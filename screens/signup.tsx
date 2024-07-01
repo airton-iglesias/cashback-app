@@ -1,41 +1,66 @@
-import { useNavigation, NavigationProp, CommonActions } from "@react-navigation/native";
+import React, { useState } from 'react';
+import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from './types';
 import { Image, SafeAreaView, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, View } from "react-native";
 import Checkbox from "expo-checkbox";
-import { useState } from "react";
+import * as ImagePicker from 'expo-image-picker';
 
 export default function SignUp() {
-
-    const navigation = useNavigation< NavigationProp<RootStackParamList> >();
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [isChecked, setChecked] = useState(false);
+    const [image, setImage] = useState<any>(null);
+
+    const handleImagePick = async () => {
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (permissionResult.granted === false) {
+            alert("Permission to access camera roll is required!");
+            return;
+        }
+
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!pickerResult.canceled) {
+            setImage(pickerResult.assets[0].uri);
+        }
+    };
 
     return (
         <SafeAreaView className="flex-1">
             <View className="flex-1 gap-8 pb-20 justify-center items-center">
                 <Text className="text-xl font-bold bg-gray-200 p-8 rounded-full">REGISTER SCREEN</Text>
 
-                <Image className="text-xl h-16 w-16 font-bold bg-gray-200 p-12 rounded-full" source={require("../assets/user-icon.png")}/>
+                <TouchableHighlight onPress={handleImagePick} underlayColor="#e5e7eb" style={{ borderRadius: 8 }}>
+                    {image ? (
+                        <Image source={{ uri: image }} className="text-xl h-16 w-16 font-bold bg-gray-200 p-12 rounded-full" />
+                    ) : (
+                        <Image source={require("../assets/user-icon.png")} className="text-xl h-16 w-16 font-bold bg-gray-200 p-12 rounded-full" />
+                    )}
+                </TouchableHighlight>
 
                 <TextInput
-                   className="border border-gray-400 w-40 h-14 justify-center items-center text-center p-4 rounded-lg"
-                   placeholder="ID"
-                   readOnly={true}
+                    className="border border-gray-400 w-40 h-14 justify-center items-center text-center p-4 rounded-lg"
+                    placeholder="ID"
+                    readOnly={true}
                 />
 
                 <TextInput
-                   className="border border-gray-400 w-72 h-14 justify-center items-center text-center p-4 rounded-lg"
-                   placeholder="Name"
+                    className="border border-gray-400 w-72 h-14 justify-center items-center text-center p-4 rounded-lg"
+                    placeholder="Name"
                 />
 
                 <TextInput
-                   className="border border-gray-400 w-72 h-14 justify-center items-center text-center p-4 rounded-lg"
-                   placeholder="Email/Telefone"
+                    className="border border-gray-400 w-72 h-14 justify-center items-center text-center p-4 rounded-lg"
+                    placeholder="Email/Telefone"
                 />
                 
-
                 <TextInput
-                   className="border border-gray-400 w-72 h-14 justify-center items-center text-center p-4 rounded-lg"
-                   placeholder="Codigo Bonús"
+                    className="border border-gray-400 w-72 h-14 justify-center items-center text-center p-4 rounded-lg"
+                    placeholder="Codigo Bonús"
                 />
 
                 <TouchableHighlight onPress={() => navigation.navigate('Pin')}
@@ -52,7 +77,6 @@ export default function SignUp() {
                     <View className="absolute w-full border-b border-gray-400 border-1"></View>
                     <Text className="bg-gray-100 px-4">OR</Text> 
                 </View>
-
 
                 <TouchableHighlight onPress={() => navigation.navigate('Pin')} 
                     underlayColor="#e5e7eb"
@@ -74,4 +98,4 @@ export default function SignUp() {
             </View>
         </SafeAreaView>
     );
-  }
+}
