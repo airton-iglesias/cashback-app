@@ -101,7 +101,7 @@ export default function SignupStep1() {
                                     onFocus={() => setInputEmailIsFocus(true)}
                                     onBlur={() => setInputEmailIsFocus(false)}
                                     onChangeText={handleEmailChange}
-                                    className={`border-2 rounded-lg w-full h-14 ${inputEmailIsFocus ? inputEmailError ? 'border-[#DC3545]' : 'border-black' : inputEmailError ? 'border-[#DC3545]':'border-gray-300'} px-5 text-xl text-gray-500`}
+                                    className={`border rounded-lg w-full h-14 ${inputEmailIsFocus ? inputEmailError ? 'border-[#DC3545]' : 'border-black' : inputEmailError ? 'border-[#DC3545]':'border-gray-300'} px-5 text-xl text-gray-500`}
                                     keyboardType={'email-address'}
                                 />
                             </View>
@@ -118,7 +118,7 @@ export default function SignupStep1() {
                                     onFocus={() => setInputPasswordIsFocus(true)}
                                     onBlur={() => setInputPasswordIsFocus(false)}
                                     onChangeText={handlePasswordChange}
-                                    className={`border-2 rounded-lg w-full h-14 ${inputPasswordIsFocus ? inputPasswordError ? 'border-[#DC3545]' : 'border-black' : inputPasswordError ? 'border-[#DC3545]':'border-gray-300'} px-5 text-xl text-gray-500`}
+                                    className={`border rounded-lg w-full h-14 ${inputPasswordIsFocus ? inputPasswordError ? 'border-[#DC3545]' : 'border-black' : inputPasswordError ? 'border-[#DC3545]':'border-gray-300'} px-5 text-xl text-gray-500`}
                                     value={password}
                                     secureTextEntry={true}
                                 />
@@ -136,7 +136,7 @@ export default function SignupStep1() {
                                     onFocus={() => setInputConfirmPasswordIsFocus(true)}
                                     onBlur={() => setInputConfirmPasswordIsFocus(false)}
                                     onChangeText={handleConfirmPasswordChange}
-                                    className={`border-2 rounded-lg w-full h-14 ${inputConfirmPasswordIsFocus ? inputConfirmPasswordError ? 'border-[#DC3545]' : 'border-black' : inputConfirmPasswordError ? 'border-[#DC3545]':'border-gray-300'} px-5 text-xl text-gray-500`}
+                                    className={`border rounded-lg w-full h-14 ${inputConfirmPasswordIsFocus ? inputConfirmPasswordError ? 'border-[#DC3545]' : 'border-black' : inputConfirmPasswordError ? 'border-[#DC3545]':'border-gray-300'} px-5 text-xl text-gray-500`}
                                     value={confirmPassword}
                                     secureTextEntry={true}
                                 />

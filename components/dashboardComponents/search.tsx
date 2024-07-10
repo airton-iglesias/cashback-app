@@ -9,7 +9,7 @@ import SearchComponent from "./SearchComponent";
 export default function Search() {
 
     return (
-        <SafeAreaView className="flex-1">
+        <SafeAreaView className="flex-1 bg-white">
             <Topbar />
             <View className="flex-row px-5 pt-5 gap-3">
                 <View className="flex-1 justify-center">
@@ -24,24 +24,17 @@ export default function Search() {
                         className="border border-[#D7D7D7] rounded-xl w-full h-14 pl-12 pr-5 text-xl text-gray-500"
                     />
                 </View>
-                <View className="w-14 h-14 bg-gray-300 justify-center items-center rounded-lg ml-3">
+                <View className="w-14 h-14 bg-[#EEEEEE] justify-center items-center rounded-lg ml-3">
                     <Ionicons name="location-outline" size={24} color="#374151" />
                 </View>
-                <View className="w-14 h-14 bg-gray-300 justify-center items-center rounded-lg">
+                <View className="w-14 h-14 bg-[#EEEEEE] justify-center items-center rounded-lg">
                     <MaterialIcons name="filter-list" size={24} color="#374151" />
                 </View>
             </View>
 
             <ScrollView className="flex-col mb-24">
-                <SearchComponent />
-                <SearchComponent />
-                <SearchComponent />
-                <SearchComponent />
-                <SearchComponent />
-                <SearchComponent />
-                <SearchComponent />
-                <SearchComponent />
-
+                <SearchComponent haveCupom={false} haveLocation={false}/>
+                <SearchComponent haveCupom={true} haveLocation={true}/>
             </ScrollView>
  
 

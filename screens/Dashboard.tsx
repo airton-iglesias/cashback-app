@@ -1,15 +1,17 @@
 import React from 'react';
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { faHouse, faSearch, faWallet, faQrcode } from '@fortawesome/free-solid-svg-icons';
-import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 import { BlurView } from "expo-blur";
 import Home from "../components/dashboardComponents/home";
 import { View } from 'react-native';
 import Search from '../components/dashboardComponents/search';
 import Wallat from '../components/dashboardComponents/wallat';
 import Qrcode from '../components/dashboardComponents/qrcode';
-import Withdraw from '../components/dashboardComponents/withdraw';  // Atualize o caminho conforme necessário
+import Withdraw from '../components/dashboardComponents/withdraw';
+import HomeIcon from '../assets/homeIcon';
+import SearchIcon from '../assets/searchIcon';
+import WallatIcon from '../assets/wallatIcon';
+import QRCodeIcon from '../assets/qrcodeIcon';
+import AirplaneIcon from '../assets/airplaneIcon';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,36 +20,44 @@ export default function DashboardScreen() {
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused }) => {
-                    let icon;
                     switch (route.name) {
                         case 'DashboardHome':
-                            icon = faHouse;
-                            break;
+                            return (
+                                <View style={{ backgroundColor: 'transparent' }} className=' h-14 w-14 flex justify-center items-center'>
+                                    <HomeIcon size={30} focused={focused}/>
+                                </View>
+                            );
                         case 'SearchTab':
-                            icon = faSearch;
-                            break;
+                            return (
+                                <View style={{ backgroundColor: 'transparent' }} className=' h-14 w-14 flex justify-center items-center'>
+                                    <SearchIcon size={28} focused={focused}/>
+                                </View>
+                            );
                         case 'WalletTab':
-                            icon = faWallet;
-                            break;
+                            return (
+                                <View style={{ backgroundColor: 'transparent' }} className=' h-14 w-14 flex justify-center items-center'>
+                                    <WallatIcon size={28} focused={focused}/> 
+                                </View> 
+                            );
                         case 'QrCodeTab':
-                            icon = faQrcode;
-                            break;
+                            return (
+                                <View style={{ backgroundColor: 'transparent' }} className=' h-14 w-14 flex justify-center items-center'>
+                                    <QRCodeIcon size={28} focused={focused}/>
+                                </View>
+                            );
                         case 'WithdrawTab':
-                            icon = faPaperPlane;
-                            break;
+                            return (
+                                <View style={{ backgroundColor: 'transparent' }} className=' h-14 w-14 flex justify-center items-center'>
+                                    <AirplaneIcon size={28} focused={focused}/>
+                                </View>
+                            );
                         default:
-                            icon = faHouse;
+                            return (
+                                <View style={{ backgroundColor: 'transparent' }} className=' h-14 w-14 flex justify-center items-center'>
+                                    <HomeIcon size={30} focused={focused}/>
+                                </View>
+                            );
                     }
-
-                    return (
-                        <View style={{ backgroundColor: 'transparent' }} className=' h-14 w-14 flex justify-center items-center'>
-                            <FontAwesomeIcon
-                                icon={icon}
-                                size={28}
-                                style={{ color: focused ? 'white' : 'gray' }}
-                            />
-                        </View>
-                    );
                 },
                 tabBarStyle: {
                     position: 'absolute',
@@ -71,12 +81,12 @@ export default function DashboardScreen() {
                             right: 0,
                             bottom: 0,
                             height: 80,
-                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
                         }}
                     />
                 ),
             })}
-            initialRouteName="DashboardHome"
+            initialRouteName="SearchTab"
         >
             <Tab.Screen name="DashboardHome" component={Home} options={{ headerShown: false }} />
             <Tab.Screen name="SearchTab" component={Search} options={{ headerShown: false }} />

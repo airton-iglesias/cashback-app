@@ -30,7 +30,7 @@ const QRCodeHole = () => {
 const styles = StyleSheet.create({
     container: {
         ...StyleSheet.absoluteFillObject,
-        zIndex: 10, // Ajuste o zIndex conforme necessário para garantir que fique acima da câmera
+        zIndex: 10,
     },
 });
 

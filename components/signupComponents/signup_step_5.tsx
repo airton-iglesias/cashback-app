@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList, SignupStackParamList } from "../../types";
 import { Feather } from '@expo/vector-icons';
 
-type RootNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
+type RootNavigationProp = NativeStackNavigationProp<RootStackParamList, 'signup'>;
 
 export default function SignupStep5() {
     const rootNavigation = useNavigation<RootNavigationProp>();
@@ -15,7 +15,7 @@ export default function SignupStep5() {
             rootNavigation.dispatch(
                 CommonActions.reset({
                     index: 1,
-                    routes: [{ name: 'Dashboard' }], 
+                    routes: [{ name: 'dashboard' }], 
                 })
             );
         }, 3000);

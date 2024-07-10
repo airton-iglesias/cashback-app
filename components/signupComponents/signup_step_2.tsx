@@ -118,7 +118,7 @@ export default function SignupStep2({ route }:any) {
                                     }}
                                     onChangeText={handleNameChange}
                                     value={name}
-                                    className={`border-2 rounded-lg w-full h-14 ${inputNameIsFocus ? inputNameError ? 'border-[#DC3545]' : 'border-black' : inputNameError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
+                                    className={`border rounded-lg w-full h-14 ${inputNameIsFocus ? inputNameError ? 'border-[#DC3545]' : 'border-black' : inputNameError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
                                 />
                             </View>
                         </View>
@@ -170,7 +170,7 @@ export default function SignupStep2({ route }:any) {
                                     }}
                                     onChangeText={handleBonusCodeChange}
                                     value={codeBonus}
-                                    className={`border-2 rounded-lg w-full h-14 ${inputCodeBonusIsFocus ? inputCodeBonusError ? 'border-[#DC3545]' : 'border-black' : inputCodeBonusError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
+                                    className={`border rounded-lg w-full h-14 ${inputCodeBonusIsFocus ? inputCodeBonusError ? 'border-[#DC3545]' : 'border-black' : inputCodeBonusError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
                                 />
                             </View>
                         </View>

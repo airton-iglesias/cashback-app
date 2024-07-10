@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import {
     Image, SafeAreaView,
     Text, TextInput, TouchableHighlight, TouchableWithoutFeedback,
-    View, KeyboardAvoidingView, Platform, ScrollView, Keyboard
+    View, KeyboardAvoidingView, ScrollView, Keyboard
 } from "react-native";
 
 import { useNavigation, CommonActions } from "@react-navigation/native";
@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { RootStackParamList } from '../types';
 import CheckBox from "../components/checkbox";
 
-type RootNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
+type RootNavigationProp = NativeStackNavigationProp<RootStackParamList, 'signup'>;
 
 
 export default function SigninScreen() {
@@ -82,7 +82,7 @@ export default function SigninScreen() {
             rootNavigation.dispatch(
                 CommonActions.reset({
                     index: 0,
-                    routes: [{ name: 'Dashboard' }],
+                    routes: [{ name: 'dashboard' }],
                 })
             );
         } else {
@@ -121,7 +121,7 @@ export default function SigninScreen() {
                                         setInputEmailIsFocus(false);
                                     }}
                                     onChangeText={handleEmailChange}
-                                    className={`border-2 rounded-lg w-full h-14 ${inputEmailIsFocus ? inputEmailError ? 'border-[#DC3545]' : 'border-black' : inputEmailError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
+                                    className={`border rounded-lg w-full h-14 ${inputEmailIsFocus ? inputEmailError ? 'border-[#DC3545]' : 'border-black' : inputEmailError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
                                     keyboardType={'email-address'}
                                 />
                             </View>
@@ -144,7 +144,7 @@ export default function SigninScreen() {
                                     onChangeText={handlePasswordChange}
                                     value={password}
                                     secureTextEntry={true}
-                                    className={`border-2 rounded-lg w-full h-14 ${inputPasswordIsFocus ? inputPasswordError ? 'border-[#DC3545]' : 'border-black' : inputPasswordError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
+                                    className={`border rounded-lg w-full h-14 ${inputPasswordIsFocus ? inputPasswordError ? 'border-[#DC3545]' : 'border-black' : inputPasswordError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
                                 />
                             </View>
                         </View>
@@ -179,18 +179,18 @@ export default function SigninScreen() {
                                     activeOpacity={0.6}
                                     style={{ borderRadius: 8 }}
                                 >
-                                    <View className="flex flex-row gap-2 bg-gray-200 h-14 w-full justify-center items-center p-4 rounded-lg">
+                                    <View className="flex flex-row gap-2 bg-neutral-200 h-14 w-full justify-center items-center p-4 rounded-lg">
                                         <Image source={require("../assets/google-icon.png")} className="w-8 h-8" />
                                     </View>
                                 </TouchableHighlight>
                             </View>
                             <View className="w-full items-center">
-                                <TouchableWithoutFeedback onPress={() => rootNavigation.navigate('SignUp')}>
+                                <TouchableWithoutFeedback onPress={() => rootNavigation.navigate('signup')}>
                                     <Text className="text-2xl text-blue-500">Criar nova conta</Text>
                                 </TouchableWithoutFeedback>
                             </View>
                             <View className="w-full items-center">
-                                <TouchableWithoutFeedback onPress={() => rootNavigation.navigate('SignUp')}>
+                                <TouchableWithoutFeedback onPress={() => rootNavigation.navigate('signup')}>
                                     <Text className="text-2xl text-blue-500">Esqueceu sua senha?</Text>
                                 </TouchableWithoutFeedback>
                             </View>

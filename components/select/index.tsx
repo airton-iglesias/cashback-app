@@ -17,10 +17,10 @@ const Select = ({ options, onChangeSelect, text, SelectOption }: any) => {
 
   const renderOption = ({ item }: any) => {
     return (
-      <SelectOption 
-        item={item} 
+      <SelectOption
+        item={item}
         isSelected={selected?.id === item.id}
-        onSelect={() => handleSelect(item)} 
+        onSelect={() => handleSelect(item)}
       />
     );
   };
@@ -28,7 +28,7 @@ const Select = ({ options, onChangeSelect, text, SelectOption }: any) => {
   return (
     <View>
       <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
-        <View className="border-2 rounded-lg justify-between w-full h-14 border-gray-300 px-5 text-xl text-gray-500 flex flex-row items-center">
+        <View className="border rounded-lg justify-between w-full h-14 border-gray-300 px-5 text-xl text-gray-500 flex flex-row items-center">
           <View className="flex flex-row gap-2">
             {selected && <CountryFlag isoCode={selected.flag} size={20} />}
             <Text className="text-xl">{selected ? selected.text : text}</Text>
@@ -42,21 +42,21 @@ const Select = ({ options, onChangeSelect, text, SelectOption }: any) => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-          <View style={{marginTop: 20}} className='relativeflex flex-row w-full h-12 justify-center'>
-            <TouchableOpacity style={{position: 'absolute', left: 20}} onPress={() => setModalVisible(false)}>
-              <FontAwesomeIcon style={{ color: 'black', padding: 11 }} icon={faArrowLeft} />
-            </TouchableOpacity>
+        <View style={{ marginTop: 20 }} className='relativeflex flex-row w-full h-12 justify-center'>
+          <TouchableOpacity style={{ position: 'absolute', left: 20 }} onPress={() => setModalVisible(false)}>
+            <FontAwesomeIcon style={{ color: 'black', padding: 11 }} icon={faArrowLeft} />
+          </TouchableOpacity>
 
-            <Text className='text-2xl'>
-              {text}
-            </Text>
+          <Text className='text-2xl'>
+            {text}
+          </Text>
 
-          </View>
-          <FlatList
-            data={options}
-            keyExtractor={item => String(item.id)}
-            renderItem={renderOption}
-          />
+        </View>
+        <FlatList
+          data={options}
+          keyExtractor={item => String(item.id)}
+          renderItem={renderOption}
+        />
       </Modal>
     </View>
   );

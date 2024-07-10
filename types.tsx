@@ -1,9 +1,8 @@
 export type RootStackParamList = {
-  Home: undefined;
-  Signin: undefined;
-  SignUp: undefined;
-  Dashboard: undefined;
-  Pin: undefined;
+  home: undefined;
+  signin: undefined;
+  signup: undefined;
+  dashboard: undefined;
 };
 
 export type SigninStackParamList = {

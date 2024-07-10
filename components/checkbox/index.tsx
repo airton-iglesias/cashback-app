@@ -16,7 +16,7 @@ export default function CheckBox(props: any) {
   return (
     <View>
       <TouchableWithoutFeedback onPress={handleChange}>
-        <View className={`border-gray-400 border-2 w-6 h-6 rounded-md ${props.value ? 'bg-blue-500' : ''} flex justify-center items-center`}>
+        <View className={`border-gray-400 border w-6 h-6 rounded-md ${props.value ? 'bg-blue-500' : ''} flex justify-center items-center`}>
           {
             props.value ? <FontAwesomeIcon size={12} style={{ color: props.iconColor ? props.iconColor : '#fff' }} icon={faCheck}/> : null
           }
