@@ -1,14 +1,12 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import CommerceHome from "../components/commerceComponents/home";
-
-const CommerceStack = createNativeStackNavigator();
+import React from 'react';
+import { View } from 'react-native';
+import CommerceStackNavigation from '../navigation/CommerceStackNavigation';
 
 export default function CommerceScreen() {
 
     return (
-        <CommerceStack.Navigator initialRouteName="home">
-            <CommerceStack.Screen name="home" component={CommerceHome} options={{ headerShown: false }} />
-            <CommerceStack.Screen name="newcommerce" component={CommerceHome} options={{ headerShown: false }} />
-        </CommerceStack.Navigator>
+        <View style={{ flex: 1 }}>
+            <CommerceStackNavigation/>
+        </View>
     );
 }

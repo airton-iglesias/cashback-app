@@ -1,12 +1,10 @@
-import React from "react";
 import { KeyboardAvoidingView, Platform, SafeAreaView, Text, View, ScrollView } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
-import Topbar from "./topbar";
-import { WithdrawStackParamList } from "../../types";
+import { WithdrawStackParamList } from "../../types/navigationTypes";
 
 export default function Withdraw_Home() {
     const withdrawNavigation = useNavigation<NavigationProp<WithdrawStackParamList>>();
@@ -18,7 +16,6 @@ export default function Withdraw_Home() {
                 style={{ flex: 1 }}
             >
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-                    <Topbar />
                     <View className="flex-1 p-5 h-full w-full flex gap-4">
 
                         <View className="flex-row px-5 w-full h-16 bg-gray-200 rounded-lg justify-between items-center">

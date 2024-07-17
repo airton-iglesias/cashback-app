@@ -1,4 +1,3 @@
-import React from "react";
 import { KeyboardAvoidingView, Platform, SafeAreaView, Text, TextInput, TouchableHighlight, View, ScrollView } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -6,8 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
-import { WithdrawStackParamList } from "../../types";
-import Topbar from "./topbar";
+import { WithdrawStackParamList } from "../../types/navigationTypes";
 
 export default function Withdraw_Home() {
     const withdrawNavigation = useNavigation<NavigationProp<WithdrawStackParamList>>();
@@ -19,7 +17,6 @@ export default function Withdraw_Home() {
                 style={{ flex: 1 }}
             >
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-                    <Topbar />
                     <View className="flex-1 p-5 h-full w-full flex gap-5">
                         <TextInput
                             placeholder="ID"

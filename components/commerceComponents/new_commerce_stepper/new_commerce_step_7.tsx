@@ -1,27 +1,27 @@
-import { useNavigation, NavigationProp, CommonActions } from "@react-navigation/native";
-import { SafeAreaView, Text, TouchableHighlight, View } from "react-native";
-import { useEffect, useState } from "react";
+import { useNavigation, CommonActions } from "@react-navigation/native";
+import { SafeAreaView, View } from "react-native";
+import { useEffect } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList, SignupStackParamList } from "../../types";
+import { CommerceStackParamList} from "../../../types/navigationTypes";
 import { Feather } from '@expo/vector-icons';
 
-type RootNavigationProp = NativeStackNavigationProp<RootStackParamList, 'signup'>;
+type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
 
-export default function SignupStep5() {
-    const rootNavigation = useNavigation<RootNavigationProp>();
+export default function New_Commerce_step_7() {
+    const commerceNavigation = useNavigation<CommerceNavigationProp>();
     
     useEffect(() => {
         const timeout = setTimeout(() => {
-            rootNavigation.dispatch(
+            commerceNavigation.dispatch(
                 CommonActions.reset({
                     index: 1,
-                    routes: [{ name: 'dashboard' }], 
+                    routes: [{ name: 'home' }], 
                 })
             );
         }, 3000);
 
         return () => clearTimeout(timeout);
-    }, [rootNavigation]);
+    }, [commerceNavigation]);
 
     return (
         <SafeAreaView className="flex-1 bg-black">

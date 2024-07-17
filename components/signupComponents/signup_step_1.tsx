@@ -1,168 +1,187 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
-
-import { Image, Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, View } from "react-native";
+import { Image, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, View } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SignupStackParamList } from '../../types/navigationTypes';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { RootStackParamList, SignupStackParamList } from '../../types';
+import { Feather } from '@expo/vector-icons';
+import Select from '../select';
+import SelectOption from '../selectOption';
 
-type SignupStep1NavigationProp = NativeStackNavigationProp<SignupStackParamList, 'SignupStep2'>;
+type SignupStep2NavigationProp = NativeStackNavigationProp<SignupStackParamList>;
 
-export default function SignupStep1() {
+export default function Signup_Step_1({ route }:any) {
 
-    const signupNavigation = useNavigation<SignupStep1NavigationProp>();
+    const signupNavigation = useNavigation<SignupStep2NavigationProp>();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const { email, password } = route.params;
 
-    const [keyboardVisible, setKeyboardVisible] = useState(false);
-    const [inputEmailIsFocus, setInputEmailIsFocus] = useState(false);
-    const [inputEmailError, setInputEmailError] = useState(false);
-    const [inputPasswordIsFocus, setInputPasswordIsFocus] = useState(false);
-    const [inputPasswordError, setInputPasswordError] = useState(false);
-    const [inputConfirmPasswordIsFocus, setInputConfirmPasswordIsFocus] = useState(false);
-    const [inputConfirmPasswordError, setInputConfirmPasswordError] = useState(false);
+    const countryOptions = [
+        { id: 1, text: 'Portugal', flag: 'PT' },
+        { id: 2, text: 'Brasil', flag: 'BR' },
+        { id: 3, text: 'Estados Unidos', flag: 'US' },
 
-    useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-            setKeyboardVisible(true);
+      ];
+    const currencyOptions = [
+        { id: 1, text: 'EUR', flag: 'EU' },
+        { id: 2, text: 'BRL', flag: 'BR' },
+        { id: 3, text: 'USD', flag: 'US' },
+    ];
+      
+
+    const [image, setImage] = useState<any>(null);
+    const [name, setName] = useState<string>('');
+    const [codeBonus, setCodeBonus] = useState<string>('');
+    const [country, setCountry] = useState<string>('');
+    const [currency, setCurrency] = useState<string>('');
+
+    const [inputNameIsFocus, setInputNameIsFocus] = useState(false);
+    const [inputNameError, setInputNameError] = useState(false);
+    const [inputCodeBonusIsFocus, setInputCodeBonusIsFocus] = useState(false);
+    const [inputCodeBonusError, setInputCodeBonusError] = useState(false);
+
+
+    const handleImagePick = async () => {
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (permissionResult.granted === false) {
+            alert("Permission to access camera roll is required!");
+            return;
+        }
+
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
         });
-        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-            setKeyboardVisible(false);
-        });
 
-        return () => {
-            keyboardDidHideListener.remove();
-            keyboardDidShowListener.remove();
-        };
-    }, []);
-
-
-    const handleEmailChange = (text: string) => {
-        setEmail(text);
-        if (text.trim() === '') {
-            setInputEmailError(false);
-        } else {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            setInputEmailError(!re.test(text));
+        if (!pickerResult.canceled) {
+            setImage(pickerResult.assets[0].uri);
         }
     };
 
-    const handlePasswordChange = (text: string) => {
-        setPassword(text);
-        if (text.trim() === '') {
-            setInputPasswordError(false);
-        } else {
-            setInputPasswordError(text.length < 6);
-        }
-    };
 
-    const handleConfirmPasswordChange = (text: string) => {
-        setConfirmPassword(text);
-        if (text.trim() === '') {
-            setInputConfirmPasswordError(false);
-        } else {
-            setInputConfirmPasswordError(text.length < 6);
-        }
-    };
+    const handleNameChange = (text: string) => {
+        setName(text);
+    }
+
+    const handleBonusCodeChange = (text: string) => {
+        setCodeBonus(text)
+    }
 
     const handleNextStep = () => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (re.test(email) && password.length >= 6 && password === confirmPassword) {
-            signupNavigation.navigate('SignupStep2', { email, password });
-        } 
-        else{
-            setInputEmailError(true);
-            setInputPasswordError(true);
-            setInputConfirmPasswordError(true);
-        }
+        signupNavigation.navigate('signup_step_2', { email, password, country, currency, image });
     };
 
     return (
-        <SafeAreaView className={"flex-1"}>
+        <SafeAreaView className="flex-1">
             <KeyboardAvoidingView>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View className={"flex-1 h-screen flex flex-col items-center"}>
-
-                        <View className={"w-full p-5 mt-20 mb-4"}>
-                            <Text className={"text-5xl font-bold"}>Nova conta</Text>
-                        </View>
-
-                        <View className={"w-full mt-1 gap-2"}>
-                            <Text className={"text-2xl px-5 font-normal"}>
-                                Email ou Telemovel
-                            </Text>
-                            <View className={"relative px-5 justify-center items-center"}>
-                                <View className={`${inputEmailIsFocus ? 'block':'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputEmailError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => setInputEmailIsFocus(true)}
-                                    onBlur={() => setInputEmailIsFocus(false)}
-                                    onChangeText={handleEmailChange}
-                                    className={`border rounded-lg w-full h-14 ${inputEmailIsFocus ? inputEmailError ? 'border-[#DC3545]' : 'border-black' : inputEmailError ? 'border-[#DC3545]':'border-gray-300'} px-5 text-xl text-gray-500`}
-                                    keyboardType={'email-address'}
-                                />
-                            </View>
-                        </View>
-
-                        <View className={"w-full mt-1 gap-2 mt-4"}>
-                            <Text className={"text-2xl px-5 font-normal"}>
-                                Password
-                            </Text>
-                            <View className={"relative px-5 justify-center items-center"}>
-                                <View className={`${inputPasswordIsFocus ? 'block':'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputPasswordError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => setInputPasswordIsFocus(true)}
-                                    onBlur={() => setInputPasswordIsFocus(false)}
-                                    onChangeText={handlePasswordChange}
-                                    className={`border rounded-lg w-full h-14 ${inputPasswordIsFocus ? inputPasswordError ? 'border-[#DC3545]' : 'border-black' : inputPasswordError ? 'border-[#DC3545]':'border-gray-300'} px-5 text-xl text-gray-500`}
-                                    value={password}
-                                    secureTextEntry={true}
-                                />
-                            </View>
-                        </View>
-
-                        <View className={"w-full mt-1 gap-2 mt-4"}>
-                            <Text className={"text-2xl px-5 font-normal"}>
-                                Confirme o Password
-                            </Text>
-                            <View className={"relative px-5 justify-center items-center"}>
-                                <View className={`${inputConfirmPasswordIsFocus ? 'block':'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputConfirmPasswordError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => setInputConfirmPasswordIsFocus(true)}
-                                    onBlur={() => setInputConfirmPasswordIsFocus(false)}
-                                    onChangeText={handleConfirmPasswordChange}
-                                    className={`border rounded-lg w-full h-14 ${inputConfirmPasswordIsFocus ? inputConfirmPasswordError ? 'border-[#DC3545]' : 'border-black' : inputConfirmPasswordError ? 'border-[#DC3545]':'border-gray-300'} px-5 text-xl text-gray-500`}
-                                    value={confirmPassword}
-                                    secureTextEntry={true}
-                                />
-                            </View>
-                        </View>
-
-                        <View className={`flex-1 flex w-full h-full px-5 flex flex-col ${keyboardVisible ? 'justify-start' : 'justify-end'} items-start gap-5 pb-8 mt-8`}>
-                            <View className="w-full">
-                                <TouchableHighlight onPress={handleNextStep}
-                                    underlayColor="#e5e7eb"
-                                    activeOpacity={0.6}
-                                    style={{ borderRadius: 8 }}
-                                >
-                                    <View className="flex flex-row gap-2 border bg-black w-full h-14 justify-center items-center p-4 rounded-lg">
-                                        <FontAwesomeIcon style={{ color: 'white', padding: 11 }} icon={faArrowRight} />
+                    <View className="flex-1 h-screen flex flex-col items-center px-5 pt-14">
+                        <View className='h-48 w-full flex justify-center items-center'>
+                            <TouchableWithoutFeedback onPress={handleImagePick} style={{ borderRadius: 8 }}>
+                                {image ? (
+                                    <View>
+                                        <Image source={{ uri: image }} className="text-xl h-32 w-32 border border-gray-100 font-bold bg-gray-200 p-12 rounded-full" />
+                                        <View className='absolute -bottom-4 -right-2 w-12 h-12 bg-gray-200 border-4 border-neutral-100  rounded-full justify-center items-center'>
+                                            <Feather name="camera" size={20} color="black" />
+                                        </View>
                                     </View>
-                                </TouchableHighlight>
+                                ) : (
+                                    <View>
+                                        <Image source={require("../../assets/icons/user-icon.png")} className="text-xl h-32 w-32 border border-gray-100 font-bold bg-gray-200 p-12 rounded-full" />
+                                        <View className='absolute -bottom-4 -right-2 w-12 h-12 bg-gray-200 border-4 border-neutral-100  rounded-full justify-center items-center'>
+                                            <Feather name="camera" size={20} color="black" />
+                                        </View>
+                                    </View>
+                                )}
+                            </TouchableWithoutFeedback>
+                        </View>
+
+                        <View className={"w-full mt-1 gap-2 mt-4"}>
+                            <Text className={"text-2xl font-normal"}>
+                                Nome
+                            </Text>
+                            <View className={"relative justify-center items-center"}>
+                                <View className={`${inputNameIsFocus ? '' : 'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputNameError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
+                                <TextInput
+                                    cursorColor={'#ADB5BD'}
+                                    onFocus={() => {
+                                        setInputNameIsFocus(true);
+                                    }}
+                                    onBlur={() => {
+                                        setInputNameIsFocus(false);
+                                    }}
+                                    onChangeText={handleNameChange}
+                                    value={name}
+                                    className={`border rounded-lg w-full h-14 ${inputNameIsFocus ? inputNameError ? 'border-[#DC3545]' : 'border-black' : inputNameError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
+                                />
                             </View>
-                            <View className="w-full">
+                        </View>
+
+                        <View className="flex-1 justify-center items-center">
+                            <View className="w-full mt-1 gap-2 mt-4">
+                                <Text className="text-2xl font-normal">
+                                    País
+                                </Text>
+                                <Select
+                                    options={countryOptions} 
+                                    onChangeSelect={(item: any) => setCountry(`${item.text}`)}
+                                    text={'Selecione o país'}
+                                    SelectOption={SelectOption}
+                                />
+                            </View>
+                            
+                            <View className="w-full mt-1 gap-2 mt-4">
+                                <Text className="text-2xl font-normal">
+                                    Moeda
+                                </Text>
+                                <Select
+                                    options={currencyOptions} 
+                                    onChangeSelect={(item: any) => setCurrency(`${item.text}`)}
+                                    text={'Selecione a moeda'}
+                                    SelectOption={SelectOption}
+                                />
+                            </View>
+                        </View>
+
+                        <View className={"w-full mt-1 gap-0 mt-4"}>
+                            <View className='relative flex flex-row justify-between'>
+                                <Text className={"text-2xl font-normal"}>
+                                    Código Bonus
+                                </Text>
+                                <Text className={"bottom-1 text-md bg-gray-200 text-gray-600 p-2 font-semibold rounded-lg"}>
+                                    Opcional
+                                </Text>
+                            </View>
+                            <View className={"relative justify-center items-center"}>
+                                <View className={`${inputCodeBonusIsFocus ? '' : 'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputCodeBonusError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
+                                <TextInput
+                                    cursorColor={'#ADB5BD'}
+                                    onFocus={() => {
+                                        setInputCodeBonusIsFocus(true);
+                                    }}
+                                    onBlur={() => {
+                                        setInputCodeBonusIsFocus(false);
+                                    }}
+                                    onChangeText={handleBonusCodeChange}
+                                    value={codeBonus}
+                                    className={`border rounded-lg w-full h-14 ${inputCodeBonusIsFocus ? inputCodeBonusError ? 'border-[#DC3545]' : 'border-black' : inputCodeBonusError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
+                                />
+                            </View>
+                        </View>
+                        <View className={`flex-1 w-full h-full px-5 flex flex-col justify-end gap-5 `}>
+                            <View className="flex w-full">
                                 <TouchableHighlight
                                     underlayColor="#e5e7eb"
                                     activeOpacity={0.6}
                                     style={{ borderRadius: 8 }}
+                                    onPress={handleNextStep}
                                 >
-                                    <View className="flex flex-row gap-2 bg-gray-200 h-14 w-full justify-center items-center p-4 rounded-lg">
-                                        <Image source={require("../../assets/google-icon.png")} className="w-8 h-8" />
+                                    <View className="flex flex-row gap-2 border bg-black w-full h-14 justify-center items-center p-4 rounded-lg">
+                                        <FontAwesomeIcon style={{ color: 'white', padding: 11 }} icon={faArrowRight} />
                                     </View>
                                 </TouchableHighlight>
                             </View>

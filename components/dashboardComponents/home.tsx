@@ -1,19 +1,15 @@
 import { Image, SafeAreaView, Text, View } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import Topbar from "./topbar";
-
 
 export default function Home() {
     
     return (
         <SafeAreaView className="flex-1">
-            <Topbar/>
-
             <View className="flex-1 w-full justify-center items-center">
                 <View className="relative flex justify-center items-center h-full w-full">
 
-                    <Image className="w-full h-full z-0" source={require('../../assets/garota.png')}/>
+                    <Image className="w-full h-full z-0" source={require('../../assets/images/garota.png')}/>
                     <LinearGradient
                         colors={['rgba(255, 255, 255, 0)', 'rgba(0, 0, 0, 1)']}
                         style={{ position: 'absolute', bottom: 0, width: '100%', height: '60%' }}

@@ -1,5 +1,4 @@
 import { SafeAreaView, Text, View, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import Topbar from "./topbar";
 import { useState } from "react";
 import WallatCredits from "./wallatCredits";
 import WallatTokens from "./wallatTokens";
@@ -11,8 +10,6 @@ export default function Wallat() {
 
     return (
         <SafeAreaView className="flex-1 bg-white">
-            <Topbar />
-
             <View className={'flex-row justify-center items-center bg-gray-100 h-[62px] px-4 border-b border-gray-300'}>
                 <TouchableWithoutFeedback onPress={() => setTokenScreen(false)}>
                     <View className="flex-1 w-full h-auto justify-center items-center">

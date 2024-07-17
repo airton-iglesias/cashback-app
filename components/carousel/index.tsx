@@ -24,15 +24,15 @@ export default function Carousel() {
     const carouselData: CarouselItem[] = [
         {
             id: "01",
-            image: require("../../assets/faxada1.png"),
+            image: require("../../assets/images/faxada1.png"),
         },
         {
             id: "02",
-            image: require("../../assets/faxada2.png"),
+            image: require("../../assets/images/faxada2.png"),
         },
         {
             id: "03",
-            image: require("../../assets/faxada3.png"),
+            image: require("../../assets/images/faxada3.png"),
         },
     ];
 

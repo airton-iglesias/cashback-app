@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Text, View, Alert, TouchableHighlight, StyleSheet } from "react-native";
+import { SafeAreaView, Text, View, StyleSheet } from "react-native";
 import { Camera, CameraView } from 'expo-camera';
 import QRCodeHole from './qrcodeHole';
 

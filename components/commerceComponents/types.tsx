@@ -22,3 +22,13 @@ export type SignupStackParamList = {
   SignupStep4: { email: string, password: string, country: number, currency: number, imageProfile: File, pin: string };
   SignupStep5: undefined;
 };
+
+export type CommerceStackParamList = {
+  home: undefined;
+  new_commerce_1: undefined;
+  new_commerce_2: undefined;
+  new_commerce_3: undefined;
+  new_commerce_4: undefined;
+  new_commerce_5: undefined;
+  new_commerce_6: undefined;
+};
