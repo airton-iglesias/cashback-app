@@ -1,3 +1,4 @@
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import {
     FlatList,
     Image,
@@ -5,9 +6,9 @@ import {
     Dimensions,
     NativeScrollEvent,
     NativeSyntheticEvent,
-    TouchableWithoutFeedback
-} from "react-native";
-import React, { useEffect, useRef, useState, useCallback } from "react";
+    TouchableWithoutFeedback,
+    StyleSheet
+} from 'react-native';
 
 interface CarouselItem {
     id: string;
@@ -16,23 +17,23 @@ interface CarouselItem {
 
 export default function Carousel() {
     const flatlistRef = useRef<FlatList<CarouselItem>>(null);
-    const screenWidth = Dimensions.get("window").width;
+    const screenWidth = Dimensions.get('window').width;
     const [activeIndex, setActiveIndex] = useState(0);
     const [isAutoScrollEnabled, setIsAutoScrollEnabled] = useState(true);
     const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const carouselData: CarouselItem[] = [
         {
-            id: "01",
-            image: require("../../assets/images/faxada1.png"),
+            id: '01',
+            image: require('../../assets/images/faxada1.png'),
         },
         {
-            id: "02",
-            image: require("../../assets/images/faxada2.png"),
+            id: '02',
+            image: require('../../assets/images/faxada2.png'),
         },
         {
-            id: "03",
-            image: require("../../assets/images/faxada3.png"),
+            id: '03',
+            image: require('../../assets/images/faxada3.png'),
         },
     ];
 
@@ -59,11 +60,14 @@ export default function Carousel() {
 
     const renderItem = ({ item }: { item: CarouselItem }) => {
         return (
-            <TouchableWithoutFeedback onPressIn={() => setIsAutoScrollEnabled(false)} onPressOut={() => setIsAutoScrollEnabled(true)}>
+            <TouchableWithoutFeedback
+                onPressIn={() => setIsAutoScrollEnabled(false)}
+                onPressOut={() => setIsAutoScrollEnabled(true)}
+            >
                 <View>
                     <Image
                         source={item.image}
-                        style={{ height: 200, width: screenWidth }}
+                        style={styles.image}
                     />
                 </View>
             </TouchableWithoutFeedback>
@@ -79,14 +83,17 @@ export default function Carousel() {
             if (index !== activeIndex) {
                 setActiveIndex(index);
             }
-        }, 50); // delay of 50ms for debounce
+        }, 50);
     }, [activeIndex]);
 
     const renderDotIndicators = () => {
         return carouselData.map((dot, index) => (
             <View
                 key={dot.id}
-                className={`h-2.5 w-2.5 rounded-full mx-1.5 ${activeIndex === index ? "bg-black" : "bg-black opacity-20"}`}
+                style={[
+                    styles.dot,
+                    { backgroundColor: activeIndex === index ? 'black' : 'black', opacity: activeIndex === index ? 1 : 0.2 }
+                ]}
             />
         ));
     };
@@ -106,9 +113,27 @@ export default function Carousel() {
                 scrollEventThrottle={16}
             />
 
-            <View className="flex-row justify-center mt-4">
+            <View style={styles.dotContainer}>
                 {renderDotIndicators()}
             </View>
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    image: {
+        height: 200,
+        width: Dimensions.get('window').width,
+    },
+    dotContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 16,
+    },
+    dot: {
+        height: 10,
+        width: 10,
+        borderRadius: 5,
+        marginHorizontal: 6,
+    },
+});

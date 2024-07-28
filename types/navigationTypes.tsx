@@ -1,6 +1,7 @@
 export type AuthStackParamList = {
   signin: undefined;
   signup: undefined;
+  language: undefined;
 };
 
 export type RootStackParamList = {
@@ -8,16 +9,12 @@ export type RootStackParamList = {
   profile: undefined;
   points: undefined;
   commerce: undefined;
+  wallatextract: undefined;
 };
 
-export type SigninStackParamList = {
-  SigninStep1: undefined;
-  SigninStep2: { email: string };
-};
-
-export type WithdrawStackParamList = {
-  WithdrawHome: undefined;
-  WithdrawSucess: undefined;
+export type WallatStackParamList = {
+  wallathome: undefined;
+  wallatextract: undefined;
 };
 
 export type SignupStackParamList = {
@@ -36,14 +33,34 @@ export type CommerceStackParamList = {
   commerce_access_manager: undefined;
   commerce_add_access: undefined;
   commerce_associate_edit: undefined;
-  new_commerce_0: undefined;
-  new_commerce_1: undefined;
-  new_commerce_2: undefined;
-  new_commerce_3: undefined;
-  new_commerce_4: undefined;
-  new_commerce_5: undefined;
-  new_commerce_6: undefined;
-  new_commerce_7: undefined;
+
+  new_commerce_step_0: undefined;
+  new_commerce_step_1: { CashbackType: string; PlaceType: string };
+  new_commerce_step_2: { 
+    CashbackType: string; 
+    PlaceType: string; 
+    referenceUser: string; 
+    association: string; 
+    title: string; 
+    userPoints: string 
+  };
+  new_commerce_step_3: {
+    CashbackType: string; 
+    PlaceType: string; 
+    referenceUser: string;
+    association: string; 
+    title: string; 
+    userPoints: string;
+    webSite: string;
+    startDate: string;
+    endDate: string;
+    startHour: string;
+    endHour: string;
+  };
+  new_commerce_step_4: undefined;
+  new_commerce_step_5: undefined;
+  new_commerce_step_6: undefined;
+  new_commerce_step_7: undefined;
 };
 
 export type DashboardTabParamList = {
@@ -54,3 +71,14 @@ export type DashboardTabParamList = {
   WithdrawTab: undefined;
 };
 
+export type SendDiscountParamList = {
+  home: undefined;
+  purchasevalue: undefined;
+  discountvalue: undefined;
+  receivediscount: undefined;
+};
+
+export type SearchParamList = {
+  searchhome: undefined;
+  searchresult: undefined;
+};

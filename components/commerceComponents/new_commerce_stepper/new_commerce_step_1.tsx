@@ -1,121 +1,245 @@
-import { SafeAreaView, View, Text, TouchableOpacity, TextInput, TouchableHighlight, KeyboardAvoidingView, ScrollView } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { Octicons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { useState } from "react";
-import Select from "../../select";
-import SelectOption from "../../selectOption";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { CommerceStackParamList } from "../../../types/navigationTypes";
+import React, { useState } from 'react';
+import { SafeAreaView, View, Text, TouchableOpacity, TouchableHighlight, ScrollView, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Octicons, AntDesign, Feather } from '@expo/vector-icons';
+import Select from '../../select';
+import SelectOption from '../../selectOption';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { CommerceStackParamList } from '../../../types/navigationTypes';
+import Input from '@/components/input';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
 
-export default function New_Commerce_step_1() {
-
+export default function New_Commerce_step_1({ route }: any) {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
 
-    const [image, setImage] = useState<any>(null);
-    const [name, setName] = useState<string>('');
-    const [codeBonus, setCodeBonus] = useState<string>('');
-    const [types, setTypes] = useState<number>(0);
-    const [association, setAssociation] = useState<number>(0);
-    const [selected, setSelected] = useState<number>(0);
+    const { CashbackType, PlaceType } = route.params;
 
-    const typesOptions = [
-        { id: 1, text: 'Promoção'},
-        { id: 2, text: 'Evento'},
+    const [referenceUser, setReferenceUser] = useState<string>('');
+    const [association, setAssiation] = useState<string>('');
+    const [title, setTitle] = useState<string>('');
+    const [userPoints, setUserPoints] = useState<string>('');
+
+
+    const AssociationOptions = [
+        { id: 1, text: 'Promoção' },
+        { id: 2, text: 'Evento' },
     ];
-    const associationOptions = [
-        { id: 1, text: 'EUR', flag: 'EU' },
-        { id: 2, text: 'BRL', flag: 'BR' },
-        { id: 3, text: 'USD', flag: 'US' },
+
+    const userPointsOptions = [
+        { id: 1, text: 'Airton' },
+        { id: 2, text: 'Luis' },
+        { id: 3, text: 'Bruno' },
     ];
 
     return (
-        <SafeAreaView className="flex-1 bg-white">
-            <KeyboardAvoidingView style={{ flex: 1 }}>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <SafeAreaView style={styles.container}>
 
-                    <View className="relative items-start justify-end px-8 w-full h-24">
-                        <TouchableOpacity onPress={()=> commerceNavigation.navigate("new_commerce_0")} style={{ position: 'absolute', left: 20, width: 40, height: 40, justifyContent: 'flex-end', alignItems: 'flex-start', paddingBottom: 3 }}>
-                            <Octicons name="chevron-left" size={24} color="black" />
-                        </TouchableOpacity>
-                        <Text className="text-4xl ml-6 font-bold">Dados básicos</Text>
-                        <TouchableOpacity onPress={()=> commerceNavigation.navigate("home")} style={{ position: 'absolute', right: 20, width: 40, height: 40, justifyContent: 'flex-end', alignItems: 'flex-end', paddingBottom: 3 }}>
-                            <AntDesign name="close" size={24} color="black" />
-                        </TouchableOpacity>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                <View style={styles.headerContainer}>
+                    <TouchableOpacity
+                        style={styles.backButton}
+                        onPress={() => commerceNavigation.goBack()}
+                    >
+                        <Octicons name="chevron-left" size={32} color="black" />
+
+                    </TouchableOpacity>
+                    <Text style={styles.headerText}>Dados básicos</Text>
+                    <TouchableOpacity style={styles.closeButton}
+                        onPress={() => commerceNavigation.navigate("home")}
+                    >
+                        <AntDesign name="close" size={28} color="black" />
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.longInputWrapper}>
+                    <Input
+                        label={"Título"}
+                        placeholder=""
+                        onChange={(text: string) => setTitle(text)}
+                        type={'text'}
+                    />
+                </View>
+
+                <View style={styles.selectSection}>
+                    <Text style={styles.inputLabel}>Associar</Text>
+                    <Select
+                        options={AssociationOptions}
+                        onChangeSelect={(item: any) => setAssiation(item.text)}
+                        text={''}
+                        SelectOption={SelectOption}
+                    />
+                </View>
+
+                <View style={styles.selectSection}>
+                    <Text style={styles.inputLabel}>Creditar pontos no usuário</Text>
+                    <Select
+                        options={userPointsOptions}
+                        onChangeSelect={(item: any) => setUserPoints(item.text)}
+                        text={''}
+                        SelectOption={SelectOption}
+                    />
+                </View>
+
+                <View style={styles.longInputWrapper}>
+                    <Input
+                        label={"Referido por"}
+                        placeholder=""
+                        onChange={(text: string) => setReferenceUser(text)}
+                        type={'text'}
+                    />
+                </View>
+                <View style={styles.footer}>
+                    <View style={styles.stepperLayoutContainer}>
+                        <Text style={styles.stepperLayoutText}>2 de 6</Text>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayoutSelected}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
                     </View>
 
-                    <View className={"w-full pt-4 gap-2 mt-6 px-5 border-t border-gray-300"}>
-                        <Text className={"text-2xl font-normal"}>
-                            Título
-                        </Text>
-                        <View className={"relative justify-center items-center"}>
-                            <TextInput
-                                cursorColor={'#ADB5BD'}
-                                className={`border border-gray-300 rounded-lg w-full h-14 px-5 text-xl text-gray-500`}
-                            />
+                    <TouchableHighlight
+                        onPress={() => commerceNavigation.navigate("new_commerce_step_2",
+                            { CashbackType, PlaceType, referenceUser, association, title, userPoints }
+                        )}
+                        underlayColor="#e5e7eb"
+                        activeOpacity={0.6}
+                        style={styles.nextButton}
+                    >
+                        <View style={styles.nextButtonContent}>
+                            <Feather name="arrow-right" size={24} color="white" />
                         </View>
-                    </View>
-
-                    <View className="justify-center items-center px-5">
-                        <View className="w-full mt-1 gap-2 mt-4">
-                            <Text className="text-2xl font-normal">
-                                Associar
-                            </Text>
-                            <Select
-                                options={typesOptions}
-                                onChangeSelect={(id: number) => setTypes(id)}
-                                text={''}
-                                SelectOption={SelectOption}
-                            />
-                        </View>
-
-                        <View className="w-full mt-1 gap-2 mt-4">
-                            <Text className="text-2xl font-normal">
-                                Creditar pontos no usuário
-                            </Text>
-                            <Select
-                                options={associationOptions}
-                                onChangeSelect={(id: number) => setAssociation(id)}
-                                text={''}
-                                SelectOption={SelectOption}
-                            />
-                        </View>
-                    </View>
-
-                    <View className={"w-full pt-4 gap-2 px-5 "}>
-                        <Text className={"text-2xl font-normal"}>
-                            Referido por
-                        </Text>
-                        <View className={"relative justify-center items-center"}>
-                            <TextInput
-                                cursorColor={'#ADB5BD'}
-                                className={`border border-gray-300 rounded-lg w-full h-14 px-5 text-xl text-gray-500`}
-                                placeholder="ID"
-                            />
-                        </View>
-                    </View>
-
-                    <View className="flex-1 w-full px-5 h-full justify-end pb-6 pt-44">
-                        <TouchableHighlight
-                            onPress={()=> commerceNavigation.navigate("new_commerce_2")}
-                            underlayColor="#e5e7eb"
-                            activeOpacity={0.6}
-                            style={{ borderRadius: 8 }}
-                        >
-                            <View className="flex flex-row gap-2 border bg-black w-full h-14 justify-center items-center p-4 rounded-lg">
-                                <FontAwesomeIcon style={{ color: 'white', padding: 11 }} icon={faArrowRight} />
-                            </View>
-                        </TouchableHighlight>
-                    </View>
-
-                </ScrollView>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
-
+                    </TouchableHighlight>
+                </View>
+            </ScrollView>
+        </SafeAreaView >
     );
 }
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+        paddingTop: 30
+    },
+    backButton: {
+        position: 'absolute',
+        left: 15,
+        width: 40,
+        height: 40,
+        paddingTop: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 15,
+        width: 40,
+        height: 40,
+        paddingBottom: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    headerContainer: {
+        position: 'relative',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        width: '100%',
+        height: 80,
+        borderBottomWidth: 1,
+        borderColor: '#DADADA',
+        marginBottom: 10
+    },
+    headerText: {
+        fontSize: 24,
+        fontWeight: '700',
+        left: 40
+    },
+    headerButtonLeft: {
+        position: 'absolute',
+        left: 20,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    headerButtonRight: {
+        position: 'absolute',
+        right: 20,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    title: {
+        fontSize: 32,
+        fontWeight: 'bold',
+    },
+    inputLabel: {
+        fontSize: 18,
+        fontWeight: 'normal',
+        marginBottom: 4
+    },
+    longInputWrapper: {
+        paddingHorizontal: 15,
+    },
+    selectSection: {
+        width: '100%',
+        paddingHorizontal: 16,
+        marginTop: 24,
+    },
+    footer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        paddingBottom: 24,
+        paddingTop: 90
+    },
+    stepperLayoutContainer: {
+        flexDirection: 'row',
+        gap: 10,
+        alignItems: 'center',
+        marginBottom: 20
+    },
+    stepperLayout: {
+        height: 6,
+        width: 14,
+        backgroundColor: '#121212',
+        borderRadius: 22,
+        opacity: 0.5,
+        marginTop: 2
+    },
+    stepperLayoutSelected: {
+        opacity: 1,
+        width: 31,
+        backgroundColor: '#121212',
+        borderRadius: 22,
+        height: 6,
+        marginTop: 2
+    },
+    stepperLayoutText: {
+        fontSize: 18,
+        fontWeight: 'normal',
+    },
+    nextButton: {
+        borderRadius: 8,
+    },
+    nextButtonContent: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'black',
+        width: 64,
+        height: 64,
+        borderRadius: 999,
+        paddingHorizontal: 16,
+    },
+});

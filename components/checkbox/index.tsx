@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types"
-import { View, TouchableWithoutFeedback } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { View, TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { FontAwesome6 } from '@expo/vector-icons';
 
 export default function CheckBox(props: any) {
 
@@ -16,9 +15,9 @@ export default function CheckBox(props: any) {
   return (
     <View>
       <TouchableWithoutFeedback onPress={handleChange}>
-        <View className={`border-gray-400 border w-6 h-6 rounded-md ${props.value ? 'bg-blue-500' : ''} flex justify-center items-center`}>
+        <View style={[styles.checkBoxWrapper, {backgroundColor: props.value ? '#3b82f6' : 'white'}]} >
           {
-            props.value ? <FontAwesomeIcon size={12} style={{ color: props.iconColor ? props.iconColor : '#fff' }} icon={faCheck}/> : null
+            props.value ? <FontAwesome6 name="check" size={12} color={props.iconColor ? props.iconColor : '#fff'}/>: null
           }
         </View>
       </TouchableWithoutFeedback>
@@ -34,3 +33,16 @@ CheckBox.propTypes = {
   value: PropTypes.bool,
   checkColor: PropTypes.string
 }
+
+
+const styles = StyleSheet.create({
+  checkBoxWrapper: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: 'gray',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})

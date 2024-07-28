@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { Image, KeyboardAvoidingView, SafeAreaView, ScrollView, Switch, Text, TextInput, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { Image, KeyboardAvoidingView, SafeAreaView, ScrollView, Switch, Text, TextInput, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, View, StyleSheet } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
-import { Feather } from '@expo/vector-icons';
+import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
 import Select from '../components/select';
 import SelectOption from '../components/selectOption';
-import { Ionicons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
 import { RootStackParamList } from '../types/navigationTypes';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useNavigation, CommonActions } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -22,14 +20,13 @@ export default function Profile() {
         { id: 1, text: 'Portugal', flag: 'PT' },
         { id: 2, text: 'Brasil', flag: 'BR' },
         { id: 3, text: 'Estados Unidos', flag: 'US' },
-
     ];
+
     const currencyOptions = [
         { id: 1, text: 'EUR', flag: 'EU' },
         { id: 2, text: 'BRL', flag: 'BR' },
         { id: 3, text: 'USD', flag: 'US' },
     ];
-
 
     const [image, setImage] = useState<any>(null);
     const [name, setName] = useState<string>('');
@@ -40,6 +37,24 @@ export default function Profile() {
     const [inputCodeBonusIsFocus, setInputCodeBonusIsFocus] = useState(false);
     const [inputCodeBonusError, setInputCodeBonusError] = useState(false);
 
+    const [inputPasswordIsFocus, setInputPasswordIsFocus] = useState(false);
+    const [inputPasswordError, setInputPasswordError] = useState(false);
+    const [password, setPassword] = useState('');
+
+
+
+    const validatePassword = (password: string) => {
+        return password.length >= 6;
+    };
+
+    const handlePasswordChange = (text: string) => {
+        setPassword(text);
+        if (text.trim() === '') {
+            setInputPasswordError(false);
+        } else {
+            setInputPasswordError(!validatePassword(text));
+        }
+    };
 
     const handleImagePick = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -60,144 +75,127 @@ export default function Profile() {
         }
     };
 
-
     const handleNameChange = (text: string) => {
         setName(text);
     }
 
     const handleBonusCodeChange = (text: string) => {
-        setCodeBonus(text)
+        setCodeBonus(text);
     }
 
     return (
-        <SafeAreaView className="flex-1 bg-white">
+        <SafeAreaView style={styles.safeArea}>
             <KeyboardAvoidingView>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View className="flex-1 h-screen flex flex-col items-center px-5 pt-14">
-                        <View className='flex-row justify-between w-full'>
+                <ScrollView contentContainerStyle={styles.scrollView}>
+                    <View style={styles.container}>
+                        <View style={styles.header}>
                             <TouchableOpacity
-                                onPress={()=> rootNavigation.goBack()}
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    padding: 4
-
-                                }}
+                                onPress={() => rootNavigation.goBack()}
+                                style={styles.backButton}
                             >
                                 <Ionicons name="chevron-back" size={20} color="black" />
-                                <Text className='text-2xl font-normal'> Voltar</Text>
+                                <Text style={styles.backButtonText}> Voltar</Text>
                             </TouchableOpacity>
-
-
                             <TouchableOpacity
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    padding: 4
-
-                                }}
+                                style={styles.saveButton}
                             >
-                                <Text className='text-2xl font-normal text-blue-500'>Salvar</Text>
+                                <Text style={styles.saveButtonText}>Salvar</Text>
                                 <Feather name="check" size={24} color="#0D6EFD" />
                             </TouchableOpacity>
                         </View>
-                        <View className='h-48 w-full flex justify-center items-center'>
-                            <TouchableWithoutFeedback onPress={handleImagePick} style={{ borderRadius: 8 }}>
-                                {image ? (
-                                    <View>
-                                        <Image source={{ uri: image }} className="text-xl h-32 w-32 border border-gray-100 font-bold bg-gray-200 p-12 rounded-full" />
-                                        <View className='absolute -bottom-4 -right-2 w-12 h-12 bg-gray-200 border-4 border-neutral-100  rounded-full justify-center items-center'>
-                                            <Feather name="camera" size={20} color="black" />
+                        <View style={styles.imageContainer}>
+                                <TouchableWithoutFeedback onPress={handleImagePick} style={{ borderRadius: 8 }}>
+                                    {image ? (
+                                        <View>
+                                            <Image source={{ uri: image }} style={styles.image} />
+                                            <View style={styles.cameraIconContainer}>
+                                                <Feather name="camera" size={20} color="black" />
+                                            </View>
                                         </View>
-                                    </View>
-                                ) : (
-                                    <View>
-                                        <Image source={require("../assets/icons/user-icon.png")} className="text-xl h-32 w-32 border border-gray-100 font-bold bg-gray-200 p-12 rounded-full" />
-                                        <View className='absolute -bottom-4 -right-2 w-12 h-12 bg-gray-200 border-4 border-neutral-100  rounded-full justify-center items-center'>
-                                            <Feather name="camera" size={20} color="black" />
+                                    ) : (
+                                        <View>
+                                            <Image source={require("../assets/icons/user-icon.png")} style={styles.image} />
+                                            <View style={styles.cameraIconContainer}>
+                                                <Feather name="camera" size={20} color="black" />
+                                            </View>
                                         </View>
-                                    </View>
-                                )}
-                            </TouchableWithoutFeedback>
-                        </View>
-
-                        <View className={"w-full gap-2"}>
-                            <Text className={"text-2xl font-normal"}>
-                                Nome
-                            </Text>
-                            <View className={"relative justify-center items-center"}>
-                                <View className={`${inputNameIsFocus ? '' : 'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputNameError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
+                                    )}
+                                </TouchableWithoutFeedback>
+                            </View>
+                        <View style={styles.formGroup}>
+                            <Text style={styles.label}>Nome</Text>
+                            <View style={styles.inputWrapper}>
+                                <View
+                                    style={[
+                                        styles.inputHighlight,
+                                        inputPasswordIsFocus && styles.inputHighlightVisible,
+                                        inputPasswordError && styles.inputErrorHighlight
+                                    ]}
+                                ></View>
                                 <TextInput
                                     cursorColor={'#ADB5BD'}
-                                    onFocus={() => {
-                                        setInputNameIsFocus(true);
-                                    }}
-                                    onBlur={() => {
-                                        setInputNameIsFocus(false);
-                                    }}
-                                    onChangeText={handleNameChange}
-                                    value={name}
-                                    className={`border rounded-lg w-full h-14 ${inputNameIsFocus ? inputNameError ? 'border-[#DC3545]' : 'border-black' : inputNameError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
+                                    onFocus={() => setInputPasswordIsFocus(true)}
+                                    onBlur={() => setInputPasswordIsFocus(false)}
+                                    onChangeText={handlePasswordChange}
+                                    value={password}
+                                    secureTextEntry={true}
+                                    style={[
+                                        styles.textInput,
+                                        inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
+                                        inputPasswordError && styles.inputError
+                                    ]}
                                 />
                             </View>
                         </View>
-
-                        <View className="justify-center items-center mt-4">
-                            <View className="w-full gap-2">
-                                <Text className="text-2xl font-normal">
-                                    País
-                                </Text>
-                                <Select
-                                    options={countryOptions}
-                                    onChangeSelect={(id: number) => console.log(id)}
-                                    text={'Selecione o país'}
-                                    SelectOption={SelectOption}
-                                />
-                            </View>
-
-                            <View className="w-full gap-2 mt-4">
-                                <Text className="text-2xl font-normal">
-                                    Moeda
-                                </Text>
-                                <Select
-                                    options={currencyOptions}
-                                    onChangeSelect={(id: number) => console.log(id)}
-                                    text={'Selecione a moeda'}
-                                    SelectOption={SelectOption}
-                                />
-                            </View>
+                        <View style={[styles.selectGroup,styles.marginTop]}>
+                            <Text style={styles.label}>País</Text>
+                            <Select
+                                options={countryOptions}
+                                onChangeSelect={(id: number) => console.log(id)}
+                                text={'Selecione o país'}
+                                SelectOption={SelectOption}
+                            />
                         </View>
-
-                        <View className={"w-full mt-4"}>
-                            <View className='relative flex flex-row justify-between'>
-                                <Text className={"text-2xl font-normal"}>
-                                    Código Bonus
-                                </Text>
-                                <Text className={"bottom-1 text-md bg-gray-200 text-gray-600 p-2 font-semibold rounded-lg"}>
-                                    Opcional
-                                </Text>
+                        <View style={[styles.selectGroup, styles.marginTop]}>
+                            <Text style={styles.label}>Moeda</Text>
+                            <Select
+                                options={currencyOptions}
+                                onChangeSelect={(id: number) => console.log(id)}
+                                text={'Selecione a moeda'}
+                                SelectOption={SelectOption}
+                            />
+                        </View>
+                        <View style={[styles.formGroup, styles.marginTop]}>
+                            <View style={styles.headerRow}>
+                                <Text style={styles.label}>Código Bonus</Text>
+                                <Text style={styles.optionalLabel}>Opcional</Text>
                             </View>
-                            <View className={"relative justify-center items-center"}>
-                                <View className={`${inputCodeBonusIsFocus ? '' : 'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputCodeBonusError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
+                            <View style={styles.inputWrapper}>
+                                <View
+                                    style={[
+                                        styles.inputHighlight,
+                                        inputPasswordIsFocus && styles.inputHighlightVisible,
+                                        inputPasswordError && styles.inputErrorHighlight
+                                    ]}
+                                ></View>
                                 <TextInput
                                     cursorColor={'#ADB5BD'}
-                                    onFocus={() => {
-                                        setInputCodeBonusIsFocus(true);
-                                    }}
-                                    onBlur={() => {
-                                        setInputCodeBonusIsFocus(false);
-                                    }}
-                                    onChangeText={handleBonusCodeChange}
-                                    value={codeBonus}
-                                    className={`border rounded-lg w-full h-14 ${inputCodeBonusIsFocus ? inputCodeBonusError ? 'border-[#DC3545]' : 'border-black' : inputCodeBonusError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
+                                    onFocus={() => setInputPasswordIsFocus(true)}
+                                    onBlur={() => setInputPasswordIsFocus(false)}
+                                    onChangeText={handlePasswordChange}
+                                    value={password}
+                                    secureTextEntry={true}
+                                    style={[
+                                        styles.textInput,
+                                        inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
+                                        inputPasswordError && styles.inputError
+                                    ]}
                                 />
                             </View>
                         </View>
-                        <View className={"w-full mt-4"}>
-                            <View className='relative flex flex-row justify-between border-b border-[#D2D2D2] pb-2'>
-                                <Text className={"text-2xl font-normal"}>
-                                    Localização
-                                </Text>
+                        <View style={[styles.switchGroup, styles.marginTop]}>
+                            <View style={styles.switchRow}>
+                                <Text style={styles.label}>Localização</Text>
                                 <Switch
                                     trackColor={{ false: '#767577', true: '#81b0ff' }}
                                     thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
@@ -206,12 +204,12 @@ export default function Profile() {
                                     value={isEnabled}
                                 />
                             </View>
-                            <View className={"relative flex-row justify-between items-center border-b border-[#D2D2D2] py-4"}>
-                                <Text className='text-blue-500 text-2xl font-normal'>Alterar Pin</Text>
+                            <View style={styles.optionRow}>
+                                <Text style={styles.optionText}>Alterar Pin</Text>
                                 <Entypo name="chevron-right" size={24} color="black" />
                             </View>
-                            <View className={"relative flex-row justify-between items-center border-b border-[#D2D2D2] py-4"}>
-                                <Text className='text-blue-500 text-2xl font-normal'>Alterar Password</Text>
+                            <View style={styles.optionRow}>
+                                <Text style={styles.optionText}>Alterar Password</Text>
                                 <Entypo name="chevron-right" size={24} color="black" />
                             </View>
                         </View>
@@ -221,3 +219,161 @@ export default function Profile() {
         </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
+    scrollView: {
+        flexGrow: 1,
+    },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingTop: 56,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    backButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 4,
+    },
+    backButtonText: {
+        fontSize: 20,
+        fontWeight: 'normal',
+    },
+    saveButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 4,
+    },
+    saveButtonText: {
+        fontSize: 20,
+        fontWeight: 'normal',
+        color: '#3b82f6',
+        marginRight: 4
+    },
+    imageContainer: {
+        height: 128,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 15
+    },
+    image: {
+        height: 128,
+        width: 128,
+        borderWidth: 1,
+        borderColor: '#D1D5DB',
+        backgroundColor: '#E5E7EB',
+        padding: 52,
+        borderRadius: 64,
+    },
+    cameraIconContainer: {
+        position: 'absolute',
+        bottom: -16,
+        right: -8,
+        width: 48,
+        height: 48,
+        backgroundColor: '#E5E7EB',
+        borderWidth: 4,
+        borderColor: '#F8F9FA',
+        borderRadius: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    formGroup: {
+        width: '100%',
+        gap: 8,
+    },
+    label: {
+        fontSize: 20,
+        fontWeight: 'normal',
+    },
+    textInput: {
+        borderWidth: 1,
+        borderRadius: 6,
+        width: '100%',
+        height: 48,
+        fontSize: 18,
+        color: '#ADB5BD',
+        borderColor: '#ADB5BD',
+        paddingHorizontal: 10
+    },
+    inputWrapper: {
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    inputHighlight: {
+        position: 'absolute',
+        borderWidth: 4,
+        width: '101.5%',
+        height: 53,
+        borderRadius: 10,
+        opacity: 0,
+    },
+    inputHighlightVisible: {
+        opacity: 0.15,
+        borderColor: '#6610F2',
+    },
+    inputFocused: {
+        borderColor: '#000000',
+    },
+    inputError: {
+        borderColor: '#DC3545',
+    },
+    inputErrorHighlight: {
+        opacity: 0.20,
+        borderColor: '#DC3545',
+    },
+    selectGroup: {
+        width: '100%',
+        gap: 8,
+    },
+    marginTop: {
+        marginTop: 16,
+    },
+    headerRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    optionalLabel: {
+        fontSize: 14,
+        backgroundColor: '#F3F4F6',
+        color: '#6B7280',
+        padding: 4,
+        borderRadius: 8,
+        fontWeight: '600',
+    },
+    switchGroup: {
+        width: '100%',
+    },
+    switchRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#D2D2D2',
+        paddingBottom: 8,
+    },
+    optionRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#D2D2D2',
+        paddingVertical: 16,
+    },
+    optionText: {
+        fontSize: 20,
+        color: '#3b82f6',
+    },
+});

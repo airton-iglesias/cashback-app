@@ -1,98 +1,161 @@
-import { SafeAreaView, View, Text, TouchableOpacity, BackHandler, ScrollView, KeyboardAvoidingView } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { CommerceStackParamList } from "../../types/navigationTypes";
-import { useEffect, useState } from "react";
+import React from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import { Octicons, AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@/types/navigationTypes';
 import { Feather } from '@expo/vector-icons';
-import { Octicons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
 
-type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'new_commerce_1'>;
+type WallatNavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
+const data = [
+    { id: '1', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: true },
+    { id: '2', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: false },
+    { id: '3', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: true },
+    { id: '4', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: false },
+    { id: '5', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: true },
+    { id: '6', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: false },
+    { id: '7', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: true },
+    { id: '8', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: false },
+];
+
+const Item = ({ date, transactionId, amount, deleted }: any) => (
+    <View style={styles.item}>
+        {deleted ?
+            null
+            :
+            <View style={styles.trashIcon}>
+                <Feather name="trash" size={16} color="#B02A37" />
+            </View>
+        }
+        <View style={{ justifyContent: 'center', marginTop: 5 }}>
+            <Text style={[styles.date, deleted && styles.deletedText]}>{date}</Text>
+            <Text style={[styles.transactionId, deleted && styles.deletedText]}>ID: {transactionId}</Text>
+            {deleted ? <Text style={[styles.whoDeleted, deleted && styles.deletedText]}>Eliminado por {transactionId}</Text> : null}
+        </View>
+        <View>
+            <Text style={[styles.amount, deleted && styles.deletedText]}>{amount}</Text>
+        </View>
+    </View>
+);
 
 export default function CommerceCreditExtract() {
-    const commerceNavigation = useNavigation<CommerceNavigationProp>();
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [showSidebar, setShowSidebar] = useState(false);
-    const commerceDatas = [{
-        name: 'Nome do comercio',
-    }];
-
-
-    const openSidebar = () => {
-        setShowSidebar(true);
-        setIsSidebarOpen(true);
-    };
-
-    const closeSidebar = () => {
-        setIsSidebarOpen(false);
-        setTimeout(() => {
-            setShowSidebar(false);
-        }, 300);
-    };
-
-    useEffect(() => {
-        const backAction = () => {
-            if (isSidebarOpen) {
-                closeSidebar();
-                return true;
-            }
-            return false;
-        };
-
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-
-        return () => backHandler.remove();
-    }, [isSidebarOpen, closeSidebar]);
-
+    const rootNavigation = useNavigation<WallatNavigationProp>();
     return (
-        <SafeAreaView className="flex-1 bg-white">
-            <KeyboardAvoidingView style={{ flex: 1 }}>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View className="relative items-start justify-end px-8 w-full h-24">
-                        <TouchableOpacity onPress={() => commerceNavigation.navigate("commerce_menu")} style={{ position: 'absolute', left: 20, width: 40, height: 40, justifyContent: 'flex-end', alignItems: 'flex-start', paddingBottom: 3 }}>
-                            <Octicons name="chevron-left" size={24} color="black" />
-                        </TouchableOpacity>
-                        <Text className="text-3xl ml-6 mb-1 font-bold">Extrato de Crédito</Text>
-                        <TouchableOpacity onPress={() => commerceNavigation.navigate("home")} style={{ position: 'absolute', right: 20, width: 40, height: 40, justifyContent: 'flex-end', alignItems: 'flex-end', paddingBottom: 3 }}>
-                            <AntDesign name="close" size={24} color="black" />
-                        </TouchableOpacity>
-                    </View>
-                    <View className={"w-full gap-3 px-5 pb-5 mt-5"}>
-                        <View className="relative border rounded-xl p-4 justify-center items-center gap-4 border-[#DBDBDB]">
-                            <View className="w-full justify-between flex-row">
-                                <View className="border border-[#DBDBDB] p-2 rounded-lg">
-                                    <Text className="text-xl text-gray-700">2/06</Text>
-                                </View>
-                                <Text className="text-4xl font-bold text-teal-700">50,00</Text>
-                                <View className="h-10 w-10 bg-red-100 justify-center items-center rounded-lg">
-                                    <Feather name="trash" size={20} color="#DC3545" />
-                                </View>
-                            </View>
-
-                            <Text className="text-2xl font-bold">ID</Text>
-                        </View>
-                    </View>
-                    <View className={"w-full gap-3 px-5 pb-5 mt-5"}>
-                        <View className="relative border rounded-xl p-4 justify-center items-center gap-4 border-[#DBDBDB]">
-                            <View className="w-full justify-between flex-row">
-                                <View className="border border-[#DBDBDB] p-2 rounded-lg">
-                                    <Text className="text-xl text-gray-700">2/06</Text>
-                                </View>
-                                <Text className="text-4xl font-bold text-[#DC3545]">50,00</Text>
-                                <View className="h-10 w-10 bg-red-100 justify-center items-center rounded-lg">
-                                    <Feather name="trash" size={20} color="#DC3545" />
-                                </View>
-                            </View>
-
-                            <View className="flex-row justify-between w-full">
-                                <Text className="text-xl">Eliminado por</Text>
-                                <Text className="text-2xl font-bold mr-2">ID</Text>
-                            </View>
-                        </View>
-                    </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.headerContainer}>
+                <TouchableOpacity
+                    style={styles.backButton}
+                    onPress={() => rootNavigation.goBack()}
+                >
+                    <Octicons name="chevron-left" size={32} color="black" />
+                </TouchableOpacity>
+                <Text style={styles.headerText}>Extrato de Crédito</Text>
+                <TouchableOpacity style={styles.closeButton}
+                    onPress={() => rootNavigation.goBack()}
+                >
+                    <AntDesign name="close" size={28} color="black" />
+                </TouchableOpacity>
+            </View>
+            <FlatList
+                data={data}
+                renderItem={({ item }) => (
+                    <Item
+                        date={item.date}
+                        transactionId={item.transactionId}
+                        amount={item.amount}
+                        deleted={item.deleted}
+                    />
+                )}
+                keyExtractor={item => item.id}
+            />
         </SafeAreaView>
     );
-}
+};
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+        paddingTop: 30
+    },
+    backButton: {
+        position: 'absolute',
+        left: 15,
+        width: 40,
+        height: 40,
+        paddingTop: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 15,
+        width: 40,
+        height: 40,
+        paddingBottom: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    headerContainer: {
+        position: 'relative',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        width: '100%',
+        height: 80,
+        borderBottomWidth: 1,
+        borderColor: '#DADADA',
+        marginBottom: 20
+    },
+    headerText: {
+        fontSize: 24,
+        fontWeight: '700',
+        left: 40
+    },
+    item: {
+        position: 'relative',
+        backgroundColor: 'white',
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        borderWidth: 1,
+        borderColor: '#DBDBDB',
+        marginVertical: 20,
+        marginHorizontal: 15,
+        borderRadius: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    deletedText: {
+        opacity: 0.6,
+    },
+    whoDeleted: {
+        fontSize: 17,
+        marginBottom: 10,
+    },
+    trashIcon: {
+        position: 'absolute',
+        backgroundColor: '#F8D7DA',
+        padding: 10,
+        borderRadius: 999,
+        top: -20,
+        right: -10
+    },
+    date: {
+        fontSize: 20,
+        color: '#495057',
+        fontWeight: '400'
+    },
+    transactionId: {
+        fontSize: 17,
+        marginBottom: 3,
+        fontWeight: 'bold',
+        marginTop: 5
+    },
+    amount: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: '#343A40'
+    },
+});

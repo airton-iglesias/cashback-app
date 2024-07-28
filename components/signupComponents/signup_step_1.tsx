@@ -1,35 +1,36 @@
 import React, { useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
-import { Image, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, View } from "react-native";
+import { Dimensions, Image, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, View } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SignupStackParamList } from '../../types/navigationTypes';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { Feather } from '@expo/vector-icons';
 import Select from '../select';
 import SelectOption from '../selectOption';
+import { useLocale } from '../../contexts/TranslationContext';
 
 type SignupStep2NavigationProp = NativeStackNavigationProp<SignupStackParamList>;
 
-export default function Signup_Step_1({ route }:any) {
+const windowHeight = Dimensions.get('window').height;
+
+export default function Signup_Step_1({ route }: any) {
+
+    const { t } = useLocale();
 
     const signupNavigation = useNavigation<SignupStep2NavigationProp>();
-
     const { email, password } = route.params;
 
     const countryOptions = [
         { id: 1, text: 'Portugal', flag: 'PT' },
         { id: 2, text: 'Brasil', flag: 'BR' },
         { id: 3, text: 'Estados Unidos', flag: 'US' },
+    ];
 
-      ];
     const currencyOptions = [
         { id: 1, text: 'EUR', flag: 'EU' },
         { id: 2, text: 'BRL', flag: 'BR' },
         { id: 3, text: 'USD', flag: 'US' },
     ];
-      
 
     const [image, setImage] = useState<any>(null);
     const [name, setName] = useState<string>('');
@@ -41,7 +42,6 @@ export default function Signup_Step_1({ route }:any) {
     const [inputNameError, setInputNameError] = useState(false);
     const [inputCodeBonusIsFocus, setInputCodeBonusIsFocus] = useState(false);
     const [inputCodeBonusError, setInputCodeBonusError] = useState(false);
-
 
     const handleImagePick = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -62,7 +62,6 @@ export default function Signup_Step_1({ route }:any) {
         }
     };
 
-
     const handleNameChange = (text: string) => {
         setName(text);
     }
@@ -76,119 +75,274 @@ export default function Signup_Step_1({ route }:any) {
     };
 
     return (
-        <SafeAreaView className="flex-1">
+        <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View className="flex-1 h-screen flex flex-col items-center px-5 pt-14">
-                        <View className='h-48 w-full flex justify-center items-center'>
-                            <TouchableWithoutFeedback onPress={handleImagePick} style={{ borderRadius: 8 }}>
-                                {image ? (
-                                    <View>
-                                        <Image source={{ uri: image }} className="text-xl h-32 w-32 border border-gray-100 font-bold bg-gray-200 p-12 rounded-full" />
-                                        <View className='absolute -bottom-4 -right-2 w-12 h-12 bg-gray-200 border-4 border-neutral-100  rounded-full justify-center items-center'>
-                                            <Feather name="camera" size={20} color="black" />
+                <ScrollView contentContainerStyle={styles.scrollView}>
+                    <View style={styles.innerContainer}>
+                        <View style={styles.subInnerContainer}>
+
+                            <View style={styles.imageContainer}>
+                                <TouchableWithoutFeedback onPress={handleImagePick} style={{ borderRadius: 8 }}>
+                                    {image ? (
+                                        <View>
+                                            <Image source={{ uri: image }} style={styles.image} />
+                                            <View style={styles.cameraIconContainer}>
+                                                <Feather name="camera" size={20} color="black" />
+                                            </View>
                                         </View>
-                                    </View>
-                                ) : (
-                                    <View>
-                                        <Image source={require("../../assets/icons/user-icon.png")} className="text-xl h-32 w-32 border border-gray-100 font-bold bg-gray-200 p-12 rounded-full" />
-                                        <View className='absolute -bottom-4 -right-2 w-12 h-12 bg-gray-200 border-4 border-neutral-100  rounded-full justify-center items-center'>
-                                            <Feather name="camera" size={20} color="black" />
+                                    ) : (
+                                        <View>
+                                            <Image source={require("../../assets/icons/user-icon.png")} style={styles.image} />
+                                            <View style={styles.cameraIconContainer}>
+                                                <Feather name="camera" size={20} color="black" />
+                                            </View>
                                         </View>
+                                    )}
+                                </TouchableWithoutFeedback>
+                            </View>
+                            <View style={{gap:10}}>
+                                <View style={styles.inputContainer}>
+                                    <Text style={styles.label}>{t('signup_step_1.name')}</Text>
+                                    <View style={styles.inputWrapper}>
+                                        <View style={[
+                                            styles.inputFocus,
+                                            {
+                                                borderColor: inputNameIsFocus
+                                                    ? inputNameError ? '#DC3545' : '#6610F2'
+                                                    : 'transparent',
+                                                opacity: inputNameIsFocus ? 0.15 : 0,
+                                            },
+                                        ]} />
+                                        <TextInput
+                                            cursorColor={'#ADB5BD'}
+                                            onFocus={() => setInputNameIsFocus(true)}
+                                            onBlur={() => setInputNameIsFocus(false)}
+                                            onChangeText={handleNameChange}
+                                            value={name}
+                                            style={[
+                                                styles.input,
+                                                {
+                                                    borderColor: inputNameIsFocus
+                                                        ? inputNameError ? '#DC3545' : 'black'
+                                                        : inputNameError ? '#DC3545' : 'gray',
+                                                },
+                                            ]}
+                                        />
                                     </View>
-                                )}
-                            </TouchableWithoutFeedback>
+                                </View>
+
+                                <View style={styles.selectContainer}>
+                                    <View>
+                                        <Text style={styles.label}>{t('signup_step_1.country')}</Text>
+                                        <Select
+                                            options={countryOptions}
+                                            onChangeSelect={(item: any) => setCountry(`${item.text}`)}
+                                            text={t("signup_step_1.select_country")}
+                                            SelectOption={SelectOption}
+                                        />
+                                    </View>
+
+                                    <View>
+                                        <Text style={styles.label}>{t('signup_step_1.currency')}</Text>
+                                        <Select
+                                            options={currencyOptions}
+                                            onChangeSelect={(item: any) => setCurrency(`${item.text}`)}
+                                            text={t("signup_step_1.select_currency")}
+                                            SelectOption={SelectOption}
+                                        />
+                                    </View>
+                                </View>
+
+                                <View style={styles.bonusCodeContainer}>
+                                    <View style={styles.bonusCodeLabelWrapper}>
+                                        <Text style={styles.label}>{t("signup_step_1.bonus_code")}</Text>
+                                        <Text style={styles.optionalLabel}>{t("signup_step_1.optional")}</Text>
+                                    </View>
+                                    <View style={styles.inputWrapper}>
+                                        <View
+                                            style={[
+                                                styles.inputFocus,
+                                                {
+                                                    borderColor: inputCodeBonusIsFocus
+                                                        ? inputCodeBonusError ? '#DC3545' : '#6610F2'
+                                                        : 'transparent',
+                                                    opacity: inputCodeBonusIsFocus ? 0.15 : 0,
+                                                },
+                                            ]}
+                                        />
+                                        <TextInput
+                                            cursorColor={'#ADB5BD'}
+                                            onFocus={() => setInputCodeBonusIsFocus(true)}
+                                            onBlur={() => setInputCodeBonusIsFocus(false)}
+                                            onChangeText={handleBonusCodeChange}
+                                            value={codeBonus}
+                                            style={[
+                                                styles.input,
+                                                {
+                                                    borderColor: inputCodeBonusIsFocus
+                                                        ? inputCodeBonusError ? '#DC3545' : 'black'
+                                                        : inputCodeBonusError ? '#DC3545' : 'gray',
+                                                },
+                                            ]}
+                                        />
+                                    </View>
+                                </View>
+                            </View>
                         </View>
 
-                        <View className={"w-full mt-1 gap-2 mt-4"}>
-                            <Text className={"text-2xl font-normal"}>
-                                Nome
-                            </Text>
-                            <View className={"relative justify-center items-center"}>
-                                <View className={`${inputNameIsFocus ? '' : 'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputNameError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => {
-                                        setInputNameIsFocus(true);
-                                    }}
-                                    onBlur={() => {
-                                        setInputNameIsFocus(false);
-                                    }}
-                                    onChangeText={handleNameChange}
-                                    value={name}
-                                    className={`border rounded-lg w-full h-14 ${inputNameIsFocus ? inputNameError ? 'border-[#DC3545]' : 'border-black' : inputNameError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
-                                />
-                            </View>
-                        </View>
-
-                        <View className="flex-1 justify-center items-center">
-                            <View className="w-full mt-1 gap-2 mt-4">
-                                <Text className="text-2xl font-normal">
-                                    País
-                                </Text>
-                                <Select
-                                    options={countryOptions} 
-                                    onChangeSelect={(item: any) => setCountry(`${item.text}`)}
-                                    text={'Selecione o país'}
-                                    SelectOption={SelectOption}
-                                />
-                            </View>
-                            
-                            <View className="w-full mt-1 gap-2 mt-4">
-                                <Text className="text-2xl font-normal">
-                                    Moeda
-                                </Text>
-                                <Select
-                                    options={currencyOptions} 
-                                    onChangeSelect={(item: any) => setCurrency(`${item.text}`)}
-                                    text={'Selecione a moeda'}
-                                    SelectOption={SelectOption}
-                                />
-                            </View>
-                        </View>
-
-                        <View className={"w-full mt-1 gap-0 mt-4"}>
-                            <View className='relative flex flex-row justify-between'>
-                                <Text className={"text-2xl font-normal"}>
-                                    Código Bonus
-                                </Text>
-                                <Text className={"bottom-1 text-md bg-gray-200 text-gray-600 p-2 font-semibold rounded-lg"}>
-                                    Opcional
-                                </Text>
-                            </View>
-                            <View className={"relative justify-center items-center"}>
-                                <View className={`${inputCodeBonusIsFocus ? '' : 'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputCodeBonusError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => {
-                                        setInputCodeBonusIsFocus(true);
-                                    }}
-                                    onBlur={() => {
-                                        setInputCodeBonusIsFocus(false);
-                                    }}
-                                    onChangeText={handleBonusCodeChange}
-                                    value={codeBonus}
-                                    className={`border rounded-lg w-full h-14 ${inputCodeBonusIsFocus ? inputCodeBonusError ? 'border-[#DC3545]' : 'border-black' : inputCodeBonusError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
-                                />
-                            </View>
-                        </View>
-                        <View className={`flex-1 w-full h-full px-5 flex flex-col justify-end gap-5 `}>
-                            <View className="flex w-full">
-                                <TouchableHighlight
+                        <View style={[styles.nextButtonContainer]}>
+                            <View style={styles.fullWidth}>
+                                <TouchableHighlight onPress={handleNextStep}
                                     underlayColor="#e5e7eb"
                                     activeOpacity={0.6}
-                                    style={{ borderRadius: 8 }}
-                                    onPress={handleNextStep}
+                                    style={styles.nextButtonWrapper}
                                 >
-                                    <View className="flex flex-row gap-2 border bg-black w-full h-14 justify-center items-center p-4 rounded-lg">
-                                        <FontAwesomeIcon style={{ color: 'white', padding: 11 }} icon={faArrowRight} />
+                                    <View style={styles.nextButton}>
+                                        <Feather name="arrow-right" size={24} style={styles.icon} />
                                     </View>
                                 </TouchableHighlight>
                             </View>
                         </View>
+
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        height: windowHeight,
+        backgroundColor: 'white'
+    },
+    scrollView: {
+        flexGrow: 1,
+        justifyContent: 'center',
+    },
+    innerContainer: {
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingTop: 56,
+        justifyContent: 'space-between',
+        height: windowHeight,
+        paddingBottom: 30
+    },
+    subInnerContainer: {
+        width: "100%",
+    },
+    imageContainer: {
+        height: 200,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    image: {
+        height: 128,
+        width: 128,
+        borderWidth: 1,
+        borderColor: '#D1D5DB',
+        backgroundColor: '#E5E7EB',
+        padding: 52,
+        borderRadius: 64,
+    },
+    cameraIconContainer: {
+        position: 'absolute',
+        bottom: -16,
+        right: -8,
+        width: 48,
+        height: 48,
+        backgroundColor: '#E5E7EB',
+        borderWidth: 4,
+        borderColor: '#F8F9FA',
+        borderRadius: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    inputContainer: {
+        width: '100%',
+    },
+    label: {
+        fontSize: 20,
+        fontWeight: 'normal',
+        marginBottom: 4
+    },
+    inputWrapper: {
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    inputFocus: {
+        position: 'absolute',
+        borderWidth: 4,
+        width: '101.5%',
+        height: 53,
+        borderRadius: 10,
+        opacity: 0,
+    },
+    input: {
+        borderWidth: 1,
+        borderRadius: 10,
+        width: '100%',
+        height: 48,
+        fontSize: 20,
+        color: '#ADB5BD',
+        borderColor: '#ADB5BD',
+        paddingHorizontal: 10
+    },
+    selectContainer: {
+        width: '100%',
+        gap: 10
+    },
+    bonusCodeContainer: {
+        width: '100%',
+    },
+    bonusCodeLabelWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 4
+    },
+    optionalLabel: {
+        bottom: 1,
+        fontSize: 14,
+        backgroundColor: '#E5E7EB',
+        color: '#6B7280',
+        paddingHorizontal: 6,
+        paddingVertical: 4,
+        fontWeight: '600',
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    nextButtonContainer: {
+        width: '100%',
+    },
+    nextButtonWrapper: {
+        borderRadius: 8,
+    },
+    nextButtonHighlight: {
+        borderRadius: 8,
+        width: '100%'
+    },
+    nextButton: {
+        flexDirection: 'row',
+        backgroundColor: '#000000',
+        width: '100%',
+        height: 52,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 4,
+        borderRadius: 10,
+    },
+    fullWidth: {
+        width: '100%',
+        justifyContent: 'flex-end'
+    },
+    icon: {
+        color: 'white',
+        padding: 11,
+    },
+});

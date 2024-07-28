@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import { TextInput, TouchableOpacity, View } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
+import { TextInput, TouchableOpacity, View, StyleSheet } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/navigationTypes";
 import { useRoute } from '@react-navigation/native';
+import StoreIcon from "@/assets/icons/storeIcon";
 
 type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-export default function Topbar({ openSidebar }: any) {
-    const [value, setValue] = useState('0')
+export default function Topbar({ openSidebar, openNotifications }: any) {
+    const [value, setValue] = useState('0');
     const rootNavigation = useNavigation<RootNavigationProp>();
     const route = useRoute();
+
 
     const handleSwitchAccount = () => {
         if (route.name === 'home') {
@@ -35,29 +36,40 @@ export default function Topbar({ openSidebar }: any) {
 
     return (
         <>
-            <View className="flex-none flex-row items-center px-4 justify-between bg-[#212121] w-full h-[110px] pt-8">
-                <View className="relative bg-[#303030] rounded-full h-14 w-14 flex justify-center items-center">
-                    <View className="absolute top-0 right-1 h-3 w-3 bg-[#3F31E1] rounded-full border border-white"></View>
+            <View style={styles.topBar}>
+
+                <View style={styles.iconContainer}>
+                    <View style={styles.statusIndicator}></View>
                     <TouchableOpacity
                         onPress={handleSwitchAccount}
-                        style={{ width: '100%', height: '100%', borderRadius: 999, justifyContent: 'center', alignItems: 'center' }}
+                        style={styles.switchAccountButton}
                     >
-                        <Feather name="users" size={24} color="white" />
+                        {route.name === "home" ?
+                            <Feather name="users" size={24} color="white" />
+                            :
+                            <StoreIcon height={26} width={26} color={"white"} />
+                        }
                     </TouchableOpacity>
                 </View>
-                <View className="relative flex-1 mx-4">
-                    {route.name === 'home' ? null :
-                        <View className="absolute right-0 h-14 p-4 flex justify-center items-center rounded-r-2xl z-10 bg-[#2A2C2D]">
-                            <Feather name="plus" size={20} color="#6FC768" />
-                        </View>
-                    }
-                    <TextInput  placeholder="0" onChangeText={(number) => setValue(number)} placeholderTextColor="#4b5563" className={`w-full h-14 py-2 ${route.name === 'home' ? 'text-center': 'pr-16 text-right'} rounded-2xl bg-[#343434] text-gray-600 font-black text-2xl`} />
+
+                <View style={styles.textInputContainer}>
+                    <TextInput
+                        placeholder="0"
+                        onChangeText={(number) => setValue(number)}
+                        placeholderTextColor="#4b5563"
+                        textAlign="center"
+                        style={[
+                            styles.textInput
+                        ]}
+                    />
                 </View>
-                <View className="bg-[#303030] rounded-full h-14 w-14 flex justify-center items-center">
-                    <Ionicons name="notifications" size={24} color="white" />
-                </View>
-                <View className=" rounded-full h-14 w-14 flex justify-center items-center">
-                    <TouchableOpacity onPress={openSidebar} style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+
+                <TouchableOpacity onPress={openNotifications} style={styles.iconContainer}>
+                    <Feather name="bell" size={24} color="white" />
+                </TouchableOpacity>
+
+                <View style={styles.iconContainer && { backgroundColor: 'none' }}>
+                    <TouchableOpacity onPress={openSidebar} style={styles.switchAccountButton}>
                         <MaterialCommunityIcons name="dots-vertical" size={24} color="white" />
                     </TouchableOpacity>
                 </View>
@@ -65,3 +77,73 @@ export default function Topbar({ openSidebar }: any) {
         </>
     );
 }
+
+const styles = StyleSheet.create({
+    topBar: {
+        height: 110,
+        position: 'absolute',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        justifyContent: 'space-between',
+        backgroundColor: '#212121',
+        width: '100%',
+        paddingTop: 32,
+        paddingBottom: 6,
+        zIndex: 10,
+        top: 0,
+        gap: 10,
+    },
+    iconContainer: {
+        backgroundColor: '#303030',
+        borderRadius: 89,
+        height: 50,
+        width: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    statusIndicator: {
+        position: 'absolute',
+        top: 0,
+        right: 4,
+        height: 12,
+        width: 12,
+        backgroundColor: '#3F31E1',
+        borderRadius: 6,
+        borderWidth: 1,
+        borderColor: 'white',
+    },
+    switchAccountButton: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 999,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    textInputContainer: {
+        position: 'relative',
+        flex: 1,
+        marginHorizontal: 16,
+    },
+    addButton: {
+        position: 'absolute',
+        right: 0,
+        height: 50,
+        paddingHorizontal: 14,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopRightRadius: 16,
+        borderBottomRightRadius: 16,
+        zIndex: 10,
+        backgroundColor: '#2A2C2D',
+    },
+    textInput: {
+        width: '100%',
+        height: 50,
+        borderRadius: 16,
+        backgroundColor: '#343434',
+        color: '#4b5563',
+        fontWeight: '900',
+        fontSize: 24,
+    },
+});

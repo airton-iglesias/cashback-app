@@ -1,23 +1,25 @@
-import { SafeAreaView, View, Text, TouchableOpacity, BackHandler, ScrollView, KeyboardAvoidingView } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { CommerceStackParamList } from "../../types/navigationTypes";
-import { useEffect, useState } from "react";
-import { Feather } from '@expo/vector-icons';
-import { Octicons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { SimpleLineIcons } from '@expo/vector-icons';
-import QRCodeIcon from "../../assets/icons/qrcodeIcon";
+import React, { useEffect, useState } from 'react';
+import {
+    SafeAreaView,
+    View,
+    Text,
+    TouchableOpacity,
+    BackHandler,
+    ScrollView,
+    StyleSheet
+} from 'react-native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { CommerceStackParamList } from '../../types/navigationTypes';
+import { Feather, Octicons, AntDesign, SimpleLineIcons } from '@expo/vector-icons';
+import QRCodeIcon from '../../assets/icons/qrcodeIcon';
 
-type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'new_commerce_1'>;
+type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
 export default function CommerceMenu() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [showSidebar, setShowSidebar] = useState(false);
-    const commerceDatas = [{
-        name: 'Nome do comercio',
-    }];
 
     const closeSidebar = () => {
         setIsSidebarOpen(false);
@@ -41,116 +43,175 @@ export default function CommerceMenu() {
     }, [isSidebarOpen, closeSidebar]);
 
     return (
-        <SafeAreaView className="flex-1 bg-white">
-            <KeyboardAvoidingView style={{ flex: 1 }}>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View className="relative items-start justify-end px-8 w-full h-24 mt-2">
-                        <TouchableOpacity onPress={() => commerceNavigation.navigate("home")} style={{ position: 'absolute', left: 20, width: 40, height: 40, justifyContent: 'center', alignItems: 'flex-start', paddingBottom: 3 }}>
-                            <Octicons name="chevron-left" size={24} color="black" />
-                        </TouchableOpacity>
+        <SafeAreaView style={styles.safeArea}>
 
-                        <View className="justify-end">
-                            <Text className="text-3xl ml-6 font-bold">Soverteria - Loja 1</Text>
-                            <Text className="text-xl ml-6 font-bold text-[#635C5C]">32594</Text>
-                        </View>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                <View style={styles.headerContainer}>
+                    <TouchableOpacity
+                        style={styles.backButton}
+                        onPress={() => commerceNavigation.goBack()}
+                    >
+                        <Octicons name="chevron-left" size={32} color="black" />
 
-                        <TouchableOpacity onPress={() => commerceNavigation.navigate("home")} style={{ position: 'absolute', right: 20, width: 40, height: 40, justifyContent: 'center', alignItems: 'flex-end', paddingBottom: 3 }}>
-                            <AntDesign name="close" size={24} color="black" />
-                        </TouchableOpacity>
+                    </TouchableOpacity>
+                    <View style={styles.headerTextContainer}>
+                        <Text style={styles.headerTitle}>Soverteria - Loja 1</Text>
+                        <Text style={styles.headerSubtitle}>32594</Text>
                     </View>
-
-                    <TouchableOpacity
-                        onPress={() => commerceNavigation.navigate('commerce_credit_extract')}
+                    <TouchableOpacity style={styles.closeButton}
+                        onPress={() => commerceNavigation.dispatch(
+                            CommonActions.reset({
+                                index: 0,
+                                routes: [{ name: 'home' }],
+                            })
+                        )}
                     >
-                        <View className={"w-full pt-8 gap-3 px-5 pb-5 border-t border-gray-300 mt-5 flex-row items-center"}>
-                            <View className="h-14 w-14 rounded-full bg-[#DEEDFF] items-center justify-center">
-                                <Feather name="play" size={24} color="#0A3A74" style={{ marginLeft: 4 }} />
-                            </View>
-                            <Text className={"text-2xl font-normal"}>
-                                Extrato de créditos
-                            </Text>
-                        </View>
+                        <AntDesign name="close" size={28} color="black" />
                     </TouchableOpacity>
+                </View>
 
-                    <TouchableOpacity>
-                        <View className={"w-full gap-3 p-5 border-t border-gray-300 flex-row items-center"}>
-                            <View className="h-14 w-14 rounded-full bg-[#DEEDFF] items-center justify-center">
-                                <Feather name="eye" size={24} color="#0A3A74" />
-                            </View>
-                            <Text className={"text-2xl font-normal"}>
-                                Ver versão publicada
-                            </Text>
+                <TouchableOpacity onPress={() => commerceNavigation.navigate('commerce_credit_extract')}>
+                    <View style={[styles.menuItem, { borderTopWidth: 0 }]}>
+                        <View style={styles.iconContainer}>
+                            <Octicons name="list-unordered" size={24} color="#0A3A74" />
                         </View>
-                    </TouchableOpacity>
+                        <Text style={styles.menuItemText}>Extrato de créditos</Text>
+                    </View>
+                </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => commerceNavigation.navigate('commerce_edit')}
-                    >
-                        <View className={"w-full gap-3 p-5 border-t border-gray-300 flex-row items-center"}>
-                            <View className="h-14 w-14 rounded-full bg-[#DEEDFF] items-center justify-center">
-                                <SimpleLineIcons name="pencil" size={24} color="#0A3A74" />
-                            </View>
-                            <Text className={"text-2xl font-normal"}>
-                                Editar
-                            </Text>
+                <TouchableOpacity>
+                    <View style={styles.menuItem}>
+                        <View style={styles.iconContainer}>
+                            <Feather name="eye" size={24} color="#0A3A74" />
                         </View>
-                    </TouchableOpacity>
+                        <Text style={styles.menuItemText}>Ver versão publicada</Text>
+                    </View>
+                </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={()=> commerceNavigation.navigate('commerce_access_manager')}
-                    >
-                        <View className={"w-full gap-3 p-5 border-t border-gray-300 flex-row items-center"}>
-                            <View className="h-14 w-14 rounded-full bg-[#DEEDFF] items-center justify-center">
-                                <Feather name="users" size={24} color="#0A3A74" />
-                            </View>
-                            <Text className={"text-2xl font-normal"}>
-                                Gerir acessos
-                            </Text>
+                <TouchableOpacity onPress={() => commerceNavigation.navigate('commerce_edit')}>
+                    <View style={styles.menuItem}>
+                        <View style={styles.iconContainer}>
+                            <SimpleLineIcons name="pencil" size={24} color="#0A3A74" />
                         </View>
-                    </TouchableOpacity>
+                        <Text style={styles.menuItemText}>Editar</Text>
+                    </View>
+                </TouchableOpacity>
 
-                    <TouchableOpacity>
-                        <View className={"w-full gap-3 p-5 border-t border-gray-300 flex-row items-center"}>
-                            <View className="h-14 w-14 rounded-full bg-[#DEEDFF] items-center justify-center">
-                                <QRCodeIcon size={24} color="#0A3A74" />
-                            </View>
-                            <Text className={"text-2xl font-normal"}>
-                                QR Code
-                            </Text>
+                <TouchableOpacity onPress={() => commerceNavigation.navigate('commerce_access_manager')}>
+                    <View style={styles.menuItem}>
+                        <View style={styles.iconContainer}>
+                            <Feather name="users" size={24} color="#0A3A74" />
                         </View>
-                    </TouchableOpacity>
+                        <Text style={styles.menuItemText}>Gerir acessos</Text>
+                    </View>
+                </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => commerceNavigation.navigate('commerce_credit_extract')}
-                    >
-                        <View className={"w-full gap-3 p-5 border-t border-gray-300 flex-row items-center"}>
-                            <View className="h-14 w-14 rounded-full bg-[#DEEDFF] items-center justify-center">
-                                <Octicons name="list-unordered" size={24} color="#0A3A74" />
-                            </View>
-                            <Text className={"text-2xl font-normal"}>
-                                Extrato de créditos
-                            </Text>
+                <TouchableOpacity>
+                    <View style={styles.menuItem}>
+                        <View style={styles.iconContainer}>
+                            <QRCodeIcon size={24} color="#0A3A74" />
                         </View>
-                    </TouchableOpacity>
+                        <Text style={styles.menuItemText}>QR Code</Text>
+                    </View>
+                </TouchableOpacity>
 
-
-                    <TouchableOpacity>
-                        <View className={"w-full gap-3 p-5 border-t border-gray-300 flex-row items-center"}>
-                            <View className="h-14 w-14 rounded-full bg-[#FFE0E0] items-center justify-center">
-                                <Feather name="trash" size={24} color="#DC3545" />
-                            </View>
-                            <Text className={"text-2xl font-normal text-red-500"}>
-                                Eliminar estabelecimento
-                            </Text>
+                <TouchableOpacity>
+                    <View style={[styles.menuItem]}>
+                        <View style={[styles.iconContainer, styles.deleteIconContainer]}>
+                            <Feather name="trash" size={24} color="#DC3545" />
                         </View>
-                    </TouchableOpacity>
-                    <View className={"w-full gap-2 p-5 border-t border-gray-300 flex-row items-center"}></View>
+                        <Text style={[styles.menuItemText, styles.deleteItemText]}>
+                            Eliminar estabelecimento
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            </ScrollView>
 
-
-
-                </ScrollView>
-            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
 
+const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+        paddingTop: 30
+    },
+    headerContainer: {
+        position: 'relative',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        width: '100%',
+        height: 80,
+        borderBottomWidth: 1,
+        borderColor: '#DADADA',
+        marginBottom: 10
+    },
+    headerText: {
+        fontSize: 24,
+        fontWeight: '700',
+        left: 40
+    },
+    backButton: {
+        position: 'absolute',
+        left: 20,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+    },
+    headerTextContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        left: 20
+    },
+    headerTitle: {
+        fontSize: 24,
+        fontWeight: '700',
+        marginLeft: 24,
+    },
+    headerSubtitle: {
+        fontSize: 20,
+        marginLeft: 24,
+        color: '#635C5C',
+        fontWeight: '400',
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 20,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+    },
+    menuItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 16,
+        borderTopWidth: 1,
+        borderTopColor: '#DBDBDB',
+    },
+    iconContainer: {
+        height: 56,
+        width: 56,
+        borderRadius: 28,
+        backgroundColor: '#DEEDFF',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 16,
+    },
+    menuItemText: {
+        fontSize: 18,
+        fontWeight: 'normal',
+    },
+    deleteIconContainer: {
+        backgroundColor: '#FFE0E0',
+    },
+    deleteItemText: {
+        color: '#DC3545',
+    },
+});

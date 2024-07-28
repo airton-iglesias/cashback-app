@@ -1,11 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Home from "../components/dashboardComponents/home";
 import Search from '../components/dashboardComponents/search';
-import Wallat from '../components/dashboardComponents/wallat';
-import Qrcode from '../components/dashboardComponents/qrcode';
-import Withdraw from '../components/dashboardComponents/withdraw';
+import Wallat from '../components/dashboardComponents/wallat/wallat';
+import Qrcode from '../components/dashboardComponents/qrcode/qrcode';
+import SendDiscount from '../components/dashboardComponents/sendDiscount/sendDiscount';
 import HomeIcon from '../assets/icons/homeIcon';
 import SearchIcon from '../assets/icons/searchIcon';
 import WallatIcon from '../assets/icons/wallatIcon';
@@ -16,7 +16,7 @@ import { DashboardTabParamList } from '../types/navigationTypes';
 
 const Tab = createBottomTabNavigator<DashboardTabParamList>();
 
-export default function BottomTabNavigation({ onTabChange, openFilterSidebar, closeFilterSidebar }: any) {
+export default function BottomTabNavigation({ onTabChange }: any) {
 
     return (
         <Tab.Navigator
@@ -25,37 +25,37 @@ export default function BottomTabNavigation({ onTabChange, openFilterSidebar, cl
                     switch (route.name) {
                         case 'DashboardHome':
                             return (
-                                <View style={{ backgroundColor: 'transparent', height: 56, width: 56, justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={styles.BottomTabIcons}>
                                     <HomeIcon size={30} focused={focused} />
                                 </View>
                             );
                         case 'SearchTab':
                             return (
-                                <View style={{ backgroundColor: 'transparent', height: 56, width: 56, justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={styles.BottomTabIcons}>
                                     <SearchIcon size={28} focused={focused} />
                                 </View>
                             );
                         case 'WalletTab':
                             return (
-                                <View style={{ backgroundColor: 'transparent', height: 56, width: 56, justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={styles.BottomTabIcons}>
                                     <WallatIcon size={28} focused={focused} />
                                 </View>
                             );
                         case 'QrCodeTab':
                             return (
-                                <View style={{ backgroundColor: 'transparent', height: 56, width: 56, justifyContent: 'center', alignItems: 'center' }}>
-                                    <QRCodeIcon size={28} focused={focused} />
+                                <View style={styles.BottomTabIcons}>
+                                    <QRCodeIcon size={20} focused={focused} />
                                 </View>
                             );
                         case 'WithdrawTab':
                             return (
-                                <View style={{ backgroundColor: 'transparent', height: 56, width: 56, justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={styles.BottomTabIcons}>
                                     <WithdrawIcon size={28} focused={focused} />
                                 </View>
                             );
                         default:
                             return (
-                                <View style={{ backgroundColor: 'transparent', height: 56, width: 56, justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={styles.BottomTabIcons}>
                                     <HomeIcon size={30} focused={focused} />
                                 </View>
                             );
@@ -97,20 +97,20 @@ export default function BottomTabNavigation({ onTabChange, openFilterSidebar, cl
             })}
         >
             <Tab.Screen name="DashboardHome" component={Home} options={{ headerShown: false }} />
-            <Tab.Screen 
-                name="SearchTab" 
-                component={Search} 
-                options={{ headerShown: false }} 
-                listeners={{
-                    tabPress: () => {
-                        closeFilterSidebar();
-                    }
-                }}
-                initialParams={{ openFilterSidebar }}
-            />
+            <Tab.Screen name="SearchTab" component={Search} options={{ headerShown: false }} />
             <Tab.Screen name="WalletTab" component={Wallat} options={{ headerShown: false }} />
             <Tab.Screen name="QrCodeTab" component={Qrcode} options={{ headerShown: false }} />
-            <Tab.Screen name="WithdrawTab" component={Withdraw} options={{ headerShown: false }} />
+            <Tab.Screen name="WithdrawTab" component={SendDiscount} options={{ headerShown: false }} />
         </Tab.Navigator>
     );
 }
+
+const styles = StyleSheet.create({
+    BottomTabIcons: {
+        backgroundColor: 'transparent', 
+        height: 56, 
+        width: 56, 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    }
+});

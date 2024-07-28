@@ -1,19 +1,25 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
     Image, SafeAreaView, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback,
-    View, KeyboardAvoidingView, ScrollView, Keyboard
+    View, KeyboardAvoidingView, ScrollView, StyleSheet, Dimensions
 } from "react-native";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { AuthStackParamList, RootStackParamList } from '../types/navigationTypes';
+import { Feather } from '@expo/vector-icons';
 import CheckBox from "../components/checkbox";
+import { useLocale } from "../contexts/TranslationContext";
+import LanguageModal from "@/components/languageModal";
 
 type AuthNavigationProp = NativeStackNavigationProp<AuthStackParamList>;
 type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
+const windowHeight = Dimensions.get('window').height;
+
 export default function SigninScreen() {
+
+    const { t } = useLocale();
+
     const authNavigation = useNavigation<AuthNavigationProp>();
     const rootNavigation = useNavigation<RootNavigationProp>();
 
@@ -21,25 +27,18 @@ export default function SigninScreen() {
     const [password, setPassword] = useState('');
     const [isChecked, setChecked] = useState(false);
 
-    const [keyboardVisible, setKeyboardVisible] = useState(false);
     const [inputEmailIsFocus, setInputEmailIsFocus] = useState(false);
     const [inputEmailError, setInputEmailError] = useState(false);
     const [inputPasswordIsFocus, setInputPasswordIsFocus] = useState(false);
     const [inputPasswordError, setInputPasswordError] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-            setKeyboardVisible(true);
-        });
-        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-            setKeyboardVisible(false);
-        });
+        setTimeout(() => {
+            setModalVisible(true)
+        }, 300)
 
-        return () => {
-            keyboardDidHideListener.remove();
-            keyboardDidShowListener.remove();
-        };
-    }, []);
+    }, [])
 
     const validateEmail = (email: string) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -86,44 +85,62 @@ export default function SigninScreen() {
 
     };
 
+    const handleCloseModal = () => {
+        setModalVisible(false);
+    };
+
     return (
-        <SafeAreaView className="flex-1">
+        <SafeAreaView style={styles.safeareaview}>
+            <LanguageModal
+                modalVisible={modalVisible}
+                handleCloseModal={handleCloseModal}
+            />
             <KeyboardAvoidingView>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View className="flex-1 h-screen flex flex-col items-center">
-                        <View className={`${keyboardVisible ? 'hidden' : ''} flex w-full top-14 h-52 p-5`}>
-                            <View className="w-full h-full bg-neutral-200 flex justify-center items-center rounded-2xl">
-                                <Text className="text-6xl font-bold">LOGO</Text>
+                    <View style={styles.container}>
+                        <View style={styles.logoContainer}>
+                            <View style={styles.logo}>
+                                <Text style={styles.logoText}>LOGO</Text>
                             </View>
                         </View>
 
-                        <View className="w-full p-5 mt-16">
-                            <Text className="text-5xl font-bold">Iniciar sessão</Text>
+                        <View style={styles.header}>
+                            <Text style={styles.headerText}>{t('signin.header')}</Text>
                         </View>
 
-                        <View className="w-full mt-1 gap-2">
-                            <Text className="text-2xl px-5 font-normal">
-                                Email ou Telemovel
-                            </Text>
-                            <View className="relative px-5 justify-center items-center">
-                                <View className={`${inputEmailIsFocus ? '' : 'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputEmailError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
+                        <View style={styles.inputGroup}>
+                            <Text style={styles.label}>{t('signin.email')}</Text>
+                            <View style={styles.inputWrapper}>
+                                <View style={[
+                                    styles.inputHighlight,
+                                    inputEmailIsFocus && styles.inputHighlightVisible,
+                                    inputEmailError && styles.inputErrorHighlight
+                                ]}></View>
                                 <TextInput
                                     cursorColor={'#ADB5BD'}
                                     onFocus={() => setInputEmailIsFocus(true)}
                                     onBlur={() => setInputEmailIsFocus(false)}
                                     onChangeText={handleEmailChange}
-                                    className={`border rounded-lg w-full h-14 ${inputEmailIsFocus ? inputEmailError ? 'border-[#DC3545]' : 'border-black' : inputEmailError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
+                                    style={[
+                                        styles.input,
+                                        inputEmailIsFocus && (inputEmailError ? styles.inputError : styles.inputFocused),
+                                        inputEmailError && styles.inputError
+                                    ]}
                                     keyboardType={'email-address'}
                                 />
                             </View>
                         </View>
 
-                        <View className="w-full mt-1 gap-2 mt-4">
-                            <Text className="text-2xl px-5 font-normal">
-                                Password
-                            </Text>
-                            <View className="relative px-5 justify-center items-center">
-                                <View className={`${inputPasswordIsFocus ? '' : 'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputPasswordError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
+                        <View style={styles.inputGroup}>
+                            <Text style={styles.label}>{t('signin.password')}</Text>
+                            <View style={styles.inputWrapper}>
+                                <View
+                                    style={[
+                                        styles.inputHighlight,
+                                        inputPasswordIsFocus && styles.inputHighlightVisible,
+                                        inputPasswordError && styles.inputErrorHighlight
+                                    ]}
+                                ></View>
                                 <TextInput
                                     cursorColor={'#ADB5BD'}
                                     onFocus={() => setInputPasswordIsFocus(true)}
@@ -131,54 +148,55 @@ export default function SigninScreen() {
                                     onChangeText={handlePasswordChange}
                                     value={password}
                                     secureTextEntry={true}
-                                    className={`border rounded-lg w-full h-14 ${inputPasswordIsFocus ? inputPasswordError ? 'border-[#DC3545]' : 'border-black' : inputPasswordError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
+                                    style={[
+                                        styles.input,
+                                        inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
+                                        inputPasswordError && styles.inputError
+                                    ]}
                                 />
                             </View>
                         </View>
 
-                        <View className="flex flex-row items-center px-5 gap-3 w-full h-20">
+                        <View style={styles.checkboxContainer}>
                             <CheckBox
                                 label="Esse é um checkbox"
-                                labelStyle={{ color: '#fff', fontSize: 16 }}
+                                labelStyle={{ color: '#fff000', fontSize: 16 }}
                                 iconColor="#fff"
                                 checkColor="#fff600"
                                 value={isChecked}
                                 onChange={handleCheck}
                             />
-                            <Text className="text-2xl mb-0.5">Manter-me conectado</Text>
+                            <Text style={styles.checkboxLabel}>{t('signin.keepLogged')}</Text>
                         </View>
 
-                        <View className={`flex-1 w-full h-full px-5 flex flex-col ${keyboardVisible ? 'justify-start' : 'justify-end'} gap-5 pb-8`}>
-                            <View className="flex w-full">
-                                <TouchableHighlight onPress={handleSubmit}
-                                    underlayColor="#e5e7eb"
-                                    activeOpacity={0.6}
-                                    style={{ borderRadius: 8 }}
-                                >
-                                    <View className="flex flex-row gap-2 border bg-black w-full h-14 justify-center items-center p-4 rounded-lg">
-                                        <FontAwesomeIcon style={{ color: 'white', padding: 11 }} icon={faArrowRight} />
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-                            <View className=" w-full">
-                                <TouchableHighlight
-                                    underlayColor="#e5e7eb"
-                                    activeOpacity={0.6}
-                                    style={{ borderRadius: 8 }}
-                                >
-                                    <View className="flex flex-row gap-2 bg-neutral-200 h-14 w-full justify-center items-center p-4 rounded-lg">
-                                        <Image source={require("../assets/icons/google-icon.png")} className="w-8 h-8" />
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-                            <View className="w-full items-center">
+                        <View style={styles.buttonContainer}>
+                            <TouchableHighlight onPress={handleSubmit}
+                                underlayColor="#e5e7eb"
+                                activeOpacity={0.6}
+                                style={styles.buttonWrapper}
+                            >
+                                <View style={styles.submitButton}>
+                                    <Feather name="arrow-right" size={24} color={'white'} />
+                                </View>
+                            </TouchableHighlight>
+
+                            <TouchableHighlight
+                                underlayColor="#e5e7eb"
+                                activeOpacity={0.6}
+                                style={styles.buttonWrapper}
+                            >
+                                <View style={styles.googleButton}>
+                                    <Image source={require("../assets/icons/google-icon.png")} style={styles.googleIcon} />
+                                </View>
+                            </TouchableHighlight>
+
+                            <View style={styles.linkWrapper}>
                                 <TouchableWithoutFeedback onPress={() => authNavigation.navigate('signup')}>
-                                    <Text className="text-2xl text-blue-500">Criar nova conta</Text>
+                                    <Text style={styles.link}>{t('signin.createAccount')}</Text>
                                 </TouchableWithoutFeedback>
-                            </View>
-                            <View className="w-full items-center">
+
                                 <TouchableWithoutFeedback onPress={() => authNavigation.navigate('signup')}>
-                                    <Text className="text-2xl text-blue-500">Esqueceu sua senha?</Text>
+                                    <Text style={styles.link}>{t('signin.forgotPassword')}</Text>
                                 </TouchableWithoutFeedback>
                             </View>
                         </View>
@@ -188,3 +206,154 @@ export default function SigninScreen() {
         </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    safeareaview: {
+        backgroundColor: 'white',
+        height: '100%'
+    },
+    container: {
+        flex: 1,
+        height: windowHeight,
+        gap: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 15,
+        backgroundColor: 'white',
+        paddingBottom: 30
+    },
+    logoContainer: {
+        width: '100%',
+        height: 150,
+        padding: 5,
+        marginTop: 60
+    },
+    logo: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#E5E7EB',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 20,
+    },
+    logoText: {
+        fontSize: 60,
+        fontWeight: 'bold',
+    },
+    header: {
+        width: '100%',
+        padding: 5,
+    },
+    headerText: {
+        fontSize: 40,
+        fontWeight: 'bold',
+    },
+    inputGroup: {
+        width: '100%',
+        marginTop: 1,
+    },
+    label: {
+        fontSize: 20,
+        fontWeight: 'normal',
+        marginBottom: 4
+    },
+    inputWrapper: {
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    inputHighlight: {
+        position: 'absolute',
+        borderWidth: 4,
+        width: '101.5%',
+        height: 53,
+        borderRadius: 10,
+        opacity: 0,
+    },
+    inputHighlightVisible: {
+        opacity: 0.15,
+        borderColor: '#6610F2',
+    },
+    inputErrorHighlight: {
+        opacity: 0.20,
+        borderColor: '#DC3545',
+    },
+    input: {
+        borderWidth: 1,
+        borderRadius: 10,
+        width: '100%',
+        height: 48,
+        fontSize: 20,
+        color: '#ADB5BD',
+        borderColor: '#ADB5BD',
+        paddingHorizontal: 10
+    },
+    inputFocused: {
+        borderColor: '#000000',
+    },
+    inputError: {
+        borderColor: '#DC3545',
+    },
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 3,
+        width: '100%',
+        height: 60,
+    },
+    checkboxLabel: {
+        fontSize: 20,
+        marginBottom: 2,
+        marginLeft: 5
+    },
+    buttonContainer: {
+        flex: 1,
+        width: '100%',
+        flexDirection: 'column',
+        gap: 20,
+        paddingBottom: 8,
+        justifyContent: 'flex-end'
+    },
+    buttonWrapper: {
+        borderRadius: 8,
+    },
+    submitButton: {
+        flexDirection: 'row',
+        backgroundColor: '#000000',
+        width: '100%',
+        height: 52,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 4,
+        borderRadius: 10,
+    },
+    googleButton: {
+        flexDirection: 'row',
+        gap: 2,
+        backgroundColor: '#E5E7EB',
+        height: 52,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 4,
+        borderRadius: 10,
+    },
+    googleIcon: {
+        width: 32,
+        height: 32,
+    },
+    linkWrapper: {
+        gap: 15,
+        height: 56,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 4,
+        borderRadius: 10,
+        marginTop: 15
+    },
+    link: {
+        fontSize: 20,
+        color: '#1E40AF',
+    },
+});

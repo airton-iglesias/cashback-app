@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, ScrollView } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import CountryFlag from 'react-native-country-flag';
 
@@ -13,15 +13,34 @@ const SelectOption = ({ item, isSelected, onSelect }: any) => {
         borderColor: '#d1d5db'
       }}
     >
-      <View className="rounded-lg justify-between w-full h-14 px-5 text-xl text-gray-500 flex flex-row items-center">
-        <View className="flex flex-row gap-2">
+      <View  style={styles.optionWrapper}>
+        <View style={styles.optionContent}>
           {item.flag ? <CountryFlag isoCode={item.flag} size={20} /> : null}
-          <Text className="text-xl">{item.text}</Text>
+          <Text style={{fontSize: 18}}>{item.text}</Text>
         </View>
         {isSelected && <Feather name="check" size={24} color="black" />}
       </View>
     </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  optionWrapper: {
+    borderRadius: 8,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    height: 56,
+    paddingHorizontal: 20,
+    fontSize: 20,
+    flexDirection: 'row',
+    color: '#6b7280'
+  },
+  optionContent: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center'
+  }
+})
 
 export default SelectOption;

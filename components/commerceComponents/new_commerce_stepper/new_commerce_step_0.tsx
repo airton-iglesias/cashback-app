@@ -1,78 +1,208 @@
-import { View, Text, TouchableOpacity, TouchableHighlight, SafeAreaView, KeyboardAvoidingView, ScrollView } from "react-native";
-import RadioCommerce from "../radioCommerce";
-import { useState } from "react";
-import RadioCommerceType from "../radioCommerceType";
-import { CommerceStackParamList } from "../types";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useNavigation } from "@react-navigation/native";
-import { Octicons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, StyleSheet, TouchableHighlight } from 'react-native';
+import RadioCommerce from '../radioCommerce';
+import RadioCommerceType from '../radioCommerceType';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import { Octicons, AntDesign, Feather } from '@expo/vector-icons';
+import { CommerceStackParamList } from '../../../types/navigationTypes';
 
-type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
+type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
 export default function New_Commerce_step_0() {
+    //information variables
+    const [CashbackType, setCashbackType] = useState<string>('Permanente');
+    const [PlaceType, setPlaceType] = useState<string>('Físico');
+
+    // navigation initialization and buttons states
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
     const [selectedType, setSelectedType] = useState<number>(0);
-    const [selected, setSelected] = useState<number>(0);
+    const [selectedPlace, setSelectedPlace] = useState<number>(0);
 
     return (
-        <SafeAreaView className="flex-1 bg-white">
-            <KeyboardAvoidingView style={{ flex: 1 }}>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    
-                    <View className="relative items-start justify-end px-8 w-full h-24">
-                        <TouchableOpacity onPress={() => commerceNavigation.navigate("home")} style={{ position: 'absolute', left: 20, width: 40, height: 40, justifyContent: 'flex-end', alignItems: 'flex-start', paddingBottom: 3 }}>
-                            <Octicons name="chevron-left" size={24} color="black" />
-                        </TouchableOpacity>
-                        <Text className="text-4xl ml-6 font-bold">Novo</Text>
-                        <TouchableOpacity onPress={() => commerceNavigation.navigate("home")} style={{ position: 'absolute', right: 20, width: 40, height: 40, justifyContent: 'flex-end', alignItems: 'flex-end', paddingBottom: 3 }}>
-                            <AntDesign name="close" size={24} color="black" />
-                        </TouchableOpacity>
+        <SafeAreaView style={styles.container}>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                <View style={styles.headerContainer}>
+                    <TouchableOpacity
+                        style={styles.backButton}
+                        onPress={() => commerceNavigation.goBack()}
+                    >
+                        <Octicons name="chevron-left" size={32} color="black" />
+
+                    </TouchableOpacity>
+                    <Text style={styles.headerText}>Novo</Text>
+                    <TouchableOpacity style={styles.closeButton}
+                        onPress={() => commerceNavigation.navigate("home")}
+                    >
+                        <AntDesign name="close" size={28} color="black" />
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Escolha um tipo</Text>
+                    <RadioCommerceType
+                        selected={selectedType}
+                        options={['Permanente', 'Evento', 'Promoção']}
+                        onChangeSelect={(opt, i) => {setSelectedType(i); setCashbackType(opt)}}
+                    />
+                </View>
+
+                <View style={styles.section}>
+                    <Text style={[styles.sectionTitle, { marginTop: 10, marginBottom: 35 }]}>Físico ou online?</Text>
+                    <RadioCommerce
+                        selected={selectedPlace}
+                        options={['Físico', 'Web']}
+                        onChangeSelect={(opt, i) => {setSelectedPlace(i); setPlaceType(opt)}}
+                    />
+                </View>
+
+                <View style={styles.footer}>
+                    <View style={styles.stepperLayoutContainer}>
+                        <Text style={styles.stepperLayoutText}>1 de 6</Text>
+                        <View style={styles.stepperLayoutSelected}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
                     </View>
 
-                    <View className={"w-full mt-1 gap-2 mt-6 px-5 items-center border-t pt-6 border-gray-300"}>
-                        <Text className={"text-3xl font-bold mb-4"}>
-                            Escolha um tipo
-                        </Text>
-                        <View className={"relative mt-1"}>
-                            <RadioCommerceType
-                                selected={selectedType}
-                                options={['Permanente', 'Evento', 'Promoção']}
-                                onChangeSelect={(opt: any, i: any) => setSelectedType(i)}
-                            />
+                    <TouchableHighlight
+                        onPress={() => commerceNavigation.navigate("new_commerce_step_1", {CashbackType, PlaceType})}
+                        underlayColor="#e5e7eb"
+                        activeOpacity={0.6}
+                        style={styles.nextButton}
+                    >
+                        <View style={styles.nextButtonContent}>
+                            <Feather name="arrow-right" size={24} color="white" />
                         </View>
-                    </View>
+                    </TouchableHighlight>
+                </View>
+            </ScrollView>
 
-                    <View className={"w-full mt-1 gap-2 mt-10 px-5 items-center"}>
-                        <Text className={"text-3xl font-bold"}>
-                            Físico ou online?
-                        </Text>
-                        <View className={"relative mt-1"}>
-                            <RadioCommerce
-                                selected={selected}
-                                options={['Físico', 'Web']}
-                                onChangeSelect={(opt: any, i: any) => setSelected(i)}
-                            />
-                        </View>
-                    </View>
-
-                    <View className="flex-1 w-full px-5 h-full justify-end pb-6 pt-44">
-                        <TouchableHighlight
-                            onPress={() => commerceNavigation.navigate("new_commerce_1")}
-                            underlayColor="#e5e7eb"
-                            activeOpacity={0.6}
-                            style={{ borderRadius: 8 }}
-                        >
-                            <View className="flex flex-row gap-2 border bg-black w-full h-14 justify-center items-center p-4 rounded-lg">
-                                <FontAwesomeIcon style={{ color: 'white', padding: 11 }} icon={faArrowRight} />
-                            </View>
-                        </TouchableHighlight>
-                    </View>
-
-                </ScrollView>
-            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+        paddingTop: 30
+    },
+    backButton: {
+        position: 'absolute',
+        left: 15,
+        width: 40,
+        height: 40,
+        paddingTop: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 15,
+        width: 40,
+        height: 40,
+        paddingBottom: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    headerContainer: {
+        position: 'relative',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        width: '100%',
+        height: 80,
+        borderBottomWidth: 1,
+        borderColor: '#DADADA',
+        marginBottom: 10
+    },
+    headerText: {
+        fontSize: 24,
+        fontWeight: '700',
+        left: 40
+    },
+    headerButtonLeft: {
+        position: 'absolute',
+        left: 20,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    headerButtonRight: {
+        position: 'absolute',
+        right: 20,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    title: {
+        fontSize: 32,
+        fontWeight: 'bold',
+    },
+    section: {
+        width: '100%',
+        paddingHorizontal: 15,
+        marginTop: 18,
+        alignItems: 'center',
+    },
+    sectionTitle: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        marginBottom: 30,
+    },
+    footer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        paddingBottom: 24,
+    },
+    stepperLayoutContainer: {
+        flexDirection: 'row',
+        gap: 10,
+        alignItems: 'center',
+        marginBottom: 20
+    },
+    stepperLayout: {
+        height: 6,
+        width: 14,
+        backgroundColor: '#121212',
+        borderRadius: 22,
+        opacity: 0.5,
+        marginTop: 2
+    },
+    stepperLayoutSelected: {
+        opacity: 1,
+        width: 31,
+        backgroundColor: '#121212',
+        borderRadius: 22,
+        height: 6,
+        marginTop: 2
+    },
+    stepperLayoutText: {
+        fontSize: 18,
+        fontWeight: 'normal',
+    },
+    nextButton: {
+        borderRadius: 8,
+    },
+    nextButtonContent: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'black',
+        width: 64,
+        height: 64,
+        borderRadius: 999,
+        paddingHorizontal: 16,
+    },
+});

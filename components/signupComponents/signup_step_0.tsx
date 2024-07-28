@@ -1,42 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
-import { Image, Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, View } from "react-native";
+import { Image, Dimensions, Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback, View, StyleSheet } from "react-native";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { SignupStackParamList } from '../../types/navigationTypes';
+import { Feather } from '@expo/vector-icons';
+import { useLocale } from '../../contexts/TranslationContext';
 
 type SignupStep1NavigationProp = NativeStackNavigationProp<SignupStackParamList>;
 
-export default function Signup_Step_0() {
+const windowHeight = Dimensions.get('window').height;
 
+export default function Signup_Step_0() {
+    const { t } = useLocale();
     const signupNavigation = useNavigation<SignupStep1NavigationProp>();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const [keyboardVisible, setKeyboardVisible] = useState(false);
     const [inputEmailIsFocus, setInputEmailIsFocus] = useState(false);
     const [inputEmailError, setInputEmailError] = useState(false);
     const [inputPasswordIsFocus, setInputPasswordIsFocus] = useState(false);
     const [inputPasswordError, setInputPasswordError] = useState(false);
     const [inputConfirmPasswordIsFocus, setInputConfirmPasswordIsFocus] = useState(false);
     const [inputConfirmPasswordError, setInputConfirmPasswordError] = useState(false);
-
-    useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-            setKeyboardVisible(true);
-        });
-        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-            setKeyboardVisible(false);
-        });
-
-        return () => {
-            keyboardDidHideListener.remove();
-            keyboardDidShowListener.remove();
-        };
-    }, []);
 
     const handleEmailChange = (text: string) => {
         setEmail(text);
@@ -71,90 +58,113 @@ export default function Signup_Step_0() {
     };
 
     return (
-        <SafeAreaView className={"flex-1"}>
+        <SafeAreaView style={styles.safeareaview}>
             <KeyboardAvoidingView>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View className={"flex-1 h-screen flex flex-col items-center"}>
+                    <View style={styles.container}>
 
-                        <View className={"w-full p-5 mt-20 mb-4"}>
-                            <Text className={"text-5xl font-bold"}>Nova conta</Text>
+                        <View style={styles.header}>
+                            <Text style={styles.headerText}>{t('signup_step_0.header')}</Text>
                         </View>
 
-                        <View className={"w-full mt-1 gap-2"}>
-                            <Text className={"text-2xl px-5 font-normal"}>
-                                Email ou Telemovel
-                            </Text>
-                            <View className={"relative px-5 justify-center items-center"}>
-                                <View className={`${inputEmailIsFocus ? 'block' : 'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputEmailError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => setInputEmailIsFocus(true)}
-                                    onBlur={() => setInputEmailIsFocus(false)}
-                                    onChangeText={handleEmailChange}
-                                    className={`border rounded-lg w-full h-14 ${inputEmailIsFocus ? inputEmailError ? 'border-[#DC3545]' : 'border-black' : inputEmailError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
-                                    keyboardType={'email-address'}
-                                />
-                            </View>
-                        </View>
-
-                        <View className={"w-full mt-1 gap-2 mt-4"}>
-                            <Text className={"text-2xl px-5 font-normal"}>
-                                Password
-                            </Text>
-                            <View className={"relative px-5 justify-center items-center"}>
-                                <View className={`${inputPasswordIsFocus ? 'block' : 'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputPasswordError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => setInputPasswordIsFocus(true)}
-                                    onBlur={() => setInputPasswordIsFocus(false)}
-                                    onChangeText={handlePasswordChange}
-                                    className={`border rounded-lg w-full h-14 ${inputPasswordIsFocus ? inputPasswordError ? 'border-[#DC3545]' : 'border-black' : inputPasswordError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
-                                    value={password}
-                                    secureTextEntry={true}
-                                />
-                            </View>
-                        </View>
-
-                        <View className={"w-full mt-1 gap-2 mt-4"}>
-                            <Text className={"text-2xl px-5 font-normal"}>
-                                Confirme o Password
-                            </Text>
-                            <View className={"relative px-5 justify-center items-center"}>
-                                <View className={`${inputConfirmPasswordIsFocus ? 'block' : 'hidden'} absolute border-4 w-[26.1rem] h-[4.07rem] rounded-xl ${inputConfirmPasswordError ? 'border-[#DC3545] opacity-20' : 'border-[#6610F2] opacity-15'} rounded-lg`}></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => setInputConfirmPasswordIsFocus(true)}
-                                    onBlur={() => setInputConfirmPasswordIsFocus(false)}
-                                    onChangeText={handleConfirmPasswordChange}
-                                    className={`border rounded-lg w-full h-14 ${inputConfirmPasswordIsFocus ? inputConfirmPasswordError ? 'border-[#DC3545]' : 'border-black' : inputConfirmPasswordError ? 'border-[#DC3545]' : 'border-gray-300'} px-5 text-xl text-gray-500`}
-                                    value={confirmPassword}
-                                    secureTextEntry={true}
-                                />
-                            </View>
-                        </View>
-
-                        <View className={`flex-1 flex w-full h-full px-5 flex flex-col ${keyboardVisible ? 'justify-start' : 'justify-end'} items-start gap-5 pb-8 mt-8`}>
-                            <View className="w-full">
-                                <TouchableHighlight onPress={handleNextStep}
-                                    underlayColor="#e5e7eb"
-                                    activeOpacity={0.6}
-                                    style={{ borderRadius: 8 }}
-                                >
-                                    <View className="flex flex-row gap-2 border bg-black w-full h-14 justify-center items-center p-4 rounded-lg">
-                                        <FontAwesomeIcon style={{ color: 'white', padding: 11 }} icon={faArrowRight} />
+                        <View style={styles.inputContainer}>
+                            <View style={styles.inputSubContainer}>
+                                <View style={styles.inputGroup}>
+                                    <Text style={styles.label}>{t('signup_step_0.email')}</Text>
+                                    <View style={styles.inputWrapper}>
+                                        <View style={[
+                                            styles.inputHighlight,
+                                            inputEmailIsFocus && styles.inputHighlightVisible,
+                                            inputEmailError && styles.inputErrorHighlight
+                                        ]}></View>
+                                        <TextInput
+                                            cursorColor={'#ADB5BD'}
+                                            onFocus={() => setInputEmailIsFocus(true)}
+                                            onBlur={() => setInputEmailIsFocus(false)}
+                                            onChangeText={handleEmailChange}
+                                            style={[
+                                                styles.input,
+                                                inputEmailIsFocus && (inputEmailError ? styles.inputError : styles.inputFocused),
+                                                inputEmailError && styles.inputError
+                                            ]}
+                                            keyboardType={'email-address'}
+                                        />
                                     </View>
-                                </TouchableHighlight>
-                            </View>
-                            <View className="w-full">
-                                <TouchableHighlight
-                                    underlayColor="#e5e7eb"
-                                    activeOpacity={0.6}
-                                    style={{ borderRadius: 8 }}
-                                >
-                                    <View className="flex flex-row gap-2 bg-gray-200 h-14 w-full justify-center items-center p-4 rounded-lg">
-                                        <Image source={require("../../assets/icons/google-icon.png")} className="w-8 h-8" />
+                                </View>
+
+                                <View style={styles.inputGroup}>
+                                    <Text style={styles.label}>{t('signup_step_0.password')}</Text>
+                                    <View style={styles.inputWrapper}>
+                                        <View style={[
+                                            styles.inputHighlight,
+                                            inputPasswordIsFocus && styles.inputHighlightVisible,
+                                            inputPasswordError && styles.inputErrorHighlight
+                                        ]}></View>
+                                        <TextInput
+                                            cursorColor={'#ADB5BD'}
+                                            onFocus={() => setInputPasswordIsFocus(true)}
+                                            onBlur={() => setInputPasswordIsFocus(false)}
+                                            onChangeText={handlePasswordChange}
+                                            value={password}
+                                            secureTextEntry={true}
+                                            style={[
+                                                styles.input,
+                                                inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
+                                                inputPasswordError && styles.inputError
+                                            ]}
+                                        />
                                     </View>
-                                </TouchableHighlight>
+                                </View>
+
+                                <View style={styles.inputGroup}>
+                                    <Text style={styles.label}>{t('signup_step_0.confirmPassword')}</Text>
+                                    <View style={styles.inputWrapper}>
+                                        <View style={[
+                                            styles.inputHighlight,
+                                            inputConfirmPasswordIsFocus && styles.inputHighlightVisible,
+                                            inputConfirmPasswordError && styles.inputErrorHighlight
+                                        ]}></View>
+                                        <TextInput
+                                            cursorColor={'#ADB5BD'}
+                                            onFocus={() => setInputConfirmPasswordIsFocus(true)}
+                                            onBlur={() => setInputConfirmPasswordIsFocus(false)}
+                                            onChangeText={handleConfirmPasswordChange}
+                                            value={confirmPassword}
+                                            secureTextEntry={true}
+                                            style={[
+                                                styles.input,
+                                                inputConfirmPasswordIsFocus && (inputConfirmPasswordError ? styles.inputError : styles.inputFocused),
+                                                inputConfirmPasswordError && styles.inputError
+                                            ]}
+                                        />
+                                    </View>
+                                </View>
+                            </View>
+
+                            <View style={[styles.buttonContainer]}
+                            >
+                                <View style={styles.fullWidth}>
+                                    <TouchableHighlight onPress={handleNextStep}
+                                        underlayColor="#e5e7eb"
+                                        activeOpacity={0.6}
+                                        style={styles.buttonWrapper}
+                                    >
+                                        <View style={styles.submitButton}>
+                                            <Feather name="arrow-right" size={24} style={styles.icon} />
+                                        </View>
+                                    </TouchableHighlight>
+                                </View>
+                                <View style={styles.fullWidth}>
+                                    <TouchableHighlight
+                                        underlayColor="#e5e7eb"
+                                        activeOpacity={0.6}
+                                        style={styles.buttonWrapper}
+                                    >
+                                        <View style={styles.googleButton}>
+                                            <Image source={require("../../assets/icons/google-icon.png")} style={styles.googleIcon} />
+                                        </View>
+                                    </TouchableHighlight>
+                                </View>
                             </View>
                         </View>
                     </View>
@@ -163,3 +173,134 @@ export default function Signup_Step_0() {
         </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    safeareaview: {
+        backgroundColor: 'white', 
+        height: '100%'
+    },
+    container: {
+        flex: 1,
+        height: windowHeight,
+        gap: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 15,
+        paddingBottom: 30,
+    },
+    header: {
+        width: '100%',
+        height: 54,
+        padding: 5,
+        marginTop: 60,
+        marginBottom: 4,
+    },
+    headerText: {
+        fontSize: 40,
+        fontWeight: 'bold',
+    },
+    inputGroup: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        marginTop: 4,
+        gap: 2,
+    },
+    label: {
+        fontSize: 20,
+        fontWeight: 'normal',
+        marginBottom: 4
+    },
+    inputContainer: {
+        flex: 1,
+        width: '100%',
+        height:  '100%',
+        justifyContent: 'space-between',
+
+    },
+    inputSubContainer:{
+        flex: 0.5,
+        gap: 30
+    },
+    inputWrapper: {
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    inputHighlight: {
+        position: 'absolute',
+        borderWidth: 4,
+        width: '101.5%',
+        height: 53,
+        borderRadius: 10,
+        opacity: 0,
+    },
+    inputHighlightVisible: {
+        opacity: 0.15,
+        borderColor: '#6610F2',
+    },
+    inputErrorHighlight: {
+        opacity: 0.20,
+        borderColor: '#DC3545',
+    },
+    input: {
+        borderWidth: 1,
+        borderRadius: 10,
+        width: '100%',
+        height: 48,
+        fontSize: 20,
+        color: '#ADB5BD',
+        borderColor: '#ADB5BD',
+        paddingHorizontal: 10
+    },
+    inputFocused: {
+        borderColor: '#000000',
+    },
+    inputError: {
+        borderColor: '#DC3545',
+    },
+    buttonContainer: {
+        flex: 1,
+        width: '100%',
+        height: windowHeight,
+        flexDirection: 'column',
+        gap: 20,
+        justifyContent: 'flex-end',
+    },
+    buttonWrapper: {
+        borderRadius: 8,
+    },
+    submitButton: {
+        flexDirection: 'row',
+        backgroundColor: '#000000',
+        width: '100%',
+        height: 52,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 4,
+        borderRadius: 10,
+    },
+    googleButton: {
+        flexDirection: 'row',
+        gap: 2,
+        backgroundColor: '#E5E7EB',
+        height: 52,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 4,
+        borderRadius: 10,
+    },
+    googleIcon: {
+        width: 32,
+        height: 32,
+    },
+    icon: {
+        color: 'white',
+        padding: 11,
+    },
+    fullWidth: {
+        width: '100%',
+        justifyContent: 'flex-end'
+    },
+});

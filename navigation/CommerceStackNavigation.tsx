@@ -20,7 +20,7 @@ const CommerceStack = createNativeStackNavigator<CommerceStackParamList>();
 
 const CommerceStackNavigation = () => {
     return (
-        <CommerceStack.Navigator initialRouteName="home">
+        <CommerceStack.Navigator initialRouteName="new_commerce_step_0">
             <CommerceStack.Screen name="home" component={CommerceHome} options={{ headerShown: false }} />
             <CommerceStack.Screen name="commerce_menu" component={CommerceMenu} options={{ headerShown: false }} />
             <CommerceStack.Screen name="commerce_credit_extract" component={CommerceCreditExtract} options={{ headerShown: false }} />
@@ -29,14 +29,14 @@ const CommerceStackNavigation = () => {
             <CommerceStack.Screen name="commerce_access_manager" component={CommerceAccessManager} options={{ headerShown: false }} />
             <CommerceStack.Screen name="commerce_associate_edit" component={CommerceAssociateEdit} options={{ headerShown: false }} />
 
-            <CommerceStack.Screen name="new_commerce_0" component={New_Commerce_Step_0} options={{ headerShown: false }} />
-            <CommerceStack.Screen name="new_commerce_1" component={New_Commerce_Step_1} options={{ headerShown: false }} />
-            <CommerceStack.Screen name="new_commerce_2" component={new_commerce_Step_2} options={{ headerShown: false }} />
-            <CommerceStack.Screen name="new_commerce_3" component={new_commerce_Step_3} options={{ headerShown: false }} />
-            <CommerceStack.Screen name="new_commerce_4" component={new_commerce_Step_4} options={{ headerShown: false }} />
-            <CommerceStack.Screen name="new_commerce_5" component={new_commerce_Step_5} options={{ headerShown: false }} />
-            <CommerceStack.Screen name="new_commerce_6" component={New_Commerce_Step_6} options={{ headerShown: false }} />
-            <CommerceStack.Screen name="new_commerce_7" component={New_Commerce_Step_7} options={{ headerShown: false }} />
+            <CommerceStack.Screen name="new_commerce_step_0" component={New_Commerce_Step_0} options={{ headerShown: false }} />
+            <CommerceStack.Screen name="new_commerce_step_1" component={New_Commerce_Step_1} options={{ headerShown: false }} />
+            <CommerceStack.Screen name="new_commerce_step_2" component={new_commerce_Step_2} options={{ headerShown: false }} />
+            <CommerceStack.Screen name="new_commerce_step_3" component={new_commerce_Step_3} options={{ headerShown: false }} />
+            <CommerceStack.Screen name="new_commerce_step_4" component={new_commerce_Step_4} options={{ headerShown: false }} />
+            <CommerceStack.Screen name="new_commerce_step_5" component={new_commerce_Step_5} options={{ headerShown: false }} />
+            <CommerceStack.Screen name="new_commerce_step_6" component={New_Commerce_Step_6} options={{ headerShown: false }} />
+            <CommerceStack.Screen name="new_commerce_step_7" component={New_Commerce_Step_7} options={{ headerShown: false }} />
         </CommerceStack.Navigator>
     );
 }

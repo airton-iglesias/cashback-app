@@ -1,18 +1,25 @@
-import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
-import StoreIcon from "../../assets/icons/storeIcon";
-import CloudIcon from "../../assets/icons/cloudIcon";
+import React from 'react';
+import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import StoreIcon from '../../assets/icons/storeIcon';
+import CloudIcon from '../../assets/icons/cloudIcon';
+
+interface RadioCommerceProps {
+    options: string[];
+    onChangeSelect: (option: string, index: number) => void;
+    selected: number;
+}
 
 export default function RadioCommerce({
     options = [],
     onChangeSelect,
     selected
-}: any) {
+}: RadioCommerceProps) {
 
     return (
-        <View className="flex-row gap-8">
-            {options.map((opt: any, index: any) => (
-                <View key={index}>
-                    <View style={{width: 123,height: 123}} className={`${selected === index ? '' : 'hidden'} absolute border-2 rounded-xl border border-gray-400 opacity-20' rounded-lg z-10`}></View>
+        <View style={styles.container}>
+            {options.map((opt, index) => (
+                <View key={index} style={styles.optionWrapper}>
+                    {selected === index && <View style={styles.selectedBackground} />}
                     <TouchableOpacity
                         onPress={() => onChangeSelect(opt, index)}
                         style={[
@@ -21,7 +28,7 @@ export default function RadioCommerce({
                         ]}
                     >
                         {index === 0 ? <StoreIcon /> : <CloudIcon />}
-                        <Text className="text-xl font-semibold">
+                        <Text style={styles.optionText}>
                             {opt}
                         </Text>
                         <View style={[styles.outlineCircle, { backgroundColor: selected === index ? 'black' : 'white' }]}>
@@ -35,32 +42,53 @@ export default function RadioCommerce({
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        gap: 30,
+    },
+    optionWrapper: {
+        position: 'relative',
+    },
+    selectedBackground: {
+        position: 'absolute',
+        width: 150,
+        height: 150,
+        borderWidth: 2,
+        borderColor: '#E3E3E3',
+        borderRadius: 11,
+        opacity: 0.2,
+        backgroundColor: 'white',
+        zIndex: 10,
+    },
     optContainer: {
-        width: 123,
-        height: 123,
+        width: 150,
+        height: 150,
         borderWidth: 1,
         borderRadius: 11,
         borderColor: '#E3E3E3',
         justifyContent: 'center',
         alignItems: 'center',
         gap: 10,
-        backgroundColor: '#FAFAFA'
+        backgroundColor: '#FAFAFA',
     },
     selectedOptContainer: {
-        backgroundColor: 'white',
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.30,
+        backgroundColor: '#F8F9FA',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
         shadowRadius: 4.65,
         elevation: 8,
+        borderWidth: 1,
+        borderColor: '#6C757D'
+    },
+    optionText: {
+        fontSize: 18,
+        fontWeight: '600',
     },
     outlineCircle: {
-        width: 16,
-        height: 16,
-        borderRadius: 16,
+        width: 20,
+        height: 20,
+        borderRadius: 999,
         borderWidth: 1,
         borderColor: '#ABB5BE',
         alignItems: 'center',
@@ -70,7 +98,9 @@ const styles = StyleSheet.create({
     innerCircle: {
         width: '100%',
         height: '100%',
-        borderRadius: 9999,
+        borderRadius: 999,
         backgroundColor: 'white',
+        borderWidth: 1,
+        borderColor: 'black',
     },
 });

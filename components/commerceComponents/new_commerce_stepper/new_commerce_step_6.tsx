@@ -1,61 +1,93 @@
-import { SafeAreaView, View, Text, TouchableOpacity, TextInput, TouchableHighlight, KeyboardAvoidingView, ScrollView } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { Octicons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { useState } from "react";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { CommerceStackParamList } from "../../../types/navigationTypes";
-import { FontAwesome6 } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { SafeAreaView, View, Text, TouchableOpacity, TextInput, TouchableHighlight, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Octicons, AntDesign, Feather, Ionicons } from '@expo/vector-icons';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { CommerceStackParamList } from '../../../types/navigationTypes';
 
-type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
+type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
 export default function New_Commerce_step_6() {
-
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
-    const [types, setTypes] = useState<number>(0);
-    const typesOptions = [
-        { id: 1, text: 'Fidelização' },
-    ];
+
+    const [inputPasswordIsFocus, setInputPasswordIsFocus] = useState(false);
+    const [inputPasswordError, setInputPasswordError] = useState(false);
+    const [password, setPassword] = useState('');
+
+
+    const validatePassword = (password: string) => {
+        return password.length >= 6;
+    };
+
+    const handlePasswordChange = (text: string) => {
+        setPassword(text);
+        if (text.trim() === '') {
+            setInputPasswordError(false);
+        } else {
+            setInputPasswordError(!validatePassword(text));
+        }
+    };
 
     return (
-        <SafeAreaView className="flex-1 bg-white">
-            <KeyboardAvoidingView style={{ flex: 1 }}>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View className="relative items-start justify-end px-8 w-full h-24">
-                        <TouchableOpacity onPress={() => commerceNavigation.navigate("new_commerce_5")} style={{ position: 'absolute', left: 20, width: 40, height: 40, justifyContent: 'flex-end', alignItems: 'flex-start', paddingBottom: 3 }}>
-                            <Octicons name="chevron-left" size={24} color="black" />
+        <SafeAreaView style={styles.container}>
+            <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
+                <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                    <View style={styles.headerContainer}>
+                        <TouchableOpacity
+                            style={styles.backButton}
+                            onPress={() => commerceNavigation.goBack()}
+                        >
+                            <Octicons name="chevron-left" size={32} color="black" />
+
                         </TouchableOpacity>
-                        <Text className="text-4xl ml-6 font-bold">Mais informações</Text>
-                        <TouchableOpacity onPress={() => commerceNavigation.navigate("home")} style={{ position: 'absolute', right: 20, width: 40, height: 40, justifyContent: 'flex-end', alignItems: 'flex-end', paddingBottom: 3 }}>
-                            <AntDesign name="close" size={24} color="black" />
+                        <Text style={styles.headerText}>Mais informações</Text>
+                        <TouchableOpacity style={styles.closeButton}
+                            onPress={() => commerceNavigation.navigate("home")}
+                        >
+                            <AntDesign name="close" size={28} color="black" />
                         </TouchableOpacity>
                     </View>
-                    <View className={"w-full pt-8 gap-2 px-5 mt-8 border-t border-gray-300"}>
-                        <Text className={"text-2xl font-normal"}>
+
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>
                             Email para a nossa equipa o contatar
                         </Text>
-                        <View className={"relative justify-center items-center"}>
+                        <View style={styles.inputWrapper}>
+                            <View
+                                style={[
+                                    styles.inputHighlight,
+                                    inputPasswordIsFocus && styles.inputHighlightVisible,
+                                    inputPasswordError && styles.inputErrorHighlight
+                                ]}
+                            ></View>
                             <TextInput
                                 cursorColor={'#ADB5BD'}
-                                className={`border border-gray-300 rounded-lg w-full h-14 px-5 text-xl text-gray-500`}
+                                onFocus={() => setInputPasswordIsFocus(true)}
+                                onBlur={() => setInputPasswordIsFocus(false)}
+                                onChangeText={handlePasswordChange}
+                                value={password}
+                                secureTextEntry={true}
+                                placeholder='10%'
+                                style={[
+                                    styles.textInput,
+                                    inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
+                                    inputPasswordError && styles.inputError
+                                ]}
                             />
                         </View>
                     </View>
 
-
-                    <View className={"w-full pt-4 gap-2 px-5 pb-14 border-gray-300"}>
-                        <View className="w-full flex-row h-80 bg-yellow-100 border border-yellow-200 rounded-xl items-center mt-8">
-                            <View className="flex-1 px-5 py-3">
-                                <Text className="text-2xl text-yellow-700">
+                    <View style={styles.noticeContainer}>
+                        <View style={styles.noticeBox}>
+                            <View style={styles.noticeTextContainer}>
+                                <Text style={styles.noticeText}>
                                     Vamos contata-lo por email, para encontrar a melhor forma de os nossos clientes se tonarem vossos clientes.
                                 </Text>
-                                <Text className="text-2xl text-yellow-700 mt-4">
+                                <Text style={[styles.noticeText, styles.noticeTextMargin]}>
                                     Indique um email seguro, com retorno rápido.
                                 </Text>
                             </View>
-                            <View className="h-full items-start justify-start w-12 pl-8 pt-4">
+                            <View style={styles.noticeIconContainer}>
                                 <Ionicons name="alert-circle-outline" size={30} color="#a16207" />
                             </View>
                         </View>
@@ -63,20 +95,226 @@ export default function New_Commerce_step_6() {
 
                 </ScrollView>
 
-                <View className="flex-1 w-full px-5 h-full justify-end pb-6 pt-8">
+
+                <View style={styles.footer}>
+                    <View style={styles.stepperLayoutContainer}>
+                        <Text style={styles.stepperLayoutText}>6 de 6</Text>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayoutSelected}></View>
+                    </View>
+
                     <TouchableHighlight
-                        onPress={() => commerceNavigation.navigate("new_commerce_7")}
+                        onPress={() => commerceNavigation.navigate("new_commerce_step_7")}
                         underlayColor="#e5e7eb"
                         activeOpacity={0.6}
-                        style={{ borderRadius: 8 }}
+                        style={styles.nextButton}
                     >
-                        <View className="flex flex-row gap-2 border bg-black w-full h-14 justify-center items-center p-4 rounded-lg">
+                        <View style={styles.nextButtonContent}>
                             <Feather name="check" size={24} color="white" />
                         </View>
                     </TouchableHighlight>
                 </View>
+
             </KeyboardAvoidingView>
         </SafeAreaView>
-
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
+    keyboardAvoidingView: {
+        flex: 1,
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+        paddingTop: 30
+    },
+    backButton: {
+        position: 'absolute',
+        left: 15,
+        width: 40,
+        height: 40,
+        paddingTop: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 15,
+        width: 40,
+        height: 40,
+        paddingBottom: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    headerContainer: {
+        position: 'relative',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        width: '100%',
+        height: 80,
+        borderBottomWidth: 1,
+        borderColor: '#DADADA',
+        marginBottom: 10
+    },
+    headerText: {
+        fontSize: 24,
+        fontWeight: '700',
+        left: 40
+    },
+    headerButtonLeft: {
+        position: 'absolute',
+        left: 20,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    headerButtonRight: {
+        position: 'absolute',
+        right: 20,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    title: {
+        fontSize: 32,
+        fontWeight: 'bold',
+    },
+    section: {
+        width: '100%',
+        paddingHorizontal: 16,
+        paddingTop: 16,
+    },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: 'normal',
+        marginBottom: 15
+    },
+    textInput: {
+        borderWidth: 1,
+        borderRadius: 6,
+        width: '100%',
+        height: 48,
+        fontSize: 18,
+        color: '#ADB5BD',
+        borderColor: '#ADB5BD',
+        paddingHorizontal: 10
+    },
+    inputWrapper: {
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    inputHighlight: {
+        position: 'absolute',
+        borderWidth: 4,
+        width: '101.5%',
+        height: 53,
+        borderRadius: 10,
+        opacity: 0,
+    },
+    inputHighlightVisible: {
+        opacity: 0.15,
+        borderColor: '#6610F2',
+    },
+    inputFocused: {
+        borderColor: '#000000',
+    },
+    inputError: {
+        borderColor: '#DC3545',
+    },
+    inputErrorHighlight: {
+        opacity: 0.20,
+        borderColor: '#DC3545',
+    },
+    noticeContainer: {
+        width: '100%',
+        paddingHorizontal: 16,
+        marginTop: 32,
+    },
+    noticeBox: {
+        flexDirection: 'row',
+        height: 200,
+        backgroundColor: '#FEF3C7',
+        borderWidth: 1,
+        borderColor: '#FDE68A',
+        borderRadius: 12,
+        padding: 24,
+        alignItems: 'center',
+    },
+    noticeTextContainer: {
+        flex: 1,
+    },
+    noticeText: {
+        fontSize: 18,
+        color: '#F59E0B',
+    },
+    noticeTextMargin: {
+        marginTop: 16,
+    },
+    noticeIconContainer: {
+        width: 48,
+        height: 48,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 16,
+    },
+
+    footer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        paddingBottom: 24,
+    },
+    stepperLayoutContainer: {
+        flexDirection: 'row',
+        gap: 10,
+        alignItems: 'center',
+        marginBottom: 20
+    },
+    stepperLayout: {
+        height: 6,
+        width: 14,
+        backgroundColor: '#121212',
+        borderRadius: 22,
+        opacity: 0.5,
+        marginTop: 2
+    },
+    stepperLayoutSelected: {
+        opacity: 1,
+        width: 31,
+        backgroundColor: '#121212',
+        borderRadius: 22,
+        height: 6,
+        marginTop: 2
+    },
+    stepperLayoutText: {
+        fontSize: 18,
+        fontWeight: 'normal',
+    },
+    nextButton: {
+        borderRadius: 8,
+    },
+    nextButtonContent: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'black',
+        width: 64,
+        height: 64,
+        borderRadius: 999,
+        paddingHorizontal: 16,
+    },
+});

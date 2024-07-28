@@ -1,13 +1,21 @@
-import { SafeAreaView, View, Text, TouchableOpacity, BackHandler, ScrollView, KeyboardAvoidingView, TextInput, Switch } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { CommerceStackParamList } from "../../types/navigationTypes";
-import { useEffect, useState } from "react";
-import { Feather } from '@expo/vector-icons';
-import { Octicons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import {
+    SafeAreaView,
+    View,
+    Text,
+    TouchableOpacity,
+    BackHandler,
+    ScrollView,
+    TextInput,
+    Switch,
+    StyleSheet
+} from 'react-native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { CommerceStackParamList } from '../../types/navigationTypes';
+import { Feather, Octicons, AntDesign } from '@expo/vector-icons';
 
-type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'new_commerce_1'>;
+type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
 export default function CommerceAssociateEdit() {
     const [isEnabled, setIsEnabled] = useState(false);
@@ -15,10 +23,6 @@ export default function CommerceAssociateEdit() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [showSidebar, setShowSidebar] = useState(false);
-    const commerceDatas = [{
-        name: 'Nome do comercio',
-    }];
-
 
     const openSidebar = () => {
         setShowSidebar(true);
@@ -47,100 +51,264 @@ export default function CommerceAssociateEdit() {
     }, [isSidebarOpen, closeSidebar]);
 
     return (
-        <SafeAreaView className="flex-1 bg-white">
-            <KeyboardAvoidingView style={{ flex: 1 }}>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View className="relative items-start justify-end px-8 w-full h-24 mt-2">
-                        <TouchableOpacity onPress={() => commerceNavigation.navigate("commerce_access_manager")} style={{ position: 'absolute', left: 20, width: 40, height: 40, justifyContent: 'center', alignItems: 'flex-start', paddingBottom: 3 }}>
-                            <Octicons name="chevron-left" size={24} color="black" />
-                        </TouchableOpacity>
+        <SafeAreaView style={styles.safeArea}>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                <View style={styles.headerContainer}>
+                    <TouchableOpacity
+                        style={styles.backButton}
+                        onPress={() => commerceNavigation.goBack()}
+                    >
+                        <Octicons name="chevron-left" size={32} color="black" />
 
-                        <View className="justify-end">
-                            <Text className="text-3xl ml-6 font-bold">Soverteria - Loja 1</Text>
-                            <Text className="text-xl ml-6 font-bold text-[#635C5C]">32594</Text>
-                        </View>
-
-                        <TouchableOpacity onPress={() => commerceNavigation.navigate("home")} style={{ position: 'absolute', right: 20, width: 40, height: 40, justifyContent: 'center', alignItems: 'flex-end', paddingBottom: 3 }}>
-                            <AntDesign name="close" size={24} color="black" />
-                        </TouchableOpacity>
+                    </TouchableOpacity>
+                    <View style={styles.headerTextContainer}>
+                        <Text style={styles.headerTitle}>Soverteria - Loja 1</Text>
+                        <Text style={styles.headerSubtitle}>32594</Text>
                     </View>
+                    <TouchableOpacity style={styles.closeButton}
+                        onPress={() => commerceNavigation.dispatch(
+                            CommonActions.reset({
+                                index: 0,
+                                routes: [{ name: 'home' }],
+                            })
+                        )}
+                    >
+                        <AntDesign name="close" size={28} color="black" />
+                    </TouchableOpacity>
+                </View>
 
+                <View style={styles.idContainer}>
+                    <Text style={styles.idLabel}>ID</Text>
+                    <TextInput
+                        cursorColor={'#ADB5BD'}
+                        value={'355643'}
+                        style={styles.idInput}
+                    />
+                </View>
 
-                    <View className={"w-full pt-6 gap-3 px-5 pb-5 border-t border-gray-300 mt-5"}>
-                        <Text className="text-xl">ID</Text>
-                        <TextInput
-                            cursorColor={'#ADB5BD'}
-                            value={'355643'}
-                            className={`border rounded-lg w-full h-14 px-5 text-xl text-gray-500 border-[#DEE2E6]`}
+                <View style={styles.personContainer}>
+                    <TouchableOpacity style={styles.personButton}>
+                        <View style={styles.personInfo}>
+                            <View style={styles.personAvatar}>
+                                <Text style={styles.personAvatarText}>Pe</Text>
+                            </View>
+                            <View>
+                                <Text style={styles.personName}>Pedro</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.switchContainer}>
+                    <View style={styles.switchRow}>
+                        <Text style={styles.switchLabel}>Administrador</Text>
+                        <Switch
+                            trackColor={{ false: '#767577', true: '#81b0ff' }}
+                            thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleSwitch}
+                            value={isEnabled}
                         />
                     </View>
-
-                    <View className="px-5">
-                        <TouchableOpacity style={{ width: '100%' }}>
-                            <View className="flex-row items-center gap-3 w-full border-b border-[#DFDFDF] pb-6">
-                                <View className="h-16 w-16 rounded-full items-center justify-center bg-[#CADCFF]">
-                                    <Text className="text-[#0093FD] text-2xl font-bold">Pe</Text>
-                                </View>
-                                <View>
-                                    <Text className="text-2xl">Pedro</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
+                    <View style={styles.switchRow}>
+                        <Text style={styles.switchLabel}>Pode ver registros</Text>
+                        <Switch
+                            trackColor={{ false: '#767577', true: '#81b0ff' }}
+                            thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleSwitch}
+                            value={isEnabled}
+                        />
                     </View>
-
-                    <View className="px-5">
-                        <View className="items-center flex-row justify-between border-b border-[#DFDFDF] py-1 mt-8">
-                            <Text className="text-2xl">Administrador</Text>
-                            <Switch
-                                trackColor={{ false: '#767577', true: '#81b0ff' }}
-                                thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                ios_backgroundColor="#3e3e3e"
-                                onValueChange={toggleSwitch}
-                                value={isEnabled}
-                            />
-                        </View>
-                        <View className="items-center flex-row justify-between border-b border-[#DFDFDF] py-1">
-                            <Text className="text-2xl">Pode ver registros</Text>
-                            <Switch
-                                trackColor={{ false: '#767577', true: '#81b0ff' }}
-                                thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                ios_backgroundColor="#3e3e3e"
-                                onValueChange={toggleSwitch}
-                                value={isEnabled}
-                            />
-                        </View>
-                        <View className="items-center flex-row justify-between border-b border-[#DFDFDF] py-1">
-                            <Text className="text-2xl">Pode ver e apagar registros</Text>
-                            <Switch
-                                trackColor={{ false: '#767577', true: '#81b0ff' }}
-                                thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                ios_backgroundColor="#3e3e3e"
-                                onValueChange={toggleSwitch}
-                                value={isEnabled}
-                            />
-                        </View>
-                        <View className="items-center flex-row justify-between border-b border-[#DFDFDF] py-5">
-                            <Text className="text-2xl text-red-500">Desassociar conta</Text>
-                            <Feather name="trash" size={24} color="#DC3545" style={{ marginRight: 10 }} />
-                        </View>
+                    <View style={styles.switchRow}>
+                        <Text style={styles.switchLabel}>Pode ver e apagar registros</Text>
+                        <Switch
+                            trackColor={{ false: '#767577', true: '#81b0ff' }}
+                            thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleSwitch}
+                            value={isEnabled}
+                        />
                     </View>
-
-                    <View className="flex-1 w-full h-full justify-end px-5">
-                        <View className=" w-full rounded-full w-20 h-20 justify-center items-center pb-8">
-                            <TouchableOpacity
-                                onPress={() => commerceNavigation.navigate("commerce_access_manager")}
-                                style={{ borderRadius: 8, width: '100%', alignItems: 'center', justifyContent: 'center' }}
-                            >
-                                <View className="flex flex-row gap-2 border bg-black w-full h-14 justify-center items-center p-4 rounded-lg">
-                                    <Feather name="check" size={24} color="white" />
-                                </View>
-                            </TouchableOpacity>
-                        </View>
+                    <View style={styles.deleteAccountRow}>
+                        <Text style={styles.deleteAccountText}>Desassociar conta</Text>
+                        <Feather name="trash" size={24} color="#DC3545" style={styles.deleteIcon} />
                     </View>
+                </View>
 
-                </ScrollView>
-            </KeyboardAvoidingView>
+                <View style={styles.footerContainer}>
+                    <TouchableOpacity
+                        onPress={() => commerceNavigation.navigate("commerce_access_manager")}
+                        style={styles.submitButton}
+                    >
+                        <View style={styles.submitButtonInner}>
+                            <Feather name="check" size={24} color="white" />
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+
         </SafeAreaView>
     );
 }
 
+const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
+
+    scrollViewContent: {
+        flexGrow: 1,
+        paddingTop: 30
+    },
+    headerContainer: {
+        position: 'relative',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        width: '100%',
+        height: 80,
+        borderBottomWidth: 1,
+        borderColor: '#DADADA',
+        marginBottom: 10
+    },
+    headerText: {
+        fontSize: 24,
+        fontWeight: '700',
+        left: 40
+    },
+    backButton: {
+        position: 'absolute',
+        left: 20,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+    },
+    headerTextContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        left: 20
+    },
+    headerTitle: {
+        fontSize: 24,
+        fontWeight: '700',
+        marginLeft: 24,
+    },
+    headerSubtitle: {
+        fontSize: 20,
+        marginLeft: 24,
+        color: '#635C5C',
+        fontWeight: '400',
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 20,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+    },
+    idContainer: {
+        paddingTop: 20,
+        paddingHorizontal: 20,
+        paddingBottom: 16,
+    },
+    idLabel: {
+        fontSize: 18,
+    },
+    idInput: {
+        borderColor: '#DEE2E6',
+        borderWidth: 1,
+        borderRadius: 8,
+        width: '100%',
+        height: 56,
+        paddingHorizontal: 16,
+        fontSize: 18,
+        color: '#6C757D',
+        marginTop: 8,
+    },
+    personContainer: {
+        paddingHorizontal: 20,
+    },
+    personButton: {
+        width: '100%',
+    },
+    personInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#DFDFDF',
+        paddingBottom: 16,
+    },
+    personAvatar: {
+        height: 64,
+        width: 64,
+        borderRadius: 32,
+        backgroundColor: '#CADCFF',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    personAvatarText: {
+        color: '#0093FD',
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    personName: {
+        fontSize: 20,
+        marginLeft: 16,
+    },
+    switchContainer: {
+        paddingHorizontal: 20,
+        marginTop: 16,
+    },
+    switchRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderBottomWidth: 1,
+        borderBottomColor: '#DFDFDF',
+        paddingVertical: 8,
+        alignItems: 'center'
+
+    },
+    switchLabel: {
+        fontSize: 20,
+    },
+    deleteAccountRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderBottomWidth: 1,
+        borderBottomColor: '#DFDFDF',
+        paddingVertical: 16,
+    },
+    deleteAccountText: {
+        fontSize: 20,
+        color: '#DC3545',
+    },
+    deleteIcon: {
+        marginRight: 10,
+    },
+    footerContainer: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        paddingHorizontal: 20,
+    },
+    submitButton: {
+        borderRadius: 8,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: 16,
+    },
+    submitButtonInner: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'black',
+        width: '100%',
+        height: 56,
+        borderRadius: 8,
+        paddingHorizontal: 16,
+    },
+});
