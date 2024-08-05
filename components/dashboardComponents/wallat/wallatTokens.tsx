@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 import { Feather, Ionicons } from '@expo/vector-icons';
 
 export default function WallatTokens() {
@@ -9,9 +10,14 @@ export default function WallatTokens() {
             creditsAmount: "50,00",
             token: "X",
             blockChain: "XXXX",
-            wallatLink: "lorenipsunsdocklorenipsunsdockloreni..."
+            wallatLink: "https://www.google.com"
         }
     ];
+
+    const copyToClipboard = () => {
+        Clipboard.setStringAsync(itemDatas[0].wallatLink);
+        Alert.alert("Link Copiado", "O link da carteira foi copiado para a área de transferência.");
+    };
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -19,7 +25,7 @@ export default function WallatTokens() {
                 <View style={styles.currencyAmountContainer}>
                     <Text style={[styles.currencyAmountText, { color: '#0D6EFD' }]}>99999999999,99</Text>
                     <View style={styles.tokensCurrencyContainer}>
-                        <Text style={[styles.CurrencyText, { color: '#0D6EFD' }]}>Tokens</Text>
+                        <Text style={[styles.CurrencyText, { color: '#0D6EFD' }]}>Zoi</Text>
 
                     </View>
                 </View>
@@ -52,7 +58,9 @@ export default function WallatTokens() {
                     <Text style={styles.walletLabel}>Carteira de depósito</Text>
                     <View style={styles.walletRow}>
                         <Text style={styles.walletLink}>{itemDatas[0].wallatLink}</Text>
-                        <Ionicons style={styles.copyIcon} name="copy-outline" size={18} color="black" />
+                        <TouchableOpacity onPress={copyToClipboard}>
+                            <Ionicons style={styles.copyIcon} name="copy-outline" size={18} color="black" />
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.warningContainer}>

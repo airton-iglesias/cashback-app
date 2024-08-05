@@ -1,18 +1,19 @@
 import { Modal, Text, ScrollView, View, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
+import { StorageService } from "../../services/storageService";
 
-export default function LanguageModal({modalVisible, handleCloseModal}: any) {
+export default function LanguageModal({ modalVisible, handleCloseModal }: any) {
     const languages = [
-        { code: 'pt', name: 'Português', flag: 'PT' },
-        { code: 'en', name: 'English', flag: 'GB' },
-        { code: 'fr', name: 'Français', flag: 'FR' },
+        { code: 'pt', name: 'Português' },
+        { code: 'en', name: 'English' },
+        { code: 'fr', name: 'Français' },
     ];
 
 
     const { t } = useLocale();
     const { currentLanguage, changeLanguage } = useLocale();
-    
+
     return (
         <Modal
             animationType="slide"
@@ -20,32 +21,35 @@ export default function LanguageModal({modalVisible, handleCloseModal}: any) {
             onRequestClose={handleCloseModal}
         >
             <View style={styles.container}>
-                <ScrollView style={styles.scrollView}>
-                    <View style={styles.logoContainer}>
-                        <View style={styles.logo}>
-                            <Text style={styles.logoText}>LOGO</Text>
+                <View style={styles.logoContainer}>
+                    <View style={styles.logo}>
+                        <Text style={styles.logoText}>LOGO</Text>
+                    </View>
+                </View>
+                <Text style={styles.title}>{t("language.header")}</Text>
+                <View style={styles.languageContainer}>
+                    <ScrollView>
+                        <View style={styles.languageOptionsWrapper}>
+                            {languages.map((language, index) => (
+                                <TouchableOpacity
+                                    key={index}
+                                    style={[
+                                        styles.languageOption,
+                                        currentLanguage === language.code && styles.languageOptionSelected
+                                    ]}
+                                    onPress={() => changeLanguage(language.code)}
+                                >
+
+                                    <Text style={currentLanguage === language.code ? styles.selectedlanguageText : styles.languageText}>{language.name}</Text>
+                                    {currentLanguage === language.code ? <Feather name="check" size={24} color="white" /> : null}
+                                </TouchableOpacity>
+                            ))}
                         </View>
-                    </View>
-                    <Text style={styles.title}>{t("language.header")}</Text>
+                    </ScrollView>
+                </View>
+            </View>
 
-                    <View style={{ gap: 12 }}>
-                        {languages.map((language, index) => (
-                            <TouchableOpacity
-                                key={index}
-                                style={[
-                                    styles.languageOption,
-                                    currentLanguage === language.code && styles.languageOptionSelected
-                                ]}
-                                onPress={() => changeLanguage(language.code)}
-                            >
-
-                                <Text style={currentLanguage === language.code ? styles.selectedlanguageText : styles.languageText}>{language.name}</Text>
-                                <Feather name="check" size={24} color="white" />
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                </ScrollView>
-
+            <View style={styles.buttonWrapper}>
                 <TouchableOpacity style={styles.button} onPress={handleCloseModal}>
                     <Feather name="arrow-right" size={24} color={'white'} />
                 </TouchableOpacity>
@@ -59,14 +63,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        paddingHorizontal: 15,
-        paddingVertical: 50
+        paddingTop: 50
     },
     logoContainer: {
         width: '100%',
         height: 150,
         padding: 5,
-        marginTop: 15
+        marginTop: 15,
+        paddingHorizontal: 15,
     },
     logo: {
         width: '100%',
@@ -82,12 +86,10 @@ const styles = StyleSheet.create({
     },
     title: {
         color: '#000',
-        marginVertical: 40,
+        marginVertical: 30,
         fontSize: 35,
         fontWeight: 'bold',
-    },
-    scrollView: {
-        marginBottom: 20,
+        paddingHorizontal: 15,
     },
     languageOption: {
         flexDirection: 'row',
@@ -96,13 +98,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 14,
         borderWidth: 1,
-        borderColor: '#E3E3E3'
+        borderColor: '#6C757D'
     },
     languageOptionSelected: {
         backgroundColor: '#0F0F0F',
         borderWidth: 1,
         borderColor: '#525252',
-
     },
     selectedlanguageText: {
         color: '#fff',
@@ -119,8 +120,32 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
+        marginHorizontal: 15,
+        marginVertical: 20,
     },
     buttonText: {
         fontSize: 18,
     },
+    languageOptionsWrapper: {
+        gap: 12,
+        paddingHorizontal: 15,
+        paddingVertical: 30,
+        borderRadius: 18,
+        width: '100%',
+        alignItems: 'center',
+    },
+    languageContainer: {
+        backgroundColor: '#E5E7EB',
+        borderTopEndRadius: 18,
+        borderTopStartRadius: 18,
+        overflow: 'hidden',
+        borderRadius: 18,
+        height: '100%',
+        marginHorizontal: 15,
+        flex: 1
+    },
+    buttonWrapper: {
+        backgroundColor: '#FAFAFA',
+
+    }
 });

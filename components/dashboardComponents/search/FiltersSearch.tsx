@@ -8,44 +8,38 @@ import { SearchParamList } from '@/types/navigationTypes';
 import Topbar from '@/components/header';
 import NotificationSidebar from '@/components/notificationSidebar';
 import Sidebar from '@/components/sidebar';
+import Input from '@/components/input';
 
 type SearchNavigationProp = NativeStackNavigationProp<SearchParamList>;
 
 const FiltersSearch = () => {
-
     const SearchNavigation = useNavigation<SearchNavigationProp>();
 
     const [distance, setDistance] = useState<number>(10);
-    const [inputPasswordIsFocus, setInputPasswordIsFocus] = useState(false);
-    const [inputPasswordError, setInputPasswordError] = useState(false);
-
-    const [password, setPassword] = useState('');
+    const [searchValue, setSearchValue] = useState<string>('');
+    const [location, setLocation] = useState<string>('');
+    const [place, setPlace] = useState<string>('Local');
+    const [filterType, setFilterType] = useState<string>('Comercio');
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [showSidebar, setShowSidebar] = useState(false);
-    const [showTopbar, setShowTopbar] = useState(true);
-
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(true);
     const [showNotifications, setShowNotifications] = useState(false);
-
 
     const openSidebar = () => {
         setShowSidebar(true);
         setIsSidebarOpen(true);
     };
-
     const closeSidebar = () => {
         setIsSidebarOpen(false);
         setTimeout(() => {
             setShowSidebar(false);
         }, 300);
     };
-
     const openNotifications = () => {
         setIsNotificationsOpen(true);
         setShowNotifications(true);
     };
-
     const closeNotifications = () => {
         setIsNotificationsOpen(false);
         setTimeout(() => {
@@ -53,101 +47,73 @@ const FiltersSearch = () => {
         }, 300);
     };
 
-
-    const validatePassword = (password: string) => {
-        return password.length >= 6;
-    };
-
-    const handlePasswordChange = (text: string) => {
-        setPassword(text);
-        if (text.trim() === '') {
-            setInputPasswordError(false);
-        } else {
-            setInputPasswordError(!validatePassword(text));
-        }
-    };
-
-
     return (
         <SafeAreaView style={{ flex: 1 }}>
-
-            {showTopbar && <Topbar openSidebar={openSidebar} openNotifications={openNotifications} />}
+            <Topbar openSidebar={openSidebar} openNotifications={openNotifications} />
             {showNotifications && <NotificationSidebar closeSidebar={closeNotifications} isSidebarOpen={isNotificationsOpen} />}
             {showSidebar && <Sidebar closeSidebar={closeSidebar} isSidebarOpen={isSidebarOpen} />}
 
             <View style={styles.container}>
+
                 <View style={styles.inputWrapper}>
-                    <View
-                        style={[
-                            styles.inputHighlight,
-                            inputPasswordIsFocus && styles.inputHighlightVisible,
-                            inputPasswordError && styles.inputErrorHighlight
-                        ]}
-                    ></View>
-                    <TextInput
-                        cursorColor={'#ADB5BD'}
-                        onFocus={() => setInputPasswordIsFocus(true)}
-                        onBlur={() => setInputPasswordIsFocus(false)}
-                        onChangeText={handlePasswordChange}
-                        value={password}
-                        placeholder='Buscar'
-                        style={[
-                            styles.input,
-                            inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
-                            inputPasswordError && styles.inputError
-                        ]}
+                    <Input
+                        placeholder={'Buscar'}
+                        onChange={(text: string) => setSearchValue(text)}
                     />
                     <View style={styles.searchIcon}>
                         <Feather name="search" size={28} color="#828282" />
                     </View>
                 </View>
+
                 <View style={styles.buttonRow}>
-                    <TouchableOpacity style={[styles.button, styles.activeButton]}>
-                        <Text style={styles.buttonText && styles.activeButton}>Comercios</Text>
+                    <TouchableOpacity 
+                        style={filterType === "Comercio" ? [styles.button, styles.activeButton]: styles.button}
+                        onPress={() => setFilterType("Comercio")}
+                    >
+                        <Text style={filterType === "Comercio" ? styles.activeButtonText: styles.buttonText}>Comercios</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Eventos</Text>
+                    <TouchableOpacity 
+                        style={filterType === "Eventos" ? [styles.button, styles.activeButton]: styles.button}
+                        onPress={() => setFilterType("Eventos")}
+                    >
+                        <Text style={filterType === "Eventos" ? styles.activeButtonText: styles.buttonText}>Eventos</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Promoções</Text>
+                    <TouchableOpacity 
+                        style={filterType === "Promoções" ? [styles.button, styles.activeButton]: styles.button}
+                        onPress={() => setFilterType("Promoções")}
+                    >
+                        <Text style={filterType === "Promoções" ? styles.activeButtonText: styles.buttonText}>Promoções</Text>
                     </TouchableOpacity>
                 </View>
                 <View>
                     <Text style={styles.sectionLabel}>Onde?</Text>
                     <View style={styles.buttonRowPlace}>
-                        <TouchableOpacity style={[styles.button, styles.activeButton]}>
-                            <Text style={styles.buttonText && styles.activeButton}>Local</Text>
+                        <TouchableOpacity 
+                            style={place === "Local" ? [styles.button, styles.activeButton] : styles.button}
+                            onPress={() => setPlace("Local")}
+                        >
+                            <Text style={place === "Local" ? styles.activeButtonText:styles.buttonText}>Local</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button}>
-                            <Text style={styles.buttonText}>Online</Text>
+                        <TouchableOpacity 
+                            style={place === "Online" ? [styles.button, styles.activeButton] : styles.button}
+                            onPress={() => setPlace("Online")}
+                        >
+                            <Text style={place === "Online" ? styles.activeButtonText:styles.buttonText}>Online</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
                 <View>
-                    <TouchableOpacity style={styles.buttonLocation}>
-                        <EvilIcons name="location" size={24} color="black" />
-                        <Text style={styles.buttonLocationText}>Perto de mim</Text>
+                    <TouchableOpacity 
+                        style={place === "closeToMe" ? [styles.buttonLocation, styles.activeButton] : styles.buttonLocation}
+                        onPress={() => setPlace("closeToMe")}
+                    >
+                        <EvilIcons name="location" size={24} color={place === "closeToMe" ? "white" : "black"} />
+                        <Text style={place === "closeToMe" ? [styles.buttonLocationText, styles.activeButtonText] : styles.buttonLocationText}>Perto de mim</Text>
                     </TouchableOpacity>
                     <View style={styles.inputLocationWrapper}>
-                        <View
-                            style={[
-                                styles.inputHighlight,
-                                inputPasswordIsFocus && styles.inputHighlightVisible,
-                                inputPasswordError && styles.inputErrorHighlight
-                            ]}
-                        ></View>
-                        <TextInput
-                            cursorColor={'#ADB5BD'}
-                            onFocus={() => setInputPasswordIsFocus(true)}
-                            onBlur={() => setInputPasswordIsFocus(false)}
-                            onChangeText={handlePasswordChange}
-                            value={password}
-                            placeholder='Escolher um local'
-                            style={[
-                                styles.input,
-                                inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
-                                inputPasswordError && styles.inputError
-                            ]}
+                        <Input
+                            placeholder={'Escolha um local'}
+                            onChange={(text: string) => setLocation(text)}
                         />
                     </View>
                 </View>
@@ -260,11 +226,14 @@ const styles = StyleSheet.create({
     },
     activeButton: {
         backgroundColor: '#000000',
-        color: 'white',
+        fontSize: 15
+    },
+    activeButtonText: {
+        color: '#fff',
         fontSize: 15
     },
     buttonText: {
-        color: '#000000',
+        color: '#000',
         fontSize: 15
     },
     buttonLocation: {

@@ -14,7 +14,7 @@ export default function App() {
   return (
     <TranslationProvider>
       <NavigationContainer>
-        <MainStack.Navigator initialRouteName="Root" screenOptions={{ headerShown: false }}>
+        <MainStack.Navigator initialRouteName="Auth" screenOptions={{ headerShown: false }}>
           <MainStack.Screen name="Auth" component={AuthStackNavigation} />
           <MainStack.Screen name="Root" component={RootStackNavigation} />
         </MainStack.Navigator>

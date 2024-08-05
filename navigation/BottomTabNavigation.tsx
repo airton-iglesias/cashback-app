@@ -10,7 +10,7 @@ import HomeIcon from '../assets/icons/homeIcon';
 import SearchIcon from '../assets/icons/searchIcon';
 import WallatIcon from '../assets/icons/wallatIcon';
 import QRCodeIcon from '../assets/icons/qrcodeIcon';
-import WithdrawIcon from '../assets/icons/withdrawIcon';
+import WithdrawIcon from '../assets/icons/cashbackIcon';
 import BlurView from 'expo-blur/build/BlurView';
 import { DashboardTabParamList } from '../types/navigationTypes';
 
@@ -87,6 +87,7 @@ export default function BottomTabNavigation({ onTabChange }: any) {
                         }}
                     />
                 ),
+                tabBarHideOnKeyboard: true,
             })}
             initialRouteName="DashboardHome"
             screenListeners={({ route }) => ({

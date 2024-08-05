@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, BackHandler } from 'react-native';
+import { View, BackHandler, SafeAreaView } from 'react-native';
 import Topbar from '../components/header';
 import Sidebar from '../components/sidebar';
 import BottomTabNavigation from '../navigation/BottomTabNavigation';
@@ -77,13 +77,13 @@ export default function DashboardScreen() {
     }, [isNotificationsOpen, closeNotifications]);
 
     return (
-        <View style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
             {showTopbar && <Topbar openSidebar={openSidebar} openNotifications={openNotifications} />}
             {showNotifications && <NotificationSidebar closeSidebar={closeNotifications} isSidebarOpen={isNotificationsOpen} />}
             {showSidebar && <Sidebar closeSidebar={closeSidebar} isSidebarOpen={isSidebarOpen} />}
             <BottomTabNavigation
                 onTabChange={handleTabChange}
             />
-        </View>
+        </SafeAreaView>
     );
 }

@@ -140,7 +140,6 @@ export default function Points() {
 
             </View>
 
-
             <Modal
                 animationType="slide"
                 visible={modalVisible}
@@ -152,7 +151,6 @@ export default function Points() {
                         onPress={() => setModalVisible(false)}
                     >
                         <Octicons name="chevron-left" size={32} color="black" />
-
                     </TouchableOpacity>
                     <Text style={styles.modalHeaderText}>Voltar</Text>
                 </View>

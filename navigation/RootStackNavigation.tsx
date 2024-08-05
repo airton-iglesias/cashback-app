@@ -1,17 +1,16 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import DashboardScreen from '../screens/dashboard';
+import DashboardScreen from '@/screens/Dashboard';
 import Profile from '../screens/profile';
 import Points from '../screens/points';
 import CommerceScreen from '../screens/commerce';
 import { RootStackParamList } from '../types/navigationTypes';
 import WallatExtract from '@/components/dashboardComponents/wallat/wallatExtract';
 
-
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
-export  const RootStackNavigation = () => {
+export const RootStackNavigation = () => {
     return (
-        <RootStack.Navigator initialRouteName="commerce">
+        <RootStack.Navigator initialRouteName="dashboard">
             <RootStack.Screen name="dashboard" component={DashboardScreen} options={{ headerShown: false }} />
             <RootStack.Screen name="commerce" component={CommerceScreen} options={{ headerShown: false }} />
             <RootStack.Screen name="profile" component={Profile} options={{ headerShown: false }} />
@@ -19,4 +18,4 @@ export  const RootStackNavigation = () => {
             <RootStack.Screen name="wallatextract" component={WallatExtract} options={{ headerShown: false }} />
         </RootStack.Navigator>
     );
-}
+};

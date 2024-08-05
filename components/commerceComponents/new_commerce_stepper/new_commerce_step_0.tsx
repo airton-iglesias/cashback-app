@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, StyleSheet, Tou
 import RadioCommerce from '../radioCommerce';
 import RadioCommerceType from '../radioCommerceType';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { Octicons, AntDesign, Feather } from '@expo/vector-icons';
 import { CommerceStackParamList } from '../../../types/navigationTypes';
 
@@ -25,7 +25,12 @@ export default function New_Commerce_step_0() {
                 <View style={styles.headerContainer}>
                     <TouchableOpacity
                         style={styles.backButton}
-                        onPress={() => commerceNavigation.goBack()}
+                        onPress={() => commerceNavigation.dispatch(
+                            CommonActions.reset({
+                                index: 0,
+                                routes: [{ name: 'home' }],
+                            }))
+                        }
                     >
                         <Octicons name="chevron-left" size={32} color="black" />
 

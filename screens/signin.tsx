@@ -5,14 +5,13 @@ import {
 } from "react-native";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { AuthStackParamList, RootStackParamList } from '../types/navigationTypes';
+import { AuthStackParamList } from '../types/navigationTypes';
 import { Feather } from '@expo/vector-icons';
 import CheckBox from "../components/checkbox";
 import { useLocale } from "../contexts/TranslationContext";
 import LanguageModal from "@/components/languageModal";
 
 type AuthNavigationProp = NativeStackNavigationProp<AuthStackParamList>;
-type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -21,7 +20,6 @@ export default function SigninScreen() {
     const { t } = useLocale();
 
     const authNavigation = useNavigation<AuthNavigationProp>();
-    const rootNavigation = useNavigation<RootNavigationProp>();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -76,13 +74,12 @@ export default function SigninScreen() {
     };
 
     const handleSubmit = () => {
-        rootNavigation.dispatch(
+        authNavigation.dispatch(
             CommonActions.reset({
                 index: 0,
-                routes: [{ name: 'Root' }],
+                routes: [{ name: 'pinValidate' }],
             })
         );
-
     };
 
     const handleCloseModal = () => {
@@ -195,7 +192,7 @@ export default function SigninScreen() {
                                     <Text style={styles.link}>{t('signin.createAccount')}</Text>
                                 </TouchableWithoutFeedback>
 
-                                <TouchableWithoutFeedback onPress={() => authNavigation.navigate('signup')}>
+                                <TouchableWithoutFeedback onPress={() => authNavigation.navigate('recoveryDatas')}>
                                     <Text style={styles.link}>{t('signin.forgotPassword')}</Text>
                                 </TouchableWithoutFeedback>
                             </View>

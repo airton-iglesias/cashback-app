@@ -58,7 +58,7 @@ export default function Input({ label, placeholder, type, onChange, keyboardType
 
     return (
         <View style={styles.inputSection}>
-            <Text style={styles.inputLabel}>{label}</Text>
+            {label ? <Text style={styles.inputLabel}>{label}</Text>: null}
             <View style={styles.inputWrapper}>
                 <View
                     style={[
@@ -91,7 +91,6 @@ export default function Input({ label, placeholder, type, onChange, keyboardType
 const styles = StyleSheet.create({
     inputSection: {
         width: '100%',
-        marginTop: 24,
     },
     inputLabel: {
         fontSize: 18,

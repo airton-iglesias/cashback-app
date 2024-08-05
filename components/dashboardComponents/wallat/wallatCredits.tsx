@@ -56,7 +56,7 @@ export default function WallatCredits() {
                 <View style={styles.fidelityTitleContainer}>
                     <Text style={styles.fidelityTitle}>Fidelidade</Text>
                     <Pressable style={styles.fidelityButton} onPress={() => rootNavigation.navigate("wallatextract")}>
-                        <Text style={[styles.fidelityTitle, { color: '#0D6EFD' }]}>Estrato</Text>
+                        <Text style={[styles.fidelityTitle, { color: '#0D6EFD' }]}>Extrato</Text>
                         <Feather style={{ marginBottom: 7, marginLeft: 5 }} name="list" size={24} color="#0D6EFD" />
                     </Pressable>
                 </View>

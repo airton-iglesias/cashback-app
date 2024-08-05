@@ -236,6 +236,7 @@ const styles = StyleSheet.create({
     cardDetailText: {
         fontSize: 18,
         color: '#635C5C',
+        marginLeft: 4
     },
     cardDetailItem: {
         flexDirection: 'row',

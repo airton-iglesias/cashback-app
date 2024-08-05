@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from "react-native";
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -9,8 +9,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function NotificationSidebar({ closeSidebar, isSidebarOpen }: any) {
-
-    const data = new Array(
+    const initialData = [
         {
             title: "Casa do Bacalhau",
             description: "Maria",
@@ -35,7 +34,9 @@ export default function NotificationSidebar({ closeSidebar, isSidebarOpen }: any
             isDeposit: true,
             depositFailed: false
         },
-    )
+    ];
+
+    const [data, setData] = useState(initialData);
     const rootNavigation = useNavigation<RootNavigationProp>();
     const sidebarOffset = useSharedValue(400);
 
@@ -58,6 +59,10 @@ export default function NotificationSidebar({ closeSidebar, isSidebarOpen }: any
         closeSidebar();
     };
 
+    const handleRemoveNotification = (index: number) => {
+        setData(prevData => prevData.filter((_, i) => i !== index));
+    };
+
     return (
         <View style={styles.overlay}>
             <View style={styles.backgroundOverlay}></View>
@@ -71,51 +76,50 @@ export default function NotificationSidebar({ closeSidebar, isSidebarOpen }: any
                     </View>
                     <ScrollView style={styles.content}>
                         {
-                            data.length == 0 || data == null ?
+                            data.length === 0 ? 
                                 null
                                 :
-                                data.map((item, index) =>
-
+                                data.map((item, index) => (
                                     <View key={index} style={styles.itemAdminWrapper}>
                                         <View style={styles.itemInfosWrapper}>
-                                            {item.image ?
+                                            {item.image ? (
                                                 <View style={styles.itemImageWrapper}>
                                                     <Image source={require('../../assets/images/reidobacalhau.png')} style={styles.itemImage} />
                                                 </View>
-                                                :
-                                                null
-                                            }
-                                            {item.isAdminAddNotification ?
+                                            ) : null}
+                                            {item.isAdminAddNotification ? (
                                                 <View style={styles.textWrapper}>
                                                     <Text style={styles.itemTitle}>{item.title}</Text>
                                                     <Text style={styles.itemDescription}>{item.description} adicionou você como Administrador.</Text>
                                                 </View>
-                                                :
-                                                <View style={{flexDirection: 'row', width: '100%', flex: 1}}>
+                                            ) : (
+                                                <View style={{ flexDirection: 'row', width: '100%', flex: 1 }}>
                                                     <View style={styles.textWrapper}>
-                                                        <Text style={styles.itemTitle}>{item.isDeposit ? item.depositFailed ? "Deposito falhou": "Deposito feito com sucesso" : item.title} </Text>
-                                                        <Text style={styles.itemDescription}>{ item.isDeposit ? `${item.description} tokens`: `${item.description} Anulou o seu cashback, o valor 40.00 cEur foi devolvido á sua carteira`}</Text>
+                                                        <Text style={styles.itemTitle}>
+                                                            {item.isDeposit ? (item.depositFailed ? "Depósito falhou" : "Depósito feito com sucesso") : item.title}
+                                                        </Text>
+                                                        <Text style={styles.itemDescription}>
+                                                            {item.isDeposit ? `${item.description} tokens` : `${item.description} Anulou o seu cashback, o valor 40.00 cEur foi devolvido à sua carteira`}
+                                                        </Text>
                                                     </View>
-                                                    <TouchableOpacity style={styles.itemIcon}>
+                                                    <TouchableOpacity style={styles.itemIcon} onPress={() => handleRemoveNotification(index)}>
                                                         <Feather name="trash" size={24} color="#E35D6A" />
                                                     </TouchableOpacity>
                                                 </View>
-                                            }
+                                            )}
                                         </View>
-                                        {item.isAdminAddNotification ?
+                                        {item.isAdminAddNotification ? (
                                             <View style={styles.buttonsAdminWrapper}>
                                                 <TouchableOpacity style={[styles.buttonAdmin, { backgroundColor: '#198754' }]}>
                                                     <Text style={styles.buttonAdminText}>Confirmar</Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity style={[styles.buttonAdmin, { backgroundColor: '#626262' }]}>
+                                                <TouchableOpacity style={[styles.buttonAdmin, { backgroundColor: '#626262' }]} onPress={() => handleRemoveNotification(index)}>
                                                     <Text style={styles.buttonAdminText}>Recusar</Text>
                                                 </TouchableOpacity>
                                             </View>
-                                            :
-                                            null
-                                        }
+                                        ) : null}
                                     </View>
-                                )
+                                ))
                         }
                     </ScrollView>
                 </View>
@@ -123,6 +127,7 @@ export default function NotificationSidebar({ closeSidebar, isSidebarOpen }: any
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     overlay: {
@@ -173,6 +178,7 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         paddingHorizontal: 20,
+        height: '100%',
     },
     itemAdminWrapper: {
         borderBottomWidth: 1,
@@ -242,5 +248,5 @@ const styles = StyleSheet.create({
     buttonAdminText: {
         color: 'white',
         fontSize: 16
-    }
+    },
 });

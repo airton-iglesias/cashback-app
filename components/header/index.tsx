@@ -57,11 +57,24 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                         placeholder="0"
                         onChangeText={(number) => setValue(number)}
                         placeholderTextColor="#4b5563"
-                        textAlign="center"
+                        textAlign={route.name === "home" ? "center":"right"}
+                        value={value}
+                        readOnly={route.name === "home" ? true:false}
                         style={[
-                            styles.textInput
+                            styles.textInput,
+                            {
+                                paddingRight: route.name === "home" ? 0:60,
+                                color: route.name === "home" ? '#28A745' : '#4b5563'
+                            }
                         ]}
                     />
+                    {route.name === "home" ?
+                        null
+                        :
+                        <View style={styles.plusWrapper}>
+                            <Feather name="plus" size={20} color="#6FC768" />
+                        </View>
+                    }
                 </View>
 
                 <TouchableOpacity onPress={openNotifications} style={styles.iconContainer}>
@@ -142,8 +155,18 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 16,
         backgroundColor: '#343434',
-        color: '#4b5563',
         fontWeight: '900',
         fontSize: 24,
     },
+    plusWrapper:{
+        position: 'absolute', 
+        right: 0, 
+        width: 50, 
+        height: 50, 
+        backgroundColor: '#2A2C2D', 
+        borderBottomRightRadius: 16, 
+        borderTopRightRadius: 16, 
+        alignItems: 'center', 
+        justifyContent: 'center'
+    }
 });

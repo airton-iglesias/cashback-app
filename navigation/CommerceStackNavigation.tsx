@@ -20,7 +20,7 @@ const CommerceStack = createNativeStackNavigator<CommerceStackParamList>();
 
 const CommerceStackNavigation = () => {
     return (
-        <CommerceStack.Navigator initialRouteName="new_commerce_step_0">
+        <CommerceStack.Navigator initialRouteName="home">
             <CommerceStack.Screen name="home" component={CommerceHome} options={{ headerShown: false }} />
             <CommerceStack.Screen name="commerce_menu" component={CommerceMenu} options={{ headerShown: false }} />
             <CommerceStack.Screen name="commerce_credit_extract" component={CommerceCreditExtract} options={{ headerShown: false }} />

@@ -260,7 +260,8 @@ const styles = StyleSheet.create({
     },
 
     longInputWrapper: {
-        paddingHorizontal: 15
+        paddingHorizontal: 15,
+        marginTop: 20,
     },
     dateTimeSection: {
         width: '100%',
@@ -270,7 +271,8 @@ const styles = StyleSheet.create({
     },
     dateTimeBlock: {
         flex: 1,
-        width: '100%'
+        width: '100%',
+        marginTop: 20,
     },
     mapContainer: {
         width: '100%',

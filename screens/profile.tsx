@@ -104,24 +104,48 @@ export default function Profile() {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.imageContainer}>
-                                <TouchableWithoutFeedback onPress={handleImagePick} style={{ borderRadius: 8 }}>
-                                    {image ? (
-                                        <View>
-                                            <Image source={{ uri: image }} style={styles.image} />
-                                            <View style={styles.cameraIconContainer}>
-                                                <Feather name="camera" size={20} color="black" />
-                                            </View>
+                            <TouchableWithoutFeedback onPress={handleImagePick} style={{ borderRadius: 8 }}>
+                                {image ? (
+                                    <View>
+                                        <Image source={{ uri: image }} style={styles.image} />
+                                        <View style={styles.cameraIconContainer}>
+                                            <Feather name="camera" size={20} color="black" />
                                         </View>
-                                    ) : (
-                                        <View>
-                                            <Image source={require("../assets/icons/user-icon.png")} style={styles.image} />
-                                            <View style={styles.cameraIconContainer}>
-                                                <Feather name="camera" size={20} color="black" />
-                                            </View>
+                                    </View>
+                                ) : (
+                                    <View>
+                                        <Image source={require("../assets/icons/user-icon.png")} style={styles.image} />
+                                        <View style={styles.cameraIconContainer}>
+                                            <Feather name="camera" size={20} color="black" />
                                         </View>
-                                    )}
-                                </TouchableWithoutFeedback>
+                                    </View>
+                                )}
+                            </TouchableWithoutFeedback>
+                        </View>
+                        <View style={[styles.formGroup, styles.marginTop, {paddingHorizontal: 70}]}>
+                            <View style={styles.inputWrapper}>
+                                <View
+                                    style={[
+                                        styles.inputHighlight,
+                                        inputPasswordIsFocus && styles.inputHighlightVisible,
+                                        inputPasswordError && styles.inputErrorHighlight
+                                    ]}
+                                ></View>
+                                <TextInput
+                                    cursorColor={'#ADB5BD'}
+                                    onFocus={() => setInputPasswordIsFocus(true)}
+                                    onBlur={() => setInputPasswordIsFocus(false)}
+                                    onChangeText={handlePasswordChange}
+                                    value={password}
+                                    secureTextEntry={true}
+                                    style={[
+                                        styles.textInput,
+                                        inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
+                                        inputPasswordError && styles.inputError
+                                    ]}
+                                />
                             </View>
+                        </View>
                         <View style={styles.formGroup}>
                             <Text style={styles.label}>Nome</Text>
                             <View style={styles.inputWrapper}>
@@ -147,7 +171,62 @@ export default function Profile() {
                                 />
                             </View>
                         </View>
-                        <View style={[styles.selectGroup,styles.marginTop]}>
+                        <View style={[styles.formGroup, styles.marginTop]}>
+                            <View style={styles.headerRow}>
+                                <Text style={styles.label}>Email</Text>
+
+                            </View>
+                            <View style={styles.inputWrapper}>
+                                <View
+                                    style={[
+                                        styles.inputHighlight,
+                                        inputPasswordIsFocus && styles.inputHighlightVisible,
+                                        inputPasswordError && styles.inputErrorHighlight
+                                    ]}
+                                ></View>
+                                <TextInput
+                                    cursorColor={'#ADB5BD'}
+                                    onFocus={() => setInputPasswordIsFocus(true)}
+                                    onBlur={() => setInputPasswordIsFocus(false)}
+                                    onChangeText={handlePasswordChange}
+                                    value={password}
+                                    secureTextEntry={true}
+                                    style={[
+                                        styles.textInput,
+                                        inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
+                                        inputPasswordError && styles.inputError
+                                    ]}
+                                />
+                            </View>
+                        </View>
+                        <View style={[styles.formGroup, styles.marginTop]}>
+                            <View style={styles.headerRow}>
+                                <Text style={styles.label}>Telemovel</Text>
+                            </View>
+                            <View style={styles.inputWrapper}>
+                                <View
+                                    style={[
+                                        styles.inputHighlight,
+                                        inputPasswordIsFocus && styles.inputHighlightVisible,
+                                        inputPasswordError && styles.inputErrorHighlight
+                                    ]}
+                                ></View>
+                                <TextInput
+                                    cursorColor={'#ADB5BD'}
+                                    onFocus={() => setInputPasswordIsFocus(true)}
+                                    onBlur={() => setInputPasswordIsFocus(false)}
+                                    onChangeText={handlePasswordChange}
+                                    value={password}
+                                    secureTextEntry={true}
+                                    style={[
+                                        styles.textInput,
+                                        inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
+                                        inputPasswordError && styles.inputError
+                                    ]}
+                                />
+                            </View>
+                        </View>
+                        <View style={[styles.selectGroup, styles.marginTop]}>
                             <Text style={styles.label}>País</Text>
                             <Select
                                 options={countryOptions}

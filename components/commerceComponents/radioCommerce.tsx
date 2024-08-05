@@ -44,7 +44,7 @@ export default function RadioCommerce({
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        gap: 30,
+        gap: 20,
     },
     optionWrapper: {
         position: 'relative',

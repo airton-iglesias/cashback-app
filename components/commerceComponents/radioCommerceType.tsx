@@ -45,17 +45,17 @@ export default function Radio_Commerce_Type({
         </View>
     );
 }
-
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         flex: 1,
     },
+    //mudar a margin do optionWrapper pra 5
     optionWrapper: {
         flex: 1,
         position: 'relative',
-        marginHorizontal: 5,
+        marginHorizontal: 4,
     },
     selectedBackground: {
         position: 'absolute',

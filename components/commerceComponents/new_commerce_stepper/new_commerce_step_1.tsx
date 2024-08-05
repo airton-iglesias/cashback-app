@@ -34,7 +34,6 @@ export default function New_Commerce_step_1({ route }: any) {
 
     return (
         <SafeAreaView style={styles.container}>
-
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.headerContainer}>
                     <TouchableOpacity
@@ -188,6 +187,7 @@ const styles = StyleSheet.create({
     },
     longInputWrapper: {
         paddingHorizontal: 15,
+        marginTop: 24,
     },
     selectSection: {
         width: '100%',

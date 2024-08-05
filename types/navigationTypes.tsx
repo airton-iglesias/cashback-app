@@ -2,6 +2,13 @@ export type AuthStackParamList = {
   signin: undefined;
   signup: undefined;
   language: undefined;
+  recoveryDatas: undefined;
+  verifyInbox: undefined;
+  resetPassword: undefined;
+  resetSucess: undefined;
+  pinValidate: undefined;
+  resetPin: undefined;
+  resetPinConfirm: undefined;
 };
 
 export type RootStackParamList = {
