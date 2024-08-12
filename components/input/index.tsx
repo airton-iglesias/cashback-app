@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-export default function Input({ label, placeholder, type, onChange, keyboardType, maxLength }:any) {
+export default function Input({ label, placeholder, type, onChange, keyboardType, maxLength, customPaddingLeft, customColor }: any) {
+    
+    const [inputValue, setInputValue] = useState('');
+
     const [isInputFocus, setIsInputFocus] = useState(false);
     const [isInputError, setIsInputError] = useState(false);
-    const [inputValue, setInputValue] = useState('');
     const [secureEntry, setSecureEntry] = useState(type === 'password');
 
-    const handleInputChange = (text:string) => {
+    const handleInputChange = (text: string) => {
         validateInput(text);
         onChange(text);
     };
@@ -58,17 +60,20 @@ export default function Input({ label, placeholder, type, onChange, keyboardType
 
     return (
         <View style={styles.inputSection}>
-            {label ? <Text style={styles.inputLabel}>{label}</Text>: null}
+            {label ? <Text style={styles.inputLabel}>{label}</Text> : null}
             <View style={styles.inputWrapper}>
-                <View
-                    style={[
-                        styles.inputHighlight,
-                        isInputFocus && styles.inputHighlightVisible,
-                        isInputError && styles.inputErrorHighlight
-                    ]}
-                ></View>
+                {isInputFocus ?
+                    <View
+                        style={[
+                            styles.inputHighlight,
+                            isInputFocus && styles.inputHighlightVisible,
+                            isInputError && styles.inputErrorHighlight
+                        ]}
+                    ></View>
+                    : null
+                }
                 <TextInput
-                    cursorColor={'#ADB5BD'}
+                    cursorColor={'#212529'}
                     onFocus={() => setIsInputFocus(true)}
                     onBlur={() => setIsInputFocus(false)}
                     onChangeText={handleInputChange}
@@ -80,7 +85,8 @@ export default function Input({ label, placeholder, type, onChange, keyboardType
                     style={[
                         styles.textInput,
                         isInputFocus && (isInputError ? styles.inputError : styles.inputFocused),
-                        isInputError && styles.inputError
+                        customPaddingLeft ? {paddingLeft: customPaddingLeft}: null,
+                        customColor ? {color: customColor}:{color: '#212529'}
                     ]}
                 />
             </View>
@@ -93,7 +99,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     inputLabel: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'normal',
         marginBottom: 4
     },
@@ -130,7 +136,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 48,
         fontSize: 18,
-        color: '#ADB5BD',
         borderColor: '#ADB5BD',
         paddingHorizontal: 10
     },

@@ -10,11 +10,10 @@ import { CommerceStackParamList } from '../../../types/navigationTypes';
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
 export default function New_Commerce_step_0() {
-    //information variables
+    
     const [CashbackType, setCashbackType] = useState<string>('Permanente');
     const [PlaceType, setPlaceType] = useState<string>('Físico');
 
-    // navigation initialization and buttons states
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
     const [selectedType, setSelectedType] = useState<number>(0);
     const [selectedPlace, setSelectedPlace] = useState<number>(0);
@@ -48,7 +47,7 @@ export default function New_Commerce_step_0() {
                     <RadioCommerceType
                         selected={selectedType}
                         options={['Permanente', 'Evento', 'Promoção']}
-                        onChangeSelect={(opt, i) => {setSelectedType(i); setCashbackType(opt)}}
+                        onChangeSelect={(opt, i) => { setSelectedType(i); setCashbackType(opt) }}
                     />
                 </View>
 
@@ -57,34 +56,31 @@ export default function New_Commerce_step_0() {
                     <RadioCommerce
                         selected={selectedPlace}
                         options={['Físico', 'Web']}
-                        onChangeSelect={(opt, i) => {setSelectedPlace(i); setPlaceType(opt)}}
+                        onChangeSelect={(opt, i) => { setSelectedPlace(i); setPlaceType(opt) }}
                     />
                 </View>
-
-                <View style={styles.footer}>
-                    <View style={styles.stepperLayoutContainer}>
-                        <Text style={styles.stepperLayoutText}>1 de 6</Text>
-                        <View style={styles.stepperLayoutSelected}></View>
-                        <View style={styles.stepperLayout}></View>
-                        <View style={styles.stepperLayout}></View>
-                        <View style={styles.stepperLayout}></View>
-                        <View style={styles.stepperLayout}></View>
-                        <View style={styles.stepperLayout}></View>
-                    </View>
-
-                    <TouchableHighlight
-                        onPress={() => commerceNavigation.navigate("new_commerce_step_1", {CashbackType, PlaceType})}
-                        underlayColor="#e5e7eb"
-                        activeOpacity={0.6}
-                        style={styles.nextButton}
-                    >
-                        <View style={styles.nextButtonContent}>
-                            <Feather name="arrow-right" size={24} color="white" />
-                        </View>
-                    </TouchableHighlight>
-                </View>
             </ScrollView>
-
+            <View style={styles.footer}>
+                <View style={styles.stepperLayoutContainer}>
+                    <Text style={styles.stepperLayoutText}>1 de 6</Text>
+                    <View style={styles.stepperLayoutSelected}></View>
+                    <View style={styles.stepperLayout}></View>
+                    <View style={styles.stepperLayout}></View>
+                    <View style={styles.stepperLayout}></View>
+                    <View style={styles.stepperLayout}></View>
+                    <View style={styles.stepperLayout}></View>
+                </View>
+                <View
+                    style={styles.nextButton}
+                >
+                    <TouchableOpacity style={styles.nextButtonContent}
+                        onPress={() => commerceNavigation.navigate("new_commerce_step_1", { CashbackType, PlaceType })}
+                        activeOpacity={0.6}
+                    >
+                        <Feather name="arrow-right" size={24} color="white" />
+                    </TouchableOpacity>
+                </View>
+            </View>
         </SafeAreaView>
     );
 }
@@ -164,18 +160,18 @@ const styles = StyleSheet.create({
         marginBottom: 30,
     },
     footer: {
-        flex: 1,
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
-        paddingBottom: 24,
+        height: 120
     },
     stepperLayoutContainer: {
         flexDirection: 'row',
         gap: 10,
         alignItems: 'center',
-        marginBottom: 20
+        justifyContent: 'center',
+        height: '100%',
     },
     stepperLayout: {
         height: 6,
@@ -194,19 +190,23 @@ const styles = StyleSheet.create({
         marginTop: 2
     },
     stepperLayoutText: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'normal',
     },
     nextButton: {
         borderRadius: 8,
+        height: '100%',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        flex: 1
     },
     nextButtonContent: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'black',
-        width: 64,
-        height: 64,
+        width: 78,
+        height: 78,
         borderRadius: 999,
         paddingHorizontal: 16,
     },

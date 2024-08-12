@@ -2,29 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView, Text, TouchableHighlight, View, StyleSheet } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { SignupStackParamList } from "../../types/navigationTypes";
+import { SignupStackParamList } from "@/types/navigationTypes";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
 
 type SignupStep4NavigationProp = NativeStackNavigationProp<SignupStackParamList>;
 
-export default function Signup_Step_2({ route }: any) {
+export default function Signup_Step_2({ route }: any) {    
+    const { email, password, image, name, country, currency, codeBonus } = route.params;
+    const [pin, setPin] = useState<string>('');
+
+    const buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const [pressedButton, setPressedButton] = useState<number | null>(null);
+
     const signupNavigation = useNavigation<SignupStep4NavigationProp>();
     const { t } = useLocale();
     
-    const { email, password, country, currency, imageProfile } = route.params;
-
-    const [pin, setPin] = useState<string>('');
-    const buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const [pressedButton, setPressedButton] = useState<number | null>(null);
-    
-    const handleDelete = () => {
-        setPin((prev) => prev.slice(0, -1));
-    };
-    
     useEffect(() => {
         if (pin.length === 6) {
-            signupNavigation.navigate('signup_step_3', { email, password, country, currency, imageProfile, pin });
+            signupNavigation.navigate('signup_step_3', { email, password, image, name, country, currency, codeBonus, pin });
         }
     }, [pin, signupNavigation]);
 
@@ -34,17 +30,21 @@ export default function Signup_Step_2({ route }: any) {
 
     const handlePressOut = () => {
         setPressedButton(null);
-    }
+    };
+
+    const handleDelete = () => {
+        setPin((prev) => prev.slice(0, -1));
+    };
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.content}>
-                <Text style={styles.title}>{t('signup_step_2.new_pin')}</Text>
+                <Text style={styles.title}>{t('signup.signup_step_2.new_pin')}</Text>
                 <View style={styles.pinContainer}>
                     <View style={styles.pinRow}>
                         {Array(6).fill(0).map((_, index) => (
                             <Text key={index} style={styles.pinText}>
-                                {pin[index] ? pin[index] : <Text style={styles.pinDot}>•</Text>}
+                                {pin[index] ? <Text style={styles.pinDotMarked}>•</Text> : <Text style={styles.pinDot}>•</Text>}
                             </Text>
                         ))}
                     </View>
@@ -126,6 +126,9 @@ const styles = StyleSheet.create({
     },
     pinDot: {
         color: '#848484',
+    },
+    pinDotMarked:{
+        color: '#000',
     },
     buttonGrid: {
         flexWrap: 'wrap',

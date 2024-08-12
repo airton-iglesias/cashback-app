@@ -5,6 +5,7 @@ import { Octicons, AntDesign, Feather } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../../types/navigationTypes';
 import Input from '@/components/input';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
@@ -12,11 +13,11 @@ export default function New_Commerce_step_2({ route }: any) {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
 
     const {
-        CashbackType, 
-        PlaceType, 
-        referenceUser, 
-        association, 
-        title, 
+        CashbackType,
+        PlaceType,
+        referenceUser,
+        association,
+        title,
         userPoints } = route.params || {};
 
     const [webSite, setWebsite] = useState<string>('');
@@ -24,6 +25,14 @@ export default function New_Commerce_step_2({ route }: any) {
     const [endDate, setEndDate] = useState<string>('');
     const [startHour, setStartHour] = useState<string>('');
     const [endHour, setEndHour] = useState<string>('');
+    const [mapAdress, setmapAdress] = useState<string>('');
+
+    const INITIAL_REGION = {
+        latitude: 38.7266085,
+        longitude: -9.1503216,
+        latitudeDelta: 2,
+        longitudeDelta: 2,
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -35,7 +44,7 @@ export default function New_Commerce_step_2({ route }: any) {
                             onPress={() => commerceNavigation.goBack()}
                         >
                             <Octicons name="chevron-left" size={32} color="black" />
-
+                            
                         </TouchableOpacity>
                         <Text style={styles.headerText}>Local e horário</Text>
                         <TouchableOpacity style={styles.closeButton}
@@ -103,43 +112,47 @@ export default function New_Commerce_step_2({ route }: any) {
                             </View>
                             <View style={styles.mapContainer}>
                                 <View style={styles.mapPlaceholder}>
-                                    <Text style={styles.mapText}>Maps</Text>
+                                    <MapView
+                                        style={styles.map}
+                                        provider={PROVIDER_GOOGLE}
+                                        zoomEnabled={true}
+                                        scrollEnabled={true}
+                                        showsUserLocation={true}
+                                        initialRegion={INITIAL_REGION}
+                                    />
                                 </View>
                             </View>
                         </View>
                         :
                         null
                     }
+                </ScrollView>
+                <View style={styles.footer}>
+                    <View style={styles.stepperLayoutContainer}>
+                        <Text style={styles.stepperLayoutText}>3 de 6</Text>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayoutSelected}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
+                        <View style={styles.stepperLayout}></View>
+                    </View>
 
-                    <View style={[styles.footer, {paddingTop: PlaceType === "Físico" ? 30: 150}]}>
-                        <View style={styles.stepperLayoutContainer}>
-                            <Text style={styles.stepperLayoutText}>3 de 6</Text>
-                            <View style={styles.stepperLayout}></View>
-                            <View style={styles.stepperLayout}></View>
-                            <View style={styles.stepperLayoutSelected}></View>
-                            <View style={styles.stepperLayout}></View>
-                            <View style={styles.stepperLayout}></View>
-                            <View style={styles.stepperLayout}></View>
-                        </View>
-
-                        <TouchableHighlight
+                    <View style={styles.nextButton}>
+                        <TouchableOpacity style={styles.nextButtonContent}
                             onPress={() => commerceNavigation.navigate("new_commerce_step_3",
                                 {
-                                    CashbackType, PlaceType, referenceUser, 
-                                    association, title, userPoints, webSite, startDate, 
-                                    endDate, startHour, endHour
+                                    CashbackType, PlaceType, referenceUser,
+                                    association, title, userPoints, webSite, startDate,
+                                    endDate, startHour, endHour, mapAdress
                                 }
                             )}
-                            underlayColor="#e5e7eb"
                             activeOpacity={0.6}
-                            style={styles.nextButton}
                         >
-                            <View style={styles.nextButtonContent}>
-                                <Feather name="arrow-right" size={24} color="white" />
-                            </View>
-                        </TouchableHighlight>
+                            <Feather name="arrow-right" size={24} color="white" />
+                        </TouchableOpacity>
                     </View>
-                </ScrollView>
+                </View>
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
@@ -287,24 +300,25 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
+        overflow: 'hidden'
     },
     mapText: {
         fontSize: 24,
         color: '#6C757D',
     },
     footer: {
-        flex: 1,
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
-        paddingBottom: 24,
+        height: 120
     },
     stepperLayoutContainer: {
         flexDirection: 'row',
         gap: 10,
         alignItems: 'center',
-        marginBottom: 20
+        justifyContent: 'center',
+        height: '100%',
     },
     stepperLayout: {
         height: 6,
@@ -323,19 +337,27 @@ const styles = StyleSheet.create({
         marginTop: 2
     },
     stepperLayoutText: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'normal',
     },
     nextButton: {
         borderRadius: 8,
+        height: '100%',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        flex: 1
+    },
+    map: {
+        width: '100%',
+        height: '100%',
     },
     nextButtonContent: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'black',
-        width: 64,
-        height: 64,
+        width: 78,
+        height: 78,
         borderRadius: 999,
         paddingHorizontal: 16,
     },

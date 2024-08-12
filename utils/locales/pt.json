@@ -1,8 +1,8 @@
 {
-    "language":{
+    "language": {
         "header": "Idioma"
     },
-    "signin":{
+    "signin": {
         "header": "Iniciar sessão",
         "email": "Email ou Telemovel",
         "password": "Password",
@@ -10,26 +10,32 @@
         "createAccount": "Criar nova conta",
         "forgotPassword": "Esqueceu sua senha?"
     },
-    "signup_step_0":{
-        "header": "Nova conta",
-        "email": "Email ou Telemovel",
-        "password": "Password",
-        "confirmPassword": "Confirme o Password"
-    },
-    "signup_step_1":{
-        "name": "Nome",
-        "country": "País",
-        "select_country": "Selecione o País",
-        "currency": "Moeda",
-        "select_currency": "Selecione a moeda",
-        "optional": "Opcional",
-        "bonus_code": "Código Bonus"
-    },
-    "signup_step_2":{
-        "new_pin": "Criar pin"
-
-    },
-    "signup_step_3":{
-        "confirm_pin": "Confirmar pin"
+    "signup": {
+        "signup_step_0": {
+            "header": "Nova conta",
+            "email": "Email ou Telemovel",
+            "password": "Password",
+            "confirmPassword": "Confirme o Password"
+        },
+        "signup_step_1": {
+            "name": "Nome",
+            "country": "País",
+            "select_country": "Selecione o País",
+            "currency": "Moeda",
+            "select_currency": "Selecione a moeda",
+            "optional": "Opcional",
+            "bonus_code": "Código Bonus"
+        },
+        "signup_step_2":{
+            "new_pin": "Criar pin"
+    
+        },
+        "signup_step_3": {
+            "confirm_pin": "Confirmar pin",
+            "pin_error": "Pin inválido ou errado!"
+        },
+        "signup_step_4": {
+            "processing_register": "Processando seu cadastro..."
+        }
     }
 }

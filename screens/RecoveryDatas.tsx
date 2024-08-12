@@ -9,8 +9,11 @@ import { useState } from "react";
 type AuthNavigationProp = NativeStackNavigationProp<AuthStackParamList>;
 
 export default function RecoveryDatas() {
+
     const authNavigation = useNavigation<AuthNavigationProp>();
-    const [emailInput, setEmailInput] = useState('')
+    
+    const [email, setEmail] = useState('');
+
     return (
         <SafeAreaView>
             <View style={styles.container}>
@@ -24,17 +27,13 @@ export default function RecoveryDatas() {
 
                         </TouchableOpacity>
                         <Text style={styles.headerText}>Voltar</Text>
-                        <TouchableOpacity style={styles.closeButton}
-                            onPress={() => authNavigation.goBack()}
-                        >
-                            <AntDesign name="close" size={28} color="black" />
-                        </TouchableOpacity>
                     </View>
 
                     <View style={styles.inputWrapper}>
                         <Input
                             label={'E-mail para envio de código de confirmação'}
-                            onChange={(text: string) => setEmailInput(text)}
+                            onChange={(text: string) => setEmail(text)}
+                            type={'email'}
                         />
                     </View>
                 </View>

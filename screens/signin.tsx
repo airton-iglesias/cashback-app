@@ -10,6 +10,7 @@ import { Feather } from '@expo/vector-icons';
 import CheckBox from "../components/checkbox";
 import { useLocale } from "../contexts/TranslationContext";
 import LanguageModal from "@/components/languageModal";
+import Input from "@/components/input";
 
 type AuthNavigationProp = NativeStackNavigationProp<AuthStackParamList>;
 
@@ -24,11 +25,6 @@ export default function SigninScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isChecked, setChecked] = useState(false);
-
-    const [inputEmailIsFocus, setInputEmailIsFocus] = useState(false);
-    const [inputEmailError, setInputEmailError] = useState(false);
-    const [inputPasswordIsFocus, setInputPasswordIsFocus] = useState(false);
-    const [inputPasswordError, setInputPasswordError] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
@@ -37,37 +33,6 @@ export default function SigninScreen() {
         }, 300)
 
     }, [])
-
-    const validateEmail = (email: string) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (re.test(email)) {
-            return true;
-        }
-        setInputEmailError(true);
-        return false;
-    };
-
-    const validatePassword = (password: string) => {
-        return password.length >= 6;
-    };
-
-    const handleEmailChange = (text: string) => {
-        setEmail(text);
-        if (text.trim() === '') {
-            setInputEmailError(false);
-        } else {
-            setInputEmailError(!validateEmail(text));
-        }
-    };
-
-    const handlePasswordChange = (text: string) => {
-        setPassword(text);
-        if (text.trim() === '') {
-            setInputPasswordError(false);
-        } else {
-            setInputPasswordError(!validatePassword(text));
-        }
-    };
 
     const handleCheck = () => {
         setChecked(!isChecked);
@@ -106,52 +71,19 @@ export default function SigninScreen() {
                         </View>
 
                         <View style={styles.inputGroup}>
-                            <Text style={styles.label}>{t('signin.email')}</Text>
-                            <View style={styles.inputWrapper}>
-                                <View style={[
-                                    styles.inputHighlight,
-                                    inputEmailIsFocus && styles.inputHighlightVisible,
-                                    inputEmailError && styles.inputErrorHighlight
-                                ]}></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => setInputEmailIsFocus(true)}
-                                    onBlur={() => setInputEmailIsFocus(false)}
-                                    onChangeText={handleEmailChange}
-                                    style={[
-                                        styles.input,
-                                        inputEmailIsFocus && (inputEmailError ? styles.inputError : styles.inputFocused),
-                                        inputEmailError && styles.inputError
-                                    ]}
-                                    keyboardType={'email-address'}
-                                />
-                            </View>
+                            <Input
+                                label={t('signin.email')}
+                                onChange={(text: string) => setEmail(text)}
+                                type={'email'}
+                            />
                         </View>
 
                         <View style={styles.inputGroup}>
-                            <Text style={styles.label}>{t('signin.password')}</Text>
-                            <View style={styles.inputWrapper}>
-                                <View
-                                    style={[
-                                        styles.inputHighlight,
-                                        inputPasswordIsFocus && styles.inputHighlightVisible,
-                                        inputPasswordError && styles.inputErrorHighlight
-                                    ]}
-                                ></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => setInputPasswordIsFocus(true)}
-                                    onBlur={() => setInputPasswordIsFocus(false)}
-                                    onChangeText={handlePasswordChange}
-                                    value={password}
-                                    secureTextEntry={true}
-                                    style={[
-                                        styles.input,
-                                        inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
-                                        inputPasswordError && styles.inputError
-                                    ]}
-                                />
-                            </View>
+                            <Input
+                                label={t('signin.password')}
+                                onChange={(text: string) => setPassword(text)}
+                                type={'password'}
+                            />
                         </View>
 
                         <View style={styles.checkboxContainer}>
@@ -253,43 +185,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'normal',
         marginBottom: 4
-    },
-    inputWrapper: {
-        position: 'relative',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    inputHighlight: {
-        position: 'absolute',
-        borderWidth: 4,
-        width: '101.5%',
-        height: 53,
-        borderRadius: 10,
-        opacity: 0,
-    },
-    inputHighlightVisible: {
-        opacity: 0.15,
-        borderColor: '#6610F2',
-    },
-    inputErrorHighlight: {
-        opacity: 0.20,
-        borderColor: '#DC3545',
-    },
-    input: {
-        borderWidth: 1,
-        borderRadius: 10,
-        width: '100%',
-        height: 48,
-        fontSize: 20,
-        color: '#ADB5BD',
-        borderColor: '#ADB5BD',
-        paddingHorizontal: 10
-    },
-    inputFocused: {
-        borderColor: '#000000',
-    },
-    inputError: {
-        borderColor: '#DC3545',
     },
     checkboxContainer: {
         flexDirection: 'row',

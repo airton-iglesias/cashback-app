@@ -11,13 +11,16 @@ import StoreIcon from "@/assets/icons/storeIcon";
 type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function Topbar({ openSidebar, openNotifications }: any) {
-    const [value, setValue] = useState('0');
+    
+    const [value, setValue] = useState('');
+
     const rootNavigation = useNavigation<RootNavigationProp>();
     const route = useRoute();
 
 
     const handleSwitchAccount = () => {
         if (route.name === 'home') {
+            setValue('')
             rootNavigation.dispatch(
                 CommonActions.reset({
                     index: 1,
@@ -54,6 +57,7 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
 
                 <View style={styles.textInputContainer}>
                     <TextInput
+                        cursorColor={'white'}
                         placeholder="0"
                         onChangeText={(number) => setValue(number)}
                         placeholderTextColor="#4b5563"
@@ -64,16 +68,19 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                             styles.textInput,
                             {
                                 paddingRight: route.name === "home" ? 0:60,
-                                color: route.name === "home" ? '#28A745' : '#4b5563'
+                                color: route.name === "home" ? '#28A745' : 'white'
                             }
                         ]}
+                        keyboardType={"numeric"}
                     />
                     {route.name === "home" ?
                         null
                         :
-                        <View style={styles.plusWrapper}>
+                        <TouchableOpacity
+                            style={styles.plusWrapper}
+                        >
                             <Feather name="plus" size={20} color="#6FC768" />
-                        </View>
+                        </TouchableOpacity>
                     }
                 </View>
 

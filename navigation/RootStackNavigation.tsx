@@ -10,7 +10,7 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootStackNavigation = () => {
     return (
-        <RootStack.Navigator initialRouteName="dashboard">
+        <RootStack.Navigator initialRouteName="commerce">
             <RootStack.Screen name="dashboard" component={DashboardScreen} options={{ headerShown: false }} />
             <RootStack.Screen name="commerce" component={CommerceScreen} options={{ headerShown: false }} />
             <RootStack.Screen name="profile" component={Profile} options={{ headerShown: false }} />

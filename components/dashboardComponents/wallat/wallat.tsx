@@ -5,6 +5,46 @@ import WallatTokens from "./wallatTokens";
 
 export default function Wallat() {
     const [tokenScreen, setTokenScreen] = useState(false);
+
+    const [datas, setDatas] = useState([
+        {
+            creditsAmount: "50,00",
+            currencyType: "cEUR",
+            tokensAmount: "999999999999999,00",
+            tokensBlockedAmount: "99999999999999,00",
+            token: "X",
+            blockChain: "XXXX",
+            wallatLink: "https://www.google.com",
+            loyaltyDatas: [
+                {
+                    id: "1",
+                    nome: "Rei do bacalhau",
+                    valor: "100,00",
+                },
+                {
+                    id: "2",
+                    nome: "Rei do sorvete",
+                    valor: "100,00",
+                },
+                {
+                    id: "3",
+                    nome: "Rei do peixe",
+                    valor: "100,00",
+                },
+                {
+                    id: "4",
+                    nome: "Sorveteria",
+                    valor: "100,00",
+                },
+                {
+                    id: "5",
+                    nome: "Pizzaria",
+                    valor: "100,00",
+                },
+            ],
+        }
+    ]);
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -24,7 +64,21 @@ export default function Wallat() {
                 </TouchableWithoutFeedback>
             </View>
 
-            {tokenScreen ? <WallatTokens /> : <WallatCredits />}
+            {tokenScreen ?
+                <WallatTokens
+                    tokensAmount={datas[0].tokensAmount}
+                    tokensBlockedAmount={datas[0].tokensBlockedAmount}
+                    token={datas[0].token}
+                    blockChain={datas[0].blockChain}
+                    wallatLink={datas[0].wallatLink}
+                />
+                :
+                <WallatCredits
+                    loyaltyDatas={datas[0].loyaltyDatas}
+                    currencyType={datas[0].currencyType}
+                    creditsAmount={datas[0].creditsAmount}
+                />
+            }
         </SafeAreaView>
     );
 }

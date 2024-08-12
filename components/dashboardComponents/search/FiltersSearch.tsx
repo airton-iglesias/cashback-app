@@ -15,7 +15,7 @@ type SearchNavigationProp = NativeStackNavigationProp<SearchParamList>;
 const FiltersSearch = () => {
     const SearchNavigation = useNavigation<SearchNavigationProp>();
 
-    const [distance, setDistance] = useState<number>(10);
+    const [maxDistance, setMaxDistance] = useState<number>(10);
     const [searchValue, setSearchValue] = useState<string>('');
     const [location, setLocation] = useState<string>('');
     const [place, setPlace] = useState<string>('Local');
@@ -82,7 +82,8 @@ const FiltersSearch = () => {
                         style={filterType === "Promoções" ? [styles.button, styles.activeButton]: styles.button}
                         onPress={() => setFilterType("Promoções")}
                     >
-                        <Text style={filterType === "Promoções" ? styles.activeButtonText: styles.buttonText}>Promoções</Text>
+                        <Text style={
+                            filterType === "Promoções" ? styles.activeButtonText: styles.buttonText}>Promoções</Text>
                     </TouchableOpacity>
                 </View>
                 <View>
@@ -120,15 +121,15 @@ const FiltersSearch = () => {
                 <View style={styles.sliderSection}>
                     <View style={styles.distanceTextWrapper}>
                         <Text style={styles.sectionLabel}>Distância máxima</Text>
-                        <Text style={styles.sectionLabel}>{distance}km</Text>
+                        <Text style={styles.sectionLabel}>{maxDistance} km</Text>
                     </View>
                     <Slider
                         style={styles.slider}
                         minimumValue={1}
                         maximumValue={100}
                         step={10}
-                        value={distance}
-                        onValueChange={(value) => setDistance(value)}
+                        value={maxDistance}
+                        onValueChange={(value) => setMaxDistance(value)}
                         minimumTrackTintColor="gray"
                         maximumTrackTintColor="#CCCCCC"
                         thumbTintColor={'#000000'}

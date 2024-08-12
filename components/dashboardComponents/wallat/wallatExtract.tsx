@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, StatusBar, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Octicons, AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -6,21 +6,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/navigationTypes';
 
 type WallatNavigationProp = NativeStackNavigationProp<RootStackParamList>;
-
-const data = [
-    { id: '1', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: true },
-    { id: '2', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-    { id: '3', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: true },
-    { id: '4', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-    { id: '5', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: true },
-    { id: '6', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-    { id: '7', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-    { id: '8', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-    { id: '9', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-    { id: '10', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-    { id: '11', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-
-];
 
 const Item = ({ date, transactionId, amount, positive }: any) => (
     <View style={styles.item}>
@@ -35,7 +20,22 @@ const Item = ({ date, transactionId, amount, positive }: any) => (
 );
 
 export default function WallatExtract() {
+    const [datas, setDatas] = useState([
+        { id: '1', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: true },
+        { id: '2', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+        { id: '3', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: true },
+        { id: '4', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+        { id: '5', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: true },
+        { id: '6', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+        { id: '7', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+        { id: '8', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+        { id: '9', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+        { id: '10', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+        { id: '11', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+    ]);
+
     const rootNavigation = useNavigation<WallatNavigationProp>();
+    
     return (
         <SafeAreaView style={styles.container}>
 
@@ -48,14 +48,9 @@ export default function WallatExtract() {
 
                 </TouchableOpacity>
                 <Text style={styles.headerText}>Extrato de Crédito</Text>
-                <TouchableOpacity style={styles.closeButton}
-                    onPress={() => rootNavigation.goBack()}
-                >
-                    <AntDesign name="close" size={28} color="black" />
-                </TouchableOpacity>
             </View>
             <FlatList
-                data={data}
+                data={datas}
                 renderItem={({ item }) => (
                     <Item
                         date={item.date}

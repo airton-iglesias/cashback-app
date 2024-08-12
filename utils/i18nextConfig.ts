@@ -2,20 +2,18 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { getLocales } from 'expo-localization';
 
-import en from './locales/en.json';
-import pt from './locales/pt.json';
-import fr from './locales/fr.json';
+import pt from '@/utils/locales/pt.json';
 
 const getLanguage = () => {
   const locales = getLocales();
-  return locales[0]?.languageCode ?? 'en';
+  return locales[0]?.languageCode ?? 'pt';
 };
 
 const initializeI18Next = () => {
   i18n.use(initReactI18next).init({
     debug: false,
     lng: getLanguage(),
-    fallbackLng: 'en',
+    fallbackLng: 'pt',
     compatibilityJSON: 'v3',
     interpolation: {
       escapeValue: false,
@@ -23,12 +21,6 @@ const initializeI18Next = () => {
     resources: {
       pt: {
         translation: pt,
-      },
-      en: {
-        translation: en,
-      },
-      fr: {
-        translation: fr,
       },
     }
   });

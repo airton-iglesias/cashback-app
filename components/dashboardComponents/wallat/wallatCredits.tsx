@@ -1,76 +1,76 @@
-import React from 'react';
-import { ScrollView, TextInput, View, Text, StyleSheet, Pressable } from 'react-native';
-import LoyaltyComponent from './loyaltyComponent';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal } from 'react-native';
+import LoyaltyComponent from '@/components/dashboardComponents/wallat/loyaltyComponent';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList, WallatStackParamList } from '@/types/navigationTypes';
+import { RootStackParamList } from '@/types/navigationTypes';
+import Input from '@/components/input';
 
 type WallatNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-export default function WallatCredits() {
-
+export default function WallatCredits({ creditsAmount, currencyType, loyaltyDatas }: any) {
     const rootNavigation = useNavigation<WallatNavigationProp>();
 
-    const itemData = [
-        {
-            creditsAmount: "50,00",
-            currencyType: "cEUR"
-        }
-    ];
+    const [search, setSearch] = useState<string>('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedCurrency, setSelectedCurrency] = useState<string | null>('cEUR');
 
-    const loyaltyDatas = [
+    const options = [
         {
-            nome: "Nome",
-            valor: "100,00",
-            limite: "2000,00"
+            id: "1",
+            currency: 'cEUR',
         },
         {
-            nome: "Nome",
-            valor: "100,00",
-            limite: "2000,00"
-        },
-
-        {
-            nome: "Nome",
-            valor: "100,00",
-            limite: "2000,00"
+            id: "2",
+            currency: 'cDolar',
         },
     ];
 
+    const filteredData = loyaltyDatas.filter((item: { nome: string; }) => {
+        const matchesSearchInput = item.nome.toLowerCase().includes(search.toLowerCase());
+        return matchesSearchInput;
+    });
+
+    const handleCurrencySelect = (currency: string) => {
+        setSelectedCurrency(currency);
+        setModalVisible(false);
+    };
 
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <View style={styles.amountContainer}>
-                    <Text style={styles.amountText}>{itemData[0].creditsAmount}</Text>
-                    <View style={styles.currencyContainer}>
-                        <Text style={styles.currencyText}>{itemData[0].currencyType}</Text>
+                    <Text numberOfLines={1} style={styles.amountText}>{creditsAmount}</Text>
+                    <TouchableOpacity style={styles.currencyContainer} onPress={() => setModalVisible(true)}>
+                        <Text style={styles.currencyText}>{selectedCurrency || currencyType}</Text>
                         <Entypo name="chevron-small-down" size={24} color="black" />
-                    </View>
+                    </TouchableOpacity>
                 </View>
             </View>
 
             <View style={styles.fidelityHeader}>
                 <View style={styles.fidelityTitleContainer}>
                     <Text style={styles.fidelityTitle}>Fidelidade</Text>
-                    <Pressable style={styles.fidelityButton} onPress={() => rootNavigation.navigate("wallatextract")}>
+                    <TouchableOpacity style={styles.fidelityButton} onPress={() => rootNavigation.navigate("wallatextract")}>
                         <Text style={[styles.fidelityTitle, { color: '#0D6EFD' }]}>Extrato</Text>
                         <Feather style={{ marginBottom: 7, marginLeft: 5 }} name="list" size={24} color="#0D6EFD" />
-                    </Pressable>
+                    </TouchableOpacity>
                 </View>
             </View>
 
             <View style={styles.searchContainer}>
                 <View style={styles.searchInnerContainer}>
                     <FontAwesome name="search" size={18} style={styles.searchIcon} />
-                    <TextInput
-                        placeholder="Buscar"
-                        style={styles.searchInput}
+                    <Input
+                        placeholder={'Buscar'}
+                        onChange={(text: string) => setSearch(text)}
+                        customPaddingLeft={40}
                     />
                 </View>
             </View>
+
             <View style={styles.labelContainer}>
                 <View style={styles.descriptionContainer}>
                     <Text style={styles.label}>Item</Text>
@@ -78,18 +78,63 @@ export default function WallatCredits() {
                 </View>
             </View>
 
-            <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+            <View style={styles.ViewContainer}>
                 {
-                    loyaltyDatas.length !== 0 ? loyaltyDatas.map((item, index) =>
-                        <LoyaltyComponent
-                            key={index}
-                            nome={item.nome}
-                            valor={item.valor}
-                            limite={item.limite}
+                    loyaltyDatas.length !== 0 ?
+                        <FlatList
+                            data={filteredData}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item, index }) => (
+                                <LoyaltyComponent
+                                    key={index}
+                                    nome={item.nome}
+                                    valor={item.valor}
+                                />
+                            )}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{ paddingBottom: 360 }}
                         />
-                    ) : null
+                        : null
                 }
-            </ScrollView>
+            </View>
+
+            <Modal
+                animationType="slide"
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalWrapper}>
+                    <TouchableOpacity style={{ position: 'absolute', left: 20, zIndex: 10,flexDirection: 'row' }} onPress={() => setModalVisible(false)}>
+                        <Feather name="arrow-left" size={30} style={{ color: 'black', marginTop: 2 }} />
+
+
+                        <Text style={styles.modalText}>
+                            Voltar
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                <FlatList
+                    data={options}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity
+                            onPress={() => handleCurrencySelect(item.currency)}
+                            style={{
+                                borderBottomWidth: 1,
+                                backgroundColor: selectedCurrency === item.currency ? '#EDEDED' : '#fff',
+                                borderColor: '#d1d5db'
+                            }}
+                        >
+                            <View style={styles.optionWrapper}>
+                                <View style={styles.optionContent}>
+                                    <Text style={{ fontSize: 18 }}>{item.currency}</Text>
+                                </View>
+                                {selectedCurrency === item.currency && <Feather name="check" size={24} color="black" />}
+                            </View>
+                        </TouchableOpacity>
+                    )}
+                />
+            </Modal>
         </View>
     );
 }
@@ -114,7 +159,8 @@ const styles = StyleSheet.create({
     amountText: {
         fontSize: 32,
         fontWeight: 'bold',
-        textAlign: 'center',
+        textAlign: 'left',
+        flex: 1
     },
     currencyContainer: {
         flexDirection: 'row',
@@ -172,9 +218,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: 'gray',
     },
-    scrollViewContainer: {
+    ViewContainer: {
         paddingHorizontal: 20,
-        paddingBottom: 96
     },
     labelContainer: {
         paddingHorizontal: 20,
@@ -189,5 +234,35 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 5
+    },
+    modalWrapper: {
+        position: 'relative',
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'center',
+        height: 48,
+        marginTop: 20
+    },
+    optionWrapper: {
+        borderRadius: 8,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        height: 56,
+        paddingHorizontal: 20,
+        fontSize: 20,
+        flexDirection: 'row',
+        color: '#6b7280'
+    },
+    optionContent: {
+        flexDirection: 'row',
+        gap: 8,
+        alignItems: 'center'
+    },
+    modalText: {
+        fontSize: 24,
+        textAlign: 'left',
+        width: '100%',
+        marginLeft: 5
     }
 });

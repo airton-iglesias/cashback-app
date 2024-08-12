@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import i18next from "i18next";
-import { StorageService } from "../services/storageService";
+import { StorageService } from "@/services/storageService";
 import { useTranslation } from "react-i18next";
 
 const USER_LANGUAGE = 'USER_LANGUAGE';
@@ -11,12 +11,12 @@ interface TranslationContextProps {
 }
 
 export const TranslationContext = createContext<TranslationContextProps>({
-  currentLanguage: 'en',
+  currentLanguage: 'pt',
   changeLanguage: () => {},
 });
 
 export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentLanguage, setCurrentLanguage] = useState(i18next.language ?? 'en');
+  const [currentLanguage, setCurrentLanguage] = useState(i18next.language ?? 'pt');
 
   const changeLanguage = async (lng: string) => {
     setCurrentLanguage(lng);

@@ -17,7 +17,7 @@ export default function Pin() {
     const [ConfirmPin, setConfirmPin] = useState<string>('');
     const buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     const [pressedButton, setPressedButton] = useState<number | null>(null);
-    const [validateError, setValidateError] = useState(false)
+    const [validateError, setValidateError] = useState(false);
 
     const handleDelete = () => {
         setConfirmPin((prev) => prev.slice(0, -1));
@@ -113,10 +113,10 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         alignItems: 'center',
-        gap: 50
+        gap: 55
     },
     title: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: '400',
         color: '#B02A37'
     },
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     recoveryPinText:{
-        fontSize: 22,
+        fontSize: 20,
         color: '#0D6EFD',
     }
 });

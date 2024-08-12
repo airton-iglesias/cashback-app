@@ -4,29 +4,14 @@ import { useNavigation } from '@react-navigation/native';
 import { Octicons, AntDesign, Feather, Ionicons } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../../types/navigationTypes';
+import Input from '@/components/input';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
-export default function New_Commerce_step_6() {
+export default function New_Commerce_step_6({route}: any) {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
 
-    const [inputPasswordIsFocus, setInputPasswordIsFocus] = useState(false);
-    const [inputPasswordError, setInputPasswordError] = useState(false);
-    const [password, setPassword] = useState('');
-
-
-    const validatePassword = (password: string) => {
-        return password.length >= 6;
-    };
-
-    const handlePasswordChange = (text: string) => {
-        setPassword(text);
-        if (text.trim() === '') {
-            setInputPasswordError(false);
-        } else {
-            setInputPasswordError(!validatePassword(text));
-        }
-    };
+    const [email, setEmail] = useState('');
 
     return (
         <SafeAreaView style={styles.container}>
@@ -53,26 +38,9 @@ export default function New_Commerce_step_6() {
                             Email para a nossa equipa o contatar
                         </Text>
                         <View style={styles.inputWrapper}>
-                            <View
-                                style={[
-                                    styles.inputHighlight,
-                                    inputPasswordIsFocus && styles.inputHighlightVisible,
-                                    inputPasswordError && styles.inputErrorHighlight
-                                ]}
-                            ></View>
-                            <TextInput
-                                cursorColor={'#ADB5BD'}
-                                onFocus={() => setInputPasswordIsFocus(true)}
-                                onBlur={() => setInputPasswordIsFocus(false)}
-                                onChangeText={handlePasswordChange}
-                                value={password}
-                                secureTextEntry={true}
-                                placeholder='10%'
-                                style={[
-                                    styles.textInput,
-                                    inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
-                                    inputPasswordError && styles.inputError
-                                ]}
+                            <Input
+                                onChange={(text:string) => setEmail(email)}
+                                type={'email'}
                             />
                         </View>
                     </View>
@@ -94,8 +62,7 @@ export default function New_Commerce_step_6() {
                     </View>
 
                 </ScrollView>
-
-
+                
                 <View style={styles.footer}>
                     <View style={styles.stepperLayoutContainer}>
                         <Text style={styles.stepperLayoutText}>6 de 6</Text>
@@ -107,16 +74,15 @@ export default function New_Commerce_step_6() {
                         <View style={styles.stepperLayoutSelected}></View>
                     </View>
 
-                    <TouchableHighlight
-                        onPress={() => commerceNavigation.navigate("new_commerce_step_7")}
-                        underlayColor="#e5e7eb"
-                        activeOpacity={0.6}
-                        style={styles.nextButton}
-                    >
-                        <View style={styles.nextButtonContent}>
+                    <View style={styles.nextButton}>
+                        <TouchableOpacity
+                            onPress={() => commerceNavigation.navigate("new_commerce_step_7")}
+                            activeOpacity={0.6}
+                            style={styles.nextButtonContent}
+                        >
                             <Feather name="check" size={24} color="white" />
-                        </View>
-                    </TouchableHighlight>
+                        </TouchableOpacity>
+                    </View>
                 </View>
 
             </KeyboardAvoidingView>
@@ -271,18 +237,18 @@ const styles = StyleSheet.create({
     },
 
     footer: {
-        flex: 1,
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
-        paddingBottom: 24,
+        height: 120
     },
     stepperLayoutContainer: {
         flexDirection: 'row',
         gap: 10,
         alignItems: 'center',
-        marginBottom: 20
+        justifyContent: 'center',
+        height: '100%',
     },
     stepperLayout: {
         height: 6,
@@ -301,19 +267,23 @@ const styles = StyleSheet.create({
         marginTop: 2
     },
     stepperLayoutText: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'normal',
     },
     nextButton: {
         borderRadius: 8,
+        height: '100%',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        flex: 1
     },
     nextButtonContent: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'black',
-        width: 64,
-        height: 64,
+        width: 78,
+        height: 78,
         borderRadius: 999,
         paddingHorizontal: 16,
     },

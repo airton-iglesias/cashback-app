@@ -105,8 +105,8 @@ export default function CommerceHome() {
                                 <View key={index} style={[styles.sectionContainer, index % 2 == 0 ? { backgroundColor: '#F8F9FA' } : { backgroundColor: 'white' }]}>
                                     <View style={[styles.cardContainer, { gap: 30 }]}>
                                         <View>
-                                            <View style={{ gap: 30 }}>
-                                                <TouchableOpacity key={index} onPress={() => commerceNavigation.navigate('commerce_menu')}>
+                                            <TouchableOpacity key={index} onPress={() => commerceNavigation.navigate('commerce_menu')} style={{ gap: 30 }}>
+                                                <View>
                                                     <View style={styles.card}>
                                                         <Image source={require('../../assets/images/sorveteria.png')} style={styles.image} />
                                                         <View style={styles.cardContent}>
@@ -116,7 +116,7 @@ export default function CommerceHome() {
                                                                 <Text style={styles.cardDetailText}>Administrador</Text>
                                                                 <View style={styles.cardDetailItem}>
                                                                     <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
-                                                                    <Text style={styles.cardDetailText}>ID</Text>
+                                                                    <Text style={styles.cardDetailText}>#99999</Text>
                                                                 </View>
                                                             </View>
                                                             <View style={styles.cardStatus}>
@@ -125,8 +125,8 @@ export default function CommerceHome() {
                                                         </View>
                                                         <View style={styles.separator}></View>
                                                     </View>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity>
+                                                </View>
+                                                <View>
                                                     <View style={styles.card}>
                                                         <Image source={require('../../assets/images/sorveteria2.png')} style={[styles.image, styles.roundedImage]} />
                                                         <View style={styles.cardContent}>
@@ -136,7 +136,7 @@ export default function CommerceHome() {
                                                                 <Text style={styles.cardDetailText}>Administrador</Text>
                                                                 <View style={styles.cardDetailItem}>
                                                                     <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
-                                                                    <Text style={styles.cardDetailText}>ID</Text>
+                                                                    <Text style={styles.cardDetailText}>#99999</Text>
                                                                 </View>
                                                             </View>
                                                             <View style={styles.cardStatus}>
@@ -145,8 +145,8 @@ export default function CommerceHome() {
                                                         </View>
                                                         <View style={styles.separator}></View>
                                                     </View>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity>
+                                                </View>
+                                                <View>
                                                     <View style={styles.card}>
                                                         <Image source={require('../../assets/images/sorveteria2.png')} style={[styles.image, styles.roundedImage]} />
                                                         <View style={styles.cardContent}>
@@ -156,7 +156,7 @@ export default function CommerceHome() {
                                                                 <Text style={styles.cardDetailText}>Administrador</Text>
                                                                 <View style={styles.cardDetailItem}>
                                                                     <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
-                                                                    <Text style={styles.cardDetailText}>ID</Text>
+                                                                    <Text style={styles.cardDetailText}>#99999</Text>
                                                                 </View>
                                                             </View>
                                                             <View style={styles.cardStatus}>
@@ -164,8 +164,8 @@ export default function CommerceHome() {
                                                             </View>
                                                         </View>
                                                     </View>
-                                                </TouchableOpacity>
-                                            </View>
+                                                </View>
+                                            </TouchableOpacity>
                                         </View>
                                     </View>
                                 </View>

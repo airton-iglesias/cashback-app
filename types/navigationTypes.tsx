@@ -1,3 +1,4 @@
+
 export type AuthStackParamList = {
   signin: undefined;
   signup: undefined;
@@ -26,10 +27,40 @@ export type WallatStackParamList = {
 
 export type SignupStackParamList = {
   signup_step_0: undefined;
-  signup_step_1: { email: string; password: string };
-  signup_step_2: { email: string; password: string; country: string; currency: string; image: File };
-  signup_step_3: { email: string; password: string; country: string; currency: string; imageProfile: File; pin: string };
-  signup_step_4: undefined;
+  signup_step_1: { 
+    email: string; 
+    password: string };
+  signup_step_2: { 
+    email: string;
+    password: string;
+    image: File; 
+    name: string;
+    country: string; 
+    currency: string; 
+    codeBonus: string; 
+  };
+  signup_step_3: { 
+    email: string;
+    password: string;
+    image: File; 
+    name: string;
+    country: string; 
+    currency: string; 
+    codeBonus: string; 
+    pin: string; 
+  };
+  signup_step_4: { 
+    email: string;
+    password: string;
+    image: File; 
+    name: string;
+    country: string; 
+    currency: string; 
+    codeBonus: string; 
+    pin: string; 
+  };
+  
+  signup_step_5: undefined;
 };
 
 export type CommerceStackParamList = {
@@ -40,7 +71,6 @@ export type CommerceStackParamList = {
   commerce_access_manager: undefined;
   commerce_add_access: undefined;
   commerce_associate_edit: undefined;
-
   new_commerce_step_0: undefined;
   new_commerce_step_1: { CashbackType: string; PlaceType: string };
   new_commerce_step_2: { 
@@ -63,10 +93,59 @@ export type CommerceStackParamList = {
     endDate: string;
     startHour: string;
     endHour: string;
+    mapAdress: string;
   };
-  new_commerce_step_4: undefined;
-  new_commerce_step_5: undefined;
-  new_commerce_step_6: undefined;
+  new_commerce_step_4: {
+    CashbackType: string; 
+    PlaceType: string; 
+    referenceUser: string;
+    association: string; 
+    title: string; 
+    userPoints: string;
+    webSite: string;
+    startDate: string;
+    endDate: string;
+    startHour: string;
+    endHour: string;
+    mapAdress: string;
+    description: string;
+  };
+  new_commerce_step_5: {
+    CashbackType: string; 
+    PlaceType: string; 
+    referenceUser: string;
+    association: string; 
+    title: string; 
+    userPoints: string;
+    webSite: string;
+    startDate: string;
+    endDate: string;
+    startHour: string;
+    endHour: string;
+    mapAdress: string;
+    description: string;
+    logoImage: File | null;
+    posterImage: File | null;
+    descriptionImages: File[] | null;
+  };
+  new_commerce_step_6: {
+    CashbackType: string; 
+    PlaceType: string; 
+    referenceUser: string;
+    association: string; 
+    title: string; 
+    userPoints: string;
+    webSite: string;
+    startDate: string;
+    endDate: string;
+    startHour: string;
+    endHour: string;
+    mapAdress: string;
+    description: string;
+    logoImage: File | null;
+    posterImage: File | null;
+    descriptionImages: File[] | null;
+  };
   new_commerce_step_7: undefined;
 };
 

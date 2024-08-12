@@ -60,22 +60,27 @@ export default function New_Commerce_step_1({ route }: any) {
                     />
                 </View>
 
-                <View style={styles.selectSection}>
-                    <Text style={styles.inputLabel}>Associar</Text>
-                    <Select
-                        options={AssociationOptions}
-                        onChangeSelect={(item: any) => setAssiation(item.text)}
-                        text={''}
-                        SelectOption={SelectOption}
-                    />
-                </View>
+                {PlaceType === "Físico" ?
+                    null :
+
+                    <View style={styles.selectSection}>
+                        <Text style={styles.inputLabel}>Associar</Text>
+                        <Select
+                            options={AssociationOptions}
+                            onChangeSelect={(item: any) => setAssiation(item.text)}
+                            text={''}
+                            SelectOption={SelectOption}
+                        />
+                    </View>
+
+                }
 
                 <View style={styles.selectSection}>
                     <Text style={styles.inputLabel}>Creditar pontos no usuário</Text>
                     <Select
                         options={userPointsOptions}
                         onChangeSelect={(item: any) => setUserPoints(item.text)}
-                        text={''}
+                        text={'Selecione'}
                         SelectOption={SelectOption}
                     />
                 </View>
@@ -83,36 +88,34 @@ export default function New_Commerce_step_1({ route }: any) {
                 <View style={styles.longInputWrapper}>
                     <Input
                         label={"Referido por"}
-                        placeholder=""
+                        placeholder="ID"
                         onChange={(text: string) => setReferenceUser(text)}
                         type={'text'}
                     />
                 </View>
-                <View style={styles.footer}>
-                    <View style={styles.stepperLayoutContainer}>
-                        <Text style={styles.stepperLayoutText}>2 de 6</Text>
-                        <View style={styles.stepperLayout}></View>
-                        <View style={styles.stepperLayoutSelected}></View>
-                        <View style={styles.stepperLayout}></View>
-                        <View style={styles.stepperLayout}></View>
-                        <View style={styles.stepperLayout}></View>
-                        <View style={styles.stepperLayout}></View>
-                    </View>
+            </ScrollView>
+            <View style={styles.footer}>
+                <View style={styles.stepperLayoutContainer}>
+                    <Text style={styles.stepperLayoutText}>2 de 6</Text>
+                    <View style={styles.stepperLayout}></View>
+                    <View style={styles.stepperLayoutSelected}></View>
+                    <View style={styles.stepperLayout}></View>
+                    <View style={styles.stepperLayout}></View>
+                    <View style={styles.stepperLayout}></View>
+                    <View style={styles.stepperLayout}></View>
+                </View>
 
-                    <TouchableHighlight
+                <View style={styles.nextButton}>
+                    <TouchableOpacity style={styles.nextButtonContent}
                         onPress={() => commerceNavigation.navigate("new_commerce_step_2",
                             { CashbackType, PlaceType, referenceUser, association, title, userPoints }
                         )}
-                        underlayColor="#e5e7eb"
                         activeOpacity={0.6}
-                        style={styles.nextButton}
                     >
-                        <View style={styles.nextButtonContent}>
-                            <Feather name="arrow-right" size={24} color="white" />
-                        </View>
-                    </TouchableHighlight>
+                        <Feather name="arrow-right" size={24} color="white" />
+                    </TouchableOpacity>
                 </View>
-            </ScrollView>
+            </View>
         </SafeAreaView >
     );
 }
@@ -181,7 +184,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     inputLabel: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'normal',
         marginBottom: 4
     },
@@ -195,19 +198,18 @@ const styles = StyleSheet.create({
         marginTop: 24,
     },
     footer: {
-        flex: 1,
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
-        paddingBottom: 24,
-        paddingTop: 90
+        height: 120
     },
     stepperLayoutContainer: {
         flexDirection: 'row',
         gap: 10,
         alignItems: 'center',
-        marginBottom: 20
+        justifyContent: 'center',
+        height: '100%',
     },
     stepperLayout: {
         height: 6,
@@ -226,19 +228,23 @@ const styles = StyleSheet.create({
         marginTop: 2
     },
     stepperLayoutText: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'normal',
     },
     nextButton: {
         borderRadius: 8,
+        height: '100%',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        flex: 1
     },
     nextButtonContent: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'black',
-        width: 64,
-        height: 64,
+        width: 78,
+        height: 78,
         borderRadius: 999,
         paddingHorizontal: 16,
     },

@@ -10,6 +10,30 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 type SearchNavigationProp = NativeStackNavigationProp<SearchParamList>;
 
+type DataItem = {
+    id: string;
+    title: string;
+    location: string;
+    distance: string;
+    discount: string;
+    type: string;
+    source: string;
+    cashbackLocationType: string;
+    modal: {
+        haveCupom: boolean;
+        haveLocation: boolean;
+        site: string;
+        createdBy: string;
+        eventDate: string;
+        cashbackType: string;
+        baseDiscount: string;
+        discountAbove100: string;
+        discountAbove200: string;
+        about: string;
+    };
+};
+
+
 const data = [
     {
         id: '1',
@@ -21,9 +45,9 @@ const data = [
         source: 'url da midia',
         cashbackLocationType: 'local',
         modal: {
-            haveCupom: false,
-            haveLocation: false,
-            site: "sitebacalhao.com",
+            cupomCode: 'ID s039da',
+            locationMap: '',
+            website: "www.maps.google.com",
             createdBy: "Casa Verde dos Relógios",
             eventDate: "12 out - 20:00 a 13 out - 21:00",
             cashbackType: "Evento",
@@ -33,55 +57,11 @@ const data = [
             about: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in neque rhoncus, mattis augue eget, viverra purus. Aliquam erat volutpat. Vivamus lacinia felis id massa blandit, vel pellentesque lacus tincidunt. Integer ac tellus id ipsum tincidunt interdum in eu mi. Cras leo dui, pharetra ac congue feugiat."
         }
     },
-    {
-        id: '2',
-        title: 'Fitness Center 2',
-        location: 'Beja, Portugal',
-        distance: '3km',
-        discount: '30%',
-        type: 'image',
-        source: 'url da midia',
-        cashbackLocationType: 'local',
-        modal: {
-            haveCupom: true,
-            haveLocation: true,
-            site: "sitebacalhao.com",
-            createdBy: "Casa Verde dos Relógios",
-            eventDate: "12 out - 20:00 a 13 out - 21:00",
-            cashbackType: "Promoção",
-            baseDiscount: "30%",
-            discountAbove100: "40%",
-            discountAbove200: "50%",
-            about: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in neque rhoncus, mattis augue eget, viverra purus. Aliquam erat volutpat. Vivamus lacinia felis id massa blandit, vel pellentesque lacus tincidunt. Integer ac tellus id ipsum tincidunt interdum in eu mi. Cras leo dui, pharetra ac congue feugiat."
-        }
-    },
-    {
-        id: '3',
-        title: 'Rei do bacalhau',
-        location: 'Beja, Portugal',
-        distance: '10km',
-        discount: '40%',
-        type: 'image',
-        source: 'url da midia',
-        cashbackLocationType: 'local',
-        modal: {
-            haveCupom: true,
-            haveLocation: true,
-            site: "sitebacalhao.com",
-            createdBy: "Casa Verde dos Relógios",
-            eventDate: "12 out - 20:00 a 13 out - 21:00",
-            cashbackType: "Promoção",
-            baseDiscount: "30%",
-            discountAbove100: "40%",
-            discountAbove200: "50%",
-            about: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in neque rhoncus, mattis augue eget, viverra purus. Aliquam erat volutpat. Vivamus lacinia felis id massa blandit, vel pellentesque lacus tincidunt. Integer ac tellus id ipsum tincidunt interdum in eu mi. Cras leo dui, pharetra ac congue feugiat."
-        }
-    },
 ];
 export default function SearchResult() {
     const SearchNavigation = useNavigation<SearchNavigationProp>();
     const [modalVisible, setModalVisible] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedItem, setSelectedItem] = useState<DataItem | null>(null);
     const [showMap, setShowMap] = useState(false);
     const [isMapButtonOpen, setIsMapButtonOpen] = useState(false);
     const [searchInput, setSearchInput] = useState('');
@@ -336,49 +316,46 @@ export default function SearchResult() {
                             }
                         </View>
                     </TouchableOpacity>
-                    {
 
-                        isMapButtonOpen ?
-                            isMapSelectedItem ?
-                                <>
-                                    {/* 
-                                <TouchableOpacity style={styles.item} onPress={() => handleItemPress(item)}>
-                                    <Image style={styles.image} source={require('../../../assets/images/reidobacalhau.png')} />
-                                    <View style={styles.textContainer}>
-                                        <Text numberOfLines={2} style={styles.title}>{item.title}</Text>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <Text style={styles.location}>{item.location}</Text>
-                                            <Text style={styles.location}>{item.distance}</Text>
+
+                    {isMapButtonOpen && (
+                        isMapSelectedItem && selectedItem ? (
+                            <TouchableOpacity style={styles.item} onPress={() => handleItemPress(selectedItem)}>
+                                <Image style={styles.image} source={require('../../../assets/images/reidobacalhau.png')} />
+                                <View style={styles.textContainer}>
+                                    <Text numberOfLines={2} style={styles.title}>{selectedItem.title}</Text>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <Text style={styles.location}>{selectedItem.location}</Text>
+                                        <Text style={styles.location}>{selectedItem.distance}</Text>
+                                    </View>
+                                    <View style={styles.tagsContainer}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text style={[
+                                                styles.eventTag,
+                                                selectedItem.modal.cashbackType === 'Evento' && styles.eventTagEvento,
+                                                selectedItem.modal.cashbackType === 'Promoção' && styles.eventTagPromocao,
+                                                selectedItem.modal.cashbackType === 'Permanente' && styles.eventTagPermanente
+                                            ]}>
+                                                {selectedItem.modal.cashbackType}
+                                            </Text>
+                                            <Text style={styles.localTag}>{selectedItem.cashbackLocationType}</Text>
                                         </View>
-                                        <View style={styles.tagsContainer}>
-                                            <View style={{ flexDirection: 'row' }}>
-                                                <Text style={[
-                                                    styles.eventTag,
-                                                    item.modal.cashbackType === 'Evento' && styles.eventTagEvento,
-                                                    item.modal.cashbackType === 'Promoção' && styles.eventTagPromocao,
-                                                    item.modal.cashbackType === 'Permanente' && styles.eventTagPermanente
-                                                ]}
-
-                                                >{item.modal.cashbackType}</Text>
-                                                <Text style={styles.localTag}>{item.cashbackLocationType}</Text>
-                                            </View>
-                                            <View style={[styles.discount]}>
-                                                <Text style={styles.discountText}>{item.discount}</Text>
-                                                <MaterialCommunityIcons name="ticket-confirmation-outline" size={15} color="#D9A100" />
-                                            </View>
+                                        <View style={[styles.discount]}>
+                                            <Text style={styles.discountText}>{selectedItem.discount}</Text>
+                                            <MaterialCommunityIcons name="ticket-confirmation-outline" size={15} color="#D9A100" />
                                         </View>
                                     </View>
-                                </TouchableOpacity>
-                                */ }
-                                </>
-                                :
-                                <View style={[styles.item, { justifyContent: 'center' }]}>
-                                    <Text style={styles.title}>
-                                        Selecione um comércio no mapa
-                                    </Text>
                                 </View>
-                            : null
-                    }
+                            </TouchableOpacity>
+                        ) : (
+                            <View style={[styles.item, { justifyContent: 'center' }]}>
+                                <Text style={styles.title}>
+                                    Selecione um comércio no mapa
+                                </Text>
+                            </View>
+                        )
+                    )}
+
                 </View>
                 : null
             }

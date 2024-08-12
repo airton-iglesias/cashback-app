@@ -5,11 +5,11 @@ export default function LoyaltyComponent({ nome, valor }: any) {
     return (
         <View style={styles.container}>
             <View style={styles.itemContainer}>
-                <Text style={styles.name}>{nome}</Text>
+                <Text numberOfLines={1} style={styles.name}>{nome}</Text>
             </View>
             <View style={styles.valueLimitContainer}>
                 <View style={styles.valueContainer}>
-                    <Text style={styles.value}>{valor}</Text>
+                    <Text numberOfLines={1} style={styles.value}>{valor}</Text>
                 </View>
             </View>
         </View>

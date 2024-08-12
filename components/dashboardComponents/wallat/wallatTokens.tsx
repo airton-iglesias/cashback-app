@@ -1,39 +1,34 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { Feather, Ionicons } from '@expo/vector-icons';
 
-export default function WallatTokens() {
-    const itemDatas = [
-        {
-            tokensAmount: "50,00",
-            creditsAmount: "50,00",
-            token: "X",
-            blockChain: "XXXX",
-            wallatLink: "https://www.google.com"
-        }
-    ];
+export default function WallatTokens({ tokensAmount, tokensBlockedAmount, token, blockChain, wallatLink }: any) {
 
     const copyToClipboard = () => {
-        Clipboard.setStringAsync(itemDatas[0].wallatLink);
-        Alert.alert("Link Copiado", "O link da carteira foi copiado para a área de transferência.");
+        Clipboard.setStringAsync(wallatLink);
     };
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.currencyContainer}>
                 <View style={styles.currencyAmountContainer}>
-                    <Text style={[styles.currencyAmountText, { color: '#0D6EFD' }]}>99999999999,99</Text>
+                    <Text
+                        numberOfLines={1}
+                        style={[styles.currencyAmountText, { color: '#0D6EFD' }]}
+                    >{tokensAmount}</Text>
                     <View style={styles.tokensCurrencyContainer}>
                         <Text style={[styles.CurrencyText, { color: '#0D6EFD' }]}>Zoi</Text>
-
                     </View>
                 </View>
             </View>
 
             <View style={styles.currencyContainer}>
                 <View style={styles.currencyAmountContainer}>
-                    <Text style={[styles.currencyAmountText, { color: '#495057' }]}>99999999999,99</Text>
+                    <Text
+                        numberOfLines={1}
+                        style={[styles.currencyAmountText, { color: '#495057' }]}
+                    >{tokensBlockedAmount}</Text>
                     <View style={styles.tokensCurrencyContainer}>
                         <Feather name="lock" size={15} color="#495057" style={{ marginTop: 3 }} />
                         <Text style={[styles.CurrencyText, { color: '#495057', marginLeft: 5 }]}>Zoi</Text>
@@ -48,18 +43,18 @@ export default function WallatTokens() {
             <View style={styles.detailsContainer}>
                 <View style={styles.detailRow}>
                     <Text style={styles.detailLabel}>Token</Text>
-                    <Text style={styles.detailValue}>{itemDatas[0].token}</Text>
+                    <Text numberOfLines={1} style={styles.detailValue}>{token}</Text>
                 </View>
                 <View style={styles.detailRow}>
                     <Text style={styles.detailLabel}>Blockchain</Text>
-                    <Text style={styles.detailValue}>{itemDatas[0].blockChain}</Text>
+                    <Text numberOfLines={1} style={styles.detailValue}>{blockChain}</Text>
                 </View>
                 <View style={styles.walletContainer}>
                     <Text style={styles.walletLabel}>Carteira de depósito</Text>
                     <View style={styles.walletRow}>
-                        <Text style={styles.walletLink}>{itemDatas[0].wallatLink}</Text>
+                        <Text numberOfLines={1} style={styles.walletLink}>{wallatLink}</Text>
                         <TouchableOpacity onPress={copyToClipboard}>
-                            <Ionicons style={styles.copyIcon} name="copy-outline" size={18} color="black" />
+                            <Ionicons style={styles.copyIcon} name="copy-outline" size={20} color="black" />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -93,9 +88,10 @@ const styles = StyleSheet.create({
         marginTop: 8,
     },
     currencyAmountText: {
-        fontSize: 32,
+        fontSize: 29,
         fontWeight: 'bold',
-        textAlign: 'center',
+        textAlign: 'left',
+        flex: 1
     },
     tokensCurrencyContainer: {
         flexDirection: 'row',
@@ -161,10 +157,10 @@ const styles = StyleSheet.create({
         paddingVertical: 14,
     },
     detailLabel: {
-        fontSize: 18,
+        fontSize: 20,
     },
     detailValue: {
-        fontSize: 18,
+        fontSize: 20,
         color: '#3B82F6',
     },
     walletContainer: {
@@ -174,7 +170,7 @@ const styles = StyleSheet.create({
         paddingBottom: 14,
     },
     walletLabel: {
-        fontSize: 18,
+        fontSize: 20,
         marginBottom: 5,
     },
     walletRow: {
@@ -183,7 +179,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     walletLink: {
-        fontSize: 18,
+        fontSize: 20,
         color: '#3B82F6',
     },
     copyIcon: {

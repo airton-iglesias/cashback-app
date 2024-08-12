@@ -1,6 +1,7 @@
 import { Modal, ScrollView, TouchableOpacity, View, Text, Image, TextInput, StyleSheet } from "react-native";
 import Carousel from "../carousel";
 import CalendarIcon from "../../assets/icons/calendarIcon";
+import * as Clipboard from 'expo-clipboard';
 import { MaterialCommunityIcons, Octicons, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 interface ModalCommerceProps {
@@ -10,6 +11,11 @@ interface ModalCommerceProps {
 }
 
 export default function ModalCommerce({ modalVisible, selectedItem, handleCloseModal }: ModalCommerceProps) {
+
+    const copyToClipboard = () => {
+        Clipboard.setStringAsync(selectedItem.modal.cupomCode);
+    };
+
     return (
         <Modal
             animationType="slide"
@@ -36,14 +42,14 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                 <Text style={styles.cashbackType}>{selectedItem.modal.cashbackType}</Text>
                             </View>
                             <View style={styles.sectionItem}>
-                                {!selectedItem.modal.haveLocation ? (
+                                {!selectedItem.modal.locationMap ? (
                                     <>
                                         <View style={styles.iconContainer}>
                                             <Feather name="external-link" size={24} color="#0A58CA" />
                                         </View>
                                         <View>
                                             <Text style={styles.label}>Site oficial</Text>
-                                            <Text style={styles.link}>{selectedItem.modal.site}</Text>
+                                            <Text style={styles.link}>{selectedItem.modal.website}</Text>
                                         </View>
                                     </>
                                 ) : (
@@ -51,7 +57,7 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                         <Image style={styles.image} source={require("../../assets/images/mapPreview.png")} />
                                         <View>
                                             <Text style={styles.location}>{selectedItem.location} | {selectedItem.modal.distance}</Text>
-                                            <Text style={styles.link}>{selectedItem.modal.site}</Text>
+                                            <Text style={styles.link}>{selectedItem.modal.website}</Text>
                                         </View>
                                     </>
                                 )}
@@ -74,7 +80,7 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                             </View>
                         </View>
 
-                        {selectedItem.modal.haveCupom ? (
+                        {selectedItem.modal.cupomCode ? (
                             <View style={styles.couponContainer}>
                                 <View style={styles.couponIconContainer}>
                                     <MaterialIcons name="local-fire-department" size={40} color="#146C43" />
@@ -86,12 +92,13 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                         <TextInput
                                             cursorColor={'#ADB5BD'}
                                             style={styles.couponInput}
-                                            placeholder="4598nz"
+                                            value={selectedItem.modal.cupomCode}
                                             placeholderTextColor={'#ADB5BD'}
+                                            editable={false}
                                         />
-                                        <View style={styles.copyIconContainer}>
+                                        <TouchableOpacity style={styles.copyIconContainer} onPress={copyToClipboard}>
                                             <Ionicons name="copy-outline" size={18} color="#495057" />
-                                        </View>
+                                        </TouchableOpacity>
                                     </View>
                                     <TouchableOpacity style={styles.accessButtonContainer}>
                                         <View style={styles.accessButton}>
@@ -103,9 +110,13 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                         ) : (
                             <View style={styles.noCouponContainer}>
                                 <View style={styles.noCouponIconContainer}>
-                                    <MaterialIcons name="local-fire-department" size={40} color="#FF6363" />
+                                    <MaterialIcons name="local-fire-department" size={40} color="#146C43" />
                                 </View>
-                                <Text style={styles.noCouponText}>Obtenha o seu desconto no local</Text>
+                                <Text style={[styles.noCouponText, {marginTop: 5}]}>Obtenha o seu desconto no local</Text>
+                                <TouchableOpacity style={{flexDirection: 'row', marginTop: 4}} onPress={copyToClipboard}>
+                                    <Text style={[styles.noCouponText,{fontWeight: '700'}]}>{selectedItem.modal.cupomCode}</Text>
+                                    <Ionicons style={styles.copyIcon} name="copy-outline" size={20} color="black" />
+                                </TouchableOpacity>
                             </View>
                         )}
 
@@ -153,7 +164,6 @@ const styles = StyleSheet.create({
         position: 'relative',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
         paddingHorizontal: 20,
         width: '100%',
         height: 80,
@@ -169,7 +179,8 @@ const styles = StyleSheet.create({
     headerText: {
         fontSize: 24,
         fontWeight: '600',
-        marginBottom: 4
+        marginBottom: 4,
+        marginLeft: 45
     },
     contentContainer: {
         padding: 16,
@@ -336,7 +347,7 @@ const styles = StyleSheet.create({
     },
     noCouponContainer: {
         position: 'relative',
-        backgroundColor: '#FFEDEF',
+        backgroundColor: '#D1E7DD',
         height: 80,
         marginBottom: 32,
         borderRadius: 12,
@@ -349,7 +360,7 @@ const styles = StyleSheet.create({
         top: -20,
     },
     noCouponText: {
-        color: '#630000',
+        color: '#000',
         fontSize: 18,
         textAlign: 'center',
     },
@@ -395,5 +406,9 @@ const styles = StyleSheet.create({
     aboutText: {
         color: '#374151',
         fontSize: 18,
+    },
+    copyIcon: {
+        marginLeft: 10,
+        marginTop: 2
     },
 });

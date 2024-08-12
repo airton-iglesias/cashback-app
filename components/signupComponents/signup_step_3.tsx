@@ -2,31 +2,33 @@ import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView, Text, TouchableHighlight, View, StyleSheet } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { SignupStackParamList } from "../../types/navigationTypes";
+import { SignupStackParamList } from "@/types/navigationTypes";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
 
 type SignupStep4NavigationProp = NativeStackNavigationProp<SignupStackParamList>;
 
 export default function Signup_Step_3({ route }: any) {
+
+    const { email, password, image, name, country, currency, codeBonus, pin } = route.params;
+    const [confirmPin, setConfirmPin] = useState<string>('');
+
+    const buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const [pressedButton, setPressedButton] = useState<number | null>(null);
+    const [validateError, setValidateError] = useState(false);
+
     const signupNavigation = useNavigation<SignupStep4NavigationProp>();
     const { t } = useLocale();
 
-    const { email, password, country, currency, imageProfile, pin } = route.params;
-
-    const [ConfirmPin, setConfirmPin] = useState<string>('');
-    const buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const [pressedButton, setPressedButton] = useState<number | null>(null);
-
-    const handleDelete = () => {
-        setConfirmPin((prev) => prev.slice(0, -1));
-    };
-
     useEffect(() => {
-        if (ConfirmPin.length === 6) {
-            signupNavigation.navigate('signup_step_4');
-        }
-    }, [ConfirmPin, signupNavigation]);
+        if (confirmPin.length === 6) {
+            if (pin === confirmPin) {
+                signupNavigation.navigate('signup_step_4', { email, password, image, name, country, currency, codeBonus, pin });
+                return;
+            };
+            setValidateError(true);
+        };
+    }, [confirmPin, signupNavigation]);
 
     const handlePressIn = (value: number) => {
         setPressedButton(value);
@@ -34,21 +36,29 @@ export default function Signup_Step_3({ route }: any) {
 
     const handlePressOut = () => {
         setPressedButton(null);
-    }
+    };
+
+    const handleDelete = () => {
+        setConfirmPin((prev) => prev.slice(0, -1));
+    };
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.content}>
-                <Text style={styles.title}>{t('signup_step_3.confirm_pin')}</Text>
+            <View style={[styles.content, validateError ? { gap: 40 } : { gap: 60 }]}>
+                
+                <Text style={styles.title}>{t('signup.signup_step_3.confirm_pin')}</Text>
+                {validateError ? <Text style={styles.errorLabel}>{t('signup.signup_step_3.pin_error')}</Text> : null}
+
                 <View style={styles.pinContainer}>
                     <View style={styles.pinRow}>
                         {Array(6).fill(0).map((_, index) => (
                             <Text key={index} style={styles.pinText}>
-                                {ConfirmPin[index] ? ConfirmPin[index] : <Text style={styles.pinDot}>•</Text>}
+                                {confirmPin[index] ? <Text style={styles.pinDotMarked}>•</Text> : <Text style={styles.pinDot}>•</Text>}
                             </Text>
                         ))}
                     </View>
                 </View>
+
                 <View style={styles.buttonGrid}>
                     {buttons.map((value) => (
                         <TouchableHighlight
@@ -64,7 +74,9 @@ export default function Signup_Step_3({ route }: any) {
                             </View>
                         </TouchableHighlight>
                     ))}
+
                     <View style={styles.buttonPlaceholder}></View>
+
                     <TouchableHighlight
                         onPress={() => setConfirmPin((prev) => prev.length < 6 ? prev + '0' : prev)}
                         underlayColor="#000000"
@@ -76,6 +88,7 @@ export default function Signup_Step_3({ route }: any) {
                             <Text style={[styles.buttonText, pressedButton === 0 && styles.buttonTextPressed]}>0</Text>
                         </View>
                     </TouchableHighlight>
+
                     <TouchableHighlight
                         onPress={handleDelete}
                         underlayColor="#000000"
@@ -87,11 +100,12 @@ export default function Signup_Step_3({ route }: any) {
                             <MaterialCommunityIcons name="backspace-outline" size={32} color={pressedButton === -1 ? '#ffffff' : '#000000'} />
                         </View>
                     </TouchableHighlight>
+
                 </View>
             </View>
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -102,7 +116,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         marginTop: 67,
-        gap: 60
     },
     title: {
         fontSize: 40,
@@ -126,6 +139,9 @@ const styles = StyleSheet.create({
     },
     pinDot: {
         color: '#848484',
+    },
+    pinDotMarked: {
+        color: '#000',
     },
     buttonGrid: {
         flexWrap: 'wrap',
@@ -173,4 +189,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    errorLabel: {
+        fontSize: 20,
+        fontWeight: '400',
+        color: '#B02A37'
+    }
 });
