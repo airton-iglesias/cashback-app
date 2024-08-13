@@ -1,136 +1,81 @@
 import React, { useEffect, useState } from 'react';
-import {
-    SafeAreaView,
-    View,
-    Text,
-    TouchableOpacity,
-    BackHandler,
-    Image,
-    ScrollView,
-    StyleSheet,
-} from 'react-native';
+import {SafeAreaView,View,Text,TouchableOpacity,Image,ScrollView,StyleSheet,} from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../types/navigationTypes';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { Octicons, AntDesign } from '@expo/vector-icons';
+import CommerceHeader from './CommerceHeader';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'new_commerce_step_1'>;
 
 export default function CommerceAccessManager() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [showSidebar, setShowSidebar] = useState(false);
-    const [showTopbar, setShowTopbar] = useState(true);
-    const [haveCommerce, setHaveCommerce] = useState(true);
 
-    const commerceDatas = [{
-        name: 'Nome do comercio',
-    }];
+    const userDatas = [
+        {
+            id: '#32594',
+            name: 'Pedro',
+            image: null
+        },
+        {
+            id: '#32594',
+            name: 'Fernanda',
+            image: require('../../assets/images/bar2.png')
+        },
+    ];
 
-    const openSidebar = () => {
-        setShowSidebar(true);
-        setIsSidebarOpen(true);
-    };
-
-    const closeSidebar = () => {
-        setIsSidebarOpen(false);
-        setTimeout(() => {
-            setShowSidebar(false);
-        }, 300);
-    };
-
-    useEffect(() => {
-        const backAction = () => {
-            if (isSidebarOpen) {
-                closeSidebar();
-                return true;
-            }
-            return false;
-        };
-
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-
-        return () => backHandler.remove();
-    }, [isSidebarOpen, closeSidebar]);
 
     return (
         <SafeAreaView style={styles.safeArea}>
 
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                <View style={styles.headerContainer}>
-                    <TouchableOpacity
-                        style={styles.backButton}
-                        onPress={() => commerceNavigation.goBack()}
-                    >
-                        <Octicons name="chevron-left" size={32} color="black" />
-
-                    </TouchableOpacity>
-                    <View style={styles.headerTextContainer}>
-                        <Text style={styles.headerTitle}>Soverteria - Loja 1</Text>
-                        <Text style={styles.headerSubtitle}>32594</Text>
-                    </View>
-                    <TouchableOpacity style={styles.closeButton}
-                        onPress={() => commerceNavigation.dispatch(
-                            CommonActions.reset({
-                                index: 0,
-                                routes: [{ name: 'home' }],
-                            })
-                        )}
-                    >
-                        <AntDesign name="close" size={28} color="black" />
-                    </TouchableOpacity>
-                </View>
+                <CommerceHeader
+                    Title={'Soverteria - Loja 1'}
+                    SubTitle={'32594'}
+                    ScreenGoback={() => commerceNavigation.goBack()}
+                    ScreenClose={() => commerceNavigation.dispatch(
+                        CommonActions.reset({
+                            index: 0,
+                            routes: [{ name: 'home' }],
+                        })
+                    )}
+                />
 
                 <View style={styles.manageAccessContainer}>
                     <Text style={styles.manageAccessTitle}>Gerir acessos</Text>
                 </View>
-
-                <View style={styles.commerceInfoContainer}>
-                    <View style={styles.commerceInfoInner}>
-                        <Image
-                            source={require('../../assets/images/sorveteria.png')}
-                            style={styles.commerceImage}
-                        />
-                        <View style={{marginLeft: 15}}>
-                            <Text style={styles.commerceName}>Nome atrelado ao ID</Text>
-                            <Text style={styles.commerceId}>#32594</Text>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.accessItemContainer}>
-                    <TouchableOpacity
-                        onPress={() => commerceNavigation.navigate('commerce_associate_edit')}
-                        style={styles.accessItemButton}
-                    >
-                        <View style={styles.accessItemInner}>
-                            <View style={styles.accessItemAvatar}>
-                                <Text style={styles.accessItemAvatarText}>Pe</Text>
-                            </View>
-                            <View style={{marginLeft: 15}}>
-                                <Text style={styles.accessItemName}>Pedro</Text>
-                                <Text style={styles.accessItemId}>#32594</Text>
+                {
+                    userDatas.map((user, index) =>
+                        <View style={styles.accessItemContainer} key={index}>
+                            <View style={styles.acessItemOutter}>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    onPress={() => commerceNavigation.navigate('commerce_associate_edit')}
+                                    style={styles.accessItemButton}
+                                >
+                                    <View style={styles.accessItemInner}>
+                                        <View style={styles.accessItemAvatar}>
+                                            {user.image ?
+                                                <Image source={user.image} style={styles.userImage} resizeMode={'cover'} />
+                                                :
+                                                <Text style={styles.accessItemAvatarText}>{user.name.slice(0, 2)}</Text>
+                                            }
+                                        </View>
+                                        <View style={{ marginLeft: 15 }}>
+                                            <Text style={styles.accessItemName}>{user.name}</Text>
+                                            <Text style={styles.accessItemId}>{user.id}</Text>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                         </View>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.accessItemContainer}>
-                    <View style={styles.accessItemInner}>
-                        <View style={styles.accessItemAvatarRed}>
-                            <Text style={styles.accessItemAvatarTextRed}>Fe</Text>
-                        </View>
-                        <View style={{marginLeft: 15}}>
-                            <Text style={styles.accessItemName}>Fernanda</Text>
-                            <Text style={styles.accessItemId}>#32594</Text>
-                        </View>
-                    </View>
-                </View>
+                    )
+                }
 
                 <TouchableOpacity
                     onPress={() => commerceNavigation.navigate('commerce_add_access')}
                     style={styles.addButton}
+                    activeOpacity={0.7}
                 >
                     <FontAwesome6 name="plus" size={24} color="white" />
                 </TouchableOpacity>
@@ -147,55 +92,6 @@ const styles = StyleSheet.create({
     },
     scrollViewContent: {
         flexGrow: 1,
-        paddingTop: 30
-    },
-    headerContainer: {
-        position: 'relative',
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        width: '100%',
-        height: 80,
-        borderBottomWidth: 1,
-        borderColor: '#DADADA',
-        marginBottom: 10
-    },
-    headerText: {
-        fontSize: 24,
-        fontWeight: '700',
-        left: 40
-    },
-    backButton: {
-        position: 'absolute',
-        left: 20,
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-    },
-    headerTextContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        left: 20
-    },
-    headerTitle: {
-        fontSize: 24,
-        fontWeight: '700',
-        marginLeft: 24,
-    },
-    headerSubtitle: {
-        fontSize: 20,
-        marginLeft: 24,
-        color: '#635C5C',
-        fontWeight: '400',
-    },
-    closeButton: {
-        position: 'absolute',
-        right: 20,
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'flex-end',
     },
     manageAccessContainer: {
         paddingTop: 24,
@@ -236,11 +132,13 @@ const styles = StyleSheet.create({
     accessItemButton: {
         width: '100%',
     },
+    acessItemOutter: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#DFDFDF',
+    },
     accessItemInner: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#DFDFDF',
         paddingBottom: 16,
     },
     accessItemAvatar: {
@@ -277,6 +175,12 @@ const styles = StyleSheet.create({
         color: '#B72E2E',
         fontSize: 20,
         fontWeight: 'bold',
+    },
+    userImage: {
+        flex: 1,
+        height: 64,
+        width: 64,
+        borderRadius: 999,
     },
     addButton: {
         width: 78,

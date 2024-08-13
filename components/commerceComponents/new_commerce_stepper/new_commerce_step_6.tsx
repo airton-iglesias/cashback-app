@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, TextInput, TouchableHighlight, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Octicons, AntDesign, Feather, Ionicons } from '@expo/vector-icons';
+import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { Feather, Ionicons } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../../types/navigationTypes';
 import Input from '@/components/input';
+import CommerceHeader from '../CommerceHeader';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
-export default function New_Commerce_step_6({route}: any) {
+export default function New_Commerce_step_6({ route }: any) {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
 
     const [email, setEmail] = useState('');
@@ -17,21 +18,17 @@ export default function New_Commerce_step_6({route}: any) {
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                    <View style={styles.headerContainer}>
-                        <TouchableOpacity
-                            style={styles.backButton}
-                            onPress={() => commerceNavigation.goBack()}
-                        >
-                            <Octicons name="chevron-left" size={32} color="black" />
 
-                        </TouchableOpacity>
-                        <Text style={styles.headerText}>Mais informações</Text>
-                        <TouchableOpacity style={styles.closeButton}
-                            onPress={() => commerceNavigation.navigate("home")}
-                        >
-                            <AntDesign name="close" size={28} color="black" />
-                        </TouchableOpacity>
-                    </View>
+                    <CommerceHeader
+                        Title={'Mais informações'}
+                        ScreenGoback={() => commerceNavigation.goBack()}
+                        ScreenClose={() => commerceNavigation.dispatch(
+                            CommonActions.reset({
+                                index: 0,
+                                routes: [{ name: 'home' }],
+                            })
+                        )}
+                    />
 
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>
@@ -39,7 +36,7 @@ export default function New_Commerce_step_6({route}: any) {
                         </Text>
                         <View style={styles.inputWrapper}>
                             <Input
-                                onChange={(text:string) => setEmail(email)}
+                                onChange={(text: string) => setEmail(email)}
                                 type={'email'}
                             />
                         </View>
@@ -62,7 +59,7 @@ export default function New_Commerce_step_6({route}: any) {
                     </View>
 
                 </ScrollView>
-                
+
                 <View style={styles.footer}>
                     <View style={styles.stepperLayoutContainer}>
                         <Text style={styles.stepperLayoutText}>6 de 6</Text>
@@ -77,7 +74,7 @@ export default function New_Commerce_step_6({route}: any) {
                     <View style={styles.nextButton}>
                         <TouchableOpacity
                             onPress={() => commerceNavigation.navigate("new_commerce_step_7")}
-                            activeOpacity={0.6}
+                            activeOpacity={0.7}
                             style={styles.nextButtonContent}
                         >
                             <Feather name="check" size={24} color="white" />
@@ -100,61 +97,6 @@ const styles = StyleSheet.create({
     },
     scrollViewContent: {
         flexGrow: 1,
-        paddingTop: 30
-    },
-    backButton: {
-        position: 'absolute',
-        left: 15,
-        width: 40,
-        height: 40,
-        paddingTop: 3,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    closeButton: {
-        position: 'absolute',
-        right: 15,
-        width: 40,
-        height: 40,
-        paddingBottom: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    headerContainer: {
-        position: 'relative',
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        width: '100%',
-        height: 80,
-        borderBottomWidth: 1,
-        borderColor: '#DADADA',
-        marginBottom: 10
-    },
-    headerText: {
-        fontSize: 24,
-        fontWeight: '700',
-        left: 40
-    },
-    headerButtonLeft: {
-        position: 'absolute',
-        left: 20,
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    headerButtonRight: {
-        position: 'absolute',
-        right: 20,
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    title: {
-        fontSize: 32,
-        fontWeight: 'bold',
     },
     section: {
         width: '100%',

@@ -96,7 +96,7 @@ export default function Pin() {
                 </View>
 
                 <TouchableOpacity
-                    onPress={() => authNavigation.navigate('recoveryDatas')}
+                    onPress={() => authNavigation.navigate('recoveryDatas', { type: 'pin' })}
                 >
                     <Text style={styles.recoveryPinText}>Recuperar Pin</Text>
                 </TouchableOpacity>

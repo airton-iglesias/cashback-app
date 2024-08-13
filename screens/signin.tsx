@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import {
-    Image, SafeAreaView, Text, TextInput, TouchableHighlight, TouchableWithoutFeedback,
+    Image, SafeAreaView, Text, TouchableHighlight, TouchableWithoutFeedback,
     View, KeyboardAvoidingView, ScrollView, StyleSheet, Dimensions
 } from "react-native";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { AuthStackParamList } from '../types/navigationTypes';
+import { AuthStackParamList } from '@/types/navigationTypes';
 import { Feather } from '@expo/vector-icons';
-import CheckBox from "../components/checkbox";
-import { useLocale } from "../contexts/TranslationContext";
+import CheckBox from "@/components/checkbox";
+import { useLocale } from "@/contexts/TranslationContext";
 import LanguageModal from "@/components/languageModal";
 import Input from "@/components/input";
 
@@ -124,7 +124,7 @@ export default function SigninScreen() {
                                     <Text style={styles.link}>{t('signin.createAccount')}</Text>
                                 </TouchableWithoutFeedback>
 
-                                <TouchableWithoutFeedback onPress={() => authNavigation.navigate('recoveryDatas')}>
+                                <TouchableWithoutFeedback onPress={() => authNavigation.navigate('recoveryDatas', {type: 'password'})}>
                                     <Text style={styles.link}>{t('signin.forgotPassword')}</Text>
                                 </TouchableWithoutFeedback>
                             </View>

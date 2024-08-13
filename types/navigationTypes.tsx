@@ -2,8 +2,9 @@
 export type AuthStackParamList = {
   signin: undefined;
   signup: undefined;
-  language: undefined;
-  recoveryDatas: undefined;
+  recoveryDatas: {
+    type: string;
+  };
   verifyInbox: undefined;
   resetPassword: undefined;
   resetSucess: undefined;
@@ -18,6 +19,9 @@ export type RootStackParamList = {
   points: undefined;
   commerce: undefined;
   wallatextract: undefined;
+  recoveryDatas: {
+    type: string;
+  };
 };
 
 export type WallatStackParamList = {
@@ -71,6 +75,7 @@ export type CommerceStackParamList = {
   commerce_access_manager: undefined;
   commerce_add_access: undefined;
   commerce_associate_edit: undefined;
+  commerce_qrcode: undefined;
   new_commerce_step_0: undefined;
   new_commerce_step_1: { CashbackType: string; PlaceType: string };
   new_commerce_step_2: { 

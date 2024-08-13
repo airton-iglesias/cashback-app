@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-export default function Input({ label, placeholder, type, onChange, keyboardType, maxLength, customPaddingLeft, customColor }: any) {
+export default function Input({ label, placeholder, type, onChange, keyboardType, maxLength, customPaddingLeft, customColor, value }: any) {
     
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState(value ? value:'');
 
     const [isInputFocus, setIsInputFocus] = useState(false);
     const [isInputError, setIsInputError] = useState(false);

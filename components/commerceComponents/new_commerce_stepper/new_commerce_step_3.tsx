@@ -1,12 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet, Modal, TextInput, Button, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Octicons, AntDesign, Feather, FontAwesome6 } from '@expo/vector-icons';
+import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { AntDesign, Feather, FontAwesome6 } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../../types/navigationTypes';
 import UnderlineIcon from '@/assets/icons/underlineIcon';
 import { actions, RichEditor, RichToolbar } from "react-native-pell-rich-editor";
 import Input from '@/components/input';
+import CommerceHeader from '../CommerceHeader';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
 
@@ -39,20 +40,17 @@ export default function New_Commerce_step_3({ route }: any) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.headerContainer}>
-                <TouchableOpacity
-                    style={styles.backButton}
-                    onPress={() => commerceNavigation.goBack()}
-                >
-                    <Octicons name="chevron-left" size={32} color="black" />
-                </TouchableOpacity>
-                <Text style={styles.headerText}>Descrição</Text>
-                <TouchableOpacity style={styles.closeButton}
-                    onPress={() => commerceNavigation.navigate("home")}
-                >
-                    <AntDesign name="close" size={28} color="black" />
-                </TouchableOpacity>
-            </View>
+
+            <CommerceHeader
+                Title={'Descrição'}
+                ScreenGoback={() => commerceNavigation.goBack()}
+                ScreenClose={() => commerceNavigation.dispatch(
+                    CommonActions.reset({
+                        index: 0,
+                        routes: [{ name: 'home' }],
+                    })
+                )}
+            />
 
             <View style={styles.descriptionSection}>
                 <Text style={styles.descriptionLabel}>Descreva o evento</Text>
@@ -87,7 +85,7 @@ export default function New_Commerce_step_3({ route }: any) {
                     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                         <RichEditor
                             ref={richText}
-                            style={{flex: 1}}
+                            style={{ flex: 1 }}
                             editorStyle={{
                                 backgroundColor: 'white',
                                 contentCSSText: 'font-size: 20px;',
@@ -113,14 +111,15 @@ export default function New_Commerce_step_3({ route }: any) {
                 </View>
 
                 <TouchableOpacity
+                    activeOpacity={0.7}
                     onPress={() => commerceNavigation.navigate("new_commerce_step_4",
-                        {   CashbackType, PlaceType, referenceUser,
+                        {
+                            CashbackType, PlaceType, referenceUser,
                             association, title, userPoints, webSite, startDate,
                             endDate, startHour, endHour, mapAdress, description
                         }
 
                     )}
-                    activeOpacity={0.6}
                     style={styles.nextButton}
                 >
                     <View style={styles.nextButtonContent}>
@@ -155,13 +154,21 @@ export default function New_Commerce_step_3({ route }: any) {
                             />
                         </View>
                         <View style={styles.buttonContainer}>
-                            <TouchableOpacity onPress={handleSaveLink} style={styles.modalSaveButton}>
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={handleSaveLink}
+                                style={styles.modalSaveButton}
+                            >
                                 <View style={styles.modalButtonSaveContent}>
                                     <Feather name="check" size={24} color="white" />
                                 </View>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalSaveButton}>
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={() => setModalVisible(false)}
+                                style={styles.modalSaveButton}
+                            >
                                 <View style={styles.modalButtonCancelContent}>
                                     <AntDesign name="close" size={24} color="black" />
                                 </View>
@@ -178,41 +185,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        paddingTop: 30,
-    },
-    backButton: {
-        position: 'absolute',
-        left: 15,
-        width: 40,
-        height: 40,
-        paddingTop: 3,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    closeButton: {
-        position: 'absolute',
-        right: 15,
-        width: 40,
-        height: 40,
-        paddingBottom: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    headerContainer: {
-        position: 'relative',
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        width: '100%',
-        height: 80,
-        borderBottomWidth: 1,
-        borderColor: '#DADADA',
-        marginBottom: 10
-    },
-    headerText: {
-        fontSize: 24,
-        fontWeight: '700',
-        left: 40
     },
     descriptionSection: {
         marginTop: 10,

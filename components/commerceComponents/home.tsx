@@ -10,6 +10,19 @@ import Sidebar from "../sidebar";
 import NotificationSidebar from "../notificationSidebar";
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
+type CommerceData = {
+    name: string;
+    promotion?: {
+        name: string;
+        id: string;
+        role: string;
+    };
+    event?: {
+        name: string;
+        id: string;
+        role: string;
+    };
+};
 
 export default function CommerceHome() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
@@ -20,9 +33,19 @@ export default function CommerceHome() {
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(true);
     const [showNotifications, setShowNotifications] = useState(false);
 
-    const commerceDatas = [
+    const commerceDatas: CommerceData[] = [
         {
             name: 'Nome do comercio',
+            promotion: {
+                name: 'Nome da promoção',
+                id: '#99999',
+                role: 'Administrador'
+            },
+            event: {
+                name: 'Nome do evento',
+                id: '#99999',
+                role: 'Administrador'
+            },
         },
     ];
 
@@ -49,7 +72,6 @@ export default function CommerceHome() {
             setShowNotifications(false);
         }, 300);
     };
-
 
     useEffect(() => {
         const backAction = () => {
@@ -119,52 +141,58 @@ export default function CommerceHome() {
                                                                     <Text style={styles.cardDetailText}>#99999</Text>
                                                                 </View>
                                                             </View>
-                                                            <View style={styles.cardStatus}>
-                                                                <Text style={styles.cardStatusText}>Permanente</Text>
+                                                            <View style={[styles.cardStatus, { backgroundColor: '#D1E7DD', }]}>
+                                                                <Text style={[styles.cardStatusText, { color: '#0A3622' }]}>Promoção</Text>
                                                             </View>
                                                         </View>
-                                                        <View style={styles.separator}></View>
+                                                        {data.promotion || data.event ? (<View style={styles.separator}></View>): null}
                                                     </View>
                                                 </View>
-                                                <View>
-                                                    <View style={styles.card}>
-                                                        <Image source={require('../../assets/images/sorveteria2.png')} style={[styles.image, styles.roundedImage]} />
-                                                        <View style={styles.cardContent}>
-                                                            <Text style={styles.cardTitle}>Nome da promoção</Text>
-                                                            <View style={styles.cardDetails}>
-                                                                <Feather name="user" size={16} color="#635C5C" />
-                                                                <Text style={styles.cardDetailText}>Administrador</Text>
-                                                                <View style={styles.cardDetailItem}>
-                                                                    <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
-                                                                    <Text style={styles.cardDetailText}>#99999</Text>
+
+                                                {data.promotion && (
+                                                    <View>
+                                                        <View style={styles.card}>
+                                                            <Image source={require('../../assets/images/sorveteria2.png')} style={[styles.image, styles.roundedImage]} />
+                                                            <View style={styles.cardContent}>
+                                                                <Text style={styles.cardTitle}>{data.promotion?.name || 'Sem informação'}</Text>
+                                                                <View style={styles.cardDetails}>
+                                                                    <Feather name="user" size={16} color="#635C5C" />
+                                                                    <Text style={styles.cardDetailText}>{data.promotion?.role || 'Sem informação'}</Text>
+                                                                    <View style={styles.cardDetailItem}>
+                                                                        <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
+                                                                        <Text style={styles.cardDetailText}>{data.promotion?.id || 'Sem informação'}</Text>
+                                                                    </View>
+                                                                </View>
+                                                                <View style={[styles.cardStatus, { backgroundColor: '#CFF4FC', }]}>
+                                                                    <Text style={[styles.cardStatusText, { color: '#055160' }]}>Promoção</Text>
                                                                 </View>
                                                             </View>
-                                                            <View style={styles.cardStatus}>
-                                                                <Text style={styles.cardStatusText}>Promoção</Text>
-                                                            </View>
+                                                            {data.event && (<View style={styles.separator}></View>)}
                                                         </View>
-                                                        <View style={styles.separator}></View>
                                                     </View>
-                                                </View>
-                                                <View>
-                                                    <View style={styles.card}>
-                                                        <Image source={require('../../assets/images/sorveteria2.png')} style={[styles.image, styles.roundedImage]} />
-                                                        <View style={styles.cardContent}>
-                                                            <Text style={styles.cardTitle}>Nome do evento</Text>
-                                                            <View style={styles.cardDetails}>
-                                                                <Feather name="user" size={16} color="#635C5C" />
-                                                                <Text style={styles.cardDetailText}>Administrador</Text>
-                                                                <View style={styles.cardDetailItem}>
-                                                                    <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
-                                                                    <Text style={styles.cardDetailText}>#99999</Text>
+                                                )}
+
+                                                {data.event && (
+                                                    <View>
+                                                        <View style={styles.card}>
+                                                            <Image source={require('../../assets/images/sorveteria2.png')} style={[styles.image, styles.roundedImage]} />
+                                                            <View style={styles.cardContent}>
+                                                                <Text style={styles.cardTitle}>{data.event?.name || 'Sem informação'}</Text>
+                                                                <View style={styles.cardDetails}>
+                                                                    <Feather name="user" size={16} color="#635C5C" />
+                                                                    <Text style={styles.cardDetailText}>{data.event?.role || 'Sem informação'}</Text>
+                                                                    <View style={styles.cardDetailItem}>
+                                                                        <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
+                                                                        <Text style={styles.cardDetailText}>{data.event?.id || 'Sem informação'}</Text>
+                                                                    </View>
+                                                                </View>
+                                                                <View style={[styles.cardStatus, { backgroundColor: '#FFF3CD', }]}>
+                                                                    <Text style={[styles.cardStatusText, { color: '#664D03' }]}>Evento</Text>
                                                                 </View>
                                                             </View>
-                                                            <View style={styles.cardStatus}>
-                                                                <Text style={styles.cardStatusText}>evento</Text>
-                                                            </View>
                                                         </View>
                                                     </View>
-                                                </View>
+                                                )}
                                             </TouchableOpacity>
                                         </View>
                                     </View>
@@ -192,11 +220,11 @@ const styles = StyleSheet.create({
     sectionContainer: {
         borderBottomWidth: 1,
         borderBottomColor: '#D8D8D8',
-        paddingTop: 20,
+        paddingTop: 30,
     },
     headerContainer: {
         paddingVertical: 15,
-        height: 80,
+        height: 70,
         justifyContent: 'center',
         paddingHorizontal: 20,
     },
@@ -244,7 +272,6 @@ const styles = StyleSheet.create({
         marginLeft: 8,
     },
     cardStatus: {
-        backgroundColor: '#E0F7FA',
         paddingVertical: 4,
         paddingHorizontal: 8,
         borderRadius: 8,
@@ -255,7 +282,6 @@ const styles = StyleSheet.create({
     cardStatusText: {
         fontSize: 14,
         fontWeight: 'bold',
-        color: '#00ACC1',
     },
     separator: {
         position: 'absolute',

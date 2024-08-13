@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Octicons, AntDesign, Feather } from '@expo/vector-icons';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { Feather } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../../types/navigationTypes';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+import CommerceHeader from '../CommerceHeader';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
 type ImageFile = {
@@ -131,25 +132,25 @@ export default function New_Commerce_step_4({ route }: any) {
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                    <View style={styles.headerContainer}>
-                        <TouchableOpacity
-                            style={styles.backButton}
-                            onPress={() => commerceNavigation.goBack()}
-                        >
-                            <Octicons name="chevron-left" size={32} color="black" />
-                        </TouchableOpacity>
-                        <Text style={styles.headerText}>Imagens e vídeos</Text>
-                        <TouchableOpacity style={styles.closeButton}
-                            onPress={() => commerceNavigation.navigate("home")}
-                        >
-                            <AntDesign name="close" size={28} color="black" />
-                        </TouchableOpacity>
-                    </View>
+
+                    <CommerceHeader
+                        Title={'Imagens e vídeos'}
+                        ScreenGoback={() => commerceNavigation.goBack()}
+                        ScreenClose={() => commerceNavigation.dispatch(
+                            CommonActions.reset({
+                                index: 0,
+                                routes: [{ name: 'home' }],
+                            })
+                        )}
+                    />
 
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Logomarca</Text>
                         <View>
-                            <TouchableOpacity onPress={pickLogoImage}>
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={pickLogoImage}
+                            >
                                 <View style={styles.uploadContainer}>
                                     {logoImage ? (
                                         <Image source={{ uri: logoImage.uri }} style={styles.imageThumbnail} resizeMode={'cover'} />
@@ -159,7 +160,11 @@ export default function New_Commerce_step_4({ route }: any) {
                                 </View>
                             </TouchableOpacity>
                             {logoImage && (
-                                <TouchableOpacity onPress={() => setLogoImage(null)} style={styles.removeButton}>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    onPress={() => setLogoImage(null)}
+                                    style={styles.removeButton}
+                                >
                                     <Feather name="trash" size={16} color="black" />
                                 </TouchableOpacity>
                             )}
@@ -169,7 +174,10 @@ export default function New_Commerce_step_4({ route }: any) {
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Cartaz</Text>
                         <View>
-                            <TouchableOpacity onPress={pickBannerImage}>
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={pickBannerImage}
+                            >
                                 <View style={styles.uploadContainer}>
                                     {posterImage ? (
                                         <Image source={{ uri: posterImage.uri }} style={styles.imageThumbnail} resizeMode={'cover'} />
@@ -179,7 +187,11 @@ export default function New_Commerce_step_4({ route }: any) {
                                 </View>
                             </TouchableOpacity>
                             {posterImage && (
-                                <TouchableOpacity onPress={() => setPosterImage(null)} style={styles.removeButton}>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    onPress={() => setPosterImage(null)}
+                                    style={styles.removeButton}
+                                >
                                     <Feather name="trash" size={16} color="black" />
                                 </TouchableOpacity>
                             )}
@@ -199,14 +211,21 @@ export default function New_Commerce_step_4({ route }: any) {
                         >
                             {descriptionImages.map((image, index) => (
                                 <View key={index}>
-                                    <TouchableOpacity onPress={() => removeImage(index)} style={styles.removeButton}>
+                                    <TouchableOpacity
+                                        activeOpacity={0.7}
+                                        onPress={() => removeImage(index)}
+                                        style={styles.removeButton}
+                                    >
                                         <Feather name="trash" size={16} color="black" />
                                     </TouchableOpacity>
                                     <Image source={{ uri: image.uri }} style={styles.imageThumbnail} />
                                 </View>
                             ))}
                             {descriptionImages.length < 10 && (
-                                <TouchableOpacity onPress={pickMultipleImages}>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    onPress={pickMultipleImages}
+                                >
                                     <View style={styles.uploadContainer}>
                                         <Feather name="upload" size={24} color="black" />
                                     </View>
@@ -228,9 +247,10 @@ export default function New_Commerce_step_4({ route }: any) {
                     </View>
 
                     <View style={styles.nextButton}>
-                        <TouchableOpacity style={styles.nextButtonContent}
+                        <TouchableOpacity
+                            style={styles.nextButtonContent}
                             onPress={handleNexStep}
-                            activeOpacity={0.6}
+                            activeOpacity={0.7}
                         >
                             <Feather name="arrow-right" size={24} color="white" />
                         </TouchableOpacity>
@@ -253,61 +273,6 @@ const styles = StyleSheet.create({
     },
     scrollViewContent: {
         flexGrow: 1,
-        paddingTop: 30
-    },
-    backButton: {
-        position: 'absolute',
-        left: 15,
-        width: 40,
-        height: 40,
-        paddingTop: 3,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    closeButton: {
-        position: 'absolute',
-        right: 15,
-        width: 40,
-        height: 40,
-        paddingBottom: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    headerContainer: {
-        position: 'relative',
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        width: '100%',
-        height: 80,
-        borderBottomWidth: 1,
-        borderColor: '#DADADA',
-        marginBottom: 10
-    },
-    headerText: {
-        fontSize: 24,
-        fontWeight: '700',
-        left: 40
-    },
-    headerButtonLeft: {
-        position: 'absolute',
-        left: 20,
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    headerButtonRight: {
-        position: 'absolute',
-        right: 20,
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    title: {
-        fontSize: 32,
-        fontWeight: 'bold',
     },
     section: {
         width: '100%',

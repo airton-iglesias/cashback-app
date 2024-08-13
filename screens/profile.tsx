@@ -1,20 +1,38 @@
 import React, { useState } from 'react';
-import { Image, KeyboardAvoidingView, SafeAreaView, ScrollView, Switch, Text, TextInput, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, View, StyleSheet } from "react-native";
+import {
+    Image, KeyboardAvoidingView, SafeAreaView, ScrollView,
+    Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, StyleSheet
+} from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
-import Select from '../components/select';
-import SelectOption from '../components/selectOption';
-import { RootStackParamList } from '../types/navigationTypes';
+import Select from '@/components/select';
+import SelectOption from '@/components/selectOption';
+import { AuthStackParamList, RootStackParamList } from '@/types/navigationTypes';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from "@react-navigation/native";
+import Input from '@/components/input';
+import Switch from '@/components/switch';
+import * as Clipboard from 'expo-clipboard';
 
 type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
+type AuthNavigationProp = NativeStackNavigationProp<AuthStackParamList>;
 
 export default function Profile() {
 
     const rootNavigation = useNavigation<RootNavigationProp>();
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+    const datas = [{
+        accountID: 'O23I4U5',
+        bonusCode: '2435IJ3'
+    }]
+
+    const [image, setImage] = useState<any>(null);
+    const [name, setName] = useState<string>('Name Example');
+    const [email, setEmail] = useState<string>('example@example.com');
+    const [telemovel, setTelemovel] = useState<string>('9999999999');
+    const [country, setCountry] = useState<string>('Selecione o país');
+    const [currency, setCurrency] = useState<string>('Selecione a moeda');
+    const [location, setLocation] = useState(false);
 
     const countryOptions = [
         { id: 1, text: 'Portugal', flag: 'PT' },
@@ -23,38 +41,10 @@ export default function Profile() {
     ];
 
     const currencyOptions = [
-        { id: 1, text: 'EUR', flag: 'EU' },
-        { id: 2, text: 'BRL', flag: 'BR' },
-        { id: 3, text: 'USD', flag: 'US' },
+        { id: 1, text: 'EUR'},
+        { id: 2, text: 'BRL'},
+        { id: 3, text: 'USD'},
     ];
-
-    const [image, setImage] = useState<any>(null);
-    const [name, setName] = useState<string>('');
-    const [codeBonus, setCodeBonus] = useState<string>('');
-
-    const [inputNameIsFocus, setInputNameIsFocus] = useState(false);
-    const [inputNameError, setInputNameError] = useState(false);
-    const [inputCodeBonusIsFocus, setInputCodeBonusIsFocus] = useState(false);
-    const [inputCodeBonusError, setInputCodeBonusError] = useState(false);
-
-    const [inputPasswordIsFocus, setInputPasswordIsFocus] = useState(false);
-    const [inputPasswordError, setInputPasswordError] = useState(false);
-    const [password, setPassword] = useState('');
-
-
-
-    const validatePassword = (password: string) => {
-        return password.length >= 6;
-    };
-
-    const handlePasswordChange = (text: string) => {
-        setPassword(text);
-        if (text.trim() === '') {
-            setInputPasswordError(false);
-        } else {
-            setInputPasswordError(!validatePassword(text));
-        }
-    };
 
     const handleImagePick = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -74,14 +64,9 @@ export default function Profile() {
             setImage(pickerResult.assets[0].uri);
         }
     };
-
-    const handleNameChange = (text: string) => {
-        setName(text);
-    }
-
-    const handleBonusCodeChange = (text: string) => {
-        setCodeBonus(text);
-    }
+    const copyToClipboard = (item: string) => {
+        Clipboard.setStringAsync(item);
+    };
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -122,176 +107,111 @@ export default function Profile() {
                                 )}
                             </TouchableWithoutFeedback>
                         </View>
-                        <View style={[styles.formGroup, styles.marginTop, {paddingHorizontal: 70}]}>
-                            <View style={styles.inputWrapper}>
-                                <View
-                                    style={[
-                                        styles.inputHighlight,
-                                        inputPasswordIsFocus && styles.inputHighlightVisible,
-                                        inputPasswordError && styles.inputErrorHighlight
-                                    ]}
-                                ></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => setInputPasswordIsFocus(true)}
-                                    onBlur={() => setInputPasswordIsFocus(false)}
-                                    onChangeText={handlePasswordChange}
-                                    value={password}
-                                    secureTextEntry={true}
-                                    style={[
-                                        styles.textInput,
-                                        inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
-                                        inputPasswordError && styles.inputError
-                                    ]}
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.formGroup}>
-                            <Text style={styles.label}>Nome</Text>
-                            <View style={styles.inputWrapper}>
-                                <View
-                                    style={[
-                                        styles.inputHighlight,
-                                        inputPasswordIsFocus && styles.inputHighlightVisible,
-                                        inputPasswordError && styles.inputErrorHighlight
-                                    ]}
-                                ></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => setInputPasswordIsFocus(true)}
-                                    onBlur={() => setInputPasswordIsFocus(false)}
-                                    onChangeText={handlePasswordChange}
-                                    value={password}
-                                    secureTextEntry={true}
-                                    style={[
-                                        styles.textInput,
-                                        inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
-                                        inputPasswordError && styles.inputError
-                                    ]}
-                                />
-                            </View>
-                        </View>
-                        <View style={[styles.formGroup, styles.marginTop]}>
-                            <View style={styles.headerRow}>
-                                <Text style={styles.label}>Email</Text>
 
-                            </View>
-                            <View style={styles.inputWrapper}>
-                                <View
-                                    style={[
-                                        styles.inputHighlight,
-                                        inputPasswordIsFocus && styles.inputHighlightVisible,
-                                        inputPasswordError && styles.inputErrorHighlight
-                                    ]}
-                                ></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => setInputPasswordIsFocus(true)}
-                                    onBlur={() => setInputPasswordIsFocus(false)}
-                                    onChangeText={handlePasswordChange}
-                                    value={password}
-                                    secureTextEntry={true}
-                                    style={[
-                                        styles.textInput,
-                                        inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
-                                        inputPasswordError && styles.inputError
-                                    ]}
-                                />
-                            </View>
+                        <View style={styles.formGroupID}>
+                            <TextInput
+                                cursorColor={'#ADB5BD'}
+                                style={styles.couponInput}
+                                value={'ID: ' + datas[0].accountID}
+                                placeholderTextColor={'#ADB5BD'}
+                                editable={false}
+                                textAlign='center'
+                            />
+                            <TouchableOpacity style={styles.copyIconContainer} onPress={() => copyToClipboard(datas[0].accountID)}>
+                                <Ionicons name="copy-outline" size={18} color="#495057" />
+                            </TouchableOpacity>
                         </View>
-                        <View style={[styles.formGroup, styles.marginTop]}>
-                            <View style={styles.headerRow}>
-                                <Text style={styles.label}>Telemovel</Text>
-                            </View>
-                            <View style={styles.inputWrapper}>
-                                <View
-                                    style={[
-                                        styles.inputHighlight,
-                                        inputPasswordIsFocus && styles.inputHighlightVisible,
-                                        inputPasswordError && styles.inputErrorHighlight
-                                    ]}
-                                ></View>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    onFocus={() => setInputPasswordIsFocus(true)}
-                                    onBlur={() => setInputPasswordIsFocus(false)}
-                                    onChangeText={handlePasswordChange}
-                                    value={password}
-                                    secureTextEntry={true}
-                                    style={[
-                                        styles.textInput,
-                                        inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
-                                        inputPasswordError && styles.inputError
-                                    ]}
-                                />
-                            </View>
+
+                        <View style={styles.formGroup}>
+                            <Input
+                                label={'Nome'}
+                                onChange={(text: string) => setName(text)}
+                                value={name}
+                            />
                         </View>
-                        <View style={[styles.selectGroup, styles.marginTop]}>
+
+
+                        <View style={styles.formGroup}>
+                            <Input
+                                label={'Email'}
+                                type={'email'}
+                                value={email}
+                                onChange={(text: string) => setEmail(text)}
+                            />
+                        </View>
+
+
+                        <View style={styles.formGroup}>
+                            <Input
+                                label={'Telemovel'}
+                                value={telemovel}
+                                onChange={(text: string) => setTelemovel(text)}
+                            />
+                        </View>
+
+                        <View style={styles.selectGroup}>
                             <Text style={styles.label}>País</Text>
                             <Select
                                 options={countryOptions}
-                                onChangeSelect={(id: number) => console.log(id)}
-                                text={'Selecione o país'}
+                                onChangeSelect={(item: any) => setCountry(item.name)}
+                                text={country}
                                 SelectOption={SelectOption}
                             />
                         </View>
-                        <View style={[styles.selectGroup, styles.marginTop]}>
+
+                        <View style={styles.selectGroup}>
                             <Text style={styles.label}>Moeda</Text>
                             <Select
                                 options={currencyOptions}
-                                onChangeSelect={(id: number) => console.log(id)}
-                                text={'Selecione a moeda'}
+                                onChangeSelect={(item: any) => setCurrency(item.name)}
+                                text={currency}
                                 SelectOption={SelectOption}
                             />
                         </View>
-                        <View style={[styles.formGroup, styles.marginTop]}>
-                            <View style={styles.headerRow}>
-                                <Text style={styles.label}>Código Bonus</Text>
-                                <Text style={styles.optionalLabel}>Opcional</Text>
-                            </View>
-                            <View style={styles.inputWrapper}>
-                                <View
-                                    style={[
-                                        styles.inputHighlight,
-                                        inputPasswordIsFocus && styles.inputHighlightVisible,
-                                        inputPasswordError && styles.inputErrorHighlight
-                                    ]}
-                                ></View>
+
+                        <View style={[styles.formGroup]}>
+                            <Text style={styles.label}>Bonus Code</Text>
+                            <View style={{flexDirection: 'row', width: '100%'}}>
                                 <TextInput
                                     cursorColor={'#ADB5BD'}
-                                    onFocus={() => setInputPasswordIsFocus(true)}
-                                    onBlur={() => setInputPasswordIsFocus(false)}
-                                    onChangeText={handlePasswordChange}
-                                    value={password}
-                                    secureTextEntry={true}
-                                    style={[
-                                        styles.textInput,
-                                        inputPasswordIsFocus && (inputPasswordError ? styles.inputError : styles.inputFocused),
-                                        inputPasswordError && styles.inputError
-                                    ]}
+                                    style={styles.bonusCodeInput}
+                                    value={datas[0].bonusCode}
+                                    placeholderTextColor={'#ADB5BD'}
+                                    editable={false}
                                 />
+                                <TouchableOpacity style={styles.copyIconContainer} onPress={() => copyToClipboard(datas[0].accountID)}>
+                                    <Ionicons name="copy-outline" size={18} color="#495057" />
+                                </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={[styles.switchGroup, styles.marginTop]}>
-                            <View style={styles.switchRow}>
+
+                        <View style={styles.switchGroup}>
+                            <View style={styles.optionRow}>
                                 <Text style={styles.label}>Localização</Text>
-                                <Switch
-                                    trackColor={{ false: '#767577', true: '#81b0ff' }}
-                                    thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                                    ios_backgroundColor="#3e3e3e"
-                                    onValueChange={toggleSwitch}
-                                    value={isEnabled}
-                                />
+                                <Switch onChange={(mode: boolean) => setLocation(mode)} />
                             </View>
+
                             <View style={styles.optionRow}>
-                                <Text style={styles.optionText}>Alterar Pin</Text>
-                                <Entypo name="chevron-right" size={24} color="black" />
+                                <TouchableOpacity
+                                    onPress={() => rootNavigation.navigate('recoveryDatas', { type: 'pin' })}
+                                    style={styles.optionButton}
+                                >
+                                    <Text style={styles.optionText}>Alterar Pin</Text>
+                                    <Entypo name="chevron-right" size={24} color="black" />
+                                </TouchableOpacity>
                             </View>
+
                             <View style={styles.optionRow}>
-                                <Text style={styles.optionText}>Alterar Password</Text>
-                                <Entypo name="chevron-right" size={24} color="black" />
+                                <TouchableOpacity
+                                    onPress={() => rootNavigation.navigate('recoveryDatas', { type: 'password' })}
+                                    style={styles.optionButton}
+                                >
+                                    <Text style={styles.optionText}>Alterar Password</Text>
+                                    <Entypo name="chevron-right" size={24} color="black" />
+                                </TouchableOpacity>
                             </View>
                         </View>
+
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -306,6 +226,7 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         flexGrow: 1,
+        paddingBottom: 30
     },
     container: {
         flex: 1,
@@ -370,54 +291,21 @@ const styles = StyleSheet.create({
     formGroup: {
         width: '100%',
         gap: 8,
+        marginTop: 16
     },
     label: {
         fontSize: 20,
         fontWeight: 'normal',
-    },
-    textInput: {
-        borderWidth: 1,
-        borderRadius: 6,
-        width: '100%',
-        height: 48,
-        fontSize: 18,
-        color: '#ADB5BD',
-        borderColor: '#ADB5BD',
-        paddingHorizontal: 10
     },
     inputWrapper: {
         position: 'relative',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    inputHighlight: {
-        position: 'absolute',
-        borderWidth: 4,
-        width: '101.5%',
-        height: 53,
-        borderRadius: 10,
-        opacity: 0,
-    },
-    inputHighlightVisible: {
-        opacity: 0.15,
-        borderColor: '#6610F2',
-    },
-    inputFocused: {
-        borderColor: '#000000',
-    },
-    inputError: {
-        borderColor: '#DC3545',
-    },
-    inputErrorHighlight: {
-        opacity: 0.20,
-        borderColor: '#DC3545',
-    },
     selectGroup: {
         width: '100%',
         gap: 8,
-    },
-    marginTop: {
-        marginTop: 16,
+        marginTop: 16
     },
     headerRow: {
         flexDirection: 'row',
@@ -434,6 +322,7 @@ const styles = StyleSheet.create({
     },
     switchGroup: {
         width: '100%',
+        marginTop: 10
     },
     switchRow: {
         flexDirection: 'row',
@@ -451,8 +340,66 @@ const styles = StyleSheet.create({
         borderBottomColor: '#D2D2D2',
         paddingVertical: 16,
     },
+    optionButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%'
+    },
     optionText: {
         fontSize: 20,
         color: '#3b82f6',
+    },
+    formGroupID: {
+        width: '100%',
+        marginTop: 16,
+        paddingHorizontal: 70,
+        flexDirection: 'row'
+    },
+    textInput: {
+        borderWidth: 1,
+        borderRadius: 6,
+        width: '100%',
+        height: 48,
+        fontSize: 18,
+        borderColor: '#ADB5BD',
+        paddingHorizontal: 10
+    },
+    bonusCodeInput:{
+        borderWidth: 1,
+        borderTopLeftRadius: 6,
+        borderBottomLeftRadius: 6,
+        width: '100%',
+        height: 48,
+        fontSize: 18,
+        borderColor: '#ADB5BD',
+        paddingHorizontal: 10,
+        flex: 1,
+        color: '#000'
+    },
+    couponInput: {
+        borderColor: '#ADB5BD',
+        borderWidth: 1,
+        borderTopLeftRadius: 6,
+        borderBottomLeftRadius: 6,
+        paddingHorizontal: 20,
+        fontSize: 18,
+        backgroundColor: '#FFF',
+        width: '78%',
+        height: 48,
+        color: '#000'
+    },
+    copyIconContainer: {
+        height: 48,
+        right: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        backgroundColor: '#F3F4F6',
+        borderTopRightRadius: 8,
+        borderBottomRightRadius: 8,
+        borderColor: '#E9ECEF',
+        borderWidth: 1,
+        zIndex: 10,
     },
 });

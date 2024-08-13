@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, TouchableHighlight, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Octicons, AntDesign, Feather } from '@expo/vector-icons';
+import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { Feather } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../../types/navigationTypes';
 import Input from '@/components/input';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import CommerceHeader from '../CommerceHeader';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
@@ -38,21 +39,17 @@ export default function New_Commerce_step_2({ route }: any) {
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                    <View style={styles.headerContainer}>
-                        <TouchableOpacity
-                            style={styles.backButton}
-                            onPress={() => commerceNavigation.goBack()}
-                        >
-                            <Octicons name="chevron-left" size={32} color="black" />
-                            
-                        </TouchableOpacity>
-                        <Text style={styles.headerText}>Local e horário</Text>
-                        <TouchableOpacity style={styles.closeButton}
-                            onPress={() => commerceNavigation.navigate("home")}
-                        >
-                            <AntDesign name="close" size={28} color="black" />
-                        </TouchableOpacity>
-                    </View>
+
+                    <CommerceHeader
+                        Title={'Local e horário'}
+                        ScreenGoback={() => commerceNavigation.goBack()}
+                        ScreenClose={() => commerceNavigation.dispatch(
+                            CommonActions.reset({
+                                index: 0,
+                                routes: [{ name: 'home' }],
+                            })
+                        )}
+                    />
 
                     <View style={styles.longInputWrapper}>
                         <Input
@@ -139,7 +136,9 @@ export default function New_Commerce_step_2({ route }: any) {
                     </View>
 
                     <View style={styles.nextButton}>
-                        <TouchableOpacity style={styles.nextButtonContent}
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            style={styles.nextButtonContent}
                             onPress={() => commerceNavigation.navigate("new_commerce_step_3",
                                 {
                                     CashbackType, PlaceType, referenceUser,
@@ -147,7 +146,6 @@ export default function New_Commerce_step_2({ route }: any) {
                                     endDate, startHour, endHour, mapAdress
                                 }
                             )}
-                            activeOpacity={0.6}
                         >
                             <Feather name="arrow-right" size={24} color="white" />
                         </TouchableOpacity>
@@ -168,61 +166,6 @@ const styles = StyleSheet.create({
     },
     scrollViewContent: {
         flexGrow: 1,
-        paddingTop: 30
-    },
-    backButton: {
-        position: 'absolute',
-        left: 15,
-        width: 40,
-        height: 40,
-        paddingTop: 3,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    closeButton: {
-        position: 'absolute',
-        right: 15,
-        width: 40,
-        height: 40,
-        paddingBottom: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    headerContainer: {
-        position: 'relative',
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        width: '100%',
-        height: 80,
-        borderBottomWidth: 1,
-        borderColor: '#DADADA',
-        marginBottom: 10
-    },
-    headerText: {
-        fontSize: 24,
-        fontWeight: '700',
-        left: 40
-    },
-    headerButtonLeft: {
-        position: 'absolute',
-        left: 20,
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    headerButtonRight: {
-        position: 'absolute',
-        right: 20,
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    title: {
-        fontSize: 32,
-        fontWeight: 'bold',
     },
     inputSection: {
         width: '100%',

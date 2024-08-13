@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
-import { Octicons, AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/navigationTypes';
 import { Feather } from '@expo/vector-icons';
+import CommerceHeader from './CommerceHeader';
 
 type WallatNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -43,20 +43,12 @@ export default function CommerceCreditExtract() {
     const rootNavigation = useNavigation<WallatNavigationProp>();
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.headerContainer}>
-                <TouchableOpacity
-                    style={styles.backButton}
-                    onPress={() => rootNavigation.goBack()}
-                >
-                    <Octicons name="chevron-left" size={32} color="black" />
-                </TouchableOpacity>
-                <Text style={styles.headerText}>Extrato de Crédito</Text>
-                <TouchableOpacity style={styles.closeButton}
-                    onPress={() => rootNavigation.goBack()}
-                >
-                    <AntDesign name="close" size={28} color="black" />
-                </TouchableOpacity>
-            </View>
+
+            <CommerceHeader
+                    Title={'Extrato de Crédito'}
+                    ScreenGoback={() => rootNavigation.goBack()}
+                    ScreenClose={() => rootNavigation.goBack()}
+                />
             <FlatList
                 data={data}
                 renderItem={({ item }) => (
@@ -77,41 +69,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        paddingTop: 30
-    },
-    backButton: {
-        position: 'absolute',
-        left: 15,
-        width: 40,
-        height: 40,
-        paddingTop: 3,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    closeButton: {
-        position: 'absolute',
-        right: 15,
-        width: 40,
-        height: 40,
-        paddingBottom: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    headerContainer: {
-        position: 'relative',
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        width: '100%',
-        height: 80,
-        borderBottomWidth: 1,
-        borderColor: '#DADADA',
-        marginBottom: 20
-    },
-    headerText: {
-        fontSize: 24,
-        fontWeight: '700',
-        left: 40
     },
     item: {
         position: 'relative',

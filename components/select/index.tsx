@@ -30,7 +30,7 @@ const Select = ({ options, onChangeSelect, text, SelectOption }: any) => {
         <View style={styles.buttonWrapper}>
           <View style={styles.buttonOption}>
             {selected && selected.flag ? <CountryFlag isoCode={selected.flag} size={20} /> : null}
-            <Text style={{fontSize: 16}}>{selected ? selected.text : text}</Text>
+            <Text style={{ fontSize: 16 }}>{selected ? selected.text : text}</Text>
           </View>
           <Entypo name="chevron-thin-down" size={20} color="#9ca3af" />
         </View>
@@ -42,13 +42,12 @@ const Select = ({ options, onChangeSelect, text, SelectOption }: any) => {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalWrapper}>
-          <TouchableOpacity style={{ position: 'absolute', left: 20 }} onPress={() => setModalVisible(false)}>
+          <TouchableOpacity style={styles.backButton} onPress={() => setModalVisible(false)}>
             <Feather name="arrow-left" size={30} style={{ color: 'black', marginTop: 2 }} />
+            <Text style={{ fontSize: 24 }}>
+              {text}
+            </Text>
           </TouchableOpacity>
-
-          <Text style={{fontSize: 24}}>
-            {text}
-          </Text>
         </View>
         <FlatList
           data={options}
@@ -83,8 +82,13 @@ const styles = StyleSheet.create({
     position: 'relative',
     flexDirection: 'row',
     width: '100%',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     height: 48,
     marginTop: 20
+  },
+  backButton:{
+    left: 20, 
+    flexDirection: 'row', 
+    gap: 10
   }
 })

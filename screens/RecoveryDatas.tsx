@@ -8,10 +8,11 @@ import { useState } from "react";
 
 type AuthNavigationProp = NativeStackNavigationProp<AuthStackParamList>;
 
-export default function RecoveryDatas() {
+export default function RecoveryDatas({route}:any) {
+
+    const {type} = route.params || {};
 
     const authNavigation = useNavigation<AuthNavigationProp>();
-    
     const [email, setEmail] = useState('');
 
     return (

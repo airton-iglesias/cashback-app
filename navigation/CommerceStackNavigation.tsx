@@ -15,6 +15,7 @@ import new_commerce_Step_4 from "../components/commerceComponents/new_commerce_s
 import new_commerce_Step_5 from "../components/commerceComponents/new_commerce_stepper/new_commerce_step_5";
 import New_Commerce_Step_6 from "../components/commerceComponents/new_commerce_stepper/new_commerce_step_6";
 import New_Commerce_Step_7 from "../components/commerceComponents/new_commerce_stepper/new_commerce_step_7";
+import Commerce_Qrcode from '@/components/commerceComponents/commerce_qrcode';
 
 const CommerceStack = createNativeStackNavigator<CommerceStackParamList>();
 
@@ -28,6 +29,7 @@ const CommerceStackNavigation = () => {
             <CommerceStack.Screen name="commerce_add_access" component={CommerceAddAccess} options={{ headerShown: false }} />
             <CommerceStack.Screen name="commerce_access_manager" component={CommerceAccessManager} options={{ headerShown: false }} />
             <CommerceStack.Screen name="commerce_associate_edit" component={CommerceAssociateEdit} options={{ headerShown: false }} />
+            <CommerceStack.Screen name="commerce_qrcode" component={Commerce_Qrcode} options={{ headerShown: false }} />
 
             <CommerceStack.Screen name="new_commerce_step_0" component={New_Commerce_Step_0} options={{ headerShown: false }} />
             <CommerceStack.Screen name="new_commerce_step_1" component={New_Commerce_Step_1} options={{ headerShown: false }} />
