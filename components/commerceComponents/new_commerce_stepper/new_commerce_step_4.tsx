@@ -1,12 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet, Image } from 'react-native';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../../types/navigationTypes';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import CommerceHeader from '../CommerceHeader';
+import CommerceHeader from '../commerceHeader';
+import CommerceGoBackModal from '../commerceGoBackModal';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
 type ImageFile = {
@@ -29,6 +30,7 @@ export default function New_Commerce_step_4({ route }: any) {
     const [descriptionImages, setDescriptionImages] = useState<{ uri: string, file: File }[]>([]);
 
     const scrollViewRef = useRef<ScrollView>(null);
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
 
     const uriToFile = async (uri: string, name: string): Promise<File> => {
         const fileUri = `${FileSystem.cacheDirectory}${name}`;
@@ -127,6 +129,27 @@ export default function New_Commerce_step_4({ route }: any) {
         );
     };
 
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = (e: any) => {
+                if (!modalVisible) {
+                    e.preventDefault();
+                    setModalVisible(true);
+                }
+            };
+
+            const subscription = commerceNavigation.addListener('beforeRemove', onBackPress);
+
+            return () => {
+                subscription();
+            };
+        }, [commerceNavigation, modalVisible])
+    );
+
+    const handleGoBackConfirmed = () => {
+        setModalVisible(false);
+        commerceNavigation.dispatch(CommonActions.goBack());
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -256,6 +279,12 @@ export default function New_Commerce_step_4({ route }: any) {
                         </TouchableOpacity>
                     </View>
                 </View>
+
+                <CommerceGoBackModal
+                    modalVisible={modalVisible}
+                    setModalVisible={() => setModalVisible(false)}
+                    ScreenGoback={handleGoBackConfirmed}
+                />
             </KeyboardAvoidingView>
         </SafeAreaView>
     );

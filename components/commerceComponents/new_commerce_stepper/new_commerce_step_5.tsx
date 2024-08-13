@@ -1,13 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FontAwesome6, Feather } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../../types/navigationTypes';
 import Select from '../../select';
 import SelectOption from '../../selectOption';
 import Input from '@/components/input';
-import CommerceHeader from '../CommerceHeader';
+import CommerceHeader from '../commerceHeader';
+import CommerceGoBackModal from '../commerceGoBackModal';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
 
@@ -25,6 +26,7 @@ export default function New_Commerce_step_5({ route }: any) {
     const [sections, setSections] = useState<{ minValue: string, discount: string, type: string }[]>([]);
 
     const scrollViewRef = useRef<ScrollView>(null);
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
 
     const typesOptions = [
         { id: 1, text: 'Fidelização' },
@@ -43,6 +45,28 @@ export default function New_Commerce_step_5({ route }: any) {
         const newSections = [...sections];
         newSections.splice(index, 1);
         setSections(newSections);
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = (e: any) => {
+                if (!modalVisible) {
+                    e.preventDefault();
+                    setModalVisible(true);
+                }
+            };
+
+            const subscription = commerceNavigation.addListener('beforeRemove', onBackPress);
+
+            return () => {
+                subscription();
+            };
+        }, [commerceNavigation, modalVisible])
+    );
+
+    const handleGoBackConfirmed = () => {
+        setModalVisible(false);
+        commerceNavigation.dispatch(CommonActions.goBack());
     };
 
     return (
@@ -194,6 +218,12 @@ export default function New_Commerce_step_5({ route }: any) {
                         </TouchableOpacity>
                     </View>
                 </View>
+
+                <CommerceGoBackModal
+                    modalVisible={modalVisible}
+                    setModalVisible={() => setModalVisible(false)}
+                    ScreenGoback={handleGoBackConfirmed}
+                />
             </KeyboardAvoidingView>
         </SafeAreaView>
     );

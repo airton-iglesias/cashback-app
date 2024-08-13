@@ -1,13 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { AntDesign, Feather, FontAwesome6 } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../../types/navigationTypes';
 import UnderlineIcon from '@/assets/icons/underlineIcon';
 import { actions, RichEditor, RichToolbar } from "react-native-pell-rich-editor";
 import Input from '@/components/input';
-import CommerceHeader from '../CommerceHeader';
+import CommerceHeader from '../commerceHeader';
+import CommerceGoBackModal from '../commerceGoBackModal';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
 
@@ -23,9 +24,11 @@ export default function New_Commerce_step_3({ route }: any) {
     } = route.params || {};
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalBackVisible, setModalBackVisible] = useState(false);
     const [linkURL, setLinkURL] = useState('');
     const [linkTitle, setLinkTitle] = useState('');
 
+    
     const handleInsertLink = () => {
         setModalVisible(true);
     };
@@ -37,6 +40,29 @@ export default function New_Commerce_step_3({ route }: any) {
             setModalVisible(false);
         }
     };
+
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = (e: any) => {
+                if (!modalBackVisible) {
+                    e.preventDefault();
+                    setModalBackVisible(true);
+                }
+            };
+
+            const subscription = commerceNavigation.addListener('beforeRemove', onBackPress);
+
+            return () => {
+                subscription();
+            };
+        }, [commerceNavigation, modalBackVisible])
+    );
+
+    const handleGoBackConfirmed = () => {
+        setModalBackVisible(false);
+        commerceNavigation.dispatch(CommonActions.goBack());
+    };
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -177,6 +203,12 @@ export default function New_Commerce_step_3({ route }: any) {
                     </View>
                 </View>
             </Modal>
+
+            <CommerceGoBackModal
+                modalVisible={modalBackVisible}
+                setModalVisible={() => setModalBackVisible(false)}
+                ScreenGoback={handleGoBackConfirmed}
+            />
         </SafeAreaView >
     );
 }

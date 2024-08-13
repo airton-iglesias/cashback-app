@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../types/navigationTypes';
 import { Feather, Octicons, AntDesign, SimpleLineIcons } from '@expo/vector-icons';
 import QRCodeIcon from '../../assets/icons/qrcodeIcon';
-import CommerceHeader from './CommerceHeader';
+import CommerceHeader from './commerceHeader';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
@@ -184,6 +184,8 @@ const styles = StyleSheet.create({
     menuItemButton: {
         flexDirection: 'row',
         alignItems: 'center',
+        width: '100%',
+        height: '100%'
     },
     iconContainer: {
         height: 56,

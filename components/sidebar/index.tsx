@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 0,
         zIndex: 20,
-        paddingVertical: 40
+        paddingVertical: 35
     },
     container: {
         flex: 1,
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     },
     menuItem: {
         paddingHorizontal: 16,
-        paddingVertical: 24,
+        paddingVertical: 10,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
         gap: 8,
         height: '100%',
         width: '100%',
+        paddingVertical: 10,
     },
     menuText: {
         color: 'white',

@@ -8,7 +8,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '@/types/navigationTypes';
 import { Feather } from '@expo/vector-icons';
 import Switch from '@/components/switch';
-import CommerceHeader from './CommerceHeader';
+import CommerceHeader from './commerceHeader';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 

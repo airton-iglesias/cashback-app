@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import Select from '../../select';
 import SelectOption from '../../selectOption';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../../types/navigationTypes';
 import Input from '@/components/input';
-import CommerceHeader from '../CommerceHeader';
+import CommerceHeader from '../commerceHeader';
+import CommerceGoBackModal from '../commerceGoBackModal';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
 
@@ -15,23 +16,43 @@ export default function New_Commerce_step_1({ route }: any) {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
 
     const { CashbackType, PlaceType } = route.params;
-
     const [referenceUser, setReferenceUser] = useState<string>('');
     const [association, setAssiation] = useState<string>('');
     const [title, setTitle] = useState<string>('');
     const [userPoints, setUserPoints] = useState<string>('');
 
-
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
     const AssociationOptions = [
         { id: 1, text: 'Promoção' },
         { id: 2, text: 'Evento' },
     ];
-
     const userPointsOptions = [
         { id: 1, text: 'Airton' },
         { id: 2, text: 'Luis' },
         { id: 3, text: 'Bruno' },
     ];
+
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = (e: any) => {
+                if (!modalVisible) {
+                    e.preventDefault();
+                    setModalVisible(true);
+                }
+            };
+
+            const subscription = commerceNavigation.addListener('beforeRemove', onBackPress);
+
+            return () => {
+                subscription();
+            };
+        }, [commerceNavigation, modalVisible])
+    );
+
+    const handleGoBackConfirmed = () => {
+        setModalVisible(false);
+        commerceNavigation.dispatch(CommonActions.goBack());
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -113,6 +134,12 @@ export default function New_Commerce_step_1({ route }: any) {
                     </TouchableOpacity>
                 </View>
             </View>
+
+            <CommerceGoBackModal
+                modalVisible={modalVisible}
+                setModalVisible={() => setModalVisible(false)}
+                ScreenGoback={handleGoBackConfirmed}
+            />
         </SafeAreaView >
     );
 }

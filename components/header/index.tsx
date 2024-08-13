@@ -11,7 +11,7 @@ import StoreIcon from "@/assets/icons/storeIcon";
 type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function Topbar({ openSidebar, openNotifications }: any) {
-    
+
     const [value, setValue] = useState('');
 
     const rootNavigation = useNavigation<RootNavigationProp>();
@@ -46,6 +46,7 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                     <TouchableOpacity
                         onPress={handleSwitchAccount}
                         style={styles.switchAccountButton}
+                        activeOpacity={0.7}
                     >
                         {route.name === "home" ?
                             <Feather name="users" size={24} color="white" />
@@ -61,13 +62,13 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                         placeholder="0"
                         onChangeText={(number) => setValue(number)}
                         placeholderTextColor="#4b5563"
-                        textAlign={route.name === "home" ? "center":"right"}
+                        textAlign={route.name === "home" ? "center" : "right"}
                         value={value}
-                        readOnly={route.name === "home" ? true:false}
+                        readOnly={route.name === "home" ? true : false}
                         style={[
                             styles.textInput,
                             {
-                                paddingRight: route.name === "home" ? 0:60,
+                                paddingRight: route.name === "home" ? 0 : 60,
                                 color: route.name === "home" ? '#28A745' : 'white'
                             }
                         ]}
@@ -77,6 +78,7 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                         null
                         :
                         <TouchableOpacity
+                            activeOpacity={0.7}
                             style={styles.plusWrapper}
                         >
                             <Feather name="plus" size={20} color="#6FC768" />
@@ -84,12 +86,20 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                     }
                 </View>
 
-                <TouchableOpacity onPress={openNotifications} style={styles.iconContainer}>
+                <TouchableOpacity
+                    onPress={openNotifications}
+                    style={styles.iconContainer}
+                    activeOpacity={0.7}
+                >
                     <Feather name="bell" size={24} color="white" />
                 </TouchableOpacity>
 
                 <View style={styles.iconContainer && { backgroundColor: 'none' }}>
-                    <TouchableOpacity onPress={openSidebar} style={styles.switchAccountButton}>
+                    <TouchableOpacity
+                        onPress={openSidebar}
+                        style={styles.switchAccountButton}
+                        activeOpacity={0.7}
+                    >
                         <MaterialCommunityIcons name="dots-vertical" size={24} color="white" />
                     </TouchableOpacity>
                 </View>
@@ -165,15 +175,15 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         fontSize: 24,
     },
-    plusWrapper:{
-        position: 'absolute', 
-        right: 0, 
-        width: 50, 
-        height: 50, 
-        backgroundColor: '#2A2C2D', 
-        borderBottomRightRadius: 16, 
-        borderTopRightRadius: 16, 
-        alignItems: 'center', 
+    plusWrapper: {
+        position: 'absolute',
+        right: 0,
+        width: 50,
+        height: 50,
+        backgroundColor: '#2A2C2D',
+        borderBottomRightRadius: 16,
+        borderTopRightRadius: 16,
+        alignItems: 'center',
         justifyContent: 'center'
     }
 });

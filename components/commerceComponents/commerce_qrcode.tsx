@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../types/navigationTypes';
 import { AntDesign } from '@expo/vector-icons';
-import CommerceHeader from './CommerceHeader';
+import CommerceHeader from './commerceHeader';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 

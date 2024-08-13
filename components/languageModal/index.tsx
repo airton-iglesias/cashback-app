@@ -51,7 +51,7 @@ export default function LanguageModal({ modalVisible, handleCloseModal }: any) {
 
             <View style={styles.buttonWrapper}>
                 <TouchableOpacity style={styles.button} onPress={handleCloseModal}>
-                    <Feather name="arrow-right" size={24} color={'white'} />
+                    <Feather name="arrow-right" size={24} color={'black'} />
                 </TouchableOpacity>
             </View>
         </Modal>
@@ -111,15 +111,16 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     languageText: {
-        color: '#000',
+        color: '#fff',
         fontSize: 18,
         flex: 1,
     },
     button: {
-        backgroundColor: '#000',
-        padding: 15,
+        backgroundColor: 'white',
+        height: 52,
         borderRadius: 10,
         alignItems: 'center',
+        justifyContent: 'center',
         marginHorizontal: 15,
         marginVertical: 20,
     },
@@ -130,22 +131,18 @@ const styles = StyleSheet.create({
         gap: 12,
         paddingHorizontal: 15,
         paddingVertical: 30,
-        borderRadius: 18,
         width: '100%',
         alignItems: 'center',
     },
     languageContainer: {
-        backgroundColor: '#E5E7EB',
-        borderTopEndRadius: 18,
-        borderTopStartRadius: 18,
-        overflow: 'hidden',
-        borderRadius: 18,
+        backgroundColor: 'black',
+        borderTopEndRadius: 20,
+        borderTopStartRadius: 20,
         height: '100%',
-        marginHorizontal: 15,
         flex: 1
     },
     buttonWrapper: {
-        backgroundColor: '#FAFAFA',
+        backgroundColor: 'black',
 
     }
 });

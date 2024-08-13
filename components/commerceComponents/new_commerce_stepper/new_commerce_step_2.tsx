@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '../../../types/navigationTypes';
 import Input from '@/components/input';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import CommerceHeader from '../CommerceHeader';
+import CommerceHeader from '../commerceHeader';
+import CommerceGoBackModal from '../commerceGoBackModal';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
@@ -28,12 +29,36 @@ export default function New_Commerce_step_2({ route }: any) {
     const [endHour, setEndHour] = useState<string>('');
     const [mapAdress, setmapAdress] = useState<string>('');
 
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
     const INITIAL_REGION = {
         latitude: 38.7266085,
         longitude: -9.1503216,
         latitudeDelta: 2,
         longitudeDelta: 2,
     };
+
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = (e: any) => {
+                if (!modalVisible) {
+                    e.preventDefault();
+                    setModalVisible(true);
+                }
+            };
+
+            const subscription = commerceNavigation.addListener('beforeRemove', onBackPress);
+
+            return () => {
+                subscription();
+            };
+        }, [commerceNavigation, modalVisible])
+    );
+
+    const handleGoBackConfirmed = () => {
+        setModalVisible(false);
+        commerceNavigation.dispatch(CommonActions.goBack());
+    };
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -151,6 +176,12 @@ export default function New_Commerce_step_2({ route }: any) {
                         </TouchableOpacity>
                     </View>
                 </View>
+                
+                <CommerceGoBackModal
+                    modalVisible={modalVisible}
+                    setModalVisible={() => setModalVisible(false)}
+                    ScreenGoback={handleGoBackConfirmed}
+                />
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
