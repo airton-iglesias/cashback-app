@@ -12,7 +12,6 @@ export default function Commerce_Qrcode() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
     const [commerceID, setCommerceID] = useState('#DF56G4DF');
 
-
     return (
         <SafeAreaView style={styles.safeArea}>
 
