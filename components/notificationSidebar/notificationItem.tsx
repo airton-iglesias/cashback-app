@@ -1,7 +1,9 @@
 import { View, Image, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from '@expo/vector-icons';
+import { useLocale } from "@/contexts/TranslationContext";
 
 export default function NotificationItem({ item, handleRemoveNotification, index }: any) {
+    const { t } = useLocale();
     switch (item.notificationType) {
         case "deposit_successful":
             return (
@@ -10,10 +12,10 @@ export default function NotificationItem({ item, handleRemoveNotification, index
                         <View style={{ flexDirection: 'row', width: '100%', flex: 1 }}>
                             <View style={styles.textWrapper}>
                                 <Text style={styles.itemTitle}>
-                                    Depósito feito com sucesso
+                                    {t("sidebarNotification.notificationItem.depositSuccessful")}
                                 </Text>
                                 <Text style={styles.itemDescription}>
-                                    {item.description} tokens
+                                    {item.description} {t("sidebarNotification.notificationItem.tokens")}
                                 </Text>
                             </View>
                             <TouchableOpacity style={styles.itemIcon} onPress={() => handleRemoveNotification(index)}>
@@ -35,7 +37,7 @@ export default function NotificationItem({ item, handleRemoveNotification, index
                         <View style={{ flexDirection: 'row', width: '100%', flex: 1 }}>
                             <View style={styles.textWrapper}>
                                 <Text style={styles.itemTitle}>{item.title}</Text>
-                                <Text style={styles.itemDescription}>{item.description} adicionou você como Administrador.</Text>
+                                <Text style={styles.itemDescription}>{item.description} {t("sidebarNotification.notificationItem.admin_add")}</Text>
                             </View>
                             <TouchableOpacity style={styles.itemIcon} onPress={() => handleRemoveNotification(index)}>
                                 <Feather name="trash" size={24} color="#E35D6A" />
@@ -46,10 +48,10 @@ export default function NotificationItem({ item, handleRemoveNotification, index
 
                     <View style={styles.buttonsAdminWrapper}>
                         <TouchableOpacity style={[styles.buttonAdmin, { backgroundColor: '#198754' }]}>
-                            <Text style={styles.buttonAdminText}>Confirmar</Text>
+                            <Text style={styles.buttonAdminText}>{t("sidebarNotification.notificationItem.btn_confirm")}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.buttonAdmin, { backgroundColor: '#626262' }]} onPress={() => handleRemoveNotification(index)}>
-                            <Text style={styles.buttonAdminText}>Recusar</Text>
+                            <Text style={styles.buttonAdminText}>{t("sidebarNotification.notificationItem.btn_refuse")}</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -68,7 +70,7 @@ export default function NotificationItem({ item, handleRemoveNotification, index
                                     {item.title}
                                 </Text>
                                 <Text style={styles.itemDescription}>
-                                    {item.description} Anulou o seu cashback, o valor 40.00 cEur foi devolvido à sua carteira
+                                    {item.description} {t("sidebarNotification.notificationItem.anuableCashback_1")} 40.00 cEur {t("sidebarNotification.notificationItem.anuableCashback_2")}
                                 </Text>
                             </View>
                             <TouchableOpacity style={styles.itemIcon} onPress={() => handleRemoveNotification(index)}>

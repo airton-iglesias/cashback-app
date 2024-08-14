@@ -22,6 +22,8 @@ export default function New_Commerce_step_1({ route }: any) {
     const [userPoints, setUserPoints] = useState<string>('');
 
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [isClosing, setIsClosing] = useState(false);
+
     const AssociationOptions = [
         { id: 1, text: 'Promoção' },
         { id: 2, text: 'Evento' },
@@ -51,6 +53,15 @@ export default function New_Commerce_step_1({ route }: any) {
 
     const handleGoBackConfirmed = () => {
         setModalVisible(false);
+        if (isClosing) {
+            commerceNavigation.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: 'home' }],
+                })
+            );
+            return;
+        }
         commerceNavigation.dispatch(CommonActions.goBack());
     };
 
@@ -60,13 +71,8 @@ export default function New_Commerce_step_1({ route }: any) {
 
                 <CommerceHeader
                     Title={'Dados básicos'}
-                    ScreenGoback={() => commerceNavigation.goBack()}
-                    ScreenClose={() => commerceNavigation.dispatch(
-                        CommonActions.reset({
-                            index: 0,
-                            routes: [{ name: 'home' }],
-                        })
-                    )}
+                    ScreenGoback={() => { setIsClosing(false); setModalVisible(true) }}
+                    ScreenClose={() => { setIsClosing(true); setModalVisible(true) }}
                 />
 
                 <View style={styles.longInputWrapper}>

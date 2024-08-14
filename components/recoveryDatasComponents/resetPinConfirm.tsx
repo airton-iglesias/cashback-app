@@ -15,6 +15,7 @@ export default function ResetPinConfirm() {
     const [ConfirmPin, setConfirmPin] = useState<string>('');
     const buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     const [pressedButton, setPressedButton] = useState<number | null>(null);
+    const [validateError, setValidateError] = useState(true);
 
     const handleDelete = () => {
         setConfirmPin((prev) => prev.slice(0, -1));
@@ -36,13 +37,14 @@ export default function ResetPinConfirm() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.content}>
-                <Text style={styles.title}>{'Confirmar pin'}</Text>
+            <View style={[styles.content, validateError ? { marginTop: 67, gap: 30} : { marginTop: 67, gap: 60 }]}>
+                <Text style={styles.title}>{t("recoveryDatas.confirmPin")}</Text>
+                {validateError ? <Text style={styles.errorText}>{t("recoveryDatas.pinError")}</Text> : null}
                 <View style={styles.pinContainer}>
                     <View style={styles.pinRow}>
                         {Array(6).fill(0).map((_, index) => (
                             <Text key={index} style={styles.pinText}>
-                                {ConfirmPin[index] ? ConfirmPin[index] : <Text style={styles.pinDot}>•</Text>}
+                                {ConfirmPin[index] ? <Text style={styles.pinDotMarked}>•</Text> : <Text style={styles.pinDot}>•</Text>}
                             </Text>
                         ))}
                     </View>
@@ -99,8 +101,6 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         alignItems: 'center',
-        marginTop: 67,
-        gap: 60
     },
     title: {
         fontSize: 40,
@@ -171,4 +171,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    pinDotMarked: {
+        color: '#000',
+    },
+    errorText: {
+        fontSize: 20,
+        color: '#B02A37'
+    }
 });

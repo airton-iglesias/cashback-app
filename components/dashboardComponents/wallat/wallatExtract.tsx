@@ -4,6 +4,7 @@ import { Octicons, AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/navigationTypes';
+import { useLocale } from '@/contexts/TranslationContext';
 
 type WallatNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -33,7 +34,7 @@ export default function WallatExtract() {
         { id: '10', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
         { id: '11', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
     ]);
-
+    const { t } = useLocale();
     const rootNavigation = useNavigation<WallatNavigationProp>();
     
     return (
@@ -47,7 +48,7 @@ export default function WallatExtract() {
                     <Octicons name="chevron-left" size={32} color="black" />
 
                 </TouchableOpacity>
-                <Text style={styles.headerText}>Extrato de Crédito</Text>
+                <Text style={styles.headerText}>{t("dashboardWallat.creditsScreen.creditExtract")}</Text>
             </View>
             <FlatList
                 data={datas}

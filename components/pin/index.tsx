@@ -45,7 +45,7 @@ export default function Pin() {
     return (
         <SafeAreaView style={styles.container}>
             <View style={[styles.content, validateError ? {marginTop: 80,}: {marginTop: 172,}]}>
-                {validateError ? <Text style={styles.title}>{'Pin validate error'}</Text>: null}
+                {validateError ? <Text style={styles.title}>{t("pin.pinError")}</Text>: null}
                 <View style={styles.pinContainer}>
                     <View style={styles.pinRow}>
                         {Array(6).fill(0).map((_, index) => (
@@ -98,7 +98,7 @@ export default function Pin() {
                 <TouchableOpacity
                     onPress={() => authNavigation.navigate('recoveryDatas', { type: 'pin' })}
                 >
-                    <Text style={styles.recoveryPinText}>Recuperar Pin</Text>
+                    <Text style={styles.recoveryPinText}>{t("pin.recoverPin")}</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

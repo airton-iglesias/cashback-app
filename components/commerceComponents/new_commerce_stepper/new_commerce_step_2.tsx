@@ -30,6 +30,7 @@ export default function New_Commerce_step_2({ route }: any) {
     const [mapAdress, setmapAdress] = useState<string>('');
 
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [isClosing, setIsClosing] = useState(false);
     const INITIAL_REGION = {
         latitude: 38.7266085,
         longitude: -9.1503216,
@@ -56,6 +57,15 @@ export default function New_Commerce_step_2({ route }: any) {
 
     const handleGoBackConfirmed = () => {
         setModalVisible(false);
+        if (isClosing) {
+            commerceNavigation.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: 'home' }],
+                })
+            );
+            return;
+        }
         commerceNavigation.dispatch(CommonActions.goBack());
     };
 
@@ -64,16 +74,10 @@ export default function New_Commerce_step_2({ route }: any) {
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
-
                     <CommerceHeader
                         Title={'Local e horário'}
-                        ScreenGoback={() => commerceNavigation.goBack()}
-                        ScreenClose={() => commerceNavigation.dispatch(
-                            CommonActions.reset({
-                                index: 0,
-                                routes: [{ name: 'home' }],
-                            })
-                        )}
+                        ScreenGoback={() => { setIsClosing(false); setModalVisible(true) }}
+                        ScreenClose={() => { setIsClosing(true); setModalVisible(true) }}
                     />
 
                     <View style={styles.longInputWrapper}>
@@ -176,7 +180,7 @@ export default function New_Commerce_step_2({ route }: any) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                
+
                 <CommerceGoBackModal
                     modalVisible={modalVisible}
                     setModalVisible={() => setModalVisible(false)}

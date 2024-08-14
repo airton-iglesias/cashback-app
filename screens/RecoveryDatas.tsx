@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "@/types/navigationTypes";
 import Input from "@/components/input";
 import { useState } from "react";
+import { useLocale } from "@/contexts/TranslationContext";
 
 type AuthNavigationProp = NativeStackNavigationProp<AuthStackParamList>;
 
@@ -14,6 +15,7 @@ export default function RecoveryDatas({route}:any) {
 
     const authNavigation = useNavigation<AuthNavigationProp>();
     const [email, setEmail] = useState('');
+    const { t } = useLocale();
 
     return (
         <SafeAreaView>
@@ -27,12 +29,12 @@ export default function RecoveryDatas({route}:any) {
                             <Octicons name="chevron-left" size={32} color="black" />
 
                         </TouchableOpacity>
-                        <Text style={styles.headerText}>Voltar</Text>
+                        <Text style={styles.headerText}>{t("recoveryDatas.goBack")}</Text>
                     </View>
 
                     <View style={styles.inputWrapper}>
                         <Input
-                            label={'E-mail para envio de código de confirmação'}
+                            label={t("recoveryDatas.inputLabel")}
                             onChange={(text: string) => setEmail(text)}
                             type={'email'}
                         />

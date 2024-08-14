@@ -26,9 +26,8 @@
             "optional": "Opcional",
             "bonus_code": "Código Bonus"
         },
-        "signup_step_2":{
+        "signup_step_2": {
             "new_pin": "Criar pin"
-    
         },
         "signup_step_3": {
             "confirm_pin": "Confirmar pin",
@@ -37,5 +36,100 @@
         "signup_step_4": {
             "processing_register": "Processando seu cadastro..."
         }
+    },
+    "pin": {
+        "recoverPin": "Recuperar Pin",
+        "pinError": "Pin validate error"
+    },
+    "dashboardSearch": {
+        "home": {
+            "search": "Buscar",
+            "commerce": "Comércios",
+            "events": "Eventos",
+            "promotions": "Promoções",
+            "whereLabel": "Onde?",
+            "locally": "Local",
+            "online": "Online",
+            "closeToMe": "Perto de mim",
+            "choosePlace": "Escolha um local",
+            "maxDistance": "Distância máxima"
+        }
+    },
+    "dashboardSearchResults": {
+        "topbar": {
+            "search": "Buscar",
+            "commerce": "Comércios",
+            "events": "Eventos",
+            "promotions": "Promoções"
+        },
+        "content": {
+            "results": "Resultados"
+        },
+        "filter": {
+            "showBy": "MOSTRAR POR",
+            "bigDiscount": "Desconto maior",
+            "nearByPlaces": "Locais mais próximos",
+            "happeningToday": "Acontecendo hoje",
+            "byDate": "Por data",
+            "map": {
+                "commerce": "Comércio",
+                "selectCommerce": "Selecione um comércio no mapa"
+            }
+        }
+    },
+    "dashboardWallat": {
+        "switchScreen": {
+            "credits": "Créditos",
+            "tokens": "Tokens"
+        },
+        "creditsScreen": {
+            "fidelity": "Fidelidade",
+            "extract": "Extrato",
+            "search": "Buscar",
+            "item": "Item",
+            "value": "Valor",
+            "creditExtract": "Extrato de Créditos"
+        },
+        "tokensScreen": {
+            "depositToken": "Depositar token",
+            "token": "Token",
+            "blockchain": "Blockchain",
+            "depositWallat": "Carteira de depósito",
+            "warning": "Qualquer dado mal colocado pode levar a perda irreversível do seu depósito."
+        }
+    },
+    "dashboardQRCode": {
+        "label": "Aponte para o QR Code"
+    },
+    "sidebar": {
+        "profile": "Meu perfil",
+        "points": "Pontos",
+        "aboutUs": "Sobre nós",
+        "help": "Ajuda",
+        "logout": "Logout"
+    },
+    "sidebarNotification": {
+        "allNotifications": "Todas",
+        "notificationItem": {
+            "depositSuccessful": "Depósito feito com sucesso",
+            "tokens": "tokens",
+            "admin_add": "adicionou você como Administrador.",
+            "btn_confirm": "Confirmar",
+            "btn_refuse": "Recusar",
+            "anuableCashback_1": "Anulou o seu cashback, o valor",
+            "anuableCashback_2": "foi devolvido à sua carteira."
+        }
+    },
+    "recoveryDatas": {
+        "goBack": "voltar",
+        "inputLabel": "Email para envio de código de confirmação",
+        "checkInbox": "Verifique sua caixa de email",
+        "newPasswordLabel": "Crie uma nova senha",
+        "requirementsLabel": "Com 8 caracteres ou mais, sendo alfanúmero.",
+        "password": "Passowrd",
+        "confirmPassword": "Confirmar Password",
+        "resetPin": "Redefinir pin",
+        "confirmPin": "Confirmar pin",
+        "pinError": "Pin validate error"
     }
 }

@@ -2,9 +2,10 @@ import React from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { Feather, Ionicons } from '@expo/vector-icons';
+import { useLocale } from '@/contexts/TranslationContext';
 
 export default function WallatTokens({ tokensAmount, tokensBlockedAmount, token, blockChain, wallatLink }: any) {
-
+    const { t } = useLocale();
     const copyToClipboard = () => {
         Clipboard.setStringAsync(wallatLink);
     };
@@ -37,20 +38,20 @@ export default function WallatTokens({ tokensAmount, tokensBlockedAmount, token,
             </View>
 
             <View style={styles.depositSection}>
-                <Text style={styles.depositTitle}>Depositar token</Text>
+                <Text style={styles.depositTitle}>{t("dashboardWallat.tokensScreen.depositToken")}</Text>
             </View>
 
             <View style={styles.detailsContainer}>
                 <View style={styles.detailRow}>
-                    <Text style={styles.detailLabel}>Token</Text>
+                    <Text style={styles.detailLabel}>{t("dashboardWallat.tokensScreen.token")}</Text>
                     <Text numberOfLines={1} style={styles.detailValue}>{token}</Text>
                 </View>
                 <View style={styles.detailRow}>
-                    <Text style={styles.detailLabel}>Blockchain</Text>
+                    <Text style={styles.detailLabel}>{t("dashboardWallat.tokensScreen.blockchain")}</Text>
                     <Text numberOfLines={1} style={styles.detailValue}>{blockChain}</Text>
                 </View>
                 <View style={styles.walletContainer}>
-                    <Text style={styles.walletLabel}>Carteira de depósito</Text>
+                    <Text style={styles.walletLabel}>{t("dashboardWallat.tokensScreen.depositWallat")}</Text>
                     <View style={styles.walletRow}>
                         <Text numberOfLines={1} style={styles.walletLink}>{wallatLink}</Text>
                         <TouchableOpacity onPress={copyToClipboard}>
@@ -61,7 +62,7 @@ export default function WallatTokens({ tokensAmount, tokensBlockedAmount, token,
                 <View style={styles.warningContainer}>
                     <Ionicons name="alert-circle-outline" size={30} color="#a16207" />
                     <Text style={styles.warningText}>
-                        Qualquer dado mal colocado pode levar a perda irreversível do seu deposito.
+                        {t("dashboardWallat.tokensScreen.warning")}
                     </Text>
                 </View>
             </View>

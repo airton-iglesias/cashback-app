@@ -31,6 +31,7 @@ export default function New_Commerce_step_4({ route }: any) {
 
     const scrollViewRef = useRef<ScrollView>(null);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [isClosing, setIsClosing] = useState(false);
 
     const uriToFile = async (uri: string, name: string): Promise<File> => {
         const fileUri = `${FileSystem.cacheDirectory}${name}`;
@@ -148,6 +149,15 @@ export default function New_Commerce_step_4({ route }: any) {
 
     const handleGoBackConfirmed = () => {
         setModalVisible(false);
+        if (isClosing) {
+            commerceNavigation.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: 'home' }],
+                })
+            );
+            return;
+        }
         commerceNavigation.dispatch(CommonActions.goBack());
     };
 
@@ -158,13 +168,8 @@ export default function New_Commerce_step_4({ route }: any) {
 
                     <CommerceHeader
                         Title={'Imagens e vídeos'}
-                        ScreenGoback={() => commerceNavigation.goBack()}
-                        ScreenClose={() => commerceNavigation.dispatch(
-                            CommonActions.reset({
-                                index: 0,
-                                routes: [{ name: 'home' }],
-                            })
-                        )}
+                        ScreenGoback={() => { setIsClosing(false); setModalVisible(true) }}
+                        ScreenClose={() => { setIsClosing(true); setModalVisible(true) }}
                     />
 
                     <View style={styles.section}>

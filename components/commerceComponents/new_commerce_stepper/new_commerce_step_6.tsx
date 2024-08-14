@@ -15,6 +15,7 @@ export default function New_Commerce_step_6({ route }: any) {
 
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [isClosing, setIsClosing] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
@@ -35,6 +36,15 @@ export default function New_Commerce_step_6({ route }: any) {
 
     const handleGoBackConfirmed = () => {
         setModalVisible(false);
+        if (isClosing) {
+            commerceNavigation.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: 'home' }],
+                })
+            );
+            return;
+        }
         commerceNavigation.dispatch(CommonActions.goBack());
     };
 
@@ -45,13 +55,8 @@ export default function New_Commerce_step_6({ route }: any) {
 
                     <CommerceHeader
                         Title={'Mais informações'}
-                        ScreenGoback={() => commerceNavigation.goBack()}
-                        ScreenClose={() => commerceNavigation.dispatch(
-                            CommonActions.reset({
-                                index: 0,
-                                routes: [{ name: 'home' }],
-                            })
-                        )}
+                        ScreenGoback={() => { setIsClosing(false); setModalVisible(true) }}
+                        ScreenClose={() => { setIsClosing(true); setModalVisible(true) }}
                     />
 
                     <View style={styles.section}>

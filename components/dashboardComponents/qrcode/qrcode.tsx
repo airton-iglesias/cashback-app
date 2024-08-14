@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView, Text, View, StyleSheet } from 'react-native';
 import { Camera, CameraView } from 'expo-camera';
 import QRCodeHole from './qrcodeHole';
+import { useLocale } from '@/contexts/TranslationContext';
 
 export default function Qrcode() {
     const [hasPermission, setHasPermission] = useState<null | boolean>(null);
     const [scanned, setScanned] = useState(false);
+    const { t } = useLocale();
 
     useEffect(() => {
         const getCameraPermissions = async () => {
@@ -34,7 +36,7 @@ export default function Qrcode() {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerText}>Aponte para o QR Code</Text>
+                <Text style={styles.headerText}>{t("dashboardQRCode.label")}</Text>
             </View>
 
             <QRCodeHole />

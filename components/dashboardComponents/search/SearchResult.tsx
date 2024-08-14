@@ -7,6 +7,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SearchParamList } from '@/types/navigationTypes';
 import MapPinnedIcon from '@/assets/icons/mapPinnedIcon';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { useLocale } from '@/contexts/TranslationContext';
 
 type SearchNavigationProp = NativeStackNavigationProp<SearchParamList>;
 
@@ -70,6 +71,7 @@ export default function SearchResult() {
     const [sortCriteria, setSortCriteria] = useState('date');
     const [isMapSelectedItem, setIsMapSelectedItem] = useState(false);
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+    const { t } = useLocale();
 
     const INITIAL_REGION = {
         latitude: 38.7266085,
@@ -161,7 +163,7 @@ export default function SearchResult() {
                             cursorColor={'#ADB5BD'}
                             onChangeText={(text) => setSearchInput(text)}
                             value={searchInput}
-                            placeholder='Buscar'
+                            placeholder={t("dashboardSearchResults.topbar.search")}
                             placeholderTextColor={'gray'}
                             style={styles.input}
                         />
@@ -179,13 +181,13 @@ export default function SearchResult() {
                         ]}
                         onPress={() => handleFilterChange('Comercios')}
                     >
-                        <Text style={activeFilter === 'Comercios' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>Comercios</Text>
+                        <Text style={activeFilter === 'Comercios' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>{t("dashboardSearchResults.topbar.commerce")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.cashbackTypeButton, styles.cashbackTypeButtonMiddle, activeFilter === 'Eventos' && styles.cashbackTypeButtonAtive,]}
                         onPress={() => handleFilterChange('Eventos')}
                     >
-                        <Text style={activeFilter === 'Eventos' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>Eventos</Text>
+                        <Text style={activeFilter === 'Eventos' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>{t("dashboardSearchResults.topbar.events")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[
@@ -194,13 +196,13 @@ export default function SearchResult() {
                         ]}
                         onPress={() => handleFilterChange('Promoções')}
                     >
-                        <Text style={activeFilter === 'Promoções' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>Promoções</Text>
+                        <Text style={activeFilter === 'Promoções' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>{t("dashboardSearchResults.topbar.promotions")}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
 
             <View style={styles.searchResultInfos}>
-                <Text style={styles.searchResultInfosText}>{filteredData.length} Resultados</Text>
+                <Text style={styles.searchResultInfosText}>{filteredData.length} {t("dashboardSearchResults.content.results")}</Text>
                 <View style={styles.iconsWrapper}>
                     {showMap ?
                         <TouchableOpacity onPress={handleShowMap}>
@@ -222,12 +224,12 @@ export default function SearchResult() {
             {showSortList ?
                 <View style={styles.sortMenuContainer}>
                     <View style={styles.sortMenuWrapper}>
-                        <Text style={styles.sortMenuLabel}>MOSTRAR POR</Text>
+                        <Text style={styles.sortMenuLabel}>{t("dashboardSearchResults.filter.showBy")}</Text>
                         <TouchableOpacity
                             style={sortCriteria === 'discount' ? styles.sortMenuSelected : styles.sortMenuButton}
                             onPress={() => handleSortChange('discount')}
                         >
-                            <Text style={sortCriteria === 'discount' ? styles.sortMenuTextSelected : styles.sortMenuText}>Desconto maior</Text>
+                            <Text style={sortCriteria === 'discount' ? styles.sortMenuTextSelected : styles.sortMenuText}>{t("dashboardSearchResults.filter.bigDiscount")}</Text>
                         </TouchableOpacity>
 
 
@@ -235,7 +237,7 @@ export default function SearchResult() {
                             style={sortCriteria === 'distance' ? styles.sortMenuSelected : styles.sortMenuButton}
                             onPress={() => handleSortChange('distance')}
                         >
-                            <Text style={sortCriteria === 'distance' ? styles.sortMenuTextSelected : styles.sortMenuText}>Locais mais próximos</Text>
+                            <Text style={sortCriteria === 'distance' ? styles.sortMenuTextSelected : styles.sortMenuText}>{t("dashboardSearchResults.filter.nearByPlaces")}</Text>
                         </TouchableOpacity>
 
 
@@ -243,7 +245,7 @@ export default function SearchResult() {
                             style={sortCriteria === 'today' ? styles.sortMenuSelected : styles.sortMenuButton}
                             onPress={() => handleSortChange('today')}
                         >
-                            <Text style={sortCriteria === 'today' ? styles.sortMenuTextSelected : styles.sortMenuText}>Acontecendo hoje</Text>
+                            <Text style={sortCriteria === 'today' ? styles.sortMenuTextSelected : styles.sortMenuText}>{t("dashboardSearchResults.filter.happeningToday")}</Text>
                         </TouchableOpacity>
 
 
@@ -251,7 +253,7 @@ export default function SearchResult() {
                             style={sortCriteria === 'date' ? styles.sortMenuSelected : styles.sortMenuButton}
                             onPress={() => handleSortChange('date')}
                         >
-                            <Text style={sortCriteria === 'date' ? styles.sortMenuTextSelected : styles.sortMenuText}>Por data</Text>
+                            <Text style={sortCriteria === 'date' ? styles.sortMenuTextSelected : styles.sortMenuText}>{t("dashboardSearchResults.filter.byDate")}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -308,7 +310,7 @@ export default function SearchResult() {
                 <View style={[styles.mapButtonWrapper, isKeyboardVisible ? null : { paddingBottom: 80 }]}>
                     <TouchableOpacity onPress={handleMapButtonOpen}>
                         <View style={styles.mapButtonContent}>
-                            <Text style={styles.mapButtonText}>Comércio</Text>
+                            <Text style={styles.mapButtonText}>{t("dashboardSearchResults.filter.map.commerce")}</Text>
                             {isMapButtonOpen ?
                                 <Entypo name="chevron-down" size={24} color="white" />
                                 :
@@ -350,7 +352,7 @@ export default function SearchResult() {
                         ) : (
                             <View style={[styles.item, { justifyContent: 'center' }]}>
                                 <Text style={styles.title}>
-                                    Selecione um comércio no mapa
+                                    {t("dashboardSearchResults.filter.map.selectCommerce")}
                                 </Text>
                             </View>
                         )

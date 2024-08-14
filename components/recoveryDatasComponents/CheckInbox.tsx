@@ -3,17 +3,20 @@ import { Feather } from '@expo/vector-icons';
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "@/types/navigationTypes";
+import { useLocale } from "@/contexts/TranslationContext";
 
 type AuthNavigationProp = NativeStackNavigationProp<AuthStackParamList>;
 
 export default function RecoveryPassword() {
     const authNavigation = useNavigation<AuthNavigationProp>();
+    const { t } = useLocale();
+    
     return (
         <SafeAreaView>
             <View style={styles.container}>
                 <View style={styles.infoWrapper}>
                     <Feather name="send" size={71} color="black" />
-                    <Text style={styles.infoText}>Verifique sua caixa de e-mail</Text>
+                    <Text style={styles.infoText}>{t("recoveryDatas.checkInbox")}</Text>
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity

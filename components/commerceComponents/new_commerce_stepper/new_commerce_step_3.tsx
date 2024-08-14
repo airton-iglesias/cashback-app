@@ -23,12 +23,13 @@ export default function New_Commerce_step_3({ route }: any) {
         endDate, startHour, endHour, mapAdress
     } = route.params || {};
 
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalBackVisible, setModalBackVisible] = useState(false);
     const [linkURL, setLinkURL] = useState('');
     const [linkTitle, setLinkTitle] = useState('');
 
-    
+    const [isClosing, setIsClosing] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalBackVisible, setModalBackVisible] = useState(false);
+
     const handleInsertLink = () => {
         setModalVisible(true);
     };
@@ -60,6 +61,15 @@ export default function New_Commerce_step_3({ route }: any) {
 
     const handleGoBackConfirmed = () => {
         setModalBackVisible(false);
+        if (isClosing) {
+            commerceNavigation.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: 'home' }],
+                })
+            );
+            return;
+        }
         commerceNavigation.dispatch(CommonActions.goBack());
     };
 
@@ -69,13 +79,8 @@ export default function New_Commerce_step_3({ route }: any) {
 
             <CommerceHeader
                 Title={'Descrição'}
-                ScreenGoback={() => commerceNavigation.goBack()}
-                ScreenClose={() => commerceNavigation.dispatch(
-                    CommonActions.reset({
-                        index: 0,
-                        routes: [{ name: 'home' }],
-                    })
-                )}
+                ScreenGoback={() => { setIsClosing(false); setModalBackVisible(true) }}
+                ScreenClose={() => { setIsClosing(true); setModalBackVisible(true) }}
             />
 
             <View style={styles.descriptionSection}>

@@ -4,25 +4,27 @@ import { CommonActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "@/types/navigationTypes";
 import Input from "../input";
+import { useLocale } from "@/contexts/TranslationContext";
 
 type AuthNavigationProp = NativeStackNavigationProp<AuthStackParamList>;
 
 export default function ResetPassword() {
     const authNavigation = useNavigation<AuthNavigationProp>();
+    const { t } = useLocale();
     return (
         <SafeAreaView>
             <View style={styles.container}>
                 <View style={styles.infoWrapper}>
-                    <Text style={styles.infoText}>Crie uma nova senha</Text>
-                    <Text style={styles.infolabel}>Com 8 caracteres ou mais, sendo alfanúmerico.</Text>
+                    <Text style={styles.infoText}>{t("recoveryDatas.newPasswordLabel")}</Text>
+                    <Text style={styles.infolabel}>{t("recoveryDatas.requirementsLabel")}</Text>
                     <View style={{width: '100%', paddingHorizontal: 15, marginTop: 20}}>
                         <Input
-                            label={'Password'}
+                            label={t("recoveryDatas.password")}
                         />
                     </View>
                     <View style={{width: '100%', paddingHorizontal: 15, marginTop: 20}}>
                         <Input
-                            label={'Confirmar Password'}
+                            label={t("recoveryDatas.confirmPassword")}
                         />
                     </View>
                 </View>

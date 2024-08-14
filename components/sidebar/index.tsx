@@ -8,6 +8,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { RootStackParamList } from "../../types/navigationTypes";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useLocale } from "@/contexts/TranslationContext";
 
 type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -15,6 +16,7 @@ export default function Sidebar({ closeSidebar, isSidebarOpen }: any) {
     const rootNavigation = useNavigation<RootNavigationProp>();
 
     const sidebarOffset = useSharedValue(400);
+    const { t } = useLocale();
 
     useEffect(() => {
         if (isSidebarOpen) {
@@ -52,7 +54,7 @@ export default function Sidebar({ closeSidebar, isSidebarOpen }: any) {
                                 style={styles.menuButton}
                             >
                                 <Feather name="user" size={24} color="white" />
-                                <Text style={styles.menuText}>Meu perfil</Text>
+                                <Text style={styles.menuText}>{t("sidebar.profile")}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.menuItem}>
@@ -61,7 +63,7 @@ export default function Sidebar({ closeSidebar, isSidebarOpen }: any) {
                                 style={styles.menuButton}
                             >
                                 <Feather name="star" size={24} color="white" />
-                                <Text style={styles.menuText}>Pontos</Text>
+                                <Text style={styles.menuText}>{t("sidebar.points")}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -69,13 +71,13 @@ export default function Sidebar({ closeSidebar, isSidebarOpen }: any) {
                         <View style={styles.menuItem}>
                             <TouchableOpacity style={styles.menuButton}>
                                 <AiIcon size={24} color="white" />
-                                <Text style={styles.menuText}>Sobre nós</Text>
+                                <Text style={styles.menuText}>{t("sidebar.aboutUs")}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.menuItem}>
                             <TouchableOpacity style={styles.menuButton}>
                                 <Feather name="help-circle" size={24} color="white" />
-                                <Text style={styles.menuText}>Ajuda</Text>
+                                <Text style={styles.menuText}>{t("sidebar.help")}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.menuItem}>
@@ -91,7 +93,7 @@ export default function Sidebar({ closeSidebar, isSidebarOpen }: any) {
                                 }}
                             >
                                 <LogoutIcon size={24} color="white" />
-                                <Text style={styles.menuText}>Logout</Text>
+                                <Text style={styles.menuText}>{t("sidebar.logout")}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

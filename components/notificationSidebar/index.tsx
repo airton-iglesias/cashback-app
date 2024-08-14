@@ -3,9 +3,11 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList } from "react-native
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import NotificationItem from "./notificationItem";
+import { useLocale } from "@/contexts/TranslationContext";
 
 export default function NotificationSidebar({ closeSidebar, isSidebarOpen }: any) {
     const sidebarOffset = useSharedValue(400);
+    const { t } = useLocale();
 
     const [data, setData] = useState([
         {
@@ -61,7 +63,7 @@ export default function NotificationSidebar({ closeSidebar, isSidebarOpen }: any
                 <View style={styles.container}>
 
                     <View style={styles.header}>
-                        <Text style={styles.headerText}>Todas ({data.length})</Text>
+                        <Text style={styles.headerText}>{t("sidebarNotification.allNotifications")} ({data.length})</Text>
                         <TouchableOpacity onPress={handleCloseSidebar} style={styles.closeButton}>
                             <MaterialCommunityIcons name="close-circle-outline" size={32} color="white" />
                         </TouchableOpacity>

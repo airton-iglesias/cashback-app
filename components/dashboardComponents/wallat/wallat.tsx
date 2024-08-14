@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { SafeAreaView, Text, View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import WallatCredits from "./wallatCredits";
 import WallatTokens from "./wallatTokens";
+import { useLocale } from "@/contexts/TranslationContext";
 
 export default function Wallat() {
     const [tokenScreen, setTokenScreen] = useState(false);
+    const { t } = useLocale();
 
     const [datas, setDatas] = useState([
         {
@@ -51,14 +53,14 @@ export default function Wallat() {
                 <TouchableWithoutFeedback onPress={() => setTokenScreen(false)}>
                     <View style={styles.buttonContainer}>
                         <View style={tokenScreen ? null : styles.buttonActive}>
-                            <Text style={styles.buttonText}>Créditos</Text>
+                            <Text style={styles.buttonText}>{t("dashboardWallat.switchScreen.credits")}</Text>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => setTokenScreen(true)}>
                     <View style={styles.buttonContainer}>
                         <View style={tokenScreen ? styles.buttonActive : null}>
-                            <Text style={styles.buttonText}>Token</Text>
+                            <Text style={styles.buttonText}>{t("dashboardWallat.switchScreen.tokens")}</Text>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>

@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/navigationTypes';
 import Input from '@/components/input';
+import { useLocale } from '@/contexts/TranslationContext';
 
 type WallatNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -16,7 +17,8 @@ export default function WallatCredits({ creditsAmount, currencyType, loyaltyData
     const [search, setSearch] = useState<string>('');
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedCurrency, setSelectedCurrency] = useState<string | null>('cEUR');
-
+    const { t } = useLocale();
+    
     const options = [
         {
             id: "1",
@@ -52,9 +54,9 @@ export default function WallatCredits({ creditsAmount, currencyType, loyaltyData
 
             <View style={styles.fidelityHeader}>
                 <View style={styles.fidelityTitleContainer}>
-                    <Text style={styles.fidelityTitle}>Fidelidade</Text>
+                    <Text style={styles.fidelityTitle}>{t("dashboardWallat.creditsScreen.fidelity")}</Text>
                     <TouchableOpacity style={styles.fidelityButton} onPress={() => rootNavigation.navigate("wallatextract")}>
-                        <Text style={[styles.fidelityTitle, { color: '#0D6EFD' }]}>Extrato</Text>
+                        <Text style={[styles.fidelityTitle, { color: '#0D6EFD' }]}>{t("dashboardWallat.creditsScreen.extract")}</Text>
                         <Feather style={{ marginBottom: 7, marginLeft: 5 }} name="list" size={24} color="#0D6EFD" />
                     </TouchableOpacity>
                 </View>
@@ -64,7 +66,7 @@ export default function WallatCredits({ creditsAmount, currencyType, loyaltyData
                 <View style={styles.searchInnerContainer}>
                     <FontAwesome name="search" size={18} style={styles.searchIcon} />
                     <Input
-                        placeholder={'Buscar'}
+                        placeholder={t("dashboardWallat.creditsScreen.search")}
                         onChange={(text: string) => setSearch(text)}
                         customPaddingLeft={40}
                     />
@@ -73,8 +75,8 @@ export default function WallatCredits({ creditsAmount, currencyType, loyaltyData
 
             <View style={styles.labelContainer}>
                 <View style={styles.descriptionContainer}>
-                    <Text style={styles.label}>Item</Text>
-                    <Text style={styles.label}>Valor</Text>
+                    <Text style={styles.label}>{t("dashboardWallat.creditsScreen.item")}</Text>
+                    <Text style={styles.label}>{t("dashboardWallat.creditsScreen.value")}</Text>
                 </View>
             </View>
 

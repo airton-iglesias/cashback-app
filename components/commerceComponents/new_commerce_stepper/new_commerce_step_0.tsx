@@ -1,54 +1,32 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { CommonActions, useNavigation, useFocusEffect } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { CommerceStackParamList } from '../../../types/navigationTypes';
 import CommerceHeader from '../commerceHeader';
-import CommerceGoBackModal from '../commerceGoBackModal';
 import RadioCommerce from '../radioCommerce';
 import RadioCommerceType from '../radioCommerceType';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
-export default function New_Commerce_step_0() {
+export default function New_Commerce_step_0({route}: any) {
+
+    const { editor } = route.params || {};
 
     const [CashbackType, setCashbackType] = useState<string>('Permanente');
     const [PlaceType, setPlaceType] = useState<string>('Físico');
-    const [modalVisible, setModalVisible] = useState<boolean>(false);
 
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
     const [selectedType, setSelectedType] = useState<number>(0);
     const [selectedPlace, setSelectedPlace] = useState<number>(0);
 
-    useFocusEffect(
-        useCallback(() => {
-            const onBackPress = (e: any) => {
-                if (!modalVisible) {
-                    e.preventDefault();
-                    setModalVisible(true);
-                }
-            };
-
-            const subscription = commerceNavigation.addListener('beforeRemove', onBackPress);
-
-            return () => {
-                subscription();
-            };
-        }, [commerceNavigation, modalVisible])
-    );
-
-    const handleGoBackConfirmed = () => {
-        setModalVisible(false);
-        commerceNavigation.dispatch(CommonActions.goBack());
-    };
-
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <CommerceHeader
-                    Title={'Novo'}
-                    ScreenGoback={() => setModalVisible(true)}
+                    Title={editor ? 'Editar':'Novo'}
+                    ScreenGoback={() => commerceNavigation.goBack()}
                     ScreenClose={() => commerceNavigation.dispatch(
                         CommonActions.reset({
                             index: 0,
@@ -94,12 +72,6 @@ export default function New_Commerce_step_0() {
                     </TouchableOpacity>
                 </View>
             </View>
-
-            <CommerceGoBackModal
-                modalVisible={modalVisible}
-                setModalVisible={() => setModalVisible(false)}
-                ScreenGoback={handleGoBackConfirmed}
-            />
         </SafeAreaView>
     );
 };

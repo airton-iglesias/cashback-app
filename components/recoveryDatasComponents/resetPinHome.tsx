@@ -38,7 +38,7 @@ export default function ResetPinHome() {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.content}>
-                <Text style={styles.title}>{'Redefinir pin'}</Text>
+                <Text style={styles.title}>{t("recoveryDatas.resetPin")}</Text>
                 <View style={styles.pinContainer}>
                     <View style={styles.pinRow}>
                         {Array(6).fill(0).map((_, index) => (

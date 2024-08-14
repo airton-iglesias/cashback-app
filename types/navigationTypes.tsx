@@ -76,7 +76,7 @@ export type CommerceStackParamList = {
   commerce_add_access: undefined;
   commerce_associate_edit: undefined;
   commerce_qrcode: undefined;
-  new_commerce_step_0: undefined;
+  new_commerce_step_0: {editor: boolean} | undefined;
   new_commerce_step_1: { CashbackType: string; PlaceType: string };
   new_commerce_step_2: { 
     CashbackType: string; 

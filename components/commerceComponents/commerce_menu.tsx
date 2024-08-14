@@ -6,12 +6,37 @@ import { CommerceStackParamList } from '../../types/navigationTypes';
 import { Feather, Octicons, AntDesign, SimpleLineIcons } from '@expo/vector-icons';
 import QRCodeIcon from '../../assets/icons/qrcodeIcon';
 import CommerceHeader from './commerceHeader';
+import ModalCommerce from '../modalCommerce';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
+
+const data = [
+    {
+        id: '1',
+        title: 'Fitness Center 1',
+        location: 'Beja, Portugal',
+        discount: '30%',
+        type: 'video',
+        source: 'url da midia',
+        modal: {
+            cupomCode: 'ID s039da',
+            locationMap: '',
+            website: "www.maps.google.com",
+            createdBy: "Casa Verde dos Relógios",
+            eventDate: "0 out - 20:00 a 20 out - 21:00",
+            cashbackType: "Evento",
+            baseDiscount: "10%",
+            discountAbove100: "20%",
+            discountAbove200: "30%",
+            about: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in neque rhoncus, mattis augue eget, viverra purus. Aliquam erat volutpat. Vivamus lacinia felis id massa blandit, vel pellentesque lacus tincidunt. Integer ac tellus id ipsum tincidunt interdum in eu mi. Cras leo dui, pharetra ac congue feugiat."
+        }
+    }
+];
 
 export default function CommerceMenu() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
     const [modalVisible, setModalVisible] = useState(false);
+    const [commerceModalVisible, setCommerceModalVisible] = useState(false);
 
 
     return (
@@ -47,6 +72,7 @@ export default function CommerceMenu() {
                     <TouchableOpacity
                         activeOpacity={0.7}
                         style={styles.menuItemButton}
+                        onPress={() => setCommerceModalVisible(!commerceModalVisible)}
                     >
                         <View style={styles.iconContainer}>
                             <Feather name="eye" size={24} color="#0A3A74" />
@@ -55,12 +81,10 @@ export default function CommerceMenu() {
                     </TouchableOpacity>
                 </View>
 
-
-
                 <View style={styles.menuItem}>
                     <TouchableOpacity
                         activeOpacity={0.7}
-                        onPress={() => commerceNavigation.navigate('new_commerce_step_0')}
+                        onPress={() => commerceNavigation.navigate('new_commerce_step_0', { editor:true } )}
                         style={styles.menuItemButton}
                     >
                         <View style={styles.iconContainer}>
@@ -69,8 +93,6 @@ export default function CommerceMenu() {
                         <Text style={styles.menuItemText}>Editar</Text>
                     </TouchableOpacity>
                 </View>
-
-
 
                 <View style={styles.menuItem}>
                     <TouchableOpacity
@@ -85,8 +107,6 @@ export default function CommerceMenu() {
                     </TouchableOpacity>
                 </View>
 
-
-
                 <View style={styles.menuItem}>
                     <TouchableOpacity
                         onPress={() => commerceNavigation.navigate('commerce_qrcode')}
@@ -99,8 +119,6 @@ export default function CommerceMenu() {
                         <Text style={styles.menuItemText}>QR Code</Text>
                     </TouchableOpacity>
                 </View>
-
-
 
                 <View style={[styles.menuItem]}>
                     <TouchableOpacity
@@ -162,6 +180,12 @@ export default function CommerceMenu() {
                     </View>
                 </View>
             </Modal>
+
+            <ModalCommerce
+                modalVisible={commerceModalVisible}
+                selectedItem={data[0]}
+                handleCloseModal={() => setCommerceModalVisible(!commerceModalVisible)}
+            />
         </SafeAreaView >
     );
 }
