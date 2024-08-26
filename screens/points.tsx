@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
-import { Image, KeyboardAvoidingView, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import * as ImagePicker from 'expo-image-picker';
-import { Feather, MaterialCommunityIcons, Octicons, AntDesign } from '@expo/vector-icons';
-import { RootStackParamList } from '../types/navigationTypes';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useNavigation } from "@react-navigation/native";
+import { Image, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Feather, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
 import Topbar from '../components/header';
 import InfoCloudIcon from '../assets/icons/infoCloudIcon';
 import Sidebar from '@/components/sidebar';
+import {useLocale} from "@/contexts/TranslationContext";
 
-type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type CommerceData = {
     name: string;
     promotion?: {
@@ -26,10 +22,10 @@ type CommerceData = {
 
 export default function Points() {
 
-    const rootNavigation = useNavigation<RootNavigationProp>();
     const [modalVisible, setModalVisible] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [showSidebar, setShowSidebar] = useState(false);
+    const { t } = useLocale();
 
     const commerceDatas: CommerceData[] = [
         {
@@ -68,7 +64,7 @@ export default function Points() {
                         onPress={() => setModalVisible(true)}
                     >
                         <InfoCloudIcon size={26} color={'#3b82f6'} style={{ marginTop: 3 }} />
-                        <Text style={styles.infoButtonText}>Info</Text>
+                        <Text style={styles.infoButtonText}>{t("points.info")}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.pointsContainer}>
@@ -101,7 +97,7 @@ export default function Points() {
                                                 </View>
                                             </View>
                                             <View style={[styles.cardStatus, { backgroundColor: '#D1E7DD', }]}>
-                                                <Text style={[styles.cardStatusText, { color: '#0A3622' }]}>Promoção</Text>
+                                                <Text style={[styles.cardStatusText, { color: '#0A3622' }]}>{t("points.permanent")}</Text>
                                             </View>
                                         </View>
                                         {data.promotion || data.event ? (<View style={styles.separator}></View>) : null}
@@ -113,17 +109,17 @@ export default function Points() {
                                         <View style={styles.card}>
                                             <Image source={require('@/assets/images/sorveteria2.png')} style={[styles.image, styles.roundedImage]} />
                                             <View style={styles.cardContent}>
-                                                <Text style={styles.cardTitle}>{data.promotion?.name || 'Sem informação'}</Text>
+                                                <Text style={styles.cardTitle}>{data.promotion?.name || t("points.withoutInfo")}</Text>
                                                 <View style={styles.cardDetails}>
                                                     <Feather name="user" size={16} color="#635C5C" />
-                                                    <Text style={styles.cardDetailText}>{data.promotion?.role || 'Sem informação'}</Text>
+                                                    <Text style={styles.cardDetailText}>{data.promotion?.role || t("points.withoutInfo")}</Text>
                                                     <View style={styles.cardDetailItem}>
                                                         <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
-                                                        <Text style={styles.cardDetailText}>{data.promotion?.id || 'Sem informação'}</Text>
+                                                        <Text style={styles.cardDetailText}>{data.promotion?.id || t("points.withoutInfo")}</Text>
                                                     </View>
                                                 </View>
                                                 <View style={[styles.cardStatus, { backgroundColor: '#CFF4FC', }]}>
-                                                    <Text style={[styles.cardStatusText, { color: '#055160' }]}>Promoção</Text>
+                                                    <Text style={[styles.cardStatusText, { color: '#055160' }]}>{t("points.promotion")}</Text>
                                                 </View>
                                             </View>
                                             {data.event && (<View style={styles.separator}></View>)}
@@ -136,17 +132,17 @@ export default function Points() {
                                         <View style={styles.card}>
                                             <Image source={require('@/assets/images/sorveteria3.png')} style={[styles.image, styles.roundedImage]} />
                                             <View style={styles.cardContent}>
-                                                <Text style={styles.cardTitle}>{data.event?.name || 'Sem informação'}</Text>
+                                                <Text style={styles.cardTitle}>{data.event?.name || t("points.withoutInfo")}</Text>
                                                 <View style={styles.cardDetails}>
                                                     <Feather name="user" size={16} color="#635C5C" />
-                                                    <Text style={styles.cardDetailText}>{data.event?.role || 'Sem informação'}</Text>
+                                                    <Text style={styles.cardDetailText}>{data.event?.role || t("points.withoutInfo")}</Text>
                                                     <View style={styles.cardDetailItem}>
                                                         <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
-                                                        <Text style={styles.cardDetailText}>{data.event?.id || 'Sem informação'}</Text>
+                                                        <Text style={styles.cardDetailText}>{data.event?.id || t("points.withoutInfo")}</Text>
                                                     </View>
                                                 </View>
                                                 <View style={[styles.cardStatus, { backgroundColor: '#FFF3CD', }]}>
-                                                    <Text style={[styles.cardStatusText, { color: '#664D03' }]}>Evento</Text>
+                                                    <Text style={[styles.cardStatusText, { color: '#664D03' }]}>{t("points.event")}</Text>
                                                 </View>
                                             </View>
                                         </View>
@@ -171,7 +167,7 @@ export default function Points() {
                     >
                         <Octicons name="chevron-left" size={32} color="black" />
                     </TouchableOpacity>
-                    <Text style={styles.modalHeaderText}>Voltar</Text>
+                    <Text style={styles.modalHeaderText}>{t("points.modal.headerLabel")}</Text>
                 </View>
 
                 <View style={styles.modalContainer}>
@@ -180,18 +176,18 @@ export default function Points() {
                             <InfoCloudIcon width={36} height={36} color={'#3b82f6'} />
                         </View>
                         <View style={styles.modalTitleContainer}>
-                            <Text style={styles.modalTitle}>Vantagens dos</Text>
-                            <Text style={styles.modalTitle}>Pontos na Promoção</Text>
+                            <Text style={styles.modalTitle}>{t("points.modal.title1")}</Text>
+                            <Text style={styles.modalTitle}>{t("points.modal.title2")}</Text>
                         </View>
                     </View>
                     <View style={styles.modalContent}>
                         <View style={styles.modalSection}>
-                            <Text style={styles.modalSectionTitle}>Dedução de Pontos</Text>
-                            <Text style={styles.modalSectionText}>1 ponto é retirado a cada apresentação.</Text>
+                            <Text style={styles.modalSectionTitle}>{t("points.modal.deductionPoints")}</Text>
+                            <Text style={styles.modalSectionText}>{t("points.modal.deductionDescription")}</Text>
                         </View>
                         <View style={styles.modalSection}>
-                            <Text style={styles.modalSectionTitleAdd}>Adição de Pontos</Text>
-                            <Text style={styles.modalSectionText}>1 ponto é adicionado a cada $0.01 em créditos movimentados.</Text>
+                            <Text style={styles.modalSectionTitleAdd}>{t("points.modal.additionPoints")}</Text>
+                            <Text style={styles.modalSectionText}>{t("points.modal.additionDescription")}</Text>
                         </View>
                     </View>
                 </View>

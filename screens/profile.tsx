@@ -7,20 +7,20 @@ import * as ImagePicker from 'expo-image-picker';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
 import Select from '@/components/select';
 import SelectOption from '@/components/selectOption';
-import { AuthStackParamList, RootStackParamList } from '@/types/navigationTypes';
+import { RootStackParamList } from '@/types/navigationTypes';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from "@react-navigation/native";
 import Input from '@/components/input';
 import Switch from '@/components/switch';
 import * as Clipboard from 'expo-clipboard';
+import {useLocale} from "@/contexts/TranslationContext";
 
 type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
-type AuthNavigationProp = NativeStackNavigationProp<AuthStackParamList>;
 
 export default function Profile() {
 
     const rootNavigation = useNavigation<RootNavigationProp>();
-
+    const { t } = useLocale();
     const datas = [{
         accountID: 'O23I4U5',
         bonusCode: '2435IJ3'
@@ -49,7 +49,7 @@ export default function Profile() {
     const handleImagePick = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-        if (permissionResult.granted === false) {
+        if (!permissionResult.granted) {
             alert("Permission to access camera roll is required!");
             return;
         }
@@ -79,12 +79,12 @@ export default function Profile() {
                                 style={styles.backButton}
                             >
                                 <Ionicons name="chevron-back" size={20} color="black" />
-                                <Text style={styles.backButtonText}> Voltar</Text>
+                                <Text style={styles.backButtonText}>{t("profile.headerBackLabel")}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.saveButton}
                             >
-                                <Text style={styles.saveButtonText}>Salvar</Text>
+                                <Text style={styles.saveButtonText}>{t("profile.headerSaveLabel")}</Text>
                                 <Feather name="check" size={24} color="#0D6EFD" />
                             </TouchableOpacity>
                         </View>
@@ -124,7 +124,7 @@ export default function Profile() {
 
                         <View style={styles.formGroup}>
                             <Input
-                                label={'Nome'}
+                                label={t("profile.nameLabel")}
                                 onChange={(text: string) => setName(text)}
                                 value={name}
                             />
@@ -133,7 +133,7 @@ export default function Profile() {
 
                         <View style={styles.formGroup}>
                             <Input
-                                label={'Email'}
+                                label={t("profile.emailLabel")}
                                 type={'email'}
                                 value={email}
                                 onChange={(text: string) => setEmail(text)}
@@ -143,14 +143,14 @@ export default function Profile() {
 
                         <View style={styles.formGroup}>
                             <Input
-                                label={'Telemovel'}
+                                label={t("profile.phoneLabel")}
                                 value={telemovel}
                                 onChange={(text: string) => setTelemovel(text)}
                             />
                         </View>
 
                         <View style={styles.selectGroup}>
-                            <Text style={styles.label}>País</Text>
+                            <Text style={styles.label}>{t("profile.countryLabel")}</Text>
                             <Select
                                 options={countryOptions}
                                 onChangeSelect={(item: any) => setCountry(item.name)}
@@ -160,7 +160,7 @@ export default function Profile() {
                         </View>
 
                         <View style={styles.selectGroup}>
-                            <Text style={styles.label}>Moeda</Text>
+                            <Text style={styles.label}>{t("profile.currencyLabel")}</Text>
                             <Select
                                 options={currencyOptions}
                                 onChangeSelect={(item: any) => setCurrency(item.name)}
@@ -169,25 +169,9 @@ export default function Profile() {
                             />
                         </View>
 
-                        <View style={[styles.formGroup]}>
-                            <Text style={styles.label}>Bonus Code</Text>
-                            <View style={{flexDirection: 'row', width: '100%'}}>
-                                <TextInput
-                                    cursorColor={'#ADB5BD'}
-                                    style={styles.bonusCodeInput}
-                                    value={datas[0].bonusCode}
-                                    placeholderTextColor={'#ADB5BD'}
-                                    editable={false}
-                                />
-                                <TouchableOpacity style={styles.copyIconContainer} onPress={() => copyToClipboard(datas[0].accountID)}>
-                                    <Ionicons name="copy-outline" size={18} color="#495057" />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
                         <View style={styles.switchGroup}>
                             <View style={styles.optionRow}>
-                                <Text style={styles.label}>Localização</Text>
+                                <Text style={styles.label}>{t("profile.locationLabel")}</Text>
                                 <Switch onChange={(mode: boolean) => setLocation(mode)} />
                             </View>
 
@@ -196,7 +180,7 @@ export default function Profile() {
                                     onPress={() => rootNavigation.navigate('recoveryDatas', { type: 'pin' })}
                                     style={styles.optionButton}
                                 >
-                                    <Text style={styles.optionText}>Alterar Pin</Text>
+                                    <Text style={styles.optionText}>{t("profile.changePin")}</Text>
                                     <Entypo name="chevron-right" size={24} color="black" />
                                 </TouchableOpacity>
                             </View>
@@ -206,12 +190,11 @@ export default function Profile() {
                                     onPress={() => rootNavigation.navigate('recoveryDatas', { type: 'password' })}
                                     style={styles.optionButton}
                                 >
-                                    <Text style={styles.optionText}>Alterar Password</Text>
+                                    <Text style={styles.optionText}>{t("profile.changePassword")}</Text>
                                     <Entypo name="chevron-right" size={24} color="black" />
                                 </TouchableOpacity>
                             </View>
                         </View>
-
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -247,6 +230,7 @@ const styles = StyleSheet.create({
     backButtonText: {
         fontSize: 20,
         fontWeight: 'normal',
+        marginLeft: 5
     },
     saveButton: {
         flexDirection: 'row',

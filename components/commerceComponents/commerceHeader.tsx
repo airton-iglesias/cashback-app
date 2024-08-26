@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
         height: 80,
         borderBottomWidth: 1,
         borderColor: '#DADADA',
-        marginBottom: 10,
         marginTop: 30
 
     },

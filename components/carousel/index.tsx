@@ -12,30 +12,15 @@ import {
 
 interface CarouselItem {
     id: string;
-    image: any;
+    image: string;
 }
 
-export default function Carousel() {
+export default function Carousel({ carouselData }: { carouselData: CarouselItem[] }) {
     const flatlistRef = useRef<FlatList<CarouselItem>>(null);
     const screenWidth = Dimensions.get('window').width;
     const [activeIndex, setActiveIndex] = useState(0);
     const [isAutoScrollEnabled, setIsAutoScrollEnabled] = useState(true);
     const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-    const carouselData: CarouselItem[] = [
-        {
-            id: '01',
-            image: require('../../assets/images/faxada1.png'),
-        },
-        {
-            id: '02',
-            image: require('../../assets/images/faxada2.png'),
-        },
-        {
-            id: '03',
-            image: require('../../assets/images/faxada3.png'),
-        },
-    ];
 
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
@@ -66,7 +51,7 @@ export default function Carousel() {
             >
                 <View>
                     <Image
-                        source={item.image}
+                        source={{ uri: item.image}}
                         style={styles.image}
                     />
                 </View>
@@ -87,7 +72,7 @@ export default function Carousel() {
     }, [activeIndex]);
 
     const renderDotIndicators = () => {
-        return carouselData.map((dot, index) => (
+        return carouselData.map((dot: CarouselItem, index: number) => (
             <View
                 key={dot.id}
                 style={[

@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {SafeAreaView,View,Text,TouchableOpacity,Image,ScrollView,StyleSheet,} from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { CommerceStackParamList } from '../../types/navigationTypes';
+import { CommerceStackParamList } from '@/types/navigationTypes';
 import { FontAwesome6 } from '@expo/vector-icons';
 import CommerceHeader from './commerceHeader';
+import {useLocale} from "@/contexts/TranslationContext";
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'new_commerce_step_1'>;
 
 export default function CommerceAccessManager() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
+    const { t } = useLocale();
 
     const userDatas = [
         {
@@ -42,7 +44,7 @@ export default function CommerceAccessManager() {
                 />
 
                 <View style={styles.manageAccessContainer}>
-                    <Text style={styles.manageAccessTitle}>Gerir acessos</Text>
+                    <Text style={styles.manageAccessTitle}>{t("commerce.access_manager.label")}</Text>
                 </View>
                 {
                     userDatas.map((user, index) =>

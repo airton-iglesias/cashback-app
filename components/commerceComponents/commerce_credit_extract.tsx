@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/navigationTypes';
 import { Feather } from '@expo/vector-icons';
 import CommerceHeader from './commerceHeader';
+import {useLocale} from "@/contexts/TranslationContext";
 
 type WallatNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -19,33 +20,35 @@ const data = [
     { id: '8', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: false },
 ];
 
-const Item = ({ date, transactionId, amount, deleted }: any) => (
-    <View style={styles.item}>
-        {deleted ?
-            null
-            :
-            <View style={styles.trashIcon}>
-                <Feather name="trash" size={16} color="#B02A37" />
-            </View>
-        }
-        <View style={{ justifyContent: 'center', marginTop: 5 }}>
-            <Text style={[styles.date, deleted && styles.deletedText]}>{date}</Text>
-            <Text style={[styles.transactionId, deleted && styles.deletedText]}>ID: {transactionId}</Text>
-            {deleted ? <Text style={[styles.whoDeleted, deleted && styles.deletedText]}>Eliminado por {transactionId}</Text> : null}
-        </View>
-        <View>
-            <Text style={[styles.amount, deleted && styles.deletedText]}>{amount}</Text>
-        </View>
-    </View>
-);
-
 export default function CommerceCreditExtract() {
     const rootNavigation = useNavigation<WallatNavigationProp>();
+    const { t } = useLocale();
+
+    const Item = ({ date, transactionId, amount, deleted }: any) => (
+        <View style={styles.item}>
+            {deleted ?
+                null
+                :
+                <View style={styles.trashIcon}>
+                    <Feather name="trash" size={16} color="#B02A37" />
+                </View>
+            }
+            <View style={{ justifyContent: 'center', marginTop: 5 }}>
+                <Text style={[styles.date, deleted && styles.deletedText]}>{date}</Text>
+                <Text style={[styles.transactionId, deleted && styles.deletedText]}>{t("commerce.credit_extract.id")}: {transactionId}</Text>
+                {deleted ? <Text style={[styles.whoDeleted, deleted && styles.deletedText]}>{t("commerce.credit_extract.eliminatedBy")} {transactionId}</Text> : null}
+            </View>
+            <View>
+                <Text style={[styles.amount, deleted && styles.deletedText]}>{amount}</Text>
+            </View>
+        </View>
+    );
+
     return (
         <SafeAreaView style={styles.container}>
 
             <CommerceHeader
-                    Title={'Extrato de Crédito'}
+                    Title={t("commerce.credit_extract.headerLabel")}
                     ScreenGoback={() => rootNavigation.goBack()}
                     ScreenClose={() => rootNavigation.goBack()}
                 />

@@ -9,6 +9,7 @@ import { CommerceStackParamList } from '@/types/navigationTypes';
 import { Feather } from '@expo/vector-icons';
 import Switch from '@/components/switch';
 import CommerceHeader from './commerceHeader';
+import {useLocale} from "@/contexts/TranslationContext";
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
@@ -18,6 +19,7 @@ export default function CommerceAddAccess() {
     const [canSeeLogs, setCanSeeLogs] = useState(false);
     const [canEraseLogs, setCanEraseLogs] = useState(false);
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
+    const { t } = useLocale();
 
     const datas: string | any[] = [
         /*{
@@ -30,7 +32,7 @@ export default function CommerceAddAccess() {
         <SafeAreaView style={styles.safeArea}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <CommerceHeader
-                    Title={'Adicionar  acesso'}
+                    Title={t("commerce.add_access.headerLabel")}
                     ScreenGoback={() => commerceNavigation.goBack()}
                     ScreenClose={() => commerceNavigation.dispatch(
                         CommonActions.reset({
@@ -41,7 +43,7 @@ export default function CommerceAddAccess() {
                 />
 
                 <View style={styles.idContainer}>
-                    <Text style={styles.idLabel}>ID</Text>
+                    <Text style={styles.idLabel}>{t("commerce.add_access.id")}</Text>
                     <TextInput
                         cursorColor={'#ADB5BD'}
                         value={userID}
@@ -72,21 +74,21 @@ export default function CommerceAddAccess() {
 
                 <View style={styles.switchContainer}>
                     <View style={styles.switchRow}>
-                        <Text style={styles.switchLabel}>Administrador</Text>
+                        <Text style={styles.switchLabel}>{t("commerce.add_access.admin")}</Text>
                         <Switch
                             onChange={(mode: boolean) => setAdministrador(mode)}
                             value={administrador}
                         />
                     </View>
                     <View style={styles.switchRow}>
-                        <Text style={styles.switchLabel}>Pode ver registros</Text>
+                        <Text style={styles.switchLabel}>{t("commerce.add_access.can_see_logs")}</Text>
                         <Switch
                             onChange={(mode: boolean) => setCanSeeLogs(mode)}
                             value={canSeeLogs}
                         />
                     </View>
                     <View style={styles.switchRow}>
-                        <Text style={styles.switchLabel}>Pode ver e apagar registros</Text>
+                        <Text style={styles.switchLabel}>{t("commerce.add_access.can_see_and_erase_logs")}</Text>
                         <Switch
                             onChange={(mode: boolean) => setCanEraseLogs(mode)}
                             value={canEraseLogs}

@@ -1,41 +1,38 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
-import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { FontAwesome6, Feather } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { CommerceStackParamList } from '../../../types/navigationTypes';
+import { CommerceStackParamList } from '@/types/navigationTypes';
 import Select from '../../select';
 import SelectOption from '../../selectOption';
 import Input from '@/components/input';
 import CommerceHeader from '../commerceHeader';
 import CommerceGoBackModal from '../commerceGoBackModal';
+import { useStepperContext } from '@/contexts/CommerceStepperContext';
+import { useLocale } from '@/contexts/TranslationContext';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
 
-export default function New_Commerce_step_5({ route }: any) {
-    const {
-        CashbackType, PlaceType, referenceUser,
-        association, title, userPoints, webSite, startDate,
-        endDate, startHour, endHour, mapAdress, description,
-        logoImage, posterImage, descriptionImages
-    } = route.params || {};
+export default function New_Commerce_Step_5() {
+    const { baseDiscount, cashbackForm, sections, setStepperData } = useStepperContext();
+    const [tempSections, setTempSections] = useState(sections);
 
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
-    const [baseDiscount, setBaseDiscount] = useState<number>();
-    const [cashbackForm, setCashbackForm] = useState<number>(0);
-    const [sections, setSections] = useState<{ minValue: string, discount: string, type: string }[]>([]);
-
     const scrollViewRef = useRef<ScrollView>(null);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [isClosing, setIsClosing] = useState(false);
-
+    const { t } = useLocale();
+    
     const typesOptions = [
         { id: 1, text: 'Fidelização' },
+        { id: 2, text: 'Promoção' },
     ];
+    
 
     const addSection = () => {
         if (sections.length < 10) {
-            setSections([...sections, { minValue: '', discount: '', type: '' }]);
+            setStepperData({ sections: [...sections, { minValue: '', discount: '', type: '' }] });
+            setTempSections([...tempSections, { minValue: '', discount: '', type: '' }]);
             setTimeout(() => {
                 scrollViewRef.current?.scrollToEnd({ animated: true });
             }, 200);
@@ -45,48 +42,27 @@ export default function New_Commerce_step_5({ route }: any) {
     const removeSection = (index: number) => {
         const newSections = [...sections];
         newSections.splice(index, 1);
-        setSections(newSections);
+        setStepperData({ sections: newSections });
+        commerceNavigation.replace("new_commerce_step_5");
     };
-
-    useFocusEffect(
-        useCallback(() => {
-            const onBackPress = (e: any) => {
-                if (!modalVisible) {
-                    e.preventDefault();
-                    setModalVisible(true);
-                }
-            };
-
-            const subscription = commerceNavigation.addListener('beforeRemove', onBackPress);
-
-            return () => {
-                subscription();
-            };
-        }, [commerceNavigation, modalVisible])
-    );
 
     const handleGoBackConfirmed = () => {
         setModalVisible(false);
-        if (isClosing) {
-            commerceNavigation.dispatch(
-                CommonActions.reset({
-                    index: 0,
-                    routes: [{ name: 'home' }],
-                })
-            );
-            return;
-        }
-        commerceNavigation.dispatch(CommonActions.goBack());
+        commerceNavigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'home' }],
+            })
+        );
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
-
                 <CommerceHeader
-                    Title={'Cashback'}
-                    ScreenGoback={() => { setIsClosing(false); setModalVisible(true) }}
-                    ScreenClose={() => { setIsClosing(true); setModalVisible(true) }}
+                    Title={t("commerce.new_commerce.step5.headerLabel")}
+                    ScreenGoback={() => commerceNavigation.goBack()}
+                    ScreenClose={() => { setModalVisible(true) }}
                 />
 
                 <ScrollView
@@ -95,29 +71,27 @@ export default function New_Commerce_step_5({ route }: any) {
                 >
                     <View style={styles.sectionContainer}>
                         <View style={styles.section}>
-                            <Text style={styles.sectionTitle}>Desconto base em %</Text>
+                            <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.baseDiscount")}</Text>
                             <View style={styles.inputWrapper}>
                                 <Input
                                     placeholder={'10'}
-                                    onChange={(number: number) => setBaseDiscount(number)}
+                                    onChange={(discountValue: string) => setStepperData({ baseDiscount: discountValue })}
                                     keyboardType={'numeric'}
+                                    value={baseDiscount?.toString()}
                                 />
                             </View>
                         </View>
 
                         <View style={styles.section}>
-                            <Text style={styles.sectionTitle}>Tipo de Cashback</Text>
+                            <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.cashbackType")}</Text>
                             <Select
                                 options={typesOptions}
-                                onChangeSelect={(item: any) => setCashbackForm(item.name)}
-                                text={'Selecione'}
+                                onChangeSelect={(item: any) => setStepperData({ cashbackForm: item.text })}
+                                text={cashbackForm !== '' ? cashbackForm : t("commerce.new_commerce.step5.selectLabel")}
                                 SelectOption={SelectOption}
-                                selectedOption={0}
                             />
                         </View>
-                        {sections.length > 0 ?
-                            null
-                            :
+                        {sections.length === 0 && (
                             <TouchableOpacity
                                 activeOpacity={0.7}
                                 style={styles.addButtonContainer}
@@ -125,37 +99,39 @@ export default function New_Commerce_step_5({ route }: any) {
                             >
                                 <FontAwesome6 name="plus" size={16} color="black" />
                             </TouchableOpacity>
-                        }
+                        )}
                     </View>
 
                     {sections.map((section, index) => (
                         <View key={index} style={styles.sectionContainer}>
                             <View style={styles.rowContainer}>
                                 <View style={styles.smallSection}>
-                                    <Text style={styles.sectionTitle}>Valor mínimo</Text>
+                                    <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.minimalValueLabel")}</Text>
                                     <View style={styles.inputWrapper}>
                                         <Input
-                                            placeholder={'50c'}
+                                            placeholder={t("commerce.new_commerce.step5.minimalCurrencyPlaceholder")}
                                             keyboardType={'numeric'}
                                             onChange={(value: string) => {
-                                                const newSections = [...sections];
-                                                newSections[index].minValue = value;
-                                                setSections(newSections);
+                                                const updatedSections = sections.map((s, i) =>
+                                                    i === index ? { ...s, minValue: value } : s
+                                                );
+                                                setStepperData({ sections: updatedSections });
                                             }}
                                             value={section.minValue}
                                         />
                                     </View>
                                 </View>
                                 <View style={styles.largeSection}>
-                                    <Text style={styles.sectionTitle}>Desconto da etapa em %</Text>
+                                    <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.discountSectionPorcentage")}</Text>
                                     <View style={styles.inputWrapper}>
                                         <Input
-                                            placeholder={'20'}
+                                            placeholder={t("commerce.new_commerce.step5.discountSectionPorcentagePlaceholder")}
                                             keyboardType={'numeric'}
                                             onChange={(value: string) => {
-                                                const newSections = [...sections];
-                                                newSections[index].discount = value;
-                                                setSections(newSections);
+                                                const updatedSections = sections.map((s, i) =>
+                                                    i === index ? { ...s, discount: value } : s
+                                                );
+                                                setStepperData({ sections: updatedSections });
                                             }}
                                             value={section.discount}
                                         />
@@ -164,17 +140,17 @@ export default function New_Commerce_step_5({ route }: any) {
                             </View>
 
                             <View style={styles.section}>
-                                <Text style={styles.sectionTitle}>Tipo de Cashback</Text>
+                                <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.cashbackType")}</Text>
                                 <Select
                                     options={typesOptions}
                                     onChangeSelect={(item: any) => {
-                                        const newSections = [...sections];
-                                        newSections[index].type = item.name;
-                                        setSections(newSections);
+                                        const updatedSections = sections.map((s, i) =>
+                                            i === index ? { ...s, type: item.text } : s
+                                        );
+                                        setStepperData({ sections: updatedSections });
                                     }}
-                                    text={'Selecione'}
+                                    text={section.type !== '' ? section.type : t("commerce.new_commerce.step5.selectLabel")}
                                     SelectOption={SelectOption}
-                                    selectedOption={0}
                                 />
                             </View>
 
@@ -204,7 +180,7 @@ export default function New_Commerce_step_5({ route }: any) {
 
                 <View style={styles.footer}>
                     <View style={styles.stepperLayoutContainer}>
-                        <Text style={styles.stepperLayoutText}>6 de 6</Text>
+                        <Text style={styles.stepperLayoutText}>{t("commerce.new_commerce.step5.currentStepper")}</Text>
                         <View style={styles.stepperLayout}></View>
                         <View style={styles.stepperLayout}></View>
                         <View style={styles.stepperLayout}></View>
@@ -232,7 +208,9 @@ export default function New_Commerce_step_5({ route }: any) {
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
-};
+}
+
+
 
 const styles = StyleSheet.create({
     container: {

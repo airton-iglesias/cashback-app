@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, Modal } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { CommerceStackParamList } from '../../types/navigationTypes';
+import { CommerceStackParamList } from '@/types/navigationTypes';
 import { Feather, AntDesign } from '@expo/vector-icons';
 import Switch from '@/components/switch';
 import CommerceHeader from './commerceHeader';
+import {useLocale} from "@/contexts/TranslationContext";
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
@@ -16,6 +17,7 @@ export default function CommerceAssociateEdit() {
 
     const [modalVisible, setModalVisible] = useState(false);
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
+    const { t } = useLocale();
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -34,7 +36,7 @@ export default function CommerceAssociateEdit() {
                 />
 
                 <View style={styles.idContainer}>
-                    <Text style={styles.idLabel}>ID</Text>
+                    <Text style={styles.idLabel}>{t("commerce.edit_associate.id")}</Text>
                     <TextInput
                         cursorColor={'#ADB5BD'}
                         value={'355643'}
@@ -57,21 +59,21 @@ export default function CommerceAssociateEdit() {
 
                 <View style={styles.switchContainer}>
                     <View style={styles.switchRow}>
-                        <Text style={styles.switchLabel}>Administrador</Text>
+                        <Text style={styles.switchLabel}>{t("commerce.edit_associate.admin")}</Text>
                         <Switch
                             onChange={((mode: boolean) => setAdministrador(mode))}
                             value={administrador}
                         />
                     </View>
                     <View style={styles.switchRow}>
-                        <Text style={styles.switchLabel}>Pode ver registros</Text>
+                        <Text style={styles.switchLabel}>{t("commerce.edit_associate.can_see_logs")}</Text>
                         <Switch
                             onChange={((mode: boolean) => setCanSeeLogs(mode))}
                             value={canSeeLogs}
                         />
                     </View>
                     <View style={styles.switchRow}>
-                        <Text style={styles.switchLabel}>Pode ver e apagar registros</Text>
+                        <Text style={styles.switchLabel}>{t("commerce.edit_associate.can_see_and_erase_logs")}</Text>
                         <Switch
                             onChange={((mode: boolean) => setCanEraseLogs(mode))}
                             value={canEraseLogs}
@@ -83,7 +85,7 @@ export default function CommerceAssociateEdit() {
                             onPress={() => setModalVisible(!modalVisible)}
                             style={styles.delAssociate}
                         >
-                            <Text style={styles.deleteAccountText}>Desassociar conta</Text>
+                            <Text style={styles.deleteAccountText}>{t("commerce.edit_associate.disassociate_user")}</Text>
                             <Feather name="trash" size={24} color="#DC3545" style={styles.deleteIcon} />
                         </TouchableOpacity>
                     </View>
@@ -115,7 +117,7 @@ export default function CommerceAssociateEdit() {
                         <View style={[styles.iconContainer, styles.deleteIconContainer]}>
                             <Feather name="trash" size={24} color="#DC3545" />
                         </View>
-                        <Text style={styles.modalText}>Remover conta?</Text>
+                        <Text style={styles.modalText}>{t("commerce.edit_associate.modal.remove_user")}</Text>
                         <View style={styles.buttonContainer}>
 
                             <TouchableOpacity

@@ -3,11 +3,11 @@ import { SafeAreaView, View, StyleSheet } from 'react-native';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Feather } from '@expo/vector-icons';
-import { CommerceStackParamList } from '../../../types/navigationTypes';
+import { CommerceStackParamList } from '@/types/navigationTypes';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
 
-export default function New_Commerce_step_7() {
+export default function New_Commerce_Step_7() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
 
     useEffect(() => {

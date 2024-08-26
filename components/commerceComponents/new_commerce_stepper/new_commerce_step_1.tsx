@@ -1,29 +1,29 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
-import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
-import Select from '../../select';
-import SelectOption from '../../selectOption';
+import Select from '@/components/select';
+import SelectOption from '@/components/selectOption';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { CommerceStackParamList } from '../../../types/navigationTypes';
+import { CommerceStackParamList } from '@/types/navigationTypes';
 import Input from '@/components/input';
-import CommerceHeader from '../commerceHeader';
-import CommerceGoBackModal from '../commerceGoBackModal';
+import CommerceHeader from '@/components/commerceComponents/commerceHeader';
+import CommerceGoBackModal from '@/components/commerceComponents/commerceGoBackModal';
+import { useStepperContext } from '@/contexts/CommerceStepperContext';
+import { useLocale } from '@/contexts/TranslationContext';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
 
-export default function New_Commerce_step_1({ route }: any) {
+export default function New_Commerce_Step_1() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
 
-    const { CashbackType, PlaceType } = route.params;
-    const [referenceUser, setReferenceUser] = useState<string>('');
-    const [association, setAssiation] = useState<string>('');
-    const [title, setTitle] = useState<string>('');
-    const [userPoints, setUserPoints] = useState<string>('');
+    const { PlaceType, referenceUser, 
+        association, title, userPoints, setStepperData
+    } = useStepperContext();
 
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [isClosing, setIsClosing] = useState(false);
-
+    const { t } = useLocale();
+    
     const AssociationOptions = [
         { id: 1, text: 'Promoção' },
         { id: 2, text: 'Evento' },
@@ -34,35 +34,14 @@ export default function New_Commerce_step_1({ route }: any) {
         { id: 3, text: 'Bruno' },
     ];
 
-    useFocusEffect(
-        useCallback(() => {
-            const onBackPress = (e: any) => {
-                if (!modalVisible) {
-                    e.preventDefault();
-                    setModalVisible(true);
-                }
-            };
-
-            const subscription = commerceNavigation.addListener('beforeRemove', onBackPress);
-
-            return () => {
-                subscription();
-            };
-        }, [commerceNavigation, modalVisible])
-    );
-
     const handleGoBackConfirmed = () => {
         setModalVisible(false);
-        if (isClosing) {
-            commerceNavigation.dispatch(
-                CommonActions.reset({
-                    index: 0,
-                    routes: [{ name: 'home' }],
-                })
-            );
-            return;
-        }
-        commerceNavigation.dispatch(CommonActions.goBack());
+        commerceNavigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'home' }],
+            })
+        );
     };
 
     return (
@@ -70,57 +49,57 @@ export default function New_Commerce_step_1({ route }: any) {
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
 
                 <CommerceHeader
-                    Title={'Dados básicos'}
-                    ScreenGoback={() => { setIsClosing(false); setModalVisible(true) }}
-                    ScreenClose={() => { setIsClosing(true); setModalVisible(true) }}
+                    Title={t("commerce.new_commerce.step1.headerLabel")}
+                    ScreenGoback={() => commerceNavigation.goBack()}
+                    ScreenClose={() => setModalVisible(true)}
                 />
 
                 <View style={styles.longInputWrapper}>
                     <Input
-                        label={"Título"}
+                        label={t("commerce.new_commerce.step1.titleLabel")}
                         placeholder=""
-                        onChange={(text: string) => setTitle(text)}
+                        value={title}
+                        onChange={(text: string) => setStepperData({title: text})}
                         type={'text'}
                     />
                 </View>
 
                 {PlaceType === "Físico" ?
                     null :
-
                     <View style={styles.selectSection}>
-                        <Text style={styles.inputLabel}>Associar</Text>
+                        <Text style={styles.inputLabel}>{t("commerce.new_commerce.step1.associationLabel")}</Text>
                         <Select
                             options={AssociationOptions}
-                            onChangeSelect={(item: any) => setAssiation(item.text)}
-                            text={''}
+                            onChangeSelect={(item: any) => setStepperData({association: item.text})}
+                            text={association != '' ? association : t("commerce.new_commerce.step1.selectLabel")}
                             SelectOption={SelectOption}
                         />
                     </View>
-
                 }
 
                 <View style={styles.selectSection}>
-                    <Text style={styles.inputLabel}>Creditar pontos no usuário</Text>
+                    <Text style={styles.inputLabel}>{t("commerce.new_commerce.step1.userPoints")}</Text>
                     <Select
                         options={userPointsOptions}
-                        onChangeSelect={(item: any) => setUserPoints(item.text)}
-                        text={'Selecione'}
+                        onChangeSelect={(item: any) => setStepperData({ userPoints: item.text})}
+                        text={userPoints != '' ? userPoints : t("commerce.new_commerce.step1.selectLabel")}
                         SelectOption={SelectOption}
                     />
                 </View>
 
                 <View style={styles.longInputWrapper}>
                     <Input
-                        label={"Referido por"}
-                        placeholder="ID"
-                        onChange={(text: string) => setReferenceUser(text)}
+                        label={t("commerce.new_commerce.step1.referedBy")}
+                        placeholder={t("commerce.new_commerce.step1.ID")}
+                        onChange={(text: string) => setStepperData({referenceUser: text})}
+                        value={referenceUser}
                         type={'text'}
                     />
                 </View>
             </ScrollView>
             <View style={styles.footer}>
                 <View style={styles.stepperLayoutContainer}>
-                    <Text style={styles.stepperLayoutText}>2 de 6</Text>
+                    <Text style={styles.stepperLayoutText}>{t("commerce.new_commerce.step1.currentStepper")}</Text>
                     <View style={styles.stepperLayout}></View>
                     <View style={styles.stepperLayoutSelected}></View>
                     <View style={styles.stepperLayout}></View>
@@ -131,9 +110,7 @@ export default function New_Commerce_step_1({ route }: any) {
 
                 <View style={styles.nextButton}>
                     <TouchableOpacity style={styles.nextButtonContent}
-                        onPress={() => commerceNavigation.navigate("new_commerce_step_2",
-                            { CashbackType, PlaceType, referenceUser, association, title, userPoints }
-                        )}
+                        onPress={() => commerceNavigation.navigate("new_commerce_step_2")}
                         activeOpacity={0.7}
                     >
                         <Feather name="arrow-right" size={24} color="white" />

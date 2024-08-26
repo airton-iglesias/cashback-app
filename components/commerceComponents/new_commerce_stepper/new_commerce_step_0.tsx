@@ -1,31 +1,67 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
-import { CommerceStackParamList } from '../../../types/navigationTypes';
+import { CommerceStackParamList } from '@/types/navigationTypes';
 import CommerceHeader from '../commerceHeader';
 import RadioCommerce from '../radioCommerce';
 import RadioCommerceType from '../radioCommerceType';
+import CommerceGoBackModal from '../commerceGoBackModal';
+import { useStepperContext } from '@/contexts/CommerceStepperContext';
+import { useLocale } from '@/contexts/TranslationContext';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
-export default function New_Commerce_step_0({route}: any) {
+export default function New_Commerce_Step_0({route}: any) {
 
-    const { editor } = route.params || {};
-
-    const [CashbackType, setCashbackType] = useState<string>('Permanente');
-    const [PlaceType, setPlaceType] = useState<string>('Físico');
+    const {editor} = route.params || {};
+    
+    const {
+        selectedType, selectedPlace, setStepperData
+    } = useStepperContext();
 
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
-    const [selectedType, setSelectedType] = useState<number>(0);
-    const [selectedPlace, setSelectedPlace] = useState<number>(0);
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [isClosing, setIsClosing] = useState(false);
+    const { t } = useLocale();
+    
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = (e: any) => {
+                if (!modalVisible) {
+                    e.preventDefault();
+                    setModalVisible(true);
+                }
+            };
+
+            const subscription = commerceNavigation.addListener('beforeRemove', onBackPress);
+
+            return () => {
+                subscription();
+            };
+        }, [commerceNavigation, modalVisible])
+    );
+
+    const handleGoBackConfirmed = () => {
+        setModalVisible(false);
+        if (isClosing) {
+            commerceNavigation.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: 'home' }],
+                })
+            );
+            return;
+        }
+        commerceNavigation.dispatch(CommonActions.goBack());
+    };
 
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <CommerceHeader
-                    Title={editor ? 'Editar':'Novo'}
+                    Title={editor ? t("commerce.new_commerce.step0.edit") : t("commerce.new_commerce.step0.new")}
                     ScreenGoback={() => commerceNavigation.goBack()}
                     ScreenClose={() => commerceNavigation.dispatch(
                         CommonActions.reset({
@@ -36,26 +72,27 @@ export default function New_Commerce_step_0({route}: any) {
                 />
 
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Escolha um tipo</Text>
+                    <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step0.typeLabel")}</Text>
                     <RadioCommerceType
                         selected={selectedType}
-                        options={['Permanente', 'Evento', 'Promoção']}
-                        onChangeSelect={(opt, i) => { setSelectedType(i); setCashbackType(opt) }}
+                        options={[t("commerce.new_commerce.step0.permanent"), t("commerce.new_commerce.step0.event"), t("commerce.new_commerce.step0.promotion")]}
+                        onChangeSelect={(opt, i) => setStepperData({ CashbackType: opt, selectedType: i })}
                     />
                 </View>
 
                 <View style={styles.section}>
-                    <Text style={[styles.sectionTitle, { marginTop: 10, marginBottom: 35 }]}>Físico ou online?</Text>
+                    <Text style={[styles.sectionTitle, { marginTop: 10, marginBottom: 35 }]}>{t("commerce.new_commerce.step0.placeLabel")}</Text>
                     <RadioCommerce
                         selected={selectedPlace}
-                        options={['Físico', 'Web']}
-                        onChangeSelect={(opt, i) => { setSelectedPlace(i); setPlaceType(opt) }}
+                        options={[t("commerce.new_commerce.step0.fisic"), t("commerce.new_commerce.step0.web")]}
+                        onChangeSelect={(opt, i) => setStepperData({ PlaceType: opt, selectedPlace: i })}
                     />
                 </View>
             </ScrollView>
+
             <View style={styles.footer}>
                 <View style={styles.stepperLayoutContainer}>
-                    <Text style={styles.stepperLayoutText}>1 de 6</Text>
+                    <Text style={styles.stepperLayoutText}>{t("commerce.new_commerce.step0.currentStepper")}</Text>
                     <View style={styles.stepperLayoutSelected}></View>
                     <View style={styles.stepperLayout}></View>
                     <View style={styles.stepperLayout}></View>
@@ -65,13 +102,18 @@ export default function New_Commerce_step_0({route}: any) {
                 </View>
                 <View style={styles.nextButton}>
                     <TouchableOpacity style={styles.nextButtonContent}
-                        onPress={() => commerceNavigation.navigate("new_commerce_step_1", { CashbackType, PlaceType })}
+                        onPress={() => commerceNavigation.navigate("new_commerce_step_1")}
                         activeOpacity={0.7}
                     >
                         <Feather name="arrow-right" size={24} color="white" />
                     </TouchableOpacity>
                 </View>
             </View>
+            <CommerceGoBackModal
+                modalVisible={modalVisible}
+                setModalVisible={() => setModalVisible(false)}
+                ScreenGoback={handleGoBackConfirmed}
+            />
         </SafeAreaView>
     );
 };

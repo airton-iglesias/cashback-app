@@ -6,6 +6,7 @@ import CommerceScreen from '../screens/commerce';
 import { RootStackParamList } from '../types/navigationTypes';
 import WallatExtract from '@/components/dashboardComponents/wallat/wallatExtract';
 import RecoveryDatas from '@/screens/RecoveryDatas';
+import MapLocation from '@/components/mapLocation';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -17,6 +18,7 @@ export const RootStackNavigation = () => {
             <RootStack.Screen name="profile" component={Profile} options={{ headerShown: false }} />
             <RootStack.Screen name="points" component={Points} options={{ headerShown: false }} />
             <RootStack.Screen name="wallatextract" component={WallatExtract} options={{ headerShown: false }} />
+            <RootStack.Screen name="maplocation" component={MapLocation} options={{ headerShown: false }} />
             <RootStack.Screen name="recoveryDatas" component={RecoveryDatas} options={{ headerShown: false }} />
         </RootStack.Navigator>
     );

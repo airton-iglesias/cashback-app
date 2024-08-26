@@ -4,7 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../types/navigationTypes";
+import { RootStackParamList } from "@/types/navigationTypes";
 import { useRoute } from '@react-navigation/native';
 import StoreIcon from "@/assets/icons/storeIcon";
 
@@ -64,7 +64,7 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                         placeholderTextColor="#4b5563"
                         textAlign={route.name === "home" ? "center" : "right"}
                         value={value}
-                        readOnly={route.name === "home" ? true : false}
+                        readOnly={route.name === "home"}
                         style={[
                             styles.textInput,
                             {

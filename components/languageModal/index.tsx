@@ -32,6 +32,7 @@ export default function LanguageModal({ modalVisible, handleCloseModal }: any) {
                         <View style={styles.languageOptionsWrapper}>
                             {languages.map((language, index) => (
                                 <TouchableOpacity
+                                    activeOpacity={0.7}
                                     key={index}
                                     style={[
                                         styles.languageOption,
@@ -50,7 +51,7 @@ export default function LanguageModal({ modalVisible, handleCloseModal }: any) {
             </View>
 
             <View style={styles.buttonWrapper}>
-                <TouchableOpacity style={styles.button} onPress={handleCloseModal}>
+                <TouchableOpacity style={styles.button} onPress={handleCloseModal} activeOpacity={0.7}>
                     <Feather name="arrow-right" size={24} color={'black'} />
                 </TouchableOpacity>
             </View>

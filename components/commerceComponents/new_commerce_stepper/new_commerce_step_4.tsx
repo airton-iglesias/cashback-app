@@ -1,38 +1,26 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet, Image } from 'react-native';
-import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { CommerceStackParamList } from '../../../types/navigationTypes';
+import { CommerceStackParamList } from '@/types/navigationTypes';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import CommerceHeader from '../commerceHeader';
 import CommerceGoBackModal from '../commerceGoBackModal';
+import { useStepperContext } from '@/contexts/CommerceStepperContext';
+import { useLocale } from '@/contexts/TranslationContext';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList, 'home'>;
-type ImageFile = {
-    uri: string;
-    file: File;
-};
 
-
-export default function New_Commerce_step_4({ route }: any) {
+export default function New_Commerce_Step_4() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
-
-    const {
-        CashbackType, PlaceType, referenceUser,
-        association, title, userPoints, webSite, startDate,
-        endDate, startHour, endHour, mapAdress, description
-    } = route.params || {};
-
-    const [logoImage, setLogoImage] = useState<{ uri: string, file: File } | null>(null);
-    const [posterImage, setPosterImage] = useState<{ uri: string, file: File } | null>(null);
-    const [descriptionImages, setDescriptionImages] = useState<{ uri: string, file: File }[]>([]);
+    const { PlaceType, logoImage, posterImage, descriptionImages, setStepperData } = useStepperContext();
 
     const scrollViewRef = useRef<ScrollView>(null);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [isClosing, setIsClosing] = useState(false);
-
+    const { t } = useLocale();
+    
     const uriToFile = async (uri: string, name: string): Promise<File> => {
         const fileUri = `${FileSystem.cacheDirectory}${name}`;
         await FileSystem.copyAsync({
@@ -59,7 +47,7 @@ export default function New_Commerce_step_4({ route }: any) {
 
         if (!result.canceled) {
             const file = await uriToFile(result.assets[0].uri, 'logoImage.jpg');
-            setLogoImage({ uri: result.assets[0].uri, file });
+            setStepperData({ logoImage: { uri: result.assets[0].uri, file } });
         }
     };
 
@@ -73,7 +61,7 @@ export default function New_Commerce_step_4({ route }: any) {
 
         if (!result.canceled) {
             const file = await uriToFile(result.assets[0].uri, 'posterImage.jpg');
-            setPosterImage({ uri: result.assets[0].uri, file });
+            setStepperData({ posterImage: { uri: result.assets[0].uri, file } });
         }
     };
 
@@ -89,7 +77,7 @@ export default function New_Commerce_step_4({ route }: any) {
 
         if (!result.canceled) {
             const file = await uriToFile(result.assets[0].uri, `descriptionImage_${descriptionImages.length + 1}.jpg`);
-            setDescriptionImages([...descriptionImages, { uri: result.assets[0].uri, file }]);
+            setStepperData({ descriptionImages: [...descriptionImages, { uri: result.assets[0].uri, file }] });
         }
 
         setTimeout(() => {
@@ -100,85 +88,41 @@ export default function New_Commerce_step_4({ route }: any) {
     const removeImage = (index: number) => {
         const newImages = [...descriptionImages];
         newImages.splice(index, 1);
-        setDescriptionImages(newImages);
+        setStepperData({ descriptionImages: newImages });
     };
 
     const handleNexStep = () => {
         if (PlaceType === "Físico") {
-            commerceNavigation.navigate("new_commerce_step_5",
-                {
-                    CashbackType, PlaceType, referenceUser,
-                    association, title, userPoints, webSite, startDate,
-                    endDate, startHour, endHour, mapAdress, description,
-                    logoImage: logoImage ? logoImage.file : null,
-                    posterImage: posterImage ? posterImage.file : null,
-                    descriptionImages: descriptionImages.map(image => image.file)
-                }
-            )
+            commerceNavigation.navigate("new_commerce_step_5");
             return;
-        };
-
-        commerceNavigation.navigate("new_commerce_step_6",
-            {
-                CashbackType, PlaceType, referenceUser,
-                association, title, userPoints, webSite, startDate,
-                endDate, startHour, endHour, mapAdress, description,
-                logoImage: logoImage ? logoImage.file : null,
-                posterImage: posterImage ? posterImage.file : null,
-                descriptionImages: descriptionImages.map(image => image.file)
-            }
-        );
+        }
+        commerceNavigation.navigate("new_commerce_step_6");
     };
-
-    useFocusEffect(
-        useCallback(() => {
-            const onBackPress = (e: any) => {
-                if (!modalVisible) {
-                    e.preventDefault();
-                    setModalVisible(true);
-                }
-            };
-
-            const subscription = commerceNavigation.addListener('beforeRemove', onBackPress);
-
-            return () => {
-                subscription();
-            };
-        }, [commerceNavigation, modalVisible])
-    );
 
     const handleGoBackConfirmed = () => {
         setModalVisible(false);
-        if (isClosing) {
-            commerceNavigation.dispatch(
-                CommonActions.reset({
-                    index: 0,
-                    routes: [{ name: 'home' }],
-                })
-            );
-            return;
-        }
-        commerceNavigation.dispatch(CommonActions.goBack());
+        commerceNavigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'home' }],
+            })
+        );
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
-
                     <CommerceHeader
-                        Title={'Imagens e vídeos'}
-                        ScreenGoback={() => { setIsClosing(false); setModalVisible(true) }}
-                        ScreenClose={() => { setIsClosing(true); setModalVisible(true) }}
+                        Title={t("commerce.new_commerce.step4.headerLabel")}
+                        ScreenGoback={() => commerceNavigation.goBack()}
+                        ScreenClose={() => { setModalVisible(true); }}
                     />
-
+                    {/* Logomarca */}
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Logomarca</Text>
+                        <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step4.logoLabel")}</Text>
                         <View>
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                onPress={pickLogoImage}
-                            >
+                            <TouchableOpacity activeOpacity={0.7} onPress={pickLogoImage}>
                                 <View style={styles.uploadContainer}>
                                     {logoImage ? (
                                         <Image source={{ uri: logoImage.uri }} style={styles.imageThumbnail} resizeMode={'cover'} />
@@ -190,7 +134,7 @@ export default function New_Commerce_step_4({ route }: any) {
                             {logoImage && (
                                 <TouchableOpacity
                                     activeOpacity={0.7}
-                                    onPress={() => setLogoImage(null)}
+                                    onPress={() => setStepperData({ logoImage: null })}
                                     style={styles.removeButton}
                                 >
                                     <Feather name="trash" size={16} color="black" />
@@ -198,14 +142,11 @@ export default function New_Commerce_step_4({ route }: any) {
                             )}
                         </View>
                     </View>
-
+                    {/* Cartaz */}
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Cartaz</Text>
+                        <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step4.bannerLabel")}</Text>
                         <View>
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                onPress={pickBannerImage}
-                            >
+                            <TouchableOpacity activeOpacity={0.7} onPress={pickBannerImage}>
                                 <View style={styles.uploadContainer}>
                                     {posterImage ? (
                                         <Image source={{ uri: posterImage.uri }} style={styles.imageThumbnail} resizeMode={'cover'} />
@@ -217,7 +158,7 @@ export default function New_Commerce_step_4({ route }: any) {
                             {posterImage && (
                                 <TouchableOpacity
                                     activeOpacity={0.7}
-                                    onPress={() => setPosterImage(null)}
+                                    onPress={() => setStepperData({ posterImage: null })}
                                     style={styles.removeButton}
                                 >
                                     <Feather name="trash" size={16} color="black" />
@@ -225,10 +166,10 @@ export default function New_Commerce_step_4({ route }: any) {
                             )}
                         </View>
                     </View>
-
+                    {/* Imagens de Descrição */}
                     <View style={styles.section}>
                         <View style={styles.imagesHeader}>
-                            <Text style={styles.sectionTitleScrollable}>Imagens de descrição</Text>
+                            <Text style={styles.sectionTitleScrollable}>{t("commerce.new_commerce.step4.descriptionImageLabel")}</Text>
                             <Text style={styles.imageCount}>{descriptionImages.length}/10</Text>
                         </View>
                         <ScrollView
@@ -250,10 +191,7 @@ export default function New_Commerce_step_4({ route }: any) {
                                 </View>
                             ))}
                             {descriptionImages.length < 10 && (
-                                <TouchableOpacity
-                                    activeOpacity={0.7}
-                                    onPress={pickMultipleImages}
-                                >
+                                <TouchableOpacity activeOpacity={0.7} onPress={pickMultipleImages}>
                                     <View style={styles.uploadContainer}>
                                         <Feather name="upload" size={24} color="black" />
                                     </View>
@@ -262,10 +200,10 @@ export default function New_Commerce_step_4({ route }: any) {
                         </ScrollView>
                     </View>
                 </ScrollView>
-
+                {/* Footer */}
                 <View style={styles.footer}>
                     <View style={styles.stepperLayoutContainer}>
-                        <Text style={styles.stepperLayoutText}>5 de 6</Text>
+                        <Text style={styles.stepperLayoutText}>{t("commerce.new_commerce.step4.currentStepper")}</Text>
                         <View style={styles.stepperLayout}></View>
                         <View style={styles.stepperLayout}></View>
                         <View style={styles.stepperLayout}></View>
@@ -273,7 +211,6 @@ export default function New_Commerce_step_4({ route }: any) {
                         <View style={styles.stepperLayoutSelected}></View>
                         <View style={styles.stepperLayout}></View>
                     </View>
-
                     <View style={styles.nextButton}>
                         <TouchableOpacity
                             style={styles.nextButtonContent}
@@ -284,7 +221,7 @@ export default function New_Commerce_step_4({ route }: any) {
                         </TouchableOpacity>
                     </View>
                 </View>
-
+                {/* Modal de Confirmação */}
                 <CommerceGoBackModal
                     modalVisible={modalVisible}
                     setModalVisible={() => setModalVisible(false)}
@@ -294,6 +231,7 @@ export default function New_Commerce_step_4({ route }: any) {
         </SafeAreaView>
     );
 }
+
 
 
 

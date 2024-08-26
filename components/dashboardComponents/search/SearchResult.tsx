@@ -154,7 +154,7 @@ export default function SearchResult() {
         <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.headerWrapper}>
-                    <TouchableOpacity style={styles.headerBackIcon} onPress={() => SearchNavigation.goBack()}>
+                    <TouchableOpacity style={styles.headerBackIcon} onPress={() => SearchNavigation.goBack()} activeOpacity={0.7}>
                         <Entypo name="chevron-left" size={24} color="white" />
                     </TouchableOpacity>
 
@@ -175,6 +175,7 @@ export default function SearchResult() {
 
                 <View style={styles.cashbackTypeWrapper}>
                     <TouchableOpacity
+                        activeOpacity={0.7}
                         style={[
                             styles.cashbackTypeButton,
                             activeFilter === 'Comercios' && styles.cashbackTypeButtonAtive
@@ -184,12 +185,14 @@ export default function SearchResult() {
                         <Text style={activeFilter === 'Comercios' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>{t("dashboardSearchResults.topbar.commerce")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                        activeOpacity={0.7}
                         style={[styles.cashbackTypeButton, styles.cashbackTypeButtonMiddle, activeFilter === 'Eventos' && styles.cashbackTypeButtonAtive,]}
                         onPress={() => handleFilterChange('Eventos')}
                     >
                         <Text style={activeFilter === 'Eventos' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>{t("dashboardSearchResults.topbar.events")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                        activeOpacity={0.7}
                         style={[
                             styles.cashbackTypeButton,
                             activeFilter === 'Promoções' && styles.cashbackTypeButtonAtive
@@ -205,16 +208,16 @@ export default function SearchResult() {
                 <Text style={styles.searchResultInfosText}>{filteredData.length} {t("dashboardSearchResults.content.results")}</Text>
                 <View style={styles.iconsWrapper}>
                     {showMap ?
-                        <TouchableOpacity onPress={handleShowMap}>
+                        <TouchableOpacity onPress={handleShowMap} activeOpacity={0.7}>
                             <FontAwesome5 name="list-ul" size={24} color="#0D6EFD" />
                         </TouchableOpacity>
                         :
                         <>
-                            <TouchableOpacity onPress={handleShowMap}>
+                            <TouchableOpacity onPress={handleShowMap} activeOpacity={0.7}>
                                 <MapPinnedIcon />
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={() => setShowSortList(true)}>
+                            <TouchableOpacity onPress={() => setShowSortList(true)} activeOpacity={0.7}>
                                 <FontAwesome5 name="sort-alpha-up" size={24} color="#0D6EFD" />
                             </TouchableOpacity>
                         </>
@@ -226,6 +229,7 @@ export default function SearchResult() {
                     <View style={styles.sortMenuWrapper}>
                         <Text style={styles.sortMenuLabel}>{t("dashboardSearchResults.filter.showBy")}</Text>
                         <TouchableOpacity
+                            activeOpacity={0.7}
                             style={sortCriteria === 'discount' ? styles.sortMenuSelected : styles.sortMenuButton}
                             onPress={() => handleSortChange('discount')}
                         >
@@ -234,6 +238,7 @@ export default function SearchResult() {
 
 
                         <TouchableOpacity
+                            activeOpacity={0.7}
                             style={sortCriteria === 'distance' ? styles.sortMenuSelected : styles.sortMenuButton}
                             onPress={() => handleSortChange('distance')}
                         >
@@ -242,6 +247,7 @@ export default function SearchResult() {
 
 
                         <TouchableOpacity
+                            activeOpacity={0.7}
                             style={sortCriteria === 'today' ? styles.sortMenuSelected : styles.sortMenuButton}
                             onPress={() => handleSortChange('today')}
                         >
@@ -250,6 +256,7 @@ export default function SearchResult() {
 
 
                         <TouchableOpacity
+                            activeOpacity={0.7}
                             style={sortCriteria === 'date' ? styles.sortMenuSelected : styles.sortMenuButton}
                             onPress={() => handleSortChange('date')}
                         >
@@ -274,7 +281,7 @@ export default function SearchResult() {
                     data={filteredData}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
-                        <TouchableOpacity style={styles.item} onPress={() => handleItemPress(item)}>
+                        <TouchableOpacity style={styles.item} onPress={() => handleItemPress(item)} activeOpacity={0.7}>
                             <Image style={styles.image} source={require('../../../assets/images/reidobacalhau.png')} />
                             <View style={styles.textContainer}>
                                 <Text numberOfLines={2} style={styles.title}>{item.title}</Text>
@@ -308,7 +315,7 @@ export default function SearchResult() {
 
             {showMap ?
                 <View style={[styles.mapButtonWrapper, isKeyboardVisible ? null : { paddingBottom: 80 }]}>
-                    <TouchableOpacity onPress={handleMapButtonOpen}>
+                    <TouchableOpacity onPress={handleMapButtonOpen} activeOpacity={0.7}>
                         <View style={styles.mapButtonContent}>
                             <Text style={styles.mapButtonText}>{t("dashboardSearchResults.filter.map.commerce")}</Text>
                             {isMapButtonOpen ?
@@ -322,7 +329,7 @@ export default function SearchResult() {
 
                     {isMapButtonOpen && (
                         isMapSelectedItem && selectedItem ? (
-                            <TouchableOpacity style={styles.item} onPress={() => handleItemPress(selectedItem)}>
+                            <TouchableOpacity style={styles.item} onPress={() => handleItemPress(selectedItem)} activeOpacity={0.7}>
                                 <Image style={styles.image} source={require('../../../assets/images/reidobacalhau.png')} />
                                 <View style={styles.textContainer}>
                                     <Text numberOfLines={2} style={styles.title}>{selectedItem.title}</Text>

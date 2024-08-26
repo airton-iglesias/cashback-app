@@ -1,51 +1,35 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
-import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { CommerceStackParamList } from '../../../types/navigationTypes';
+import { CommerceStackParamList } from '@/types/navigationTypes';
 import Input from '@/components/input';
 import CommerceHeader from '../commerceHeader';
 import CommerceGoBackModal from '../commerceGoBackModal';
+import { useStepperContext } from '@/contexts/CommerceStepperContext';
+import { useLocale } from '@/contexts/TranslationContext';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
-export default function New_Commerce_step_6({ route }: any) {
-    const [email, setEmail] = useState('');
+export default function New_Commerce_Step_6() {
+
+    const { email, setStepperData } = useStepperContext();
 
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [isClosing, setIsClosing] = useState(false);
-
-    useFocusEffect(
-        useCallback(() => {
-            const onBackPress = (e: any) => {
-                if (!modalVisible) {
-                    e.preventDefault();
-                    setModalVisible(true);
-                }
-            };
-
-            const subscription = commerceNavigation.addListener('beforeRemove', onBackPress);
-
-            return () => {
-                subscription();
-            };
-        }, [commerceNavigation, modalVisible])
-    );
+    const { t } = useLocale();
 
     const handleGoBackConfirmed = () => {
         setModalVisible(false);
-        if (isClosing) {
-            commerceNavigation.dispatch(
-                CommonActions.reset({
-                    index: 0,
-                    routes: [{ name: 'home' }],
-                })
-            );
-            return;
-        }
-        commerceNavigation.dispatch(CommonActions.goBack());
+
+        commerceNavigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'home' }],
+            })
+        );
+        return;
     };
 
     return (
@@ -54,18 +38,19 @@ export default function New_Commerce_step_6({ route }: any) {
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
 
                     <CommerceHeader
-                        Title={'Mais informações'}
-                        ScreenGoback={() => { setIsClosing(false); setModalVisible(true) }}
-                        ScreenClose={() => { setIsClosing(true); setModalVisible(true) }}
+                        Title={t("commerce.new_commerce.step6.headerLabel")}
+                        ScreenGoback={() => commerceNavigation.goBack()}
+                        ScreenClose={() => setModalVisible(true) }
                     />
 
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>
-                            Email para a nossa equipa o contatar
+                            {t("commerce.new_commerce.step6.emailContactLabel")}
                         </Text>
                         <View style={styles.inputWrapper}>
                             <Input
-                                onChange={(text: string) => setEmail(email)}
+                                value={email}
+                                onChange={(text: string) => setStepperData({email: text})}
                                 type={'email'}
                             />
                         </View>
@@ -75,10 +60,11 @@ export default function New_Commerce_step_6({ route }: any) {
                         <View style={styles.noticeBox}>
                             <View style={styles.noticeTextContainer}>
                                 <Text style={styles.noticeText}>
-                                    Vamos contata-lo por email, para encontrar a melhor forma de os nossos clientes se tonarem vossos clientes.
+                                    {t("commerce.new_commerce.step6.warning1")}
+                                   
                                 </Text>
                                 <Text style={[styles.noticeText, styles.noticeTextMargin]}>
-                                    Indique um email seguro, com retorno rápido.
+                                    {t("commerce.new_commerce.step6.warning2")}
                                 </Text>
                             </View>
                             <View style={styles.noticeIconContainer}>
@@ -91,7 +77,7 @@ export default function New_Commerce_step_6({ route }: any) {
 
                 <View style={styles.footer}>
                     <View style={styles.stepperLayoutContainer}>
-                        <Text style={styles.stepperLayoutText}>6 de 6</Text>
+                        <Text style={styles.stepperLayoutText}>{t("commerce.new_commerce.step6.currentStepper")}</Text>
                         <View style={styles.stepperLayout}></View>
                         <View style={styles.stepperLayout}></View>
                         <View style={styles.stepperLayout}></View>

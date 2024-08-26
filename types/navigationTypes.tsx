@@ -22,6 +22,7 @@ export type RootStackParamList = {
   recoveryDatas: {
     type: string;
   };
+  maplocation: undefined;
 };
 
 export type WallatStackParamList = {
@@ -76,81 +77,15 @@ export type CommerceStackParamList = {
   commerce_add_access: undefined;
   commerce_associate_edit: undefined;
   commerce_qrcode: undefined;
-  new_commerce_step_0: {editor: boolean} | undefined;
-  new_commerce_step_1: { CashbackType: string; PlaceType: string };
-  new_commerce_step_2: { 
-    CashbackType: string; 
-    PlaceType: string; 
-    referenceUser: string; 
-    association: string; 
-    title: string; 
-    userPoints: string 
+  new_commerce_step_0: {
+    editor: boolean;
   };
-  new_commerce_step_3: {
-    CashbackType: string; 
-    PlaceType: string; 
-    referenceUser: string;
-    association: string; 
-    title: string; 
-    userPoints: string;
-    webSite: string;
-    startDate: string;
-    endDate: string;
-    startHour: string;
-    endHour: string;
-    mapAdress: string;
-  };
-  new_commerce_step_4: {
-    CashbackType: string; 
-    PlaceType: string; 
-    referenceUser: string;
-    association: string; 
-    title: string; 
-    userPoints: string;
-    webSite: string;
-    startDate: string;
-    endDate: string;
-    startHour: string;
-    endHour: string;
-    mapAdress: string;
-    description: string;
-  };
-  new_commerce_step_5: {
-    CashbackType: string; 
-    PlaceType: string; 
-    referenceUser: string;
-    association: string; 
-    title: string; 
-    userPoints: string;
-    webSite: string;
-    startDate: string;
-    endDate: string;
-    startHour: string;
-    endHour: string;
-    mapAdress: string;
-    description: string;
-    logoImage: File | null;
-    posterImage: File | null;
-    descriptionImages: File[] | null;
-  };
-  new_commerce_step_6: {
-    CashbackType: string; 
-    PlaceType: string; 
-    referenceUser: string;
-    association: string; 
-    title: string; 
-    userPoints: string;
-    webSite: string;
-    startDate: string;
-    endDate: string;
-    startHour: string;
-    endHour: string;
-    mapAdress: string;
-    description: string;
-    logoImage: File | null;
-    posterImage: File | null;
-    descriptionImages: File[] | null;
-  };
+  new_commerce_step_1: undefined;
+  new_commerce_step_2: undefined;
+  new_commerce_step_3: undefined;
+  new_commerce_step_4: undefined;
+  new_commerce_step_5: undefined;
+  new_commerce_step_6: undefined;
   new_commerce_step_7: undefined;
 };
 

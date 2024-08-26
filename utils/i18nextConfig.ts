@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import { getLocales } from 'expo-localization';
 
 import pt from '@/utils/locales/pt.json';
+import en from '@/utils/locales/en.json';
 
 const getLanguage = () => {
   const locales = getLocales();
@@ -21,6 +22,9 @@ const initializeI18Next = () => {
     resources: {
       pt: {
         translation: pt,
+      },
+      en: {
+        translation: en,
       },
     }
   });

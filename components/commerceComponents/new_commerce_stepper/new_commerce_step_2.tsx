@@ -1,36 +1,32 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
-import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { CommerceStackParamList } from '../../../types/navigationTypes';
+import { CommerceStackParamList } from '@/types/navigationTypes';
 import Input from '@/components/input';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import CommerceHeader from '../commerceHeader';
 import CommerceGoBackModal from '../commerceGoBackModal';
+import { useStepperContext } from '@/contexts/CommerceStepperContext';
+import { useLocale } from '@/contexts/TranslationContext';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
-export default function New_Commerce_step_2({ route }: any) {
+export default function New_Commerce_Step_2() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
 
-    const {
-        CashbackType,
-        PlaceType,
-        referenceUser,
-        association,
-        title,
-        userPoints } = route.params || {};
+    const { PlaceType,
+        webSite,
+        startDate,
+        endDate,
+        startHour,
+        endHour,
+        mapAdress, setStepperData
+    } = useStepperContext();
 
-    const [webSite, setWebsite] = useState<string>('');
-    const [startDate, setStartDate] = useState<string>('');
-    const [endDate, setEndDate] = useState<string>('');
-    const [startHour, setStartHour] = useState<string>('');
-    const [endHour, setEndHour] = useState<string>('');
-    const [mapAdress, setmapAdress] = useState<string>('');
-
+    const { t } = useLocale();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [isClosing, setIsClosing] = useState(false);
     const INITIAL_REGION = {
         latitude: 38.7266085,
         longitude: -9.1503216,
@@ -38,35 +34,16 @@ export default function New_Commerce_step_2({ route }: any) {
         longitudeDelta: 2,
     };
 
-    useFocusEffect(
-        useCallback(() => {
-            const onBackPress = (e: any) => {
-                if (!modalVisible) {
-                    e.preventDefault();
-                    setModalVisible(true);
-                }
-            };
-
-            const subscription = commerceNavigation.addListener('beforeRemove', onBackPress);
-
-            return () => {
-                subscription();
-            };
-        }, [commerceNavigation, modalVisible])
-    );
-
     const handleGoBackConfirmed = () => {
         setModalVisible(false);
-        if (isClosing) {
-            commerceNavigation.dispatch(
-                CommonActions.reset({
-                    index: 0,
-                    routes: [{ name: 'home' }],
-                })
-            );
-            return;
-        }
-        commerceNavigation.dispatch(CommonActions.goBack());
+
+        commerceNavigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'home' }],
+            })
+        );
+        return;
     };
 
 
@@ -75,35 +52,38 @@ export default function New_Commerce_step_2({ route }: any) {
             <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
                     <CommerceHeader
-                        Title={'Local e horário'}
-                        ScreenGoback={() => { setIsClosing(false); setModalVisible(true) }}
-                        ScreenClose={() => { setIsClosing(true); setModalVisible(true) }}
+                        Title={t("commerce.new_commerce.step2.headerLabel")}
+                        ScreenGoback={() => commerceNavigation.goBack()}
+                        ScreenClose={() => setModalVisible(true)}
                     />
 
                     <View style={styles.longInputWrapper}>
                         <Input
-                            label={'Web Site'}
-                            placeholder={'https://www.website.com'}
+                            label={t("commerce.new_commerce.step2.webSite")}
+                            value={webSite}
+                            placeholder={t("commerce.new_commerce.step2.webSitePlaceholder")}
                             type={'url'}
-                            onChange={(text: string) => setWebsite(text)}
+                            onChange={(text: string) => setStepperData({webSite: text})}
                         />
                     </View>
 
                     <View style={styles.dateTimeSection}>
                         <View style={styles.dateTimeBlock}>
                             <Input
-                                label={"Data de início"}
+                                label={t("commerce.new_commerce.step2.startDate")}
+                                value={startDate}
                                 maxLength={10}
                                 type={'date'}
-                                onChange={(text: string) => setStartDate(text)}
+                                onChange={(text: string) => setStepperData({startDate: text})}
                             />
                         </View>
                         <View style={styles.dateTimeBlock}>
                             <Input
-                                label={"Data de fim"}
+                                label={t("commerce.new_commerce.step2.endDate")}
+                                value={endDate}
                                 maxLength={10}
                                 type={'date'}
-                                onChange={(text: string) => setEndDate(text)}
+                                onChange={(text: string) => setStepperData({endDate: text})}
                             />
                         </View>
                     </View>
@@ -111,18 +91,20 @@ export default function New_Commerce_step_2({ route }: any) {
                     <View style={styles.dateTimeSection}>
                         <View style={styles.dateTimeBlock}>
                             <Input
-                                label={"Hora de início"}
+                                label={t("commerce.new_commerce.step2.startHour")}
+                                value={startHour}
                                 type={'time'}
                                 maxLength={8}
-                                onChange={(text: string) => setStartHour(text)}
+                                onChange={(text: string) => setStepperData({startHour: text})}
                             />
                         </View>
                         <View style={styles.dateTimeBlock}>
                             <Input
-                                label={"Hora de fim"}
+                                label={t("commerce.new_commerce.step2.endHour")}
+                                value={endHour}
                                 type={'time'}
                                 maxLength={8}
-                                onChange={(text: string) => setStartHour(text)}
+                                onChange={(text: string) => setStepperData({endHour: text})}
                             />
                         </View>
                     </View>
@@ -131,9 +113,10 @@ export default function New_Commerce_step_2({ route }: any) {
                         <View>
                             <View style={styles.longInputWrapper}>
                                 <Input
-                                    label={"Local do estabelecimento"}
-                                    placeholder={"Complexo Desportivo municipal do..."}
-                                    onChange={(text: string) => setEndHour(text)}
+                                    label={t("commerce.new_commerce.step2.locationLabel")}
+                                    value={mapAdress}
+                                    placeholder={t("commerce.new_commerce.step2.adressPlaceholder")}
+                                    onChange={(text: string) => setStepperData({mapAdress: text})}
                                 />
                             </View>
                             <View style={styles.mapContainer}>
@@ -155,7 +138,7 @@ export default function New_Commerce_step_2({ route }: any) {
                 </ScrollView>
                 <View style={styles.footer}>
                     <View style={styles.stepperLayoutContainer}>
-                        <Text style={styles.stepperLayoutText}>3 de 6</Text>
+                        <Text style={styles.stepperLayoutText}>{t("commerce.new_commerce.step2.currentStepper")}</Text>
                         <View style={styles.stepperLayout}></View>
                         <View style={styles.stepperLayout}></View>
                         <View style={styles.stepperLayoutSelected}></View>
@@ -168,13 +151,7 @@ export default function New_Commerce_step_2({ route }: any) {
                         <TouchableOpacity
                             activeOpacity={0.7}
                             style={styles.nextButtonContent}
-                            onPress={() => commerceNavigation.navigate("new_commerce_step_3",
-                                {
-                                    CashbackType, PlaceType, referenceUser,
-                                    association, title, userPoints, webSite, startDate,
-                                    endDate, startHour, endHour, mapAdress
-                                }
-                            )}
+                            onPress={() => commerceNavigation.navigate("new_commerce_step_3")}
                         >
                             <Feather name="arrow-right" size={24} color="white" />
                         </TouchableOpacity>

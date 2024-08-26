@@ -1,7 +1,9 @@
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import { Feather, AntDesign } from '@expo/vector-icons';
+import { useLocale } from '@/contexts/TranslationContext';
 
 export default function CommerceGoBackModal({ modalVisible, setModalVisible, ScreenGoback }: any) {
+    const { t } = useLocale();
     return (
         <Modal
             animationType="slide"
@@ -14,8 +16,8 @@ export default function CommerceGoBackModal({ modalVisible, setModalVisible, Scr
             <View style={styles.modalContainer}>
                 <View style={styles.modalView}>
                     <View>
-                        <Text style={styles.modalText}>Ao voltar, os dados serão perdidos.</Text>
-                        <Text style={styles.modalText}>Prosseguir?</Text>
+                        <Text style={styles.modalText}>{t("commerce.new_commerce.gobackModal.description1")}</Text>
+                        <Text style={styles.modalText}>{t("commerce.new_commerce.gobackModal.description2")}</Text>
                     </View>
                     <View style={styles.buttonContainer}>
 

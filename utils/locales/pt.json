@@ -131,5 +131,175 @@
         "resetPin": "Redefinir pin",
         "confirmPin": "Confirmar pin",
         "pinError": "Pin validate error"
+    },
+    "commerce": {
+        "home": {
+            "label": "Crie um novo estabelecimento, evento ou promoção",
+            "establishment_label": "Estabelecimentos",
+            "admin": "Administrador",
+            "promotion": "Promoção",
+            "event": "Evento",
+            "permanent": "Permanente",
+            "withoutInfos": "Sem informação"
+        },
+        "new_commerce": {
+            "step0": {
+                "edit": "Editar",
+                "new": "Novo",
+                "typeLabel": "Escolha um tipo",
+                "permanent": "Permanente",
+                "event": "Evento",
+                "promotion": "Promoção",
+                "placeLabel": "Físico ou online?",
+                "fisic": "Físico",
+                "web": "Web",
+                "currentStepper": "1 de 6"
+            },
+            "step1": {
+                "headerLabel": "Dados básicos",
+                "titleLabel": "Título",
+                "selectLabel": "Selecione",
+                "associationLabel": "Associar",
+                "userPoints": "Creditar pontos no usuário",
+                "referedBy": "Referido por",
+                "ID": "ID",
+                "currentStepper": "2 de 6"
+            },
+            "step2": {
+                "headerLabel": "Local e horário",
+                "webSite": "Web site",
+                "webSitePlaceholder": "https://www.website.com",
+                "startDate": "Data de início",
+                "endDate": "Data de fim",
+                "startHour": "Hora de início",
+                "endHour": "Hora de fim",
+                "locationLabel": "Local do estabelecimento",
+                "adressPlaceholder": "Complexo Desportivo municipal do...",
+                "currentStepper": "3 de 6"
+            },
+            "step3": {
+                "headerLabel": "Descrição",
+                "descriptionLabel": "Descreva o evento",
+                "modalLabel": "Inserção de link",
+                "linkTitle": "Título do link",
+                "linkTitlePlaceholder": "Título",
+                "linkAdress": "Endereço do link",
+                "linkAdressPlaceholder": "https://...",
+                "currentStepper": "4 de 6"
+            },
+            "step4": {
+                "headerLabel": "Imagens e vídeos",
+                "logoLabel": "Logomarca",
+                "bannerLabel": "Cartaz",
+                "descriptionImageLabel": "Imagens de descrição",
+                "currentStepper": "5 de 6"
+            },
+            "step5":{
+                "headerLabel": "Cashback",
+                "baseDiscount": " Desconto base em %",
+                "cashbackType": "Tipo de Cashback",
+                "selectLabel": "Selecione",
+                "minimalValueLabel": "Valor mínimo",
+                "minimalCurrencyPlaceholder": "50c",
+                "discountSectionPorcentage": "Desconto da etapa em %",
+                "discountSectionPorcentagePlaceholder": "20",
+                "currentStepper": "6 de 6"
+            },
+            "step6": {
+                "headerLabel": "Mais informações",
+                "emailContactLabel": "Email para a nossa equipe o contatar",
+                "warning1": "Vamos contata-lo por email, para encontrar a melhor forma de os nossos clientes se tonarem vossos clientes.",
+                "warning2": "Indique um email seguro, com retorno rápido.",
+                "currentStepper": "6 de 6"
+            },
+            "gobackModal": {
+                "description1": "Ao voltar, os dados serão perdidos.",
+                "description2": "Prosseguir?"
+            }
+        },
+        "menu": {
+            "credit_extract": "Extrato de créditos",
+            "published_version": "Ver versão publicada",
+            "edit": "Editar",
+            "access_manager": "Gerir acessos",
+            "qrcode": "QR Code",
+            "delete_commerce": "Eliminar estabelecimento",
+            "modal": {
+                "title": "Remover comercio?"
+            }
+        },
+        "credit_extract": {
+            "headerLabel": "Extrato de crédito",
+            "id": "ID",
+            "eliminatedBy": "Eliminado por"
+        },
+        "access_manager": {
+            "label": "Gerir acessos"
+        },
+        "add_access": {
+            "headerLabel": "Adicionar acesso",
+            "id": "ID",
+            "admin": "Administrador",
+            "can_see_logs": "Pode ver registros",
+            "can_see_and_erase_logs": "Pode ver e apagar registros"
+        },
+        "edit_associate": {
+            "id": "ID",
+            "admin": "Administrador",
+            "can_see_logs": "Pode ver registros",
+            "can_see_and_erase_logs": "Pode ver e apagar registros",
+            "disassociate_user": "Desassociar conta",
+            "modal": {
+                "remove_user": "Remover conta?"
+            }
+        },
+        "qrcode": {
+            "headerLabel": "Voltar",
+            "title": "QR Code",
+            "id": "ID",
+            "description1": "Scan QR Code",
+            "description2": "do comerciante"
+        }
+    },
+    "modalCommerce": {
+        "headerLabel": "Informação completa",
+        "oficial_website": "Site oficial",
+        "eventCreatedBy": "Evento criado por",
+        "when": "Quando",
+        "getDiscount": "Para obter descontos, entre e use o código",
+        "discountCode": "Código de desconto",
+        "access": "Acessar",
+        "getDiscountLocally": "Obtenha o seu desconto no local",
+        "discountBase": "Desconto base",
+        "discountAbove": "Desconto acima de",
+        "about": "Sobre"
+    },
+    "profile": {
+        "headerBackLabel": "Voltar",
+        "headerSaveLabel": "Salvar",
+        "nameLabel": "Nome",
+        "emailLabel": "Email",
+        "phoneLabel": "Telemovel",
+        "countryLabel": "País",
+        "currencyLabel": "Moeda",
+        "locationLabel": "Localização",
+        "changePin": "Alterar Pin",
+        "changePassword": "Alterar Password"
+    },
+    "points": {
+        "info": "Info",
+        "permanent": "Permanente",
+        "promotion": "Promoção",
+        "event": "Evento",
+        "withoutInfo": "Sem informação",
+        "modal": {
+            "headerLabel": "Voltar",
+            "title1": "Vantagens dos",
+            "title2": "Pontos na Promoção",
+            "deductionPoints": "Dedução de Pontos",
+            "deductionDescription": "1 ponto é retirado a cada apresentação",
+            "additionPoints": "Adição de Pontos",
+            "additionDescription": "1 ponto é adicionado a cada $0.01 em créditos movimentados."
+        }
     }
 }

@@ -8,6 +8,7 @@ import MoonStarIcon from "../../assets/icons/moonStarIcon";
 import Topbar from "../header";
 import Sidebar from "../sidebar";
 import NotificationSidebar from "../notificationSidebar";
+import { useLocale } from "@/contexts/TranslationContext";
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 type CommerceData = {
@@ -32,19 +33,19 @@ export default function CommerceHome() {
 
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(true);
     const [showNotifications, setShowNotifications] = useState(false);
-
+    const { t } = useLocale();
     const commerceDatas: CommerceData[] = [
         {
             name: 'Nome do comercio',
             promotion: {
                 name: 'Nome da promoção',
                 id: '#99999',
-                role: 'Administrador'
+                role: t("commerce.home.admin")
             },
             event: {
                 name: 'Nome do evento',
                 id: '#99999',
-                role: 'Administrador'
+                role: t("commerce.home.admin")
             },
         },
     ];
@@ -112,7 +113,7 @@ export default function CommerceHome() {
                     <View style={styles.emptyStateContainer}>
                         <MoonStarIcon />
                         <Text style={styles.emptyStateText}>
-                            Crie um novo estabelecimento, evento ou promoção
+                            {t("commerce.home.label")}
                         </Text>
                     </View>
                 )
@@ -120,7 +121,7 @@ export default function CommerceHome() {
                 (
                     <View style={{ paddingTop: 110, paddingBottom: 80 }}>
                         <View style={styles.headerContainer}>
-                            <Text style={styles.headerText}>Estabelecimentos</Text>
+                            <Text style={styles.headerText}>{t("commerce.home.establishment_label")}</Text>
                         </View>
                         <ScrollView>
                             {commerceDatas.map((data, index) => (
@@ -135,14 +136,14 @@ export default function CommerceHome() {
                                                             <Text style={styles.cardTitle}>{data.name}</Text>
                                                             <View style={styles.cardDetails}>
                                                                 <Feather name="user" size={16} color="#635C5C" />
-                                                                <Text style={styles.cardDetailText}>Administrador</Text>
+                                                                <Text style={styles.cardDetailText}>{t("commerce.home.admin")}</Text>
                                                                 <View style={styles.cardDetailItem}>
                                                                     <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
                                                                     <Text style={styles.cardDetailText}>#99999</Text>
                                                                 </View>
                                                             </View>
                                                             <View style={[styles.cardStatus, { backgroundColor: '#D1E7DD', }]}>
-                                                                <Text style={[styles.cardStatusText, { color: '#0A3622' }]}>Promoção</Text>
+                                                                <Text style={[styles.cardStatusText, { color: '#0A3622' }]}>{t("commerce.home.permanent")}</Text>
                                                             </View>
                                                         </View>
                                                         {data.promotion || data.event ? (<View style={styles.separator}></View>): null}
@@ -154,17 +155,17 @@ export default function CommerceHome() {
                                                         <View style={styles.card}>
                                                             <Image source={require('../../assets/images/sorveteria2.png')} style={[styles.image, styles.roundedImage]} />
                                                             <View style={styles.cardContent}>
-                                                                <Text style={styles.cardTitle}>{data.promotion?.name || 'Sem informação'}</Text>
+                                                                <Text style={styles.cardTitle}>{data.promotion?.name || t("commerce.home.withoutInfos")}</Text>
                                                                 <View style={styles.cardDetails}>
                                                                     <Feather name="user" size={16} color="#635C5C" />
-                                                                    <Text style={styles.cardDetailText}>{data.promotion?.role || 'Sem informação'}</Text>
+                                                                    <Text style={styles.cardDetailText}>{data.promotion?.role || t("commerce.home.withoutInfos")}</Text>
                                                                     <View style={styles.cardDetailItem}>
                                                                         <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
-                                                                        <Text style={styles.cardDetailText}>{data.promotion?.id || 'Sem informação'}</Text>
+                                                                        <Text style={styles.cardDetailText}>{data.promotion?.id || t("commerce.home.withoutInfos")}</Text>
                                                                     </View>
                                                                 </View>
                                                                 <View style={[styles.cardStatus, { backgroundColor: '#CFF4FC', }]}>
-                                                                    <Text style={[styles.cardStatusText, { color: '#055160' }]}>Promoção</Text>
+                                                                    <Text style={[styles.cardStatusText, { color: '#055160' }]}>{t("commerce.home.promotion")}</Text>
                                                                 </View>
                                                             </View>
                                                             {data.event && (<View style={styles.separator}></View>)}
@@ -177,17 +178,17 @@ export default function CommerceHome() {
                                                         <View style={styles.card}>
                                                             <Image source={require('../../assets/images/sorveteria2.png')} style={[styles.image, styles.roundedImage]} />
                                                             <View style={styles.cardContent}>
-                                                                <Text style={styles.cardTitle}>{data.event?.name || 'Sem informação'}</Text>
+                                                                <Text style={styles.cardTitle}>{data.event?.name || t("commerce.home.withoutInfos")}</Text>
                                                                 <View style={styles.cardDetails}>
                                                                     <Feather name="user" size={16} color="#635C5C" />
-                                                                    <Text style={styles.cardDetailText}>{data.event?.role || 'Sem informação'}</Text>
+                                                                    <Text style={styles.cardDetailText}>{data.event?.role || t("commerce.home.withoutInfos")}</Text>
                                                                     <View style={styles.cardDetailItem}>
                                                                         <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
-                                                                        <Text style={styles.cardDetailText}>{data.event?.id || 'Sem informação'}</Text>
+                                                                        <Text style={styles.cardDetailText}>{data.event?.id || t("commerce.home.withoutInfos")}</Text>
                                                                     </View>
                                                                 </View>
                                                                 <View style={[styles.cardStatus, { backgroundColor: '#FFF3CD', }]}>
-                                                                    <Text style={[styles.cardStatusText, { color: '#664D03' }]}>Evento</Text>
+                                                                    <Text style={[styles.cardStatusText, { color: '#664D03' }]}>{t("commerce.home.event")}</Text>
                                                                 </View>
                                                             </View>
                                                         </View>
@@ -203,14 +204,15 @@ export default function CommerceHome() {
                 )
             }
             <TouchableOpacity
-                onPress={() => commerceNavigation.navigate("new_commerce_step_0")}
+                onPress={() => commerceNavigation.navigate("new_commerce_step_0", {editor: false})}
                 style={styles.fab}
+                activeOpacity={0.7}
             >
                 <FontAwesome6 name="plus" size={24} color="white" />
             </TouchableOpacity>
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {

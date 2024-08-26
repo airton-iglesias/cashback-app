@@ -2,30 +2,31 @@ import React, { useState } from 'react';
 import { SafeAreaView, Text, TextInput, View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { CommerceStackParamList } from '../../types/navigationTypes';
+import { CommerceStackParamList } from '@/types/navigationTypes';
 import { AntDesign } from '@expo/vector-icons';
 import CommerceHeader from './commerceHeader';
+import {useLocale} from "@/contexts/TranslationContext";
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
 export default function Commerce_Qrcode() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
     const [commerceID, setCommerceID] = useState('#DF56G4DF');
-
+    const { t } = useLocale();
     return (
         <SafeAreaView style={styles.safeArea}>
 
             <CommerceHeader
-                Title={'Voltar'}
+                Title={t("commerce.qrcode.headerLabel")}
                 ScreenGoback={() => commerceNavigation.goBack()}
             />
 
             <View style={styles.container}>
                 <View>
-                    <Text style={styles.header}>Qrcode</Text>
+                <Text style={styles.header}>{t("commerce.qrcode.title")}</Text>
                 </View>
                 <View style={styles.inputWrapper}>
-                    <Text style={[styles.qrcodeText, {marginLeft: 5, marginBottom: 5}]}>ID</Text>
+                    <Text style={[styles.qrcodeText, {marginLeft: 5, marginBottom: 5}]}>{t("commerce.qrcode.id")}</Text>
                     <TextInput
                         value={commerceID}
                         editable={false}
@@ -42,8 +43,8 @@ export default function Commerce_Qrcode() {
                     </View>
 
                     <View style={styles.qrcodeTextContainer}>
-                        <Text style={styles.qrcodeText}>Scan QR code</Text>
-                        <Text style={styles.qrcodeText}>do comerciante</Text>
+                        <Text style={styles.qrcodeText}>{t("commerce.qrcode.description1")}</Text>
+                        <Text style={styles.qrcodeText}>{t("commerce.qrcode.description2")}</Text>
                     </View>
                 </View>
             </View>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Feather, EvilIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -68,19 +68,22 @@ const FiltersSearch = () => {
                 </View>
 
                 <View style={styles.buttonRow}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
+                        activeOpacity={0.7}
                         style={filterType === "Comercio" ? [styles.button, styles.activeButton]: styles.button}
                         onPress={() => setFilterType("Comercio")}
                     >
                         <Text style={filterType === "Comercio" ? styles.activeButtonText: styles.buttonText}>{t("dashboardSearch.home.commerce")}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity 
+                    <TouchableOpacity
+                        activeOpacity={0.7}
                         style={filterType === "Eventos" ? [styles.button, styles.activeButton]: styles.button}
                         onPress={() => setFilterType("Eventos")}
                     >
                         <Text style={filterType === "Eventos" ? styles.activeButtonText: styles.buttonText}>{t("dashboardSearch.home.events")}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity 
+                    <TouchableOpacity
+                        activeOpacity={0.7}
                         style={filterType === "Promoções" ? [styles.button, styles.activeButton]: styles.button}
                         onPress={() => setFilterType("Promoções")}
                     >
@@ -91,13 +94,15 @@ const FiltersSearch = () => {
                 <View>
                     <Text style={styles.sectionLabel}>{t("dashboardSearch.home.whereLabel")}</Text>
                     <View style={styles.buttonRowPlace}>
-                        <TouchableOpacity 
+                        <TouchableOpacity
+                            activeOpacity={0.7}
                             style={place === "Local" ? [styles.button, styles.activeButton] : styles.button}
                             onPress={() => setPlace("Local")}
                         >
                             <Text style={place === "Local" ? styles.activeButtonText:styles.buttonText}>{t("dashboardSearch.home.locally")}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity 
+                        <TouchableOpacity
+                            activeOpacity={0.7}
                             style={place === "Online" ? [styles.button, styles.activeButton] : styles.button}
                             onPress={() => setPlace("Online")}
                         >
@@ -106,7 +111,8 @@ const FiltersSearch = () => {
                     </View>
                 </View>
                 <View>
-                    <TouchableOpacity 
+                    <TouchableOpacity
+                        activeOpacity={0.7}
                         style={place === "closeToMe" ? [styles.buttonLocation, styles.activeButton] : styles.buttonLocation}
                         onPress={() => setPlace("closeToMe")}
                     >
@@ -138,6 +144,7 @@ const FiltersSearch = () => {
                     />
                 </View>
                 <TouchableOpacity
+                    activeOpacity={0.7}
                     style={styles.nextButton}
                     onPress={() => SearchNavigation.navigate('searchresult')}
                 >

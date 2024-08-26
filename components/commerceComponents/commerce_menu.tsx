@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { CommerceStackParamList } from '../../types/navigationTypes';
+import { CommerceStackParamList } from '@/types/navigationTypes';
 import { Feather, Octicons, AntDesign, SimpleLineIcons } from '@expo/vector-icons';
 import QRCodeIcon from '../../assets/icons/qrcodeIcon';
 import CommerceHeader from './commerceHeader';
 import ModalCommerce from '../modalCommerce';
+import {useLocale} from "@/contexts/TranslationContext";
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
@@ -37,7 +38,7 @@ export default function CommerceMenu() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
     const [modalVisible, setModalVisible] = useState(false);
     const [commerceModalVisible, setCommerceModalVisible] = useState(false);
-
+    const { t } = useLocale();
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -63,7 +64,7 @@ export default function CommerceMenu() {
                         <View style={styles.iconContainer}>
                             <Octicons name="list-unordered" size={24} color="#0A3A74" />
                         </View>
-                        <Text style={styles.menuItemText}>Extrato de créditos</Text>
+                        <Text style={styles.menuItemText}>{t("commerce.menu.credit_extract")}</Text>
                     </View>
                 </TouchableOpacity>
 
@@ -77,7 +78,7 @@ export default function CommerceMenu() {
                         <View style={styles.iconContainer}>
                             <Feather name="eye" size={24} color="#0A3A74" />
                         </View>
-                        <Text style={styles.menuItemText}>Ver versão publicada</Text>
+                        <Text style={styles.menuItemText}>{t("commerce.menu.published_version")}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -90,7 +91,7 @@ export default function CommerceMenu() {
                         <View style={styles.iconContainer}>
                             <SimpleLineIcons name="pencil" size={24} color="#0A3A74" />
                         </View>
-                        <Text style={styles.menuItemText}>Editar</Text>
+                        <Text style={styles.menuItemText}>{t("commerce.menu.edit")}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -103,7 +104,7 @@ export default function CommerceMenu() {
                         <View style={styles.iconContainer}>
                             <Feather name="users" size={24} color="#0A3A74" />
                         </View>
-                        <Text style={styles.menuItemText}>Gerir acessos</Text>
+                        <Text style={styles.menuItemText}>{t("commerce.menu.access_manager")}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -116,7 +117,7 @@ export default function CommerceMenu() {
                         <View style={styles.iconContainer}>
                             <QRCodeIcon size={24} color="#0A3A74" />
                         </View>
-                        <Text style={styles.menuItemText}>QR Code</Text>
+                        <Text style={styles.menuItemText}>{t("commerce.menu.qrcode")}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -130,7 +131,7 @@ export default function CommerceMenu() {
                             <Feather name="trash" size={24} color="#DC3545" />
                         </View>
                         <Text style={[styles.menuItemText, styles.deleteItemText]}>
-                            Eliminar estabelecimento
+                            {t("commerce.menu.delete_commerce")}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -149,7 +150,7 @@ export default function CommerceMenu() {
                         <View style={[styles.iconContainer, styles.deleteIconContainer]}>
                             <Feather name="trash" size={24} color="#DC3545" />
                         </View>
-                        <Text style={styles.modalText}>Remover comercio?</Text>
+                        <Text style={styles.modalText}>{t("commerce.menu.modal.title")}</Text>
                         <View style={styles.buttonContainer}>
 
                             <TouchableOpacity

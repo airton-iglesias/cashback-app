@@ -4,35 +4,18 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import ModalCommerce from "@/components/modalCommerce";
 import { Video } from 'expo-av';
+import { RootStackParamList } from "@/types/navigationTypes";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
 
 const data = [
     {
         id: '1',
         title: 'Fitness Center 1',
         location: 'Beja, Portugal',
-        discount: '30%',
+        discount: '20%',
         type: 'video',
-        source: 'url da midia',
-        modal: {
-            cupomCode: 'ID s039da',
-            locationMap: '',
-            website: "www.maps.google.com",
-            createdBy: "Casa Verde dos Relógios",
-            eventDate: "0 out - 20:00 a 20 out - 21:00",
-            cashbackType: "Evento",
-            baseDiscount: "10%",
-            discountAbove100: "20%",
-            discountAbove200: "30%",
-            about: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in neque rhoncus, mattis augue eget, viverra purus. Aliquam erat volutpat. Vivamus lacinia felis id massa blandit, vel pellentesque lacus tincidunt. Integer ac tellus id ipsum tincidunt interdum in eu mi. Cras leo dui, pharetra ac congue feugiat."
-        }
-    },
-    {
-        id: '2',
-        title: 'Fitness Center 1',
-        location: 'Beja, Portugal',
-        discount: '30%',
-        type: 'image',
-        source: 'url da midia',
+        source: 'https://i.imgur.com/6Y8qkha.mp4',
         modal: {
             cupomCode: 'ID s039da',
             locationMap: null,
@@ -41,11 +24,89 @@ const data = [
             eventDate: "0 out - 20:00 a 20 out - 21:00",
             cashbackType: "Evento",
             baseDiscount: "10%",
-            discountAbove100: "20%",
-            discountAbove200: "30%",
-            about: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in neque rhoncus, mattis augue eget, viverra purus. Aliquam erat volutpat. Vivamus lacinia felis id massa blandit, vel pellentesque lacus tincidunt. Integer ac tellus id ipsum tincidunt interdum in eu mi. Cras leo dui, pharetra ac congue feugiat."
+            flexDiscount: [
+                {
+                    currency: 'EUR',
+                    value: 100,
+                    discount: '10%'
+                },
+                {
+                    currency: 'EUR',
+                    value: 200,
+                    discount: '20%'
+                },
+                {
+                    currency: 'EUR',
+                    value: 300,
+                    discount: '30%'
+                },
+            ],
+            about: "Lorem ipsum...",
+            carouselImages: [
+                {
+                    id: '01',
+                    image: 'https://i.imgur.com/7NvPLld.jpeg',
+                },
+                {
+                    id: '02',
+                    image: 'https://i.imgur.com/5Qx1oqV.jpeg',
+                },
+                {
+                    id: '03',
+                    image: 'https://i.imgur.com/2cFsaV2.png',
+                }
+            ]
         }
     },
+    {
+        id: '2',
+        title: 'Cafe Center 1',
+        location: 'Beja, Portugal',
+        discount: '20%',
+        type: 'image',
+        source: 'https://i.imgur.com/vuz4ufK.png',
+        modal: {
+            cupomCode: 'ID s039da',
+            locationMap: "Beja, portugal",
+            website: "sitebacalhao.com",
+            createdBy: "Casa Verde dos Relógios",
+            eventDate: "0 out - 20:00 a 20 out - 21:00",
+            cashbackType: "Evento",
+            baseDiscount: "10%",
+            flexDiscount: [
+                {
+                    currency: 'EUR',
+                    value: 100,
+                    discount: '10%'
+                },
+                {
+                    currency: 'EUR',
+                    value: 200,
+                    discount: '20%'
+                },
+                {
+                    currency: 'EUR',
+                    value: 300,
+                    discount: '30%'
+                },
+            ],
+            carouselImages: [
+                {
+                    id: '01',
+                    image: 'https://i.imgur.com/7NvPLld.jpeg',
+                },
+                {
+                    id: '02',
+                    image: 'https://i.imgur.com/5Qx1oqV.jpeg',
+                },
+                {
+                    id: '03',
+                    image: 'https://i.imgur.com/2cFsaV2.png',
+                }
+            ],
+            about: "Lorem ipsum...",
+        }
+    }
 ];
 
 export default function Home() {
@@ -79,7 +140,7 @@ export default function Home() {
         if (item.type === 'image') {
             return (
                 <Image
-                    source={require("../../../assets/images/garota.png")}
+                    source={{ uri: item.source }}
                     style={styles.image}
                 />
             );
@@ -87,7 +148,7 @@ export default function Home() {
             return (
                 <Video
                     ref={(ref) => (videoRefs.current[item.id] = ref)}
-                    source={require("../../../assets/videos/reels_template.mp4")}
+                    source={{ uri: item.source }}
                     style={styles.image}
                     useNativeControls={false}
                     isLooping
@@ -157,7 +218,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         paddingTop: 110,
     },
-    container:{
+    container: {
         flex: 1,
     },
     itemContainer: {

@@ -3,15 +3,29 @@ import Carousel from "../carousel";
 import CalendarIcon from "../../assets/icons/calendarIcon";
 import * as Clipboard from 'expo-clipboard';
 import { MaterialCommunityIcons, Octicons, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { useLocale } from "@/contexts/TranslationContext";
+import { WebView } from 'react-native-webview';
+import { Linking } from 'react-native';
+import { RootStackParamList } from "@/types/navigationTypes";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+
+type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 interface ModalCommerceProps {
     modalVisible: boolean;
     selectedItem: any;
     handleCloseModal: () => void;
 }
+interface flexDiscountProps {
+    currency: string;
+    value: number;
+    discount: string;
+}
 
 export default function ModalCommerce({ modalVisible, selectedItem, handleCloseModal }: ModalCommerceProps) {
-
+    const rootNavigation = useNavigation<RootNavigationProp>();
+    const { t } = useLocale();
     const copyToClipboard = () => {
         Clipboard.setStringAsync(selectedItem.modal.cupomCode);
     };
@@ -27,12 +41,11 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                     <TouchableOpacity onPress={handleCloseModal} style={styles.closeButton}>
                         <Octicons name="chevron-left" size={32} color="black" />
                     </TouchableOpacity>
-                    <Text style={styles.headerText}>Informação completa</Text>
+                    <Text style={styles.headerText}>{t("modalCommerce.headerLabel")}</Text>
                 </View>
 
-                <View>
-                    <Carousel />
-                </View>
+
+                <Carousel carouselData={selectedItem.modal.carouselImages} />
 
                 {selectedItem && (
                     <View style={styles.contentContainer}>
@@ -48,13 +61,19 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                             <Feather name="external-link" size={24} color="#0A58CA" />
                                         </View>
                                         <View>
-                                            <Text style={styles.label}>Site oficial</Text>
+                                            <Text style={styles.label}>{t("modalCommerce.oficial_website")}</Text>
                                             <Text style={styles.link}>{selectedItem.modal.website}</Text>
                                         </View>
                                     </>
                                 ) : (
                                     <>
-                                        <Image style={styles.image} source={require("../../assets/images/mapPreview.png")} />
+                                        <TouchableOpacity
+                                            activeOpacity={0.7}
+                                            onPress={() => rootNavigation.navigate('maplocation')}
+                                            
+                                        >
+                                            <Image style={styles.image} source={require("../../assets/images/mapPreview.png")} />
+                                        </TouchableOpacity>
                                         <View>
                                             <Text style={styles.location}>{selectedItem.location} | {selectedItem.modal.distance}</Text>
                                             <Text style={styles.link}>{selectedItem.modal.website}</Text>
@@ -65,7 +84,7 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                             <View style={styles.sectionItem}>
                                 <Image style={styles.image} source={require("../../assets/images/reidobacalhau.png")} />
                                 <View style={styles.infoContainer}>
-                                    <Text style={styles.label}>Evento criado por</Text>
+                                    <Text style={styles.label}>{t("modalCommerce.eventCreatedBy")}</Text>
                                     <Text style={styles.link}>{selectedItem.modal.createdBy}</Text>
                                 </View>
                             </View>
@@ -74,7 +93,7 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                     <CalendarIcon />
                                 </View>
                                 <View style={styles.infoContainer}>
-                                    <Text style={styles.label}>Quando</Text>
+                                    <Text style={styles.label}>{t("modalCommerce.when")}</Text>
                                     <Text style={styles.date}>{selectedItem.modal.eventDate}</Text>
                                 </View>
                             </View>
@@ -86,8 +105,8 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                     <MaterialIcons name="local-fire-department" size={40} color="#146C43" />
                                 </View>
                                 <View style={styles.couponContent}>
-                                    <Text style={styles.couponText}>Para obter descontos, entre e use o código</Text>
-                                    <Text style={styles.couponCodeText}>Código de desconto</Text>
+                                    <Text style={styles.couponText}>{t("modalCommerce.getDiscount")}</Text>
+                                    <Text style={styles.couponCodeText}>{t("modalCommerce.discountCode")}</Text>
                                     <View style={styles.couponInputContainer}>
                                         <TextInput
                                             cursorColor={'#ADB5BD'}
@@ -102,7 +121,7 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                     </View>
                                     <TouchableOpacity style={styles.accessButtonContainer}>
                                         <View style={styles.accessButton}>
-                                            <Text style={styles.accessButtonText}>Acessar</Text>
+                                            <Text style={styles.accessButtonText}>{t("modalCommerce.access")}</Text>
                                         </View>
                                     </TouchableOpacity>
                                 </View>
@@ -112,9 +131,9 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                 <View style={styles.noCouponIconContainer}>
                                     <MaterialIcons name="local-fire-department" size={40} color="#146C43" />
                                 </View>
-                                <Text style={[styles.noCouponText, {marginTop: 5}]}>Obtenha o seu desconto no local</Text>
-                                <TouchableOpacity style={{flexDirection: 'row', marginTop: 4}} onPress={copyToClipboard}>
-                                    <Text style={[styles.noCouponText,{fontWeight: '700'}]}>{selectedItem.modal.cupomCode}</Text>
+                                <Text style={[styles.noCouponText, { marginTop: 5 }]}>{t("modalCommerce.getDiscountLocaly")}</Text>
+                                <TouchableOpacity style={{ flexDirection: 'row', marginTop: 4 }} onPress={copyToClipboard}>
+                                    <Text style={[styles.noCouponText, { fontWeight: '700' }]}>{selectedItem.modal.cupomCode}</Text>
                                     <Ionicons style={styles.copyIcon} name="copy-outline" size={20} color="black" />
                                 </TouchableOpacity>
                             </View>
@@ -122,35 +141,50 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
 
                         <View style={styles.section}>
                             <View style={styles.discountContainer}>
-                                <Text style={styles.discountTitle}>Desconto Base</Text>
+                                <Text style={styles.discountTitle}>{t("modalCommerce.discountBase")}</Text>
                                 <View style={styles.discountValueContainer}>
                                     <Text style={styles.discountValue}>{selectedItem.modal.baseDiscount}</Text>
                                     <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#D9A100" style={styles.ticketIcon} />
                                 </View>
                             </View>
-                            {selectedItem.modal.discountAbove100 && (
-                                <View style={styles.discountContainer}>
-                                    <Text style={styles.discountTitle}>Desconto acima de 100 EUR</Text>
-                                    <View style={styles.discountValueContainer}>
-                                        <Text style={styles.discountValue}>{selectedItem.modal.discountAbove100}</Text>
-                                        <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#D9A100" style={styles.ticketIcon} />
+
+                            {selectedItem.modal.flexDiscount && selectedItem.modal.flexDiscount.length > 0 &&
+                                selectedItem.modal.flexDiscount.map((item: flexDiscountProps, index: number) => (
+                                    <View key={index} style={styles.discountContainer}>
+                                        <Text style={styles.discountTitle}>
+                                            {t("modalCommerce.discountAbove")} {item.value} {item.currency}
+                                        </Text>
+                                        <View style={styles.discountValueContainer}>
+                                            <Text style={styles.discountValue}>{item.discount}</Text>
+                                            <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#D9A100" style={styles.ticketIcon} />
+                                        </View>
                                     </View>
-                                </View>
-                            )}
-                            {selectedItem.modal.discountAbove200 && (
-                                <View style={styles.discountContainer}>
-                                    <Text style={styles.discountTitle}>Desconto acima de 200 EUR</Text>
-                                    <View style={styles.discountValueContainer}>
-                                        <Text style={styles.discountValue}>{selectedItem.modal.discountAbove200}</Text>
-                                        <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#D9A100" style={styles.ticketIcon} />
-                                    </View>
-                                </View>
-                            )}
+                                ))
+                            }
                         </View>
 
                         <View style={styles.aboutContainer}>
-                            <Text style={styles.aboutTitle}>Sobre</Text>
-                            <Text style={styles.aboutText}>{selectedItem.modal.about}</Text>
+                            <Text style={styles.aboutTitle}>{t("modalCommerce.about")}</Text>
+                            <ScrollView
+                                contentContainerStyle={{ flexGrow: 1 }}
+                            >
+                                <WebView
+                                    style={[styles.aboutText, { height: 200 }]}
+                                    originWhitelist={['*']}
+                                    nestedScrollEnabled
+                                    source={{
+                                        html:
+                                            `<div style='font-size: 45px; color: #4A4949'>${selectedItem.modal.about || ''}</div>`
+                                    }}
+                                    onShouldStartLoadWithRequest={(request) => {
+                                        if (request.url.startsWith('http')) {
+                                            Linking.openURL(request.url);
+                                            return false;
+                                        }
+                                        return false;
+                                    }}
+                                />
+                            </ScrollView>
                         </View>
                     </View>
                 )}
