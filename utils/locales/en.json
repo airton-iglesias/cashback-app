@@ -254,7 +254,7 @@
       }
     },
     "qrcode": {
-      "headerLabel": "Go back",
+      "headerLabel": "Back",
       "title": "QR Code",
       "id": "ID",
       "description1": "Scan QR Code",
@@ -275,7 +275,7 @@
     "about": "About"
   },
   "profile": {
-    "headerBackLabel": "Go back",
+    "headerBackLabel": "Back",
     "headerSaveLabel": "Save",
     "nameLabel": "Name",
     "emailLabel": "Email",
@@ -293,7 +293,7 @@
     "event": "Event",
     "withoutInfo": "Without information",
     "modal": {
-      "headerLabel": "Go back",
+      "headerLabel": "Back",
       "title1": "Benefits of",
       "title2": "Points in Promotion",
       "deductionPoints": "Points Deduction",
@@ -301,5 +301,8 @@
       "additionPoints": "Points Addition",
       "additionDescription": "1 point is added for every $0.01 in credits moved."
     }
-  }
+  },
+  "mapLocation":{
+    "headerLabel": "Back"
+}
 }

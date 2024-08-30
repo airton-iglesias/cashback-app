@@ -4,9 +4,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import ModalCommerce from "@/components/modalCommerce";
 import { Video } from 'expo-av';
-import { RootStackParamList } from "@/types/navigationTypes";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useNavigation } from "@react-navigation/native";
 
 const data = [
     {
@@ -104,7 +101,7 @@ const data = [
                     image: 'https://i.imgur.com/2cFsaV2.png',
                 }
             ],
-            about: "Lorem ipsum...",
+            about: `<div><b>Exemplo </b><i>de <u>texto</u></i></div><div><i><u><br></u></i></div><div><font color="#ff0000">Cor Vermelha, </font><font color="#00ff00">Cor Verde, </font><font color="#0000ff">Cor Azul, </font><font color="#ffff00">Cor Amarela, </font><font color="#ff00ff">Cor Lilas, </font><font color="#00ffff">Cor Ciano.</font></div><div><font color="#00ffff"><br></font></div><div><ul><li><font color="#00ffff">&nbsp;</font><font color="#000000">Item 1</font></li><li><font color="#000000">&nbsp;Item 2</font></li><li><font color="#000000">&nbsp;Item 3</font></li></ul><div><font color="#000000"><a href="https://www.google.com">Link para o website</a></font></div></div>`,
         }
     }
 ];
@@ -136,7 +133,7 @@ export default function Home() {
         setSelectedItem(null);
     };
 
-    const renderMedia = (item: any, index: number) => {
+    const renderMedia = (item: any) => {
         if (item.type === 'image') {
             return (
                 <Image
@@ -160,11 +157,11 @@ export default function Home() {
         }
     };
 
-    const renderItem = ({ item, index }: any) => (
+    const renderItem = ({ item }: any) => (
         <TouchableWithoutFeedback onPress={() => handleItemPress(item)} style={styles.itemContainer}>
             <View style={styles.itemContent}>
                 <View style={styles.imageContainer}>
-                    {renderMedia(item, index)}
+                    {renderMedia(item)}
                     <LinearGradient
                         colors={['rgba(255, 255, 255, 0)', 'rgba(0, 0, 0, 0.9)']}
                         style={styles.gradient}

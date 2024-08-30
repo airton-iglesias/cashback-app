@@ -4,12 +4,13 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { View, StyleSheet } from "react-native";
 import CommerceHeader from "../commerceComponents/commerceHeader";
 import MapView, { PROVIDER_GOOGLE }  from "react-native-maps";
+import { useLocale } from "@/contexts/TranslationContext";
 
 type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function MapLocation() {
     const rootNavigation = useNavigation<RootNavigationProp>();
-
+    const { t } = useLocale();
     const INITIAL_REGION = {
         latitude: 38.7266085,
         longitude: -9.1503216,
@@ -20,7 +21,7 @@ export default function MapLocation() {
     return (
         <View>
             <CommerceHeader
-                Title={"Voltar"}
+                Title={t("mapLocation.headerLabel")}
                 ScreenGoback={() => rootNavigation.goBack()}
                 ScreenClose={() => rootNavigation.goBack()}
             />

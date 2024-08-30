@@ -301,5 +301,8 @@
             "additionPoints": "Adição de Pontos",
             "additionDescription": "1 ponto é adicionado a cada $0.01 em créditos movimentados."
         }
+    },
+    "mapLocation":{
+        "headerLabel": "Voltar"
     }
 }
