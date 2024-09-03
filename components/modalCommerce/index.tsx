@@ -308,6 +308,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         paddingVertical: 24,
         paddingHorizontal: 20,
+        alignItems: 'center'
     },
     couponIconContainer: {
         position: 'absolute',

@@ -141,7 +141,6 @@ export default function New_Commerce_Step_3() {
                             }}
                             onChange={descriptionText => {
                                 setStepperData({description: descriptionText});
-                                console.log(description)
                             }}
                             initialContentHTML={description}
                         />

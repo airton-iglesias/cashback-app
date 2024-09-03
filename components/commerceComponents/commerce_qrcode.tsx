@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { SafeAreaView, Text, TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '@/types/navigationTypes';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { Ionicons, Feather } from '@expo/vector-icons';
 import CommerceHeader from './commerceHeader';
 import { useLocale } from "@/contexts/TranslationContext";
 import * as Clipboard from 'expo-clipboard';
+import QRCode from 'react-native-qrcode-svg';
+import { printAsync } from 'expo-print';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
@@ -14,9 +16,31 @@ export default function Commerce_Qrcode() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
     const [commerceID, setCommerceID] = useState('#DF56G4DF');
     const { t } = useLocale();
+    const qrCodeRef = useRef<any>(null);
+
     const copyToClipboard = () => {
         Clipboard.setStringAsync(commerceID);
     };
+
+
+
+    const handlePrint = async () => {
+        if (qrCodeRef.current) {
+            qrCodeRef.current.toDataURL(async (data: string) => {
+                const htmlContent = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100vh;">
+                        <img src="data:image/png;base64,${data}" alt="QR Code" />
+                    </div>
+                `;
+
+                await printAsync({
+                    html: htmlContent,
+                });
+            });
+        }
+    }
+
+
     return (
         <SafeAreaView style={styles.safeArea}>
 
@@ -46,9 +70,14 @@ export default function Commerce_Qrcode() {
 
                 <View style={styles.qrcodeContainer}>
                     <View style={styles.qrcodeWrapper}>
-                        <View style={styles.qrcodeIcon}>
-                            <AntDesign name="qrcode" size={150} color="white" />
-                        </View>
+                        <QRCode
+                            value={commerceID}
+                            size={230}
+                            color="white"
+                            backgroundColor="black"
+                            getRef={(ref) => (qrCodeRef.current = ref)}
+                            quietZone={-1}
+                        />
                     </View>
 
                     <View style={styles.qrcodeTextContainer}>
@@ -56,6 +85,15 @@ export default function Commerce_Qrcode() {
                         <Text style={styles.qrcodeText}>{t("commerce.qrcode.description2")}</Text>
                     </View>
                 </View>
+
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.printerLabel}
+                    onPress={handlePrint}
+                >
+                    <Feather name="printer" size={20} color='#0D6EFD' />
+                    <Text style={[styles.qrcodeText, { color: '#0D6EFD' }]}>Imprimir</Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
@@ -69,7 +107,7 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 40,
         alignItems: 'center',
-        gap: 30
+        gap: 35
     },
     header: {
         fontSize: 44,
@@ -86,8 +124,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderColor: '#B3B3B3',
         alignItems: 'center',
-        padding: 15,
-        marginTop: 20
+        justifyContent: 'center',
     },
     qrcodeIcon: {
         backgroundColor: '#B3B3B3',
@@ -133,4 +170,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         zIndex: 10,
     },
+    printerLabel: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5
+    }
 });
