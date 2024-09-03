@@ -128,7 +128,7 @@ export default function CommerceHome() {
                                 <View key={index} style={[styles.sectionContainer, index % 2 == 0 ? { backgroundColor: '#F8F9FA' } : { backgroundColor: 'white' }]}>
                                     <View style={[styles.cardContainer, { gap: 30 }]}>
                                         <View>
-                                            <TouchableOpacity key={index} onPress={() => commerceNavigation.navigate('commerce_menu')} style={{ gap: 30 }}>
+                                            <TouchableOpacity key={index} onPress={() => commerceNavigation.navigate('commerce_menu')} style={{ gap: 30 }} activeOpacity={0.7}>
                                                 <View>
                                                     <View style={styles.card}>
                                                         <Image source={require('../../assets/images/sorveteria.png')} style={styles.image} />

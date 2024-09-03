@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Text, TextInput, View, StyleSheet } from 'react-native';
+import { SafeAreaView, Text, TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommerceStackParamList } from '@/types/navigationTypes';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import CommerceHeader from './commerceHeader';
-import {useLocale} from "@/contexts/TranslationContext";
+import { useLocale } from "@/contexts/TranslationContext";
+import * as Clipboard from 'expo-clipboard';
 
 type CommerceNavigationProp = NativeStackNavigationProp<CommerceStackParamList>;
 
@@ -13,6 +14,9 @@ export default function Commerce_Qrcode() {
     const commerceNavigation = useNavigation<CommerceNavigationProp>();
     const [commerceID, setCommerceID] = useState('#DF56G4DF');
     const { t } = useLocale();
+    const copyToClipboard = () => {
+        Clipboard.setStringAsync(commerceID);
+    };
     return (
         <SafeAreaView style={styles.safeArea}>
 
@@ -23,21 +27,26 @@ export default function Commerce_Qrcode() {
 
             <View style={styles.container}>
                 <View>
-                <Text style={styles.header}>{t("commerce.qrcode.title")}</Text>
+                    <Text style={styles.header}>{t("commerce.qrcode.title")}</Text>
                 </View>
                 <View style={styles.inputWrapper}>
-                    <Text style={[styles.qrcodeText, {marginLeft: 5, marginBottom: 5}]}>{t("commerce.qrcode.id")}</Text>
-                    <TextInput
-                        value={commerceID}
-                        editable={false}
-                        style={styles.textInput}
-                        textAlign='center'
-                    />
+                    <Text style={[styles.qrcodeText, { marginLeft: 5, marginBottom: 5 }]}>{t("commerce.qrcode.id")}</Text>
+                    <View>
+                        <TextInput
+                            value={commerceID}
+                            editable={false}
+                            style={styles.textInput}
+                            textAlign='center'
+                        />
+                        <TouchableOpacity style={styles.copyIconContainer} onPress={copyToClipboard} activeOpacity={0.7}>
+                            <Ionicons name="copy-outline" size={18} color="#495057" />
+                        </TouchableOpacity>
+                    </View>
                 </View>
 
-                <View>
-                    <View style={styles.qrcodeContainer}>
-                        <View style={styles.qrcodeSubContainer}>
+                <View style={styles.qrcodeContainer}>
+                    <View style={styles.qrcodeWrapper}>
+                        <View style={styles.qrcodeIcon}>
                             <AntDesign name="qrcode" size={150} color="white" />
                         </View>
                     </View>
@@ -68,17 +77,21 @@ const styles = StyleSheet.create({
         marginTop: 30
     },
     qrcodeContainer: {
-        width: 200,
-        height: 200,
+        width: '90%'
+    },
+    qrcodeWrapper: {
+        width: '100%',
+        height: 280,
         borderWidth: 1,
         borderRadius: 15,
         borderColor: '#B3B3B3',
         alignItems: 'center',
         padding: 15,
-        marginTop: 50
+        marginTop: 20
     },
-    qrcodeSubContainer: {
+    qrcodeIcon: {
         backgroundColor: '#B3B3B3',
+        borderRadius: 15,
         width: '100%',
         height: '100%',
         alignItems: 'center',
@@ -105,5 +118,19 @@ const styles = StyleSheet.create({
     inputWrapper: {
         position: 'relative',
         width: '90%'
+    },
+    copyIconContainer: {
+        position: 'absolute',
+        height: '100%',
+        right: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        backgroundColor: '#F3F4F6',
+        borderTopRightRadius: 6,
+        borderBottomRightRadius: 6,
+        borderColor: '#E9ECEF',
+        borderWidth: 1,
+        zIndex: 10,
     },
 });

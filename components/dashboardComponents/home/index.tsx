@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FlatList, Image, SafeAreaView, Text, View, StyleSheet, Dimensions, TouchableWithoutFeedback } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import ModalCommerce from "@/components/modalCommerce";
 import { Video } from 'expo-av';
+import { useFocusEffect } from "@react-navigation/native";
 
 const data = [
     {
@@ -113,6 +114,18 @@ export default function Home() {
     const flatListRef = useRef<FlatList>(null);
     const videoRefs = useRef<{ [key: string]: Video | null }>({});
 
+    useFocusEffect(
+        useCallback(() => {
+            if (selectedItem) {
+                setModalVisible(true);
+            }
+
+            return () => {
+                setModalVisible(false);
+            };
+        }, [selectedItem])
+    );
+
     useEffect(() => {
         const timer = setTimeout(() => {
             const nextIndex = (currentIndex + 1) % data.length;
@@ -192,7 +205,7 @@ export default function Home() {
                     showsVerticalScrollIndicator={false}
                     pagingEnabled
                     snapToAlignment="start"
-                    decelerationRate={0.9}
+                    decelerationRate={0.5}
                 />
                 {selectedItem && (
                     <ModalCommerce

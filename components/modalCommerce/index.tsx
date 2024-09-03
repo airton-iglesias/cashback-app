@@ -38,7 +38,7 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
         >
             <ScrollView>
                 <View style={styles.headerContainer}>
-                    <TouchableOpacity onPress={handleCloseModal} style={styles.closeButton}>
+                    <TouchableOpacity onPress={handleCloseModal} style={styles.closeButton} activeOpacity={0.7}>
                         <Octicons name="chevron-left" size={32} color="black" />
                     </TouchableOpacity>
                     <Text style={styles.headerText}>{t("modalCommerce.headerLabel")}</Text>
@@ -115,11 +115,11 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                             placeholderTextColor={'#ADB5BD'}
                                             editable={false}
                                         />
-                                        <TouchableOpacity style={styles.copyIconContainer} onPress={copyToClipboard}>
+                                        <TouchableOpacity style={styles.copyIconContainer} onPress={copyToClipboard} activeOpacity={0.7}>
                                             <Ionicons name="copy-outline" size={18} color="#495057" />
                                         </TouchableOpacity>
                                     </View>
-                                    <TouchableOpacity style={styles.accessButtonContainer}>
+                                    <TouchableOpacity style={styles.accessButtonContainer} activeOpacity={0.7}>
                                         <View style={styles.accessButton}>
                                             <Text style={styles.accessButtonText}>{t("modalCommerce.access")}</Text>
                                         </View>
@@ -132,7 +132,7 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                     <MaterialIcons name="local-fire-department" size={40} color="#146C43" />
                                 </View>
                                 <Text style={[styles.noCouponText, { marginTop: 5 }]}>{t("modalCommerce.getDiscountLocaly")}</Text>
-                                <TouchableOpacity style={{ flexDirection: 'row', marginTop: 4 }} onPress={copyToClipboard}>
+                                <TouchableOpacity style={{ flexDirection: 'row', marginTop: 4 }} onPress={copyToClipboard} activeOpacity={0.7}>
                                     <Text style={[styles.noCouponText, { fontWeight: '700' }]}>{selectedItem.modal.cupomCode}</Text>
                                     <Ionicons style={styles.copyIcon} name="copy-outline" size={20} color="black" />
                                 </TouchableOpacity>

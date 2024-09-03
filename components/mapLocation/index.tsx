@@ -23,7 +23,6 @@ export default function MapLocation() {
             <CommerceHeader
                 Title={t("mapLocation.headerLabel")}
                 ScreenGoback={() => rootNavigation.goBack()}
-                ScreenClose={() => rootNavigation.goBack()}
             />
             <View>
                 <MapView
