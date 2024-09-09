@@ -2,7 +2,7 @@ import { RootStackParamList } from "@/types/navigationTypes";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { View, StyleSheet } from "react-native";
-import CommerceHeader from "../commerceComponents/commerceHeader";
+import CommerceHeader from "../components/commerceComponents/commerceHeader";
 import MapView, { PROVIDER_GOOGLE }  from "react-native-maps";
 import { useLocale } from "@/contexts/TranslationContext";
 

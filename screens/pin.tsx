@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { SafeAreaView, Text, TouchableHighlight, View, StyleSheet, TouchableOpacity } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { AuthStackParamList, RootStackParamList } from "../../types/navigationTypes";
+import { AuthStackParamList, RootStackParamList } from "../types/navigationTypes";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
 

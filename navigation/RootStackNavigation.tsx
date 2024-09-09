@@ -1,12 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import DashboardScreen from '@/screens/Dashboard';
+import DashboardScreen from '@/screens/dashboard';
 import Profile from '../screens/profile';
 import Points from '../screens/points';
 import CommerceScreen from '../screens/commerce';
 import { RootStackParamList } from '../types/navigationTypes';
 import WallatExtract from '@/components/dashboardComponents/wallat/wallatExtract';
 import RecoveryDatas from '@/screens/RecoveryDatas';
-import MapLocation from '@/components/mapLocation';
+import MapLocation from '@/screens/mapLocation';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 

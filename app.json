@@ -20,7 +20,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [],
+      "package": "com.cashbackapp"
     },
     "web": {
       "bundler": "metro",
@@ -30,6 +32,12 @@
       "expo-localization",
       "expo-font",
       "react-native-video"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c2aadba8-d813-453c-9aa7-eda6f0c55df2"
+      }
+    },
+    "owner": "airtoniglesias"
   }
 }

@@ -5,7 +5,7 @@ import SignupScreen from '@/screens/signup';
 import CheckInbox from '@/components/recoveryDatasComponents/CheckInbox';
 import ResetPassword from '@/components/recoveryDatasComponents/resetPassword';
 import ResetPasswordSucess from '@/components/recoveryDatasComponents/resetSucess';
-import Pin from '@/components/pin';
+import Pin from '@/screens/pin';
 import ResetPinHome from '@/components/recoveryDatasComponents/resetPinHome';
 import RecoveryDatas from '@/screens/RecoveryDatas';
 import ResetPinConfirm from '@/components/recoveryDatasComponents/resetPinConfirm';
