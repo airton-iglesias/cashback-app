@@ -5,15 +5,10 @@ import { Feather } from '@expo/vector-icons';
 import AiIcon from "../../assets/icons/AiIcon";
 import LogoutIcon from "../../assets/icons/LogoutIcon";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { RootStackParamList } from "../../types/navigationTypes";
-import { useNavigation, CommonActions } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useLocale } from "@/contexts/TranslationContext";
-
-type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
+import { Link } from "expo-router";
 
 export default function Sidebar({ closeSidebar, isSidebarOpen }: any) {
-    const rootNavigation = useNavigation<RootNavigationProp>();
 
     const sidebarOffset = useSharedValue(400);
     const { t } = useLocale();
@@ -49,52 +44,52 @@ export default function Sidebar({ closeSidebar, isSidebarOpen }: any) {
                     </View>
                     <View style={styles.content}>
                         <View style={styles.menuItem}>
-                            <TouchableOpacity
-                                onPress={() => rootNavigation.navigate('profile')}
-                                style={styles.menuButton}
-                            >
-                                <Feather name="user" size={24} color="white" />
-                                <Text style={styles.menuText}>{t("sidebar.profile")}</Text>
-                            </TouchableOpacity>
+                            <Link href={"/profile"} asChild>
+                                <TouchableOpacity
+                                    style={styles.menuButton}
+                                    activeOpacity={0.7}
+                                >
+                                    <Feather name="user" size={24} color="white" />
+                                    <Text style={styles.menuText}>{t("sidebar.profile")}</Text>
+                                </TouchableOpacity>
+                            </Link>
                         </View>
                         <View style={styles.menuItem}>
-                            <TouchableOpacity
-                                onPress={() => rootNavigation.navigate('points')}
-                                style={styles.menuButton}
-                            >
-                                <Feather name="star" size={24} color="white" />
-                                <Text style={styles.menuText}>{t("sidebar.points")}</Text>
-                            </TouchableOpacity>
+                            <Link href={"/points"} asChild>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    style={styles.menuButton}
+                                >
+                                    <Feather name="star" size={24} color="white" />
+                                    <Text style={styles.menuText}>{t("sidebar.points")}</Text>
+                                </TouchableOpacity>
+                            </Link>
+
                         </View>
                     </View>
                     <View style={styles.footer}>
                         <View style={styles.menuItem}>
-                            <TouchableOpacity style={styles.menuButton}>
+                            <TouchableOpacity style={styles.menuButton} activeOpacity={0.7}>
                                 <AiIcon size={24} color="white" />
                                 <Text style={styles.menuText}>{t("sidebar.aboutUs")}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.menuItem}>
-                            <TouchableOpacity style={styles.menuButton}>
+                            <TouchableOpacity style={styles.menuButton} activeOpacity={0.7}>
                                 <Feather name="help-circle" size={24} color="white" />
                                 <Text style={styles.menuText}>{t("sidebar.help")}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.menuItem}>
-                            <TouchableOpacity
-                                style={styles.menuButton}
-                                onPress={() => {
-                                    rootNavigation.dispatch(
-                                        CommonActions.reset({
-                                            index: 1,
-                                            routes: [{ name: 'signin' }],
-                                        })
-                                    );
-                                }}
-                            >
-                                <LogoutIcon size={24} color="white" />
-                                <Text style={styles.menuText}>{t("sidebar.logout")}</Text>
-                            </TouchableOpacity>
+                            <Link href={"/"} replace asChild>
+                                <TouchableOpacity
+                                    style={styles.menuButton}
+                                    activeOpacity={0.7}
+                                >
+                                    <LogoutIcon size={24} color="white" />
+                                    <Text style={styles.menuText}>{t("sidebar.logout")}</Text>
+                                </TouchableOpacity>
+                            </Link>
                         </View>
                     </View>
                 </View>
@@ -144,7 +139,6 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        paddingHorizontal: 20,
         paddingBottom: 10,
     },
     menuItem: {

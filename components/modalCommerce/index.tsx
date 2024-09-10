@@ -6,11 +6,7 @@ import { MaterialCommunityIcons, Octicons, Feather, Ionicons, MaterialIcons } fr
 import { useLocale } from "@/contexts/TranslationContext";
 import { WebView } from 'react-native-webview';
 import { Linking } from 'react-native';
-import { RootStackParamList } from "@/types/navigationTypes";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useNavigation } from "@react-navigation/native";
-
-type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
+import { router } from "expo-router";
 
 interface ModalCommerceProps {
     modalVisible: boolean;
@@ -24,7 +20,6 @@ interface flexDiscountProps {
 }
 
 export default function ModalCommerce({ modalVisible, selectedItem, handleCloseModal }: ModalCommerceProps) {
-    const rootNavigation = useNavigation<RootNavigationProp>();
     const { t } = useLocale();
     const copyToClipboard = () => {
         Clipboard.setStringAsync(selectedItem.modal.cupomCode);
@@ -69,10 +64,9 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                     <>
                                         <TouchableOpacity
                                             activeOpacity={0.7}
-                                            onPress={() => rootNavigation.navigate('maplocation')}
-                                            
+                                            onPress={()=> router.push("/map_location")}
                                         >
-                                            <Image style={styles.image} source={require("../../assets/images/mapPreview.png")} />
+                                            <Image style={styles.image} source={require("@/assets/images/mapPreview.png")} />
                                         </TouchableOpacity>
                                         <View>
                                             <Text style={styles.location}>{selectedItem.location} | {selectedItem.modal.distance}</Text>
@@ -82,7 +76,7 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                 )}
                             </View>
                             <View style={styles.sectionItem}>
-                                <Image style={styles.image} source={require("../../assets/images/reidobacalhau.png")} />
+                                <Image style={styles.image} source={require("@/assets/images/reidobacalhau.png")} />
                                 <View style={styles.infoContainer}>
                                     <Text style={styles.label}>{t("modalCommerce.eventCreatedBy")}</Text>
                                     <Text style={styles.link}>{selectedItem.modal.createdBy}</Text>

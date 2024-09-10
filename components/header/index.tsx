@@ -2,58 +2,32 @@ import React, { useState } from "react";
 import { TextInput, TouchableOpacity, View, StyleSheet } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation, CommonActions } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "@/types/navigationTypes";
-import { useRoute } from '@react-navigation/native';
 import StoreIcon from "@/assets/icons/storeIcon";
+import { Link, usePathname } from "expo-router";
+import { router } from 'expo-router';
 
-type RootNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function Topbar({ openSidebar, openNotifications }: any) {
-
+    const route = usePathname();
     const [value, setValue] = useState('');
-
-    const rootNavigation = useNavigation<RootNavigationProp>();
-    const route = useRoute();
-
-
-    const handleSwitchAccount = () => {
-        if (route.name === 'home') {
-            setValue('')
-            rootNavigation.dispatch(
-                CommonActions.reset({
-                    index: 1,
-                    routes: [{ name: 'dashboard' }],
-                })
-            );
-        } else {
-            rootNavigation.dispatch(
-                CommonActions.reset({
-                    index: 1,
-                    routes: [{ name: 'commerce' }],
-                })
-            );
-        }
-    };
 
     return (
         <>
             <View style={styles.topBar}>
-
                 <View style={styles.iconContainer}>
                     <View style={styles.statusIndicator}></View>
-                    <TouchableOpacity
-                        onPress={handleSwitchAccount}
-                        style={styles.switchAccountButton}
-                        activeOpacity={0.7}
-                    >
-                        {route.name === "home" ?
-                            <Feather name="users" size={24} color="white" />
-                            :
-                            <StoreIcon height={26} width={26} color={"white"} />
-                        }
-                    </TouchableOpacity>
+                    <Link href={route === "/commerce" ? "/dashboard" : "/commerce"} replace asChild>
+                        <TouchableOpacity
+                            style={styles.switchAccountButton}
+                            activeOpacity={0.7}
+                        >
+                            {route === "/commerce" ?
+                                <Feather name="users" size={24} color="white" />
+                                :
+                                <StoreIcon height={26} width={26} color={"white"} />
+                            }
+                        </TouchableOpacity>
+                    </Link>
                 </View>
 
                 <View style={styles.textInputContainer}>
@@ -62,19 +36,19 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                         placeholder="0"
                         onChangeText={(number) => setValue(number)}
                         placeholderTextColor="#4b5563"
-                        textAlign={route.name === "home" ? "center" : "right"}
+                        textAlign={route === "/commerce" ? "center" : "right"}
                         value={value}
-                        readOnly={route.name === "home"}
+                        readOnly={route === "/commerce"}
                         style={[
                             styles.textInput,
                             {
-                                paddingRight: route.name === "home" ? 0 : 60,
-                                color: route.name === "home" ? '#28A745' : 'white'
+                                paddingRight: route === "/commerce" ? 0 : 60,
+                                color: route === "/commerce" ? '#28A745' : 'white'
                             }
                         ]}
                         keyboardType={"numeric"}
                     />
-                    {route.name === "home" ?
+                    {route === "/commerce" ?
                         null
                         :
                         <TouchableOpacity

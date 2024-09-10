@@ -4,10 +4,11 @@
     "slug": "cashback-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -15,10 +16,8 @@
       "supportsTablet": true
     },
     "android": {
-      "minSdkVersion": 24,
-      "targetSdkVersion": 33,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [],
@@ -26,18 +25,24 @@
     },
     "web": {
       "bundler": "metro",
-      "favicon": "./assets/favicon.png"
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-localization",
-      "expo-font",
-      "react-native-video"
+      "expo-router",
+      "react-native-video",
+      "expo-localization"
     ],
+    "experiments": {
+      "typedRoutes": true
+    },
     "extra": {
+      "router": {
+        "origin": false
+      },
       "eas": {
         "projectId": "c2aadba8-d813-453c-9aa7-eda6f0c55df2"
       }
-    },
-    "owner": "airtoniglesias"
+    }
   }
 }

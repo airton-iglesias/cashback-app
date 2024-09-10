@@ -122,7 +122,7 @@
     },
     "recoveryDatas": {
         "goBack": "voltar",
-        "inputLabel": "Email para envio de código de confirmação",
+        "inputLabel": "Email para envio de confirmação",
         "checkInbox": "Verifique sua caixa de email",
         "newPasswordLabel": "Crie uma nova senha",
         "requirementsLabel": "Com 8 caracteres ou mais, sendo alfanúmero.",

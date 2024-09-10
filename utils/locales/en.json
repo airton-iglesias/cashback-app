@@ -122,7 +122,7 @@
   },
   "recoveryDatas": {
     "goBack": "Go back",
-    "inputLabel": "Email to send confirmation code",
+    "inputLabel": "Email to send confirmation",
     "checkInbox": "Check your inbox",
     "newPasswordLabel": "Create a new password",
     "requirementsLabel": "With 8 or more characters, alphanumeric.",
