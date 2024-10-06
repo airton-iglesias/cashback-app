@@ -1,80 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, BackHandler } from 'react-native';
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Feather, EvilIcons } from '@expo/vector-icons';
 import Topbar from '@/components/header';
-import NotificationSidebar from '@/components/notificationSidebar';
-import Sidebar from '@/components/sidebar';
 import Input from '@/components/input';
 import { useLocale } from '@/contexts/TranslationContext';
-import { Link } from 'expo-router';
+import { fontSize } from '@/constants/fonts';
 
-export default function Home({filterType, place, maxDistance, handleMaxDistance, handleSearchValue, handleLocation, handlePlace, handleFilterType, showResults}: any) {
+export default function Home({
+    filterType, place, maxDistance, handleMaxDistance, handleSearchValue, handleLocation, handlePlace,
+    handleFilterType, showResults, openSidebar, openNotifications }: any) {
 
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-    const [showSidebar, setShowSidebar] = useState(false);
-    const [isNotificationsOpen, setIsNotificationsOpen] = useState(true);
-    const [showNotifications, setShowNotifications] = useState(false);
     const { t } = useLocale();
-
-    const openSidebar = () => {
-        setShowSidebar(true);
-        setIsSidebarOpen(true);
-    };
-
-    const closeSidebar = () => {
-        setIsSidebarOpen(false);
-        setTimeout(() => {
-            setShowSidebar(false);
-        }, 300);
-    };
-
-    const openNotifications = () => {
-        setIsNotificationsOpen(true);
-        setShowNotifications(true);
-    };
-
-    const closeNotifications = () => {
-        setIsNotificationsOpen(false);
-        setTimeout(() => {
-            setShowNotifications(false);
-        }, 300);
-    };
-    
-    useEffect(() => {
-        const backAction = () => {
-            if (isSidebarOpen) {
-                closeSidebar();
-                return true;
-            }
-            return false;
-        };
-
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-
-        return () => backHandler.remove();
-    }, [isSidebarOpen]);
-
-    useEffect(() => {
-        const backAction = () => {
-            if (isNotificationsOpen) {
-                closeNotifications();
-                return true;
-            }
-            return false;
-        };
-
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-
-        return () => backHandler.remove();
-    }, [isNotificationsOpen]);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <Topbar openSidebar={openSidebar} openNotifications={openNotifications} />
-            {showNotifications && <NotificationSidebar closeSidebar={closeNotifications} isSidebarOpen={isNotificationsOpen} />}
-            {showSidebar && <Sidebar closeSidebar={closeSidebar} isSidebarOpen={isSidebarOpen} />}
-
+            <Topbar openSidebar={openSidebar} openNotifications={openNotifications}/>
             <View style={styles.container}>
 
                 <View style={styles.inputWrapper}>
@@ -93,6 +34,7 @@ export default function Home({filterType, place, maxDistance, handleMaxDistance,
                         style={filterType === "Comercio" ? [styles.button, styles.activeButton] : styles.button}
                         onPress={() => handleFilterType("Comercio")}
                     >
+                        {filterType === "Comercio" ? <View style={styles.statusIndicator}></View> : null}
                         <Text style={filterType === "Comercio" ? styles.activeButtonText : styles.buttonText}>{t("dashboardSearch.home.commerce")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -100,6 +42,7 @@ export default function Home({filterType, place, maxDistance, handleMaxDistance,
                         style={filterType === "Eventos" ? [styles.button, styles.activeButton] : styles.button}
                         onPress={() => handleFilterType("Eventos")}
                     >
+                        {filterType === "Eventos" ? <View style={styles.statusIndicator}></View> : null}
                         <Text style={filterType === "Eventos" ? styles.activeButtonText : styles.buttonText}>{t("dashboardSearch.home.events")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -107,6 +50,7 @@ export default function Home({filterType, place, maxDistance, handleMaxDistance,
                         style={filterType === "Promoções" ? [styles.button, styles.activeButton] : styles.button}
                         onPress={() => handleFilterType("Promoções")}
                     >
+                        {filterType === "Promoções" ? <View style={styles.statusIndicator}></View> : null}
                         <Text style={
                             filterType === "Promoções" ? styles.activeButtonText : styles.buttonText}>{t("dashboardSearch.home.promotions")}</Text>
                     </TouchableOpacity>
@@ -119,6 +63,7 @@ export default function Home({filterType, place, maxDistance, handleMaxDistance,
                             style={place === "Local" ? [styles.button, styles.activeButton] : styles.button}
                             onPress={() => handlePlace("Local")}
                         >
+                            {place === "Local" ? <View style={styles.statusIndicator}></View> : null}
                             <Text style={place === "Local" ? styles.activeButtonText : styles.buttonText}>{t("dashboardSearch.home.locally")}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -126,6 +71,7 @@ export default function Home({filterType, place, maxDistance, handleMaxDistance,
                             style={place === "Online" ? [styles.button, styles.activeButton] : styles.button}
                             onPress={() => handlePlace("Online")}
                         >
+                            {place === "Online" ? <View style={styles.statusIndicator}></View> : null}
                             <Text style={place === "Online" ? styles.activeButtonText : styles.buttonText}>{t("dashboardSearch.home.online")}</Text>
                         </TouchableOpacity>
                     </View>
@@ -136,6 +82,7 @@ export default function Home({filterType, place, maxDistance, handleMaxDistance,
                         style={place === "closeToMe" ? [styles.buttonLocation, styles.activeButton] : styles.buttonLocation}
                         onPress={() => handlePlace("closeToMe")}
                     >
+                        {place === "closeToMe" ? <View style={styles.statusIndicator}></View> : null}
                         <EvilIcons name="location" size={24} color={place === "closeToMe" ? "white" : "black"} />
                         <Text style={place === "closeToMe" ? [styles.buttonLocationText, styles.activeButtonText] : styles.buttonLocationText}>{t("dashboardSearch.home.closeToMe")}</Text>
                     </TouchableOpacity>
@@ -163,15 +110,15 @@ export default function Home({filterType, place, maxDistance, handleMaxDistance,
                         thumbTintColor={'#000000'}
                     />
                 </View>
-                    <TouchableOpacity
-                        activeOpacity={0.7}
-                        style={styles.nextButton}
-                        onPress={() => showResults(true)}
-                    >
-                        <View style={styles.nextButtonContent}>
-                            <Feather name="check" size={24} color="white" />
-                        </View>
-                    </TouchableOpacity>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.nextButton}
+                    onPress={() => showResults(true)}
+                >
+                    <View style={styles.nextButtonContent}>
+                        <Feather name="check" size={24} color="white" />
+                    </View>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
@@ -220,7 +167,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: '100%',
         height: 48,
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         color: '#ADB5BD',
         borderColor: '#ADB5BD',
         paddingLeft: 15,
@@ -256,15 +203,15 @@ const styles = StyleSheet.create({
     },
     activeButton: {
         backgroundColor: '#000000',
-        fontSize: 15
+        fontSize: fontSize.labels.medium
     },
     activeButtonText: {
         color: '#fff',
-        fontSize: 15
+        fontSize: fontSize.labels.medium
     },
     buttonText: {
         color: '#000',
-        fontSize: 15
+        fontSize: fontSize.labels.medium
     },
     buttonLocation: {
         padding: 10,
@@ -279,10 +226,10 @@ const styles = StyleSheet.create({
         gap: 8
     },
     buttonLocationText: {
-        fontSize: 15
+        fontSize: fontSize.labels.medium
     },
     sectionLabel: {
-        fontSize: 20
+        fontSize: fontSize.labels.large
     },
     sliderSection: {
         alignItems: 'center',
@@ -310,5 +257,16 @@ const styles = StyleSheet.create({
         height: 56,
         borderRadius: 8,
         paddingHorizontal: 16,
+    },
+    statusIndicator: {
+        position: 'absolute',
+        top: -3,
+        right: -4,
+        height: 12,
+        width: 12,
+        backgroundColor: '#3F31E1',
+        borderRadius: 6,
+        borderWidth: 1,
+        borderColor: 'white',
     },
 });

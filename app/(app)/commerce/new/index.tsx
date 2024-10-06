@@ -8,6 +8,8 @@ import CommerceGoBackModal from '@/components/commerceGoBackModal';
 import { useStepperContext } from '@/contexts/CommerceStepperContext';
 import { useLocale } from '@/contexts/TranslationContext';
 import { useFocusEffect, router, useLocalSearchParams } from 'expo-router';
+import FooterNewCommerce from '@/components/footerNewCommerce';
+import { fontSize } from '@/constants/fonts';
 
 
 export default function New_Commerce() {
@@ -52,7 +54,6 @@ export default function New_Commerce() {
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <CommerceHeader
                     Title={editor === "true" ? t("commerce.new_commerce.step0.edit") : t("commerce.new_commerce.step0.new")}
-                    ScreenGoback={() => router.back()}
                     ScreenClose={() => router.replace("/commerce")}
                 />
 
@@ -75,25 +76,11 @@ export default function New_Commerce() {
                 </View>
             </ScrollView>
 
-            <View style={styles.footer}>
-                <View style={styles.stepperLayoutContainer}>
-                    <Text style={styles.stepperLayoutText}>{t("commerce.new_commerce.step0.currentStepper")}</Text>
-                    <View style={styles.stepperLayoutSelected}></View>
-                    <View style={styles.stepperLayout}></View>
-                    <View style={styles.stepperLayout}></View>
-                    <View style={styles.stepperLayout}></View>
-                    <View style={styles.stepperLayout}></View>
-                    <View style={styles.stepperLayout}></View>
-                </View>
-                <View style={styles.nextButton}>
-                    <TouchableOpacity style={styles.nextButtonContent}
-                        onPress={() => router.push("/commerce/new/basic_datas")}
-                        activeOpacity={0.7}
-                    >
-                        <Feather name="arrow-right" size={24} color="white" />
-                    </TouchableOpacity>
-                </View>
-            </View>
+            <FooterNewCommerce
+                backStep={() => router.back()}
+                nextStep={()=> router.push("/commerce/new/basic_datas")}
+                currentStep={1}
+            />
             <CommerceGoBackModal
                 modalVisible={modalVisible}
                 setModalVisible={() => setModalVisible(false)}
@@ -114,63 +101,12 @@ const styles = StyleSheet.create({
     section: {
         width: '100%',
         paddingHorizontal: 15,
-        marginTop: 18,
+        marginTop: 25,
         alignItems: 'center',
     },
     sectionTitle: {
-        fontSize: 26,
+        fontSize: fontSize.titles.mini,
         fontWeight: 'bold',
         marginBottom: 30,
-    },
-    footer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 16,
-        height: 120
-    },
-    stepperLayoutContainer: {
-        flexDirection: 'row',
-        gap: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-    },
-    stepperLayout: {
-        height: 6,
-        width: 14,
-        backgroundColor: '#121212',
-        borderRadius: 22,
-        opacity: 0.5,
-        marginTop: 2
-    },
-    stepperLayoutSelected: {
-        opacity: 1,
-        width: 31,
-        backgroundColor: '#121212',
-        borderRadius: 22,
-        height: 6,
-        marginTop: 2
-    },
-    stepperLayoutText: {
-        fontSize: 20,
-        fontWeight: 'normal',
-    },
-    nextButton: {
-        borderRadius: 8,
-        height: '100%',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        flex: 1
-    },
-    nextButtonContent: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'black',
-        width: 78,
-        height: 78,
-        borderRadius: 999,
-        paddingHorizontal: 16,
     },
 });

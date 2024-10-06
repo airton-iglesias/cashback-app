@@ -4,7 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import StoreIcon from "@/assets/icons/storeIcon";
 import { Link, usePathname } from "expo-router";
-import { router } from 'expo-router';
+import { fontSize } from "@/constants/fonts";
 
 
 export default function Topbar({ openSidebar, openNotifications }: any) {
@@ -13,7 +13,7 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
 
     return (
         <>
-            <View style={styles.topBar}>
+            <View style={[styles.topBar]}>
                 <View style={styles.iconContainer}>
                     <View style={styles.statusIndicator}></View>
                     <Link href={route === "/commerce" ? "/dashboard" : "/commerce"} replace asChild>
@@ -90,13 +90,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 16,
         justifyContent: 'space-between',
-        backgroundColor: '#212121',
         width: '100%',
         paddingTop: 32,
         paddingBottom: 6,
         zIndex: 10,
         top: 0,
         gap: 10,
+        backgroundColor: '#212121'
     },
     iconContainer: {
         backgroundColor: '#303030',
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         backgroundColor: '#343434',
         fontWeight: '900',
-        fontSize: 24,
+        fontSize: fontSize.titles.mini,
     },
     plusWrapper: {
         position: 'absolute',

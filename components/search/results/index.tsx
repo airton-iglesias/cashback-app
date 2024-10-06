@@ -5,6 +5,7 @@ import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, TextInput, K
 import MapPinnedIcon from '@/assets/icons/mapPinnedIcon';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { useLocale } from '@/contexts/TranslationContext';
+import { fontSize } from '@/constants/fonts';
 
 
 type DataItem = {
@@ -251,7 +252,7 @@ export default function Results({ showResults }: any) {
 
     const handleSortChange = (criteria: any) => {
         setSortCriteria(criteria);
-        setShowSortList(false);
+        setShowSortList(!showSortList);
     };
 
     const filteredData = data.filter(item => {
@@ -349,7 +350,7 @@ export default function Results({ showResults }: any) {
                                 <MapPinnedIcon />
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={() => setShowSortList(true)} activeOpacity={0.7}>
+                            <TouchableOpacity onPress={() => setShowSortList(!showSortList)} activeOpacity={0.7}>
                                 <FontAwesome5 name="sort-alpha-up" size={24} color="#0D6EFD" />
                             </TouchableOpacity>
                         </>
@@ -588,7 +589,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#D7D7D7',
     },
     searchResultInfosText: {
-        fontSize: 18
+        fontSize:  fontSize.labels.medium
     },
     item: {
         flexDirection: 'row',
@@ -608,14 +609,14 @@ const styles = StyleSheet.create({
         marginLeft: 16,
     },
     title: {
-        fontSize: 20,
+        fontSize:  fontSize.titles.mini,
         fontWeight: 'bold',
         marginBottom: 8,
     },
     location: {
         color: '#555',
-        marginBottom: 8,
-        fontSize: 16
+        marginBottom: 12,
+        fontSize:  fontSize.labels.medium
     },
     tagsContainer: {
         flexDirection: 'row',
@@ -648,7 +649,7 @@ const styles = StyleSheet.create({
     },
     discountText: {
         color: '#D9A100',
-        fontSize: 16,
+        fontSize:  fontSize.labels.medium,
         marginBottom: 2
     },
     searchIcon: {
@@ -667,7 +668,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: '100%',
         height: 48,
-        fontSize: 18,
+        fontSize:  fontSize.labels.medium,
         color: '#FFF',
         borderColor: '#434343',
         paddingLeft: 50,
@@ -690,7 +691,7 @@ const styles = StyleSheet.create({
     },
     mapButtonText: {
         color: 'white',
-        fontSize: 17
+        fontSize:  fontSize.labels.medium
     },
     iconsWrapper: {
         flexDirection: 'row',
@@ -734,7 +735,7 @@ const styles = StyleSheet.create({
     sortMenuLabel: {
         color: '#ABB5BE',
         fontWeight: '500',
-        fontSize: 12,
+        fontSize:  fontSize.labels.mini,
         paddingVertical: 7,
         paddingHorizontal: 15
     },
@@ -748,10 +749,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15
     },
     sortMenuText: {
-        fontSize: 15
+        fontSize: fontSize.labels.large
     },
     sortMenuTextSelected: {
-        fontSize: 15,
+        fontSize:  fontSize.labels.large,
         color: '#fff'
     }
 });

@@ -3,6 +3,7 @@ import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import StoreIcon from '@/assets/icons/storeIcon';
 import CalendarIconRadio from '@/assets/icons/calendarIconRadio';
 import PricingIcon from '@/assets/icons/pricingIcon';
+import { fontSize } from '@/constants/fonts';
 
 interface RadioCommerceTypeProps {
     options: string[];
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
         borderColor: '#6C757D'
     },
     optionText: {
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         fontWeight: '600',
     },
     outlineCircle: {

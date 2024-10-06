@@ -3,6 +3,7 @@ import { SafeAreaView, Text, TouchableHighlight, View, StyleSheet } from "react-
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
 import { router, useLocalSearchParams } from 'expo-router';
+import { fontSize } from "@/constants/fonts";
 
 
 export default function Step3() {    
@@ -42,7 +43,7 @@ export default function Step3() {
                     <View style={styles.pinRow}>
                         {Array(6).fill(0).map((_, index) => (
                             <Text key={index} style={styles.pinText}>
-                                {pin[index] ? <Text style={styles.pinDotMarked}>•</Text> : <Text style={styles.pinDot}>•</Text>}
+                                {pin[index] ? <Text style={styles.pinDotMarked}>{pin[index]}</Text> : <Text style={styles.pinDot}>•</Text>}
                             </Text>
                         ))}
                     </View>
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
         gap: 60
     },
     title: {
-        fontSize: 40,
+        fontSize: fontSize.titles.large,
         fontWeight: 'bold',
     },
     pinContainer: {
@@ -118,12 +119,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     pinText: {
-        fontSize: 50,
+        fontSize: fontSize.titles.superlarge,
         fontWeight: '900',
         marginHorizontal: 12,
     },
     pinDot: {
-        color: '#848484',
+        color: '#d1d5db',
     },
     pinDotMarked:{
         color: '#000',
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        fontSize: 32,
+        fontSize: fontSize.titles.large,
         fontWeight: '900',
         color: '#000000',
     },

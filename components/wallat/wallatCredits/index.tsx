@@ -1,17 +1,102 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal } from 'react-native';
-import LoyaltyComponent from '@/components/wallat/loyaltyComponent';
-import { Entypo, FontAwesome } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
-import Input from '@/components/input';
 import { useLocale } from '@/contexts/TranslationContext';
+import { fontSize } from '@/constants/fonts';
+import LoyaltyComponent from '../loyaltyComponent';
+import WallatDeposit from '../wallatDeposit';
 
-export default function WallatCredits({ creditsAmount, currencyType, loyaltyDatas, openExtract }: any) {
+export default function WallatCredits({ creditsAmount, currencyType, openExtract }: any) {
 
     const [search, setSearch] = useState<string>('');
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedCurrency, setSelectedCurrency] = useState<string | null>('cEUR');
+    const [currentComponent, setCurrentComponent] = useState<string>("deposit");
     const { t } = useLocale();
+
+    const [datas, setDatas] = useState([
+        {
+            creditsAmount: "50,00",
+            currencyType: "cEUR",
+            tokensAmount: "999999999999999,00",
+            tokensBlockedAmount: "99999999999999,00",
+            token: "X",
+            blockChain: "XXXX",
+            wallatLink: "https://www.google.com",
+            loyaltyDatas: [
+                {
+                    id: "1",
+                    name: "Rei do bacalhau",
+                    value: "100,00",
+                },
+                {
+                    id: "2",
+                    name: "Rei do sorvete",
+                    value: "100,00",
+                },
+                {
+                    id: "3",
+                    name: "Rei do peixe",
+                    value: "100,00",
+                },
+                {
+                    id: "4",
+                    name: "Sorveteria",
+                    value: "100,00",
+                },
+                {
+                    id: "5",
+                    name: "Pizzaria",
+                    value: "100,00",
+                },
+                {
+                    id: "6",
+                    name: "Pizzaria",
+                    value: "100,00",
+                },
+                {
+                    id: "7",
+                    name: "Pizzaria",
+                    value: "100,00",
+                },
+                {
+                    id: "8",
+                    name: "Pizzaria",
+                    value: "100,00",
+                },
+                {
+                    id: "9",
+                    name: "Pizzaria",
+                    value: "100,00",
+                },
+                {
+                    id: "10",
+                    name: "Pizzaria",
+                    value: "100,00",
+                },
+                {
+                    id: "11",
+                    name: "Pizzaria",
+                    value: "100,00",
+                },
+                {
+                    id: "12",
+                    name: "Pizzaria",
+                    value: "100,00",
+                },
+                {
+                    id: "13",
+                    name: "Pizzaria",
+                    value: "100,00",
+                }, {
+                    id: "14",
+                    name: "Pizzaria",
+                    value: "100,00",
+                },
+            ],
+        }
+    ]);
 
     const options = [
         {
@@ -24,8 +109,8 @@ export default function WallatCredits({ creditsAmount, currencyType, loyaltyData
         },
     ];
 
-    const filteredData = loyaltyDatas.filter((item: { nome: string; }) => {
-        const matchesSearchInput = item.nome.toLowerCase().includes(search.toLowerCase());
+    const filteredData = datas[0].loyaltyDatas.filter((item: { name: string; }) => {
+        const matchesSearchInput = item.name.toLowerCase().includes(search.toLowerCase());
         return matchesSearchInput;
     });
 
@@ -34,11 +119,32 @@ export default function WallatCredits({ creditsAmount, currencyType, loyaltyData
         setModalVisible(false);
     };
 
+    const renderComponent = () => {
+        if (currentComponent === "deposit"){
+            return (
+                <WallatDeposit
+                    token={datas[0].token}
+                    blockChain={datas[0].blockChain}
+                    wallatLink={datas[0].wallatLink}
+                />
+            )
+        }
+
+        if(currentComponent === "fidelity"){
+            return (
+                <LoyaltyComponent
+                    setSearch={(text: string) => setSearch(text)}
+                    loyaltyDatas={datas[0].loyaltyDatas}
+                />
+            )
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <View style={styles.amountContainer}>
-                    <Text numberOfLines={1} style={styles.amountText}>{creditsAmount}</Text>
+                    <Text numberOfLines={1} style={styles.amountText}>{datas[0].creditsAmount}</Text>
                     <TouchableOpacity style={styles.currencyContainer} onPress={() => setModalVisible(true)}>
                         <Text style={styles.currencyText}>{selectedCurrency || currencyType}</Text>
                         <Entypo name="chevron-small-down" size={24} color="black" />
@@ -48,51 +154,22 @@ export default function WallatCredits({ creditsAmount, currencyType, loyaltyData
 
             <View style={styles.fidelityHeader}>
                 <View style={styles.fidelityTitleContainer}>
-                    <Text style={styles.fidelityTitle}>{t("dashboardWallat.creditsScreen.fidelity")}</Text>
+                    <TouchableOpacity style={styles.fidelityButton} activeOpacity={0.7} onPress={() => setCurrentComponent("deposit")}>
+                        <Text style={[styles.fidelityTitle, currentComponent === "deposit" ? { color: '#0D6EFD' }: { color: '#000' }]}>{t("dashboardWallat.creditsScreen.deposit")}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.fidelityButton} activeOpacity={0.7} onPress={() => setCurrentComponent("fidelity")}>
+                        <Text style={[styles.fidelityTitle, currentComponent === "fidelity" ? { color: '#0D6EFD' }: { color: '#000' }]}>{t("dashboardWallat.creditsScreen.fidelity")}</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity style={styles.fidelityButton} activeOpacity={0.7} onPress={openExtract}>
-                        <Text style={[styles.fidelityTitle, { color: '#0D6EFD' }]}>{t("dashboardWallat.creditsScreen.extract")}</Text>
-                        <Feather style={{ marginBottom: 7, marginLeft: 5 }} name="list" size={24} color="#0D6EFD" />
+                        <Text style={[styles.fidelityTitle, { color: '#000' }]}>{t("dashboardWallat.creditsScreen.extract")}</Text>
+                        <Feather style={{ marginBottom: 7, marginLeft: 5 }} name="list" size={24} color="#000" />
                     </TouchableOpacity>
                 </View>
             </View>
 
-            <View style={styles.searchContainer}>
-                <View style={styles.searchInnerContainer}>
-                    <FontAwesome name="search" size={18} style={styles.searchIcon} />
-                    <Input
-                        placeholder={t("dashboardWallat.creditsScreen.search")}
-                        onChange={(text: string) => setSearch(text)}
-                        customPaddingLeft={40}
-                    />
-                </View>
-            </View>
-
-            <View style={styles.labelContainer}>
-                <View style={styles.descriptionContainer}>
-                    <Text style={styles.label}>{t("dashboardWallat.creditsScreen.item")}</Text>
-                    <Text style={styles.label}>{t("dashboardWallat.creditsScreen.value")}</Text>
-                </View>
-            </View>
-
-            <View style={styles.listContainer}>
-                {
-                    loyaltyDatas.length !== 0 ?
-                        <FlatList
-                            data={filteredData}
-                            keyExtractor={(item) => item.id}
-                            renderItem={({ item, index }) => (
-                                <LoyaltyComponent
-                                    key={index}
-                                    nome={item.nome}
-                                    valor={item.valor}
-                                />
-                            )}
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={{ paddingBottom: 360}}
-                        />
-                        : null
-                }
-            </View>
+            {
+                renderComponent()
+            }
 
             <Modal
                 animationType="slide"
@@ -102,7 +179,7 @@ export default function WallatCredits({ creditsAmount, currencyType, loyaltyData
                 <View style={styles.modalWrapper}>
                     <TouchableOpacity style={{ position: 'absolute', left: 20, zIndex: 10, flexDirection: 'row' }} onPress={() => setModalVisible(false)}>
                         <Feather name="arrow-left" size={30} style={{ color: 'black', marginTop: 2 }} />
-                        <Text style={styles.modalText}>Voltar</Text>
+                        <Text style={styles.modalText}>{t("dashboardWallat.creditsScreen.modalback")}</Text>
                     </TouchableOpacity>
                 </View>
                 <FlatList
@@ -119,7 +196,7 @@ export default function WallatCredits({ creditsAmount, currencyType, loyaltyData
                         >
                             <View style={styles.optionWrapper}>
                                 <View style={styles.optionContent}>
-                                    <Text style={{ fontSize: 18 }}>{item.currency}</Text>
+                                    <Text style={{ fontSize: fontSize.labels.medium }}>{item.currency}</Text>
                                 </View>
                                 {selectedCurrency === item.currency && <Feather name="check" size={24} color="black" />}
                             </View>
@@ -132,7 +209,7 @@ export default function WallatCredits({ creditsAmount, currencyType, loyaltyData
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         flex: 1
     },
     headerContainer: {
@@ -149,7 +226,7 @@ const styles = StyleSheet.create({
         marginTop: 8,
     },
     amountText: {
-        fontSize: 32,
+        fontSize: fontSize.titles.large,
         fontWeight: 'bold',
         textAlign: 'left',
         flex: 1,
@@ -159,7 +236,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     currencyText: {
-        fontSize: 24,
+        fontSize: fontSize.titles.mini,
         fontWeight: '600',
         marginRight: 8,
     },
@@ -170,13 +247,13 @@ const styles = StyleSheet.create({
     },
     fidelityTitleContainer: {
         borderBottomWidth: 1,
-        paddingVertical: 4,
+        paddingVertical: 7,
         borderColor: '#DEE2E6',
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
     fidelityTitle: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'bold',
         marginBottom: 8,
     },
@@ -199,17 +276,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         marginLeft: 14,
     },
-    searchInput: {
-        borderColor: '#D7D7D7',
-        borderWidth: 1,
-        borderRadius: 12,
-        width: '100%',
-        height: 48,
-        paddingLeft: 48,
-        paddingRight: 20,
-        fontSize: 20,
-        color: 'gray',
-    },
     listContainer: {
         paddingHorizontal: 20,
     },
@@ -218,7 +284,7 @@ const styles = StyleSheet.create({
         marginTop: 24,
     },
     label: {
-        fontSize: 16,
+        fontSize: fontSize.labels.mini,
         color: '#4B5563',
         fontWeight: '600',
     },
@@ -242,7 +308,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 56,
         paddingHorizontal: 20,
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         flexDirection: 'row',
         color: '#6b7280',
     },
@@ -252,9 +318,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalText: {
-        fontSize: 24,
+        fontSize: fontSize.titles.mini,
         textAlign: 'left',
         width: '100%',
         marginLeft: 5,
+        marginTop: 4
     }
 });

@@ -3,6 +3,7 @@ import { SafeAreaView, Text, TouchableHighlight, View, StyleSheet } from "react-
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
 import { router, useLocalSearchParams } from 'expo-router';
+import { fontSize } from "@/constants/fonts";
 
 export default function Signup_Step_3() {
 
@@ -50,7 +51,7 @@ export default function Signup_Step_3() {
                     <View style={styles.pinRow}>
                         {Array(6).fill(0).map((_, index) => (
                             <Text key={index} style={styles.pinText}>
-                                {confirmPin[index] ? <Text style={styles.pinDotMarked}>•</Text> : <Text style={styles.pinDot}>•</Text>}
+                                {confirmPin[index] ? <Text style={styles.pinDotMarked}>{confirmPin[index]}</Text> : <Text style={styles.pinDot}>•</Text>}
                             </Text>
                         ))}
                     </View>
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
         marginTop: 67,
     },
     title: {
-        fontSize: 40,
+        fontSize: fontSize.titles.large,
         fontWeight: 'bold',
     },
     pinContainer: {
@@ -130,12 +131,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     pinText: {
-        fontSize: 50,
+        fontSize: fontSize.titles.superlarge,
         fontWeight: '900',
         marginHorizontal: 12,
     },
     pinDot: {
-        color: '#848484',
+        color: '#d1d5db',
     },
     pinDotMarked: {
         color: '#000',
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        fontSize: 32,
+        fontSize: fontSize.titles.large,
         fontWeight: '900',
         color: '#000000',
     },

@@ -7,6 +7,8 @@ import { useLocale } from "@/contexts/TranslationContext";
 import { WebView } from 'react-native-webview';
 import { Linking } from 'react-native';
 import { router } from "expo-router";
+import { fontSize } from "@/constants/fonts";
+import React from "react";
 
 interface ModalCommerceProps {
     modalVisible: boolean;
@@ -46,8 +48,12 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                     <View style={styles.contentContainer}>
                         <View style={styles.section}>
                             <View style={styles.sectionHeader}>
-                                <Text numberOfLines={2} style={styles.title}>{selectedItem.title}</Text>
-                                <Text style={styles.cashbackType}>{selectedItem.modal.cashbackType}</Text>
+                                <View style={{ flex:1 }}>
+                                    <Text numberOfLines={2} style={styles.title}>{selectedItem.title}</Text>
+                                </View>
+                                <View style={styles.cashbackType}>
+                                    <Text style={styles.cashbackTypeLabel}>{selectedItem.modal.cashbackType}</Text>
+                                </View>
                             </View>
                             <View style={styles.sectionItem}>
                                 {!selectedItem.modal.locationMap ? (
@@ -64,7 +70,7 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                     <>
                                         <TouchableOpacity
                                             activeOpacity={0.7}
-                                            onPress={()=> router.push("/map_location")}
+                                            onPress={() => router.push("/map_location")}
                                         >
                                             <Image style={styles.image} source={require("@/assets/images/mapPreview.png")} />
                                         </TouchableOpacity>
@@ -168,7 +174,7 @@ export default function ModalCommerce({ modalVisible, selectedItem, handleCloseM
                                     nestedScrollEnabled
                                     source={{
                                         html:
-                                            `<div style='font-size: 45px; color: #4A4949'>${selectedItem.modal.about || ''}</div>`
+                                            `<div style='font-size: 40px; color: #4A4949'>${selectedItem.modal.about || ''}</div>`
                                     }}
                                     onShouldStartLoadWithRequest={(request) => {
                                         if (request.url.startsWith('http')) {
@@ -205,9 +211,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     headerText: {
-        fontSize: 24,
+        fontSize: fontSize.titles.mini,
         fontWeight: '600',
-        marginBottom: 4,
+        marginBottom: 2,
         marginLeft: 45
     },
     contentContainer: {
@@ -223,24 +229,28 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#D2D2D2',
         paddingBottom: 4,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     title: {
-        fontSize: 24,
+        fontSize: fontSize.titles.mini,
         fontWeight: '700',
         marginBottom: 8,
         flex: 1,
         paddingRight: 15
     },
     cashbackType: {
-        fontSize: 16,
         height: 30,
-        color: '#2D6A4F',
         backgroundColor: '#D1FAE5',
         borderRadius: 8,
         paddingVertical: 5,
         paddingHorizontal: 8,
         fontWeight: '600',
+        justifyContent: 'center',
+        marginBottom: 5
+    },
+    cashbackTypeLabel:{
+        color: '#2D6A4F',
+        fontSize: fontSize.labels.mini,
     },
     sectionItem: {
         flexDirection: 'row',
@@ -266,17 +276,17 @@ const styles = StyleSheet.create({
     location: {
         color: '#6B7280',
         fontWeight: '600',
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
     },
     link: {
         color: '#3B82F6',
         fontWeight: '600',
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
     },
     label: {
         color: '#6B7280',
         fontWeight: '600',
-        fontSize: 16,
+        fontSize: fontSize.labels.mini,
     },
     infoContainer: {
         flexDirection: 'column',
@@ -292,7 +302,7 @@ const styles = StyleSheet.create({
     date: {
         color: '#343A40',
         fontWeight: '600',
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
     },
     couponContainer: {
         position: 'relative',
@@ -316,12 +326,12 @@ const styles = StyleSheet.create({
     },
     couponText: {
         color: '#000',
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         textAlign: 'center',
     },
     couponCodeText: {
         color: '#000',
-        fontSize: 18,
+        fontSize: fontSize.labels.large,
         fontWeight: '600',
         marginTop: 12,
         textAlign: 'center',
@@ -340,7 +350,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         paddingHorizontal: 20,
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         color: '#6B7280',
         backgroundColor: '#FFF',
     },
@@ -372,7 +382,7 @@ const styles = StyleSheet.create({
     },
     accessButtonText: {
         color: '#FFF',
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
     },
     noCouponContainer: {
         position: 'relative',
@@ -390,7 +400,7 @@ const styles = StyleSheet.create({
     },
     noCouponText: {
         color: '#000',
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         textAlign: 'center',
     },
     discountContainer: {
@@ -400,7 +410,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     discountTitle: {
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         fontWeight: '700',
     },
     discountValueContainer: {
@@ -414,7 +424,7 @@ const styles = StyleSheet.create({
     },
     discountValue: {
         color: '#D9A100',
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         fontWeight: '700',
     },
     ticketIcon: {
@@ -434,7 +444,7 @@ const styles = StyleSheet.create({
     },
     aboutText: {
         color: '#374151',
-        fontSize: 18,
+        fontSize: fontSize.titles.mini,
     },
     copyIcon: {
         marginLeft: 10,

@@ -4,94 +4,12 @@ import WallatCredits from "@/components/wallat/wallatCredits";
 import WallatTokens from "@/components/wallat/wallatTokens";
 import { useLocale } from "@/contexts/TranslationContext";
 import CreditsExtractModal from "@/components/creditsExtractModal";
+import { fontSize } from "@/constants/fonts";
 
 export default function Wallat() {
     const [tokenScreen, setTokenScreen] = useState(false);
     const { t } = useLocale();
     const [modalVisible, setModalVisible] = useState(false);
-
-    const [datas, setDatas] = useState([
-        {
-            creditsAmount: "50,00",
-            currencyType: "cEUR",
-            tokensAmount: "999999999999999,00",
-            tokensBlockedAmount: "99999999999999,00",
-            token: "X",
-            blockChain: "XXXX",
-            wallatLink: "https://www.google.com",
-            loyaltyDatas: [
-                {
-                    id: "1",
-                    nome: "Rei do bacalhau",
-                    valor: "100,00",
-                },
-                {
-                    id: "2",
-                    nome: "Rei do sorvete",
-                    valor: "100,00",
-                },
-                {
-                    id: "3",
-                    nome: "Rei do peixe",
-                    valor: "100,00",
-                },
-                {
-                    id: "4",
-                    nome: "Sorveteria",
-                    valor: "100,00",
-                },
-                {
-                    id: "5",
-                    nome: "Pizzaria",
-                    valor: "100,00",
-                },
-                {
-                    id: "6",
-                    nome: "Pizzaria",
-                    valor: "100,00",
-                },
-                {
-                    id: "7",
-                    nome: "Pizzaria",
-                    valor: "100,00",
-                },
-                {
-                    id: "8",
-                    nome: "Pizzaria",
-                    valor: "100,00",
-                },
-                {
-                    id: "9",
-                    nome: "Pizzaria",
-                    valor: "100,00",
-                },
-                {
-                    id: "10",
-                    nome: "Pizzaria",
-                    valor: "100,00",
-                },
-                {
-                    id: "11",
-                    nome: "Pizzaria",
-                    valor: "100,00",
-                },
-                {
-                    id: "12",
-                    nome: "Pizzaria",
-                    valor: "100,00",
-                },
-                {
-                    id: "13",
-                    nome: "Pizzaria",
-                    valor: "100,00",
-                }, {
-                    id: "14",
-                    nome: "Pizzaria",
-                    valor: "100,00",
-                },
-            ],
-        }
-    ]);
 
     const handleCloseModal = () => {
         setModalVisible(false);
@@ -118,18 +36,11 @@ export default function Wallat() {
 
             {tokenScreen ?
                 <WallatTokens
-                    tokensAmount={datas[0].tokensAmount}
-                    tokensBlockedAmount={datas[0].tokensBlockedAmount}
-                    token={datas[0].token}
-                    blockChain={datas[0].blockChain}
-                    wallatLink={datas[0].wallatLink}
+                    openExtract={() => setModalVisible(!modalVisible)}
                 />
                 :
                 <WallatCredits
-                    loyaltyDatas={datas[0].loyaltyDatas}
-                    currencyType={datas[0].currencyType}
-                    creditsAmount={datas[0].creditsAmount}
-                    openExtract={() => setModalVisible(true)}
+                    openExtract={() => setModalVisible(!modalVisible)}
                 />
             }
 
@@ -139,7 +50,7 @@ export default function Wallat() {
             />
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -176,7 +87,7 @@ const styles = StyleSheet.create({
         elevation: 4,
     },
     buttonText: {
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         fontWeight: '600',
     },
 });

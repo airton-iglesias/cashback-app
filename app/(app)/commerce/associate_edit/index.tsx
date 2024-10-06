@@ -5,6 +5,7 @@ import Switch from '@/components/switch';
 import CommerceHeader from '@/components/commerceHeader';
 import {useLocale} from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
+import { fontSize } from '@/constants/fonts';
 
 export default function CommerceAssociateEdit() {
     const [administrador, setAdministrador] = useState(false);
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
         paddingBottom: 16,
     },
     idLabel: {
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
     },
     idInput: {
         borderColor: '#D9D9D9',
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 56,
         paddingHorizontal: 16,
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         color: '#6C757D',
         marginTop: 8,
     },
@@ -188,11 +189,12 @@ const styles = StyleSheet.create({
     },
     personAvatarText: {
         color: '#0093FD',
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'bold',
     },
     personName: {
-        fontSize: 20,
+        fontSize: fontSize.labels.large,
+        fontWeight: 'bold',
         marginLeft: 16,
     },
     switchContainer: {
@@ -209,7 +211,7 @@ const styles = StyleSheet.create({
 
     },
     switchLabel: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
     },
     deleteAccountRow: {
         flexDirection: 'row',
@@ -219,13 +221,14 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
     },
     deleteAccountText: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         color: '#DC3545',
     },
     delAssociate: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '100%'
+        width: '100%',
+        alignItems: 'center'
     },
     deleteIcon: {
         marginRight: 10,
@@ -286,7 +289,7 @@ const styles = StyleSheet.create({
     },
     modalText: {
         textAlign: 'center',
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         color: '#DC3545'
     },
     buttonContainer: {

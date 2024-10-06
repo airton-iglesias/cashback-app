@@ -1,316 +1,130 @@
+import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
+import VideoPost from '@/components/videoPost';
+import { useEffect, useRef, useState } from 'react';
 
-const data = [
-    {
-        id: '1',
-        title: 'Fitness Center 1',
-        location: 'Beja, Portugal',
-        discount: '20%',
-        type: 'video',
-        source: 'https://i.imgur.com/6Y8qkha.mp4',
-        modal: {
-            cupomCode: 'ID s039da',
-            locationMap: null,
-            website: "sitebacalhao.com",
-            createdBy: "Casa Verde dos Relógios",
-            eventDate: "0 out - 20:00 a 20 out - 21:00",
-            cashbackType: "Evento",
-            baseDiscount: "10%",
-            flexDiscount: [
-                {
-                    currency: 'EUR',
-                    value: 100,
-                    discount: '10%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 200,
-                    discount: '20%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 300,
-                    discount: '30%'
-                },
-            ],
-            about: "Lorem ipsum...",
-            carouselImages: [
-                {
-                    id: '01',
-                    image: 'https://i.imgur.com/7NvPLld.jpeg',
-                },
-                {
-                    id: '02',
-                    image: 'https://i.imgur.com/5Qx1oqV.jpeg',
-                },
-                {
-                    id: '03',
-                    image: 'https://i.imgur.com/2cFsaV2.png',
-                }
-            ]
-        }
-    },
-    {
-        id: '2',
-        title: 'Cafe Center 1',
-        location: 'Beja, Portugal',
-        discount: '20%',
-        type: 'image',
-        source: 'https://i.imgur.com/vuz4ufK.png',
-        modal: {
-            cupomCode: 'ID s039da',
-            locationMap: "Beja, portugal",
-            website: "sitebacalhao.com",
-            createdBy: "Casa Verde dos Relógios",
-            eventDate: "0 out - 20:00 a 20 out - 21:00",
-            cashbackType: "Evento",
-            baseDiscount: "10%",
-            flexDiscount: [
-                {
-                    currency: 'EUR',
-                    value: 100,
-                    discount: '10%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 200,
-                    discount: '20%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 300,
-                    discount: '30%'
-                },
-            ],
-            carouselImages: [
-                {
-                    id: '01',
-                    image: 'https://i.imgur.com/7NvPLld.jpeg',
-                },
-                {
-                    id: '02',
-                    image: 'https://i.imgur.com/5Qx1oqV.jpeg',
-                },
-                {
-                    id: '03',
-                    image: 'https://i.imgur.com/2cFsaV2.png',
-                }
-            ],
-            about: `<div><b>Exemplo </b><i>de <u>texto</u></i></div><div><i><u><br></u></i></div><div><font color="#ff0000">Cor Vermelha, </font><font color="#00ff00">Cor Verde, </font><font color="#0000ff">Cor Azul, </font><font color="#ffff00">Cor Amarela, </font><font color="#ff00ff">Cor Lilas, </font><font color="#00ffff">Cor Ciano.</font></div><div><font color="#00ffff"><br></font></div><div><ul><li><font color="#00ffff">&nbsp;</font><font color="#000000">Item 1</font></li><li><font color="#000000">&nbsp;Item 2</font></li><li><font color="#000000">&nbsp;Item 3</font></li></ul><div><font color="#000000"><a href="https://www.google.com">Link para o website</a></font></div></div>`,
-        }
-    },
-    {
-        id: '3',
-        title: 'Fitness Center 3',
-        location: 'Beja, Portugal',
-        discount: '20%',
-        type: 'video',
-        source: 'https://i.imgur.com/6Y8qkha.mp4',
-        modal: {
-            cupomCode: 'ID s039da',
-            locationMap: null,
-            website: "sitebacalhao.com",
-            createdBy: "Casa Verde dos Relógios",
-            eventDate: "0 out - 20:00 a 20 out - 21:00",
-            cashbackType: "Evento",
-            baseDiscount: "10%",
-            flexDiscount: [
-                {
-                    currency: 'EUR',
-                    value: 100,
-                    discount: '10%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 200,
-                    discount: '20%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 300,
-                    discount: '30%'
-                },
-            ],
-            about: "Lorem ipsum...",
-            carouselImages: [
-                {
-                    id: '01',
-                    image: 'https://i.imgur.com/7NvPLld.jpeg',
-                },
-                {
-                    id: '02',
-                    image: 'https://i.imgur.com/5Qx1oqV.jpeg',
-                },
-                {
-                    id: '03',
-                    image: 'https://i.imgur.com/2cFsaV2.png',
-                }
-            ]
-        }
-    },
-];
+type postTypes = {
+    id: string;
+    title: string;
+    location: string;
+    discount: string;
+    type: string;
+    source: string;
+}
 
-import React, { useRef, useState, useEffect, useCallback } from "react";
-import { FlatList, SafeAreaView, View, StyleSheet } from "react-native";
-import { Video } from 'expo-av';
-import Reels from "@/components/reels";
-import ModalCommerce from "@/components/modalCommerce";
-import { Link, useFocusEffect, useNavigation } from 'expo-router';
+const screenHeight = Dimensions.get('window').height;
+const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-export default function Home() {
-    const [modalVisible, setModalVisible] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [wasPlayingBeforeModal, setWasPlayingBeforeModal] = useState(false);
-    const flatListRef = useRef<FlatList>(null);
-    const videoRefs = useRef<{ [key: string]: Video | null }>({});
-    const currentPlayingVideo = useRef<Video | null>(null);
-    const autoScrollTimer = useRef<NodeJS.Timeout | null>(null);
-    const currentVisibleItem = useRef<any>(null);
-    const isFocused = useNavigation().isFocused();
+const FeedScreen = () => {
+    const [posts, setPosts] = useState<postTypes[]>([]);
+    const [activePostId, setActivePostId] = useState<string>('');
 
-
-    useFocusEffect(
-        useCallback(() => {
-            if (selectedItem) {
-                setModalVisible(true);
-            }
-
-            return () => {
-                setModalVisible(false);
-            };
-        }, [selectedItem])
-    );
-    
     useEffect(() => {
-        if (isFocused && currentVisibleItem.current?.type === 'video' && currentPlayingVideo.current) {
-            currentPlayingVideo.current.playAsync();
-        } 
-        else {
-            if (currentPlayingVideo.current) {
-                currentPlayingVideo.current.pauseAsync();
-            }
-        }
-    }, [isFocused]);
-
-    const handleItemPress = (item: any) => {
-        if (currentPlayingVideo.current) {
-            currentPlayingVideo.current.getStatusAsync().then((status) => {
-                if (status.isLoaded) {
-                    setWasPlayingBeforeModal(status.isPlaying);
-                    currentPlayingVideo.current?.pauseAsync();
+        const fetchPosts = async () => {
+            const initialPosts: postTypes[] = [
+                {
+                    id: '',
+                    title: 'Fitness Center 1 aaaaaaaa aaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+                    location: 'Beja, Portugal',
+                    discount: '30%',
+                    type: 'video',
+                    source: "https://i.imgur.com/6Y8qkha.mp4",
+                },
+                {
+                    id: '',
+                    title: 'Shopping Center 2',
+                    location: 'Beja, Portugal',
+                    discount: '60%',
+                    type: 'video',
+                    source: "https://i.imgur.com/UEcSu7s.mp4",
+                },
+                {
+                    id: '',
+                    title: 'Barbearia Center 3',
+                    location: 'Beja, Portugal',
+                    discount: '10%',
+                    type: 'image',
+                    source: "https://i.imgur.com/vuz4ufK.png",
+                },
+                {
+                    id: '',
+                    title: 'Sorveteria Center 4',
+                    location: 'Beja, Portugal',
+                    discount: '40%',
+                    type: 'video',
+                    source: "https://i.imgur.com/A4lgwI1.mp4",
+                },
+                {
+                    id: '',
+                    title: 'Shopping Center 4',
+                    location: 'Beja, Portugal',
+                    discount: '20%',
+                    type: 'video',
+                    source: "https://i.imgur.com/4NcYs4h.mp4",
                 }
-            });
-        }
-    
-        if (autoScrollTimer.current) {
-            clearTimeout(autoScrollTimer.current);
-        }
-    
-        setSelectedItem(item);
-        setModalVisible(true);
-    };
+            ];
 
-    const handleCloseModal = () => {
-        setModalVisible(false);
-        setSelectedItem(null);
+            const postsWithIds = initialPosts.map((post) => ({
+                ...post,
+                id: generateUniqueId(),
+            }));
 
-        if (wasPlayingBeforeModal && currentPlayingVideo.current) {
-            currentPlayingVideo.current.playAsync();
-            startAutoScroll();
-        }
-    };
+            setPosts(postsWithIds);
+            setActivePostId(postsWithIds[0]?.id);
+        };
 
-    const goToNextItem = () => {
-        const nextIndex = (currentIndex + 1) % data.length;
-        setCurrentIndex(nextIndex);
-        flatListRef.current?.scrollToIndex({ index: nextIndex });
-    };
+        fetchPosts();
+    }, []);
 
-    const startAutoScroll = () => {
-        const currentItem = currentVisibleItem.current;
-    
-        if (currentItem?.type === 'video' && currentPlayingVideo.current) {
-            currentPlayingVideo.current.setOnPlaybackStatusUpdate((status) => {
-                if (status.isLoaded && !status.isPlaying && status.didJustFinish) {
-                    goToNextItem();
-                }
-            });
-        } else if (currentItem?.type === 'image') {
-            if (autoScrollTimer.current) {
-                clearTimeout(autoScrollTimer.current);
+    const viewabilityConfigCallbackPairs = useRef([{
+        viewabilityConfig: { itemVisiblePercentThreshold: 80 },
+        onViewableItemsChanged: ({ changed, viewableItems }: any) => {
+            if (viewableItems.length > 0 && viewableItems[0].isViewable) {
+                setActivePostId(viewableItems[0].item.id);
             }
-            autoScrollTimer.current = setTimeout(() => goToNextItem(), 5000);
-        }
-    };
-    
+        },
+    },]);
 
-    const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
-        Object.values(videoRefs.current).forEach(video => {
-            if (video) {
-                video.pauseAsync();
-            }
-        });
-    
-        if (viewableItems.length > 0) {
-            const currentItem = viewableItems[0].item;
-    
-            currentVisibleItem.current = currentItem;
-    
-            if (autoScrollTimer.current) {
-                clearTimeout(autoScrollTimer.current);
-            }
-    
-            if (currentItem.type === 'video') {
-                currentPlayingVideo.current = videoRefs.current[currentItem.id];
-                videoRefs.current[currentItem.id]?.setPositionAsync(0).then(() => {
-                    if (!modalVisible) {
-                        videoRefs.current[currentItem.id]?.playAsync();
-                        startAutoScroll();
-                    }
-                });
-            } else if (currentItem.type === 'image') {
-                startAutoScroll();
-            }
-        }
-    }).current;
-    
+    const onEndReached = () => {
+        const newPosts = posts.map((post) => ({
+            ...post,
+            id: generateUniqueId().toString(),
+        }));
+
+        setPosts((currentPosts) => [...currentPosts, ...newPosts]);
+    };
 
     return (
-        <SafeAreaView style={styles.safeArea}>
-            <View style={styles.container}>
-                <FlatList
-                    ref={flatListRef}
-                    data={data}
-                    renderItem={({ item }) => (
-                        <Reels item={item} handleItemPress={handleItemPress} videoRefs={videoRefs} />
-                    )}
-                    keyExtractor={item => item.id}
-                    showsVerticalScrollIndicator={false}
-                    pagingEnabled
-                    snapToAlignment="start"
-                    decelerationRate={0.5}
-                    onViewableItemsChanged={onViewableItemsChanged}
-                    viewabilityConfig={{ itemVisiblePercentThreshold: 70 }}
-                />
-                {selectedItem && (
-                    <ModalCommerce
-                        modalVisible={modalVisible}
-                        selectedItem={selectedItem}
-                        handleCloseModal={handleCloseModal}
-                    />
+        <View style={styles.container}>
+            <FlatList
+                data={posts}
+                renderItem={({ item }) => (
+                    <VideoPost post={item} activePostID={activePostId} />
                 )}
-            </View>
-        </SafeAreaView>
+                keyExtractor={(item, index) => `${item.id}-${index}`}
+                pagingEnabled
+                viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
+                showsVerticalScrollIndicator={false}
+                onEndReached={onEndReached}
+                onEndReachedThreshold={3}
+                disableIntervalMomentum={true}
+                windowSize={4}
+                scrollEventThrottle={16}
+                initialNumToRender={2}
+                maxToRenderPerBatch={2}
+                decelerationRate={'fast'}
+                snapToAlignment={'start'}
+                snapToInterval={screenHeight}
+                removeClippedSubviews={false}
+                contentContainerStyle={{ paddingBottom: 50 }}
+            />
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    safeArea: {
-        flex: 1,
-        backgroundColor: 'black',
-        paddingTop: 110,
-    },
     container: {
-        flex: 1,
+        backgroundColor: 'black',
     },
 });
+
+export default FeedScreen;

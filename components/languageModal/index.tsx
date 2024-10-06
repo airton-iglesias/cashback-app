@@ -1,7 +1,7 @@
 import { Modal, Text, ScrollView, View, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
-import { StorageService } from "../../services/storageService";
+import { fontSize } from "@/constants/fonts";
 
 export default function LanguageModal({ modalVisible, handleCloseModal }: any) {
     const languages = [
@@ -42,7 +42,7 @@ export default function LanguageModal({ modalVisible, handleCloseModal }: any) {
                                 >
 
                                     <Text style={currentLanguage === language.code ? styles.selectedlanguageText : styles.languageText}>{language.name}</Text>
-                                    {currentLanguage === language.code ? <Feather name="check" size={24} color="white" /> : null}
+                                    {currentLanguage === language.code ? <Feather name="check" size={19} color="white" /> : null}
                                 </TouchableOpacity>
                             ))}
                         </View>
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     title: {
         color: '#000',
         marginVertical: 30,
-        fontSize: 35,
+        fontSize: fontSize.titles.large,
         fontWeight: 'bold',
         paddingHorizontal: 15,
     },
@@ -108,12 +108,12 @@ const styles = StyleSheet.create({
     },
     selectedlanguageText: {
         color: '#fff',
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         flex: 1,
     },
     languageText: {
         color: '#fff',
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         flex: 1,
     },
     button: {
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
         marginVertical: 20,
     },
     buttonText: {
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
     },
     languageOptionsWrapper: {
         gap: 12,

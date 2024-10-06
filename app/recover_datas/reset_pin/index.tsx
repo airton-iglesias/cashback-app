@@ -3,6 +3,7 @@ import { SafeAreaView, Text, TouchableHighlight, View, StyleSheet } from "react-
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
 import { router } from "expo-router";
+import { fontSize } from "@/constants/fonts";
 
 export default function ResetPinHome() {
     const { t } = useLocale();
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
         gap: 60
     },
     title: {
-        fontSize: 40,
+        fontSize: fontSize.titles.large,
         fontWeight: 'bold',
     },
     pinContainer: {
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     pinText: {
-        fontSize: 50,
+        fontSize: fontSize.titles.superlarge,
         fontWeight: '900',
         marginHorizontal: 12,
     },
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        fontSize: 32,
+        fontSize: fontSize.titles.large,
         fontWeight: '900',
         color: '#000000',
     },

@@ -3,6 +3,7 @@ import { SafeAreaView, Text, TouchableHighlight, View, StyleSheet } from "react-
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
 import { router, useLocalSearchParams } from "expo-router";
+import { fontSize } from "@/constants/fonts";
 
 
 export default function ResetPinConfirm() {
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 40,
+        fontSize: fontSize.titles.large,
         fontWeight: 'bold',
     },
     pinContainer: {
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     pinText: {
-        fontSize: 50,
+        fontSize: fontSize.titles.superlarge,
         fontWeight: '900',
         marginHorizontal: 12,
     },
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        fontSize: 32,
+        fontSize: fontSize.titles.large,
         fontWeight: '900',
         color: '#000000',
     },
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     errorText: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         color: '#B02A37'
     }
 });

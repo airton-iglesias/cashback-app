@@ -7,6 +7,8 @@ import * as Clipboard from 'expo-clipboard';
 import QRCode from 'react-native-qrcode-svg';
 import { printAsync } from 'expo-print';
 import { router } from 'expo-router';
+import { qrCodeTemplate } from '@/components/qrCodeTemplate';
+import { fontSize } from '@/constants/fonts';
 
 export default function Commerce_Qrcode() {
     const [commerceID, setCommerceID] = useState('#DF56G4DF');
@@ -18,22 +20,22 @@ export default function Commerce_Qrcode() {
     };
 
 
-
     const handlePrint = async () => {
         if (qrCodeRef.current) {
             qrCodeRef.current.toDataURL(async (data: string) => {
-                const htmlContent = `
-                    <div style="display: flex; align-items: center; justify-content: center; height: 100vh;">
-                        <img src="data:image/png;base64,${data}" alt="QR Code" />
-                    </div>
-                `;
-
-                await printAsync({
-                    html: htmlContent,
-                });
+                try {
+                    const htmlContent = qrCodeTemplate.replace('{{qrcodeData}}', data);
+                    await printAsync({
+                        html: htmlContent,
+                    });
+                } catch (error) {
+                    console.error("Erro ao gerar o HTML para impressão", error);
+                }
             });
         }
-    }
+    };
+
+
 
 
     return (
@@ -49,7 +51,6 @@ export default function Commerce_Qrcode() {
                     <Text style={styles.header}>{t("commerce.qrcode.title")}</Text>
                 </View>
                 <View style={styles.inputWrapper}>
-                    <Text style={[styles.qrcodeText, { marginLeft: 5, marginBottom: 5 }]}>{t("commerce.qrcode.id")}</Text>
                     <View>
                         <TextInput
                             value={commerceID}
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
         gap: 35
     },
     header: {
-        fontSize: 44,
+        fontSize: fontSize.titles.extralarge,
         fontWeight: 'bold',
         marginTop: 30
     },
@@ -134,15 +135,15 @@ const styles = StyleSheet.create({
         marginTop: 30
     },
     qrcodeText: {
-        fontSize: 20,
-        fontWeight: '400'
+        fontSize: fontSize.labels.medium,
+        fontWeight: '400',
     },
     textInput: {
         borderWidth: 1,
         borderRadius: 6,
         width: '100%',
         height: 48,
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         color: '#000',
         borderColor: '#ADB5BD',
         paddingHorizontal: 10,

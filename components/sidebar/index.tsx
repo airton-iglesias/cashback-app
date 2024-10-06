@@ -7,6 +7,7 @@ import LogoutIcon from "../../assets/icons/LogoutIcon";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useLocale } from "@/contexts/TranslationContext";
 import { Link } from "expo-router";
+import { fontSize } from "@/constants/fonts";
 
 export default function Sidebar({ closeSidebar, isSidebarOpen }: any) {
 
@@ -38,7 +39,7 @@ export default function Sidebar({ closeSidebar, isSidebarOpen }: any) {
             <Animated.View style={[animatedSidebarStyle, styles.sidebar]}>
                 <View style={styles.container}>
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={handleCloseSidebar} style={styles.closeButton}>
+                        <TouchableOpacity onPress={handleCloseSidebar} style={styles.closeButton} activeOpacity={0.7}>
                             <MaterialCommunityIcons name="close-circle-outline" size={32} color="white" />
                         </TouchableOpacity>
                     </View>
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
     },
     menuText: {
         color: 'white',
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
     },
     footer: {
         flex: 1,

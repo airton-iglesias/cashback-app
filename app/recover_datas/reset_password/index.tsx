@@ -3,6 +3,7 @@ import { Feather } from '@expo/vector-icons';
 import Input from "@/components/input";
 import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
+import { fontSize } from "@/constants/fonts";
 
 export default function ResetPassword() {
     const { t } = useLocale();
@@ -48,12 +49,12 @@ const styles = StyleSheet.create({
         height: '100%'
     },
     infoText:{
-        fontSize: 22,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'bold',
         marginTop: 25
     },
     infolabel:{
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         fontWeight: '400',
         marginTop: 10,
         width: 300,
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     headerText: {
-        fontSize: 24,
+        fontSize: fontSize.titles.large,
         fontWeight: '700',
         left: 40
     },

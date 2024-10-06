@@ -29,8 +29,8 @@ interface StepperData {
     mapAdress: string;
     description: string;
     logoImage: ImageFile | null;
-    posterImage: ImageFile | null;
-    descriptionImages: ImageFile[];
+    posterImage: any;
+    descriptionMedia: any;
     baseDiscount: string;
     cashbackForm: string;
     sections: Section[];
@@ -62,7 +62,7 @@ export const StepperProvider = ({ children }: { children: ReactNode }) => {
         description: '',
         logoImage: null,
         posterImage: null,
-        descriptionImages: [],
+        descriptionMedia: [],
         baseDiscount: '',
         cashbackForm: '',
         sections: [],

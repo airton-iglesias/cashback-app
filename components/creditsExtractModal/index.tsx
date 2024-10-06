@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView, Modal } from 'react-native';
 import { Octicons } from '@expo/vector-icons';
 import { useLocale } from '@/contexts/TranslationContext';
+import { fontSize } from '@/constants/fonts';
 
 interface ModalExtractProps {
     modalVisible: boolean;
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     headerText: {
-        fontSize: 24,
+        fontSize: fontSize.titles.mini,
         fontWeight: '700',
         left: 40
     },
@@ -139,19 +140,19 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     date: {
-        fontSize: 20,
+        fontSize: fontSize.labels.extralarge,
         color: '#495057',
         fontWeight: '400'
 
     },
     transactionId: {
-        fontSize: 17,
+        fontSize: fontSize.labels.medium,
         marginBottom: 10,
         fontWeight: 'bold',
         marginTop: 5
     },
     amount: {
-        fontSize: 25,
+        fontSize: fontSize.titles.medium,
         fontWeight: 'bold',
     },
     positive: {

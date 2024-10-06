@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigation } from "@react-navigation/native";
 import {
     Image, Dimensions, KeyboardAvoidingView, SafeAreaView, ScrollView,
-    Text, TouchableHighlight, View, StyleSheet,
+    Text, View, StyleSheet,
     TouchableOpacity
 } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { useLocale } from '@/contexts/TranslationContext';
 import Input from '@/components/input';
 import { Link } from 'expo-router';
+import { fontSize } from '@/constants/fonts';
 
 export default function Signup_Step_0() {
     const [email, setEmail] = useState('');
@@ -18,131 +18,106 @@ export default function Signup_Step_0() {
     const { t } = useLocale();
 
     return (
-        <SafeAreaView style={styles.safeareaview}>
-            <KeyboardAvoidingView>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View style={styles.container}>
 
-                        <View style={styles.header}>
-                            <Text style={styles.headerText}>{t('signup.signup_step_0.header')}</Text>
-                        </View>
+        <SafeAreaView style={styles.container}>
+            <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
+                <View style={styles.scrollViewContent}>
 
-                        <View style={styles.inputContainer}>
-                            <View style={styles.inputSubContainer}>
-
-                                <View style={styles.inputGroup}>
-                                    <Input
-                                        label={t('signup.signup_step_0.email')}
-                                        type={'email'}
-                                        onChange={(text: string) => setEmail(text)}
-                                    />
-                                </View>
-
-                                <View style={styles.inputGroup}>
-                                    <Input
-                                        label={t('signup.signup_step_0.password')}
-                                        type={'password'}
-                                        onChange={(text: string) => setPassword(text)}
-                                    />
-                                </View>
-
-                                <View style={styles.inputGroup}>
-                                    <Input
-                                        label={t('signup.signup_step_0.confirmPassword')}
-                                        type={'password'}
-                                        onChange={(text: string) => setConfirmPassword(text)}
-                                    />
-                                </View>
-                            </View>
-
-                            <View style={[styles.buttonContainer]}
-                            >
-                                <Link href={{ pathname: '/signup/step2', params: { email: email, password: password } }} asChild>
-                                    <TouchableOpacity
-                                        activeOpacity={0.7}
-                                        style={styles.buttonWrapper}
-                                    >
-                                        <View style={styles.submitButton}>
-                                            <Feather name="arrow-right" size={24} style={styles.icon} />
-                                        </View>
-                                    </TouchableOpacity>
-                                </Link>
-                                <View>
-                                    <TouchableHighlight
-                                        underlayColor="#e5e7eb"
-                                        activeOpacity={0.6}
-                                        style={styles.buttonWrapper}
-                                    >
-                                        <View style={styles.googleButton}>
-                                            <Image source={require("../../assets/icons/google-icon.png")} style={styles.googleIcon} />
-                                        </View>
-                                    </TouchableHighlight>
-                                </View>
-                            </View>
-                        </View>
+                    <View style={styles.header}>
+                        <Text style={styles.headerText}>{t('signup.signup_step_0.header')}</Text>
                     </View>
-                </ScrollView>
+
+                    <View style={styles.inputGroup}>
+                        <Input
+                            label={t('signup.signup_step_0.email')}
+                            onChange={(text: string) => setEmail(text)}
+                            type={'email'}
+                        />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Input
+                            label={t('signup.signup_step_0.password')}
+                            onChange={(text: string) => setPassword(text)}
+                            type={'password'}
+                        />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Input
+                            label={t('signup.signup_step_0.confirmPassword')}
+                            onChange={(text: string) => setConfirmPassword(text)}
+                            type={'password'}
+                        />
+                    </View>
+
+
+                </View>
+
+                <View style={styles.buttonContainer}>
+                    <Link href={"/signup/step2"} asChild>
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            style={styles.buttonWrapper}
+                        >
+                            <View style={styles.submitButton}>
+                                <Feather name="arrow-right" size={24} color={'white'} />
+                            </View>
+                        </TouchableOpacity>
+                    </Link>
+
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={styles.buttonWrapper}
+                    >
+                        <View style={styles.googleButton}>
+                            <Image source={require("@/assets/icons/google-icon.png")} style={styles.googleIcon} />
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </KeyboardAvoidingView>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 };
 
 const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
-    safeareaview: {
-        backgroundColor: 'white',
-        height: '100%'
-    },
     container: {
         flex: 1,
-        height: windowHeight,
-        gap: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
+        backgroundColor: 'white',
         paddingHorizontal: 15,
-        paddingBottom: 30,
+        paddingTop: 70,
+        paddingBottom: 35
+    },
+    keyboardAvoidingView: {
+        flex: 1,
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+        gap: 10
     },
     header: {
         width: '100%',
-        height: 54,
-        padding: 5,
-        marginTop: 60,
-        marginBottom: 4,
+        marginBottom: 15
     },
     headerText: {
-        fontSize: 40,
+        fontSize: fontSize.titles.large,
         fontWeight: 'bold',
     },
     inputGroup: {
-        flex: 1,
         width: '100%',
-        height: '100%',
-        marginTop: 4,
-        gap: 2,
+        marginTop: 1,
     },
     label: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'normal',
         marginBottom: 4
     },
-    inputContainer: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
-        justifyContent: 'space-between',
-
-    },
-    inputSubContainer: {
-        flex: 0.5,
-        gap: 50
-    },
     buttonContainer: {
-        flex: 1,
         width: '100%',
-        height: windowHeight,
         flexDirection: 'column',
         gap: 20,
-        justifyContent: 'flex-end',
+        paddingBottom: 8,
     },
     buttonWrapper: {
         borderRadius: 8,
@@ -172,9 +147,14 @@ const styles = StyleSheet.create({
         width: 32,
         height: 32,
     },
-    icon: {
-        color: 'white',
-        padding: 11,
+    linkWrapper: {
+        gap: 15,
+        height: 56,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 4,
+        borderRadius: 10,
+        marginTop: 15
     },
-
 });

@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Text, View, StyleSheet } from 'react-native';
+import { SafeAreaView, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Camera, CameraView } from 'expo-camera';
 import QRCodeHole from '@/components/qrcodeHole';
 import { useLocale } from '@/contexts/TranslationContext';
+import { fontSize } from '@/constants/fonts';
 
 export default function Qrcode() {
-    const [hasPermission, setHasPermission] = useState<null | boolean>(null);
+    const [hasPermission, setHasPermission] = useState<null | boolean>(false);
     const [scanned, setScanned] = useState(false);
     const { t } = useLocale();
 
-    useEffect(() => {
-        const getCameraPermissions = async () => {
-            const { status } = await Camera.requestCameraPermissionsAsync();
-            setHasPermission(status === 'granted');
-        };
+    const requestCameraPermission = async () => {
+        const { status } = await Camera.requestCameraPermissionsAsync();
+        setHasPermission(status === 'granted');
+    };
 
-        getCameraPermissions();
+    useEffect(() => {
+        requestCameraPermission();
     }, []);
 
     const handleBarCodeScanned = ({ type, data }: any) => {
@@ -26,30 +27,43 @@ export default function Qrcode() {
         }, 3000);
     };
 
-    if (hasPermission === null) {
-        return <Text style={styles.text}>Requesting for camera permission</Text>;
-    }
-    if (hasPermission === false) {
-        return <Text style={styles.text}>No access to camera</Text>;
-    }
-
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.headerText}>{t("dashboardQRCode.label")}</Text>
-            </View>
-
-            <QRCodeHole />
-
-            <View style={styles.cameraContainer}>
-                <CameraView
-                    onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-                    barcodeScannerSettings={{
-                        barcodeTypes: ['qr', 'pdf417'],
-                    }}
-                    style={StyleSheet.absoluteFillObject}
-                />
-            </View>
+        <SafeAreaView style={{ flex: 1 }}>
+            {hasPermission ? (
+                <View style={styles.container}>
+                    <View style={styles.header}>
+                        <Text style={styles.headerText}>{t("dashboardQRCode.label")}</Text>
+                    </View>
+                    <QRCodeHole />
+                    <View style={styles.cameraContainer}>
+                        <CameraView
+                            onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+                            barcodeScannerSettings={{
+                                barcodeTypes: ['qr', 'pdf417'],
+                            }}
+                            style={StyleSheet.absoluteFillObject}
+                        />
+                    </View>
+                </View>
+            ) : (
+                <View style={styles.permissionContainer}>
+                    <View style={styles.header}>
+                        <Text style={styles.headerText}>{t("dashboardQRCode.label")}</Text>
+                    </View>
+                    <View style={[styles.cameraContainer, { marginBottom: 120 }]}>
+                        <Text style={styles.permissionText}>
+                            {t("dashboardQRCode.noPermission")}
+                        </Text>
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            style={styles.button}
+                            onPress={requestCameraPermission}
+                        >
+                            <Text style={styles.buttonText}>{t("dashboardQRCode.permissionButton")}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )}
         </SafeAreaView>
     );
 }
@@ -70,7 +84,7 @@ const styles = StyleSheet.create({
     },
     headerText: {
         color: 'white',
-        fontSize: 30,
+        fontSize: fontSize.titles.medium,
         fontWeight: 'bold',
     },
     cameraContainer: {
@@ -80,8 +94,26 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    text: {
+    permissionContainer: {
+        flex: 1,
+        backgroundColor: 'black',
+    },
+    permissionText: {
+        color: 'white',
+        fontSize: fontSize.labels.medium,
         textAlign: 'center',
-        marginTop: 20,
+        paddingHorizontal: 60
+    },
+    button: {
+        marginTop: 30,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: 'white',
+        borderRadius: 5,
+    },
+    buttonText: {
+        color: 'black',
+        fontSize: fontSize.labels.medium,
+        textAlign: 'center',
     },
 });

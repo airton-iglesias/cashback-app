@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import NotificationItem from "./notificationItem";
 import { useLocale } from "@/contexts/TranslationContext";
+import { fontSize } from "@/constants/fonts";
 
 export default function NotificationSidebar({ closeSidebar, isSidebarOpen }: any) {
     const sidebarOffset = useSharedValue(400);
@@ -64,7 +65,7 @@ export default function NotificationSidebar({ closeSidebar, isSidebarOpen }: any
 
                     <View style={styles.header}>
                         <Text style={styles.headerText}>{t("sidebarNotification.allNotifications")} ({data.length})</Text>
-                        <TouchableOpacity onPress={handleCloseSidebar} style={styles.closeButton}>
+                        <TouchableOpacity onPress={handleCloseSidebar} style={styles.closeButton} activeOpacity={0.7}>
                             <MaterialCommunityIcons name="close-circle-outline" size={32} color="white" />
                         </TouchableOpacity>
                     </View>
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     headerText: {
-        fontSize: 20,
+        fontSize: fontSize.titles.medium,
         fontWeight: 'bold',
         color: 'white'
     },

@@ -9,6 +9,8 @@ import CommerceGoBackModal from '@/components/commerceGoBackModal';
 import { useStepperContext } from '@/contexts/CommerceStepperContext';
 import { useLocale } from '@/contexts/TranslationContext';
 import { router } from 'expo-router';
+import FooterNewCommerce from '@/components/footerNewCommerce';
+import { fontSize } from '@/constants/fonts';
 
 export default function New_Commerce_Step_6() {
     const { baseDiscount, cashbackForm, sections, setStepperData } = useStepperContext();
@@ -17,12 +19,12 @@ export default function New_Commerce_Step_6() {
     const scrollViewRef = useRef<ScrollView>(null);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const { t } = useLocale();
-    
+
     const typesOptions = [
         { id: 1, text: 'Fidelização' },
-        { id: 2, text: 'Promoção' },
+        { id: 2, text: 'Livre' },
     ];
-    
+
 
     const addSection = () => {
         if (sections.length < 10) {
@@ -51,7 +53,6 @@ export default function New_Commerce_Step_6() {
             <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
                 <CommerceHeader
                     Title={t("commerce.new_commerce.step5.headerLabel")}
-                    ScreenGoback={() => router.back()}
                     ScreenClose={() => { setModalVisible(true) }}
                 />
 
@@ -168,27 +169,11 @@ export default function New_Commerce_Step_6() {
                     ))}
                 </ScrollView>
 
-                <View style={styles.footer}>
-                    <View style={styles.stepperLayoutContainer}>
-                        <Text style={styles.stepperLayoutText}>{t("commerce.new_commerce.step5.currentStepper")}</Text>
-                        <View style={styles.stepperLayout}></View>
-                        <View style={styles.stepperLayout}></View>
-                        <View style={styles.stepperLayout}></View>
-                        <View style={styles.stepperLayout}></View>
-                        <View style={styles.stepperLayout}></View>
-                        <View style={styles.stepperLayoutSelected}></View>
-                    </View>
-
-                    <View style={styles.nextButton}>
-                        <TouchableOpacity
-                            style={styles.nextButtonContent}
-                            onPress={() => router.navigate("/commerce/new/register_completed")}
-                            activeOpacity={0.7}
-                        >
-                            <Feather name="check" size={24} color="white" />
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                <FooterNewCommerce
+                    backStep={() => router.back()}
+                    nextStep={() => router.navigate("/commerce/new/register_completed")}
+                    currentStep={6}
+                />
 
                 <CommerceGoBackModal
                     modalVisible={modalVisible}
@@ -226,12 +211,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
     },
     sectionTitle: {
-        fontSize: 19,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'normal',
         marginBottom: 15
     },
     inputLabel: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'normal',
         marginBottom: 4
     },
@@ -312,56 +297,5 @@ const styles = StyleSheet.create({
         paddingTop: 16,
         paddingLeft: 8,
         paddingRight: 16,
-    },
-    footer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 16,
-        height: 120
-    },
-    stepperLayoutContainer: {
-        flexDirection: 'row',
-        gap: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-    },
-    stepperLayout: {
-        height: 6,
-        width: 14,
-        backgroundColor: '#121212',
-        borderRadius: 22,
-        opacity: 0.5,
-        marginTop: 2
-    },
-    stepperLayoutSelected: {
-        opacity: 1,
-        width: 31,
-        backgroundColor: '#121212',
-        borderRadius: 22,
-        height: 6,
-        marginTop: 2
-    },
-    stepperLayoutText: {
-        fontSize: 20,
-        fontWeight: 'normal',
-    },
-    nextButton: {
-        borderRadius: 8,
-        height: '100%',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        flex: 1
-    },
-    nextButtonContent: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'black',
-        width: 78,
-        height: 78,
-        borderRadius: 999,
-        paddingHorizontal: 16,
     },
 });

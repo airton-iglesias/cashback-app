@@ -2,6 +2,7 @@ import { SafeAreaView, TouchableOpacity, View, StyleSheet, Text } from "react-na
 import { Feather } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
+import { fontSize } from "@/constants/fonts";
 
 export default function RecoverDatas() {
     const { t } = useLocale();
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
         height: '100%'
     },
     infoText:{
-        fontSize: 22,
+        fontSize: fontSize.titles.mini,
         fontWeight: 'bold',
         marginTop: 25
     },

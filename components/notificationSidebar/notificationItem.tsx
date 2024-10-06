@@ -1,6 +1,8 @@
 import { View, Image, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
+import { fontSize } from "@/constants/fonts";
+import React from "react";
 
 export default function NotificationItem({ item, handleRemoveNotification, index }: any) {
     const { t } = useLocale();
@@ -18,7 +20,7 @@ export default function NotificationItem({ item, handleRemoveNotification, index
                                     {item.description} {t("sidebarNotification.notificationItem.tokens")}
                                 </Text>
                             </View>
-                            <TouchableOpacity style={styles.itemIcon} onPress={() => handleRemoveNotification(index)}>
+                            <TouchableOpacity style={styles.itemIcon} onPress={() => handleRemoveNotification(index)} activeOpacity={0.7}>
                                 <Feather name="trash" size={24} color="#E35D6A" />
                             </TouchableOpacity>
                         </View>
@@ -39,7 +41,7 @@ export default function NotificationItem({ item, handleRemoveNotification, index
                                 <Text style={styles.itemTitle}>{item.title}</Text>
                                 <Text style={styles.itemDescription}>{item.description} {t("sidebarNotification.notificationItem.admin_add")}</Text>
                             </View>
-                            <TouchableOpacity style={styles.itemIcon} onPress={() => handleRemoveNotification(index)}>
+                            <TouchableOpacity style={styles.itemIcon} onPress={() => handleRemoveNotification(index)} activeOpacity={0.7}>
                                 <Feather name="trash" size={24} color="#E35D6A" />
                             </TouchableOpacity>
                         </View>
@@ -47,10 +49,10 @@ export default function NotificationItem({ item, handleRemoveNotification, index
                     </View>
 
                     <View style={styles.buttonsAdminWrapper}>
-                        <TouchableOpacity style={[styles.buttonAdmin, { backgroundColor: '#198754' }]}>
+                        <TouchableOpacity style={[styles.buttonAdmin, { backgroundColor: '#198754' }]} activeOpacity={0.7}>
                             <Text style={styles.buttonAdminText}>{t("sidebarNotification.notificationItem.btn_confirm")}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.buttonAdmin, { backgroundColor: '#626262' }]} onPress={() => handleRemoveNotification(index)}>
+                        <TouchableOpacity style={[styles.buttonAdmin, { backgroundColor: '#626262' }]} onPress={() => handleRemoveNotification(index)} activeOpacity={0.7}>
                             <Text style={styles.buttonAdminText}>{t("sidebarNotification.notificationItem.btn_refuse")}</Text>
                         </TouchableOpacity>
                     </View>
@@ -73,7 +75,7 @@ export default function NotificationItem({ item, handleRemoveNotification, index
                                     {item.description} {t("sidebarNotification.notificationItem.anuableCashback_1")} 40.00 cEur {t("sidebarNotification.notificationItem.anuableCashback_2")}
                                 </Text>
                             </View>
-                            <TouchableOpacity style={styles.itemIcon} onPress={() => handleRemoveNotification(index)}>
+                            <TouchableOpacity style={styles.itemIcon} onPress={() => handleRemoveNotification(index)} activeOpacity={0.7}>
                                 <Feather name="trash" size={24} color="#E35D6A" />
                             </TouchableOpacity>
                         </View>
@@ -122,13 +124,13 @@ const styles = StyleSheet.create({
     },
     itemTitle: {
         fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: fontSize.labels.extralarge,
         color: '#a3a3a3'
 
     },
     itemDescription: {
         color: '#F8F9FA',
-        fontSize: 16,
+        fontSize: fontSize.labels.medium,
         fontWeight: '400'
     },
     itemIcon: {
@@ -154,6 +156,6 @@ const styles = StyleSheet.create({
     },
     buttonAdminText: {
         color: 'white',
-        fontSize: 16
+        fontSize: fontSize.labels.medium
     },
 });

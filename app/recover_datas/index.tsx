@@ -4,6 +4,7 @@ import Input from "@/components/input";
 import { useState } from "react";
 import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
+import { fontSize } from "@/constants/fonts";
 
 export default function RecoveryDatas() {
 
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     backButton: {
         position: 'absolute',
         left: 25,
-        width: 60,
+        width: 70,
         height: 40,
         paddingTop: 3,
         justifyContent: 'center',
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     headerText: {
-        fontSize: 24,
+        fontSize: fontSize.titles.medium,
         fontWeight: '700',
         left: 15,
         marginBottom: 4

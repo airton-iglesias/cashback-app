@@ -4,6 +4,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import CommerceHeader from '@/components/commerceHeader';
 import {useLocale} from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
+import { fontSize } from '@/constants/fonts';
 
 export default function CommerceAccessManager() {
     const { t } = useLocale();
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
     },
     manageAccessTitle: {
-        fontSize: 24,
+        fontSize: fontSize.titles.mini,
         fontWeight: 'bold',
     },
     commerceInfoContainer: {
@@ -109,13 +110,6 @@ const styles = StyleSheet.create({
         height: 64,
         width: 64,
         borderRadius: 32,
-    },
-    commerceName: {
-        fontSize: 20,
-    },
-    commerceId: {
-        fontSize: 18,
-        marginTop: 8,
     },
     accessItemContainer: {
         paddingHorizontal: 20,
@@ -143,15 +137,15 @@ const styles = StyleSheet.create({
     },
     accessItemAvatarText: {
         color: '#0093FD',
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'bold',
     },
     accessItemName: {
-        fontSize: 20,
-        fontWeight: '400'
+        fontSize: fontSize.labels.large,
+        fontWeight: '700'
     },
     accessItemId: {
-        fontSize: 16,
+        fontSize: fontSize.labels.medium,
         marginTop: 4,
         color: '#635C5C'
     },
@@ -165,7 +159,7 @@ const styles = StyleSheet.create({
     },
     accessItemAvatarTextRed: {
         color: '#B72E2E',
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'bold',
     },
     userImage: {

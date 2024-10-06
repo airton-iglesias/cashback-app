@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import {
     Image, SafeAreaView, Text, TouchableWithoutFeedback,
-    View, KeyboardAvoidingView, ScrollView, StyleSheet, Dimensions,
-    TouchableOpacity
+    View, KeyboardAvoidingView, StyleSheet,
+    TouchableOpacity,
+    Keyboard
 } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import CheckBox from "@/components/checkbox";
@@ -10,9 +11,7 @@ import { useLocale } from "@/contexts/TranslationContext";
 import LanguageModal from "@/components/languageModal";
 import Input from "@/components/input";
 import { Link } from "expo-router";
-
-
-const windowHeight = Dimensions.get('window').height;
+import { fontSize } from "@/constants/fonts";
 
 export default function SigninScreen() {
 
@@ -22,6 +21,22 @@ export default function SigninScreen() {
     const [password, setPassword] = useState('');
     const [isChecked, setChecked] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [keyboardIsVisible, setKeyboardIsVisible] = useState(false);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+            setKeyboardIsVisible(true);
+        });
+
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+            setKeyboardIsVisible(false);
+        });
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
 
     useEffect(() => {
         setTimeout(() => {
@@ -39,166 +54,145 @@ export default function SigninScreen() {
     };
 
     return (
-        <SafeAreaView style={styles.safeareaview}>
-            <LanguageModal
-                modalVisible={modalVisible}
-                handleCloseModal={handleCloseModal}
-            />
-            <KeyboardAvoidingView>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                    <View style={styles.container}>
-                        <View style={styles.logoContainer}>
-                            <View style={styles.logo}>
-                                <Text style={styles.logoText}>LOGO</Text>
-                            </View>
-                        </View>
+        <SafeAreaView style={[styles.container, keyboardIsVisible ? { paddingTop: 70 } : null]}>
+            <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
+                <LanguageModal
+                    modalVisible={modalVisible}
+                    handleCloseModal={handleCloseModal}
+                />
 
-                        <View style={styles.header}>
-                            <Text style={styles.headerText}>{t('signin.header')}</Text>
-                        </View>
-
-                        <View style={styles.inputGroup}>
-                            <Input
-                                label={t('signin.email')}
-                                onChange={(text: string) => setEmail(text)}
-                                type={'email'}
-                            />
-                        </View>
-
-                        <View style={styles.inputGroup}>
-                            <Input
-                                label={t('signin.password')}
-                                onChange={(text: string) => setPassword(text)}
-                                type={'password'}
-                            />
-                        </View>
-
-                        <View style={styles.checkboxContainer}>
-                            <CheckBox
-                                label="Esse é um checkbox"
-                                labelStyle={{ color: '#fff000', fontSize: 16 }}
-                                iconColor="#fff"
-                                checkColor="#fff600"
-                                value={isChecked}
-                                onChange={handleCheck}
-                            />
-                            <Text style={styles.checkboxLabel}>{t('signin.keepLogged')}</Text>
-                        </View>
-
-                        <View style={styles.buttonContainer}>
-                            <Link replace href={"/dashboard"} asChild>
-                                <TouchableOpacity
-                                    activeOpacity={0.7}
-                                    style={styles.buttonWrapper}
-                                >
-                                    <View style={styles.submitButton}>
-                                        <Feather name="arrow-right" size={24} color={'white'} />
-                                    </View>
-                                </TouchableOpacity>
-                            </Link>
-
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                style={styles.buttonWrapper}
-                            >
-                                <View style={styles.googleButton}>
-                                    <Image source={require("@/assets/icons/google-icon.png")} style={styles.googleIcon} />
-                                </View>
-                            </TouchableOpacity>
-
-                            <View style={styles.linkWrapper}>
-                                <Link href={"/signup"} asChild>
-                                    <TouchableWithoutFeedback>
-                                        <Text style={styles.link}>{t('signin.createAccount')}</Text>
-                                    </TouchableWithoutFeedback>
-                                </Link>
-
-                                <Link href={{
-                                    pathname: '/recover_datas',
-                                    params: { type: 'password' },
-                                }} asChild>
-                                    <TouchableWithoutFeedback>
-                                        <Text style={styles.link}>{t('signin.forgotPassword')}</Text>
-                                    </TouchableWithoutFeedback>
-                                </Link>
-                            </View>
+                {keyboardIsVisible ?
+                    null
+                    :
+                    <View style={styles.logoContainer}>
+                        <View style={styles.logo}>
+                            <Text style={styles.logoText}>LOGO</Text>
                         </View>
                     </View>
-                </ScrollView>
+                }
+
+                <View style={styles.contentWrapper}>
+
+                    <View style={[styles.header, keyboardIsVisible ? null : { marginTop: 20 }]}>
+                        <Text style={styles.headerText}>{t('signin.header')}</Text>
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Input
+                            label={t('signin.email')}
+                            onChange={(text: string) => setEmail(text)}
+                            type={'email'}
+                        />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Input
+                            label={t('signin.password')}
+                            onChange={(text: string) => setPassword(text)}
+                            type={'password'}
+                        />
+                    </View>
+
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox
+                            label=" "
+                            labelStyle={{ color: '#fff000', fontSize: 16 }}
+                            iconColor="#fff"
+                            checkColor="#fff600"
+                            value={isChecked}
+                            onChange={handleCheck}
+                        />
+                        <Text style={styles.checkboxLabel}>{t('signin.keepLogged')}</Text>
+                    </View>
+                </View>
+
+                <View style={styles.buttonContainer}>
+                    <Link replace href={"/pin"} asChild>
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            style={styles.buttonWrapper}
+                        >
+                            <View style={styles.submitButton}>
+                                <Feather name="arrow-right" size={24} color={'white'} />
+                            </View>
+                        </TouchableOpacity>
+                    </Link>
+
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={styles.buttonWrapper}
+                    >
+                        <View style={styles.googleButton}>
+                            <Image source={require("@/assets/icons/google-icon.png")} style={styles.googleIcon} />
+                        </View>
+                    </TouchableOpacity>
+
+                    <View style={styles.linkWrapper}>
+                        <Link href={"/signup"} asChild>
+                            <TouchableWithoutFeedback>
+                                <Text style={styles.link}>{t('signin.createAccount')}</Text>
+                            </TouchableWithoutFeedback>
+                        </Link>
+
+                        <Link href={{
+                            pathname: '/recover_datas',
+                            params: { type: 'password' },
+                        }} asChild>
+                            <TouchableWithoutFeedback>
+                                <Text style={styles.link}>{t('signin.forgotPassword')}</Text>
+                            </TouchableWithoutFeedback>
+                        </Link>
+                    </View>
+                </View>
             </KeyboardAvoidingView>
-        </SafeAreaView>
+        </SafeAreaView >
     );
-}
+};
 
 const styles = StyleSheet.create({
-    safeareaview: {
-        backgroundColor: 'white',
-        height: '100%'
-    },
     container: {
         flex: 1,
-        height: windowHeight,
-        gap: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 15,
         backgroundColor: 'white',
-        paddingBottom: 30
+        paddingHorizontal: 15,
+        paddingBottom: 35
     },
-    logoContainer: {
-        width: '100%',
-        height: 150,
-        padding: 5,
-        marginTop: 60
+    keyboardAvoidingView: {
+        flex: 1,
     },
-    logo: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#E5E7EB',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 20,
-    },
-    logoText: {
-        fontSize: 60,
-        fontWeight: 'bold',
+    contentWrapper: {
+        flexGrow: 1,
+        gap: 10
     },
     header: {
         width: '100%',
-        padding: 5,
+        marginBottom: 10
     },
     headerText: {
-        fontSize: 40,
+        fontSize: fontSize.titles.large,
         fontWeight: 'bold',
     },
     inputGroup: {
         width: '100%',
         marginTop: 1,
     },
-    label: {
-        fontSize: 20,
-        fontWeight: 'normal',
-        marginBottom: 4
-    },
     checkboxContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 3,
         width: '100%',
-        height: 60,
+        height: 40,
+        marginBottom: 5
     },
     checkboxLabel: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         marginBottom: 2,
         marginLeft: 5
     },
     buttonContainer: {
-        flex: 1,
         width: '100%',
         flexDirection: 'column',
         gap: 20,
         paddingBottom: 8,
-        justifyContent: 'flex-end'
     },
     buttonWrapper: {
         borderRadius: 8,
@@ -239,7 +233,25 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
     link: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         color: '#1E40AF',
+    },
+    logoContainer: {
+        width: '100%',
+        height: 150,
+        padding: 5,
+        marginTop: 60
+    },
+    logo: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#E5E7EB',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 20,
+    },
+    logoText: {
+        fontSize: 60,
+        fontWeight: 'bold',
     },
 });

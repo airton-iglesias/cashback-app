@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocalSearchParams } from 'expo-router';
 import {
-    Dimensions, Image, KeyboardAvoidingView, SafeAreaView, ScrollView,
-    StyleSheet, Text, TouchableHighlight, TouchableWithoutFeedback, View
+    Dimensions, Image, Keyboard, KeyboardAvoidingView, SafeAreaView,
+    StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { Feather } from '@expo/vector-icons';
@@ -10,15 +10,20 @@ import Select from '@/components/select';
 import SelectOption from '@/components/selectOption';
 import { useLocale } from '@/contexts/TranslationContext';
 import Input from '@/components/input';
+import { fontSize } from '@/constants/fonts';
 
-export default function Signup_Step_1() {
 
+const windowHeight = Dimensions.get('window').height;
+
+export default function SigninScreen() {
     const { email, password } = useLocalSearchParams();
     const [image, setImage] = useState<any>(null);
     const [name, setName] = useState<string>('');
     const [codeBonus, setCodeBonus] = useState<string>('');
     const [country, setCountry] = useState<string>('');
     const [currency, setCurrency] = useState<string>('');
+    const [keyboardIsVisible, setKeyboardIsVisible] = useState(false);
+    const { t } = useLocale();
 
     const countryOptions = [
         { id: 1, text: 'Portugal', flag: 'PT' },
@@ -32,7 +37,20 @@ export default function Signup_Step_1() {
         { id: 3, text: 'USD', flag: 'US' },
     ];
 
-    const { t } = useLocale();
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+            setKeyboardIsVisible(true);
+        });
+
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+            setKeyboardIsVisible(false);
+        });
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
 
     const handleImagePick = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -53,134 +71,112 @@ export default function Signup_Step_1() {
         }
     };
 
-    const handleNextStep = () => {
-
-    };
-
     return (
         <SafeAreaView style={styles.container}>
-            <KeyboardAvoidingView>
-                <ScrollView contentContainerStyle={styles.scrollView}>
-                    <View style={styles.innerContainer}>
-                        <View style={styles.subInnerContainer}>
-                            <View style={styles.imageContainer}>
-                                <TouchableWithoutFeedback onPress={handleImagePick} style={{ borderRadius: 8 }}>
-                                    {image ? (
-                                        <View>
-                                            <Image source={{ uri: image }} style={styles.image} />
-                                            <View style={styles.cameraIconContainer}>
-                                                <Feather name="camera" size={20} color="black" />
-                                            </View>
-                                        </View>
-                                    ) : (
-                                        <View>
-                                            <Image
-                                                source={require("../../assets/icons/user-icon.png")}
-                                                style={styles.image}
-                                            />
-                                            <View style={styles.cameraIconContainer}>
-                                                <Feather name="camera" size={20} color="black" />
-                                            </View>
-                                        </View>
-                                    )}
-                                </TouchableWithoutFeedback>
-                            </View>
-                            <View style={{ gap: 10 }}>
-                                <View style={styles.inputContainer}>
-                                    <Input
-                                        label={t('signup.signup_step_1.name')}
-                                        onChange={(text: string) => setName(text)}
-                                    />
-                                </View>
+            <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
+                <View style={styles.contentWrapper}>
 
-                                <View style={styles.selectContainer}>
+                    {keyboardIsVisible ?
+                        null
+                        :
+                        <View style={styles.imageContainer}>
+                            <TouchableWithoutFeedback onPress={handleImagePick} style={{ borderRadius: 8 }}>
+                                {image ? (
                                     <View>
-                                        <Text style={styles.label}>{t('signup.signup_step_1.country')}</Text>
-                                        <Select
-                                            options={countryOptions}
-                                            onChangeSelect={(item: any) => setCountry(`${item.text}`)}
-                                            text={t("signup.signup_step_1.select_country")}
-                                            SelectOption={SelectOption}
-                                        />
+                                        <Image source={{ uri: image }} style={styles.image} />
+                                        <View style={styles.cameraIconContainer}>
+                                            <Feather name="camera" size={20} color="black" />
+                                        </View>
                                     </View>
-
+                                ) : (
                                     <View>
-                                        <Text style={styles.label}>{t('signup.signup_step_1.currency')}</Text>
-                                        <Select
-                                            options={currencyOptions}
-                                            onChangeSelect={(item: any) => setCurrency(`${item.text}`)}
-                                            text={t("signup.signup_step_1.select_currency")}
-                                            SelectOption={SelectOption}
+                                        <Image
+                                            source={require("../../assets/icons/user-icon.png")}
+                                            style={styles.image}
                                         />
+                                        <View style={styles.cameraIconContainer}>
+                                            <Feather name="camera" size={20} color="black" />
+                                        </View>
                                     </View>
-                                </View>
-
-                                <View>
-                                    <View style={styles.bonusCodeLabelWrapper}>
-                                        <Text style={styles.label}>{t("signup.signup_step_1.bonus_code")}</Text>
-                                        <Text style={styles.optionalLabel}>{t("signup.signup_step_1.optional")}</Text>
-                                    </View>
-                                    <Input
-                                        onChange={(text: string) => setCodeBonus(text)}
-                                    />
-                                </View>
-                            </View>
+                                )}
+                            </TouchableWithoutFeedback>
                         </View>
+                    }
 
-                        <View style={[styles.nextButtonContainer]}>
-                            <Link href={{
-                                pathname: '/signup/step3', params: {
-                                    email: email, password: password, image: image, 
-                                    name: name, codeBonus: codeBonus, country: country, 
-                                    currency: currency
-                                }
-                            }} asChild>
-                                <TouchableHighlight onPress={handleNextStep}
-                                    underlayColor="#e5e7eb"
-                                    activeOpacity={0.6}
-                                    style={styles.nextButtonWrapper}
-                                >
-                                    <View style={styles.nextButton}>
-                                        <Feather name="arrow-right" size={24} style={styles.icon} />
-                                    </View>
-                                </TouchableHighlight>
-                            </Link>
-                        </View>
-
+                    <View style={styles.inputGroup}>
+                        <Input
+                            label={t('signup.signup_step_1.name')}
+                            onChange={(text: string) => setName(text)}
+                            type={'email'}
+                        />
                     </View>
-                </ScrollView>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>{t('signup.signup_step_1.country')}</Text>
+                        <Select
+                            options={countryOptions}
+                            onChangeSelect={(item: any) => setCountry(`${item.text}`)}
+                            text={t("signup.signup_step_1.select_country")}
+                            SelectOption={SelectOption}
+                        />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>{t('signup.signup_step_1.currency')}</Text>
+                        <Select
+                            options={currencyOptions}
+                            onChangeSelect={(item: any) => setCurrency(`${item.text}`)}
+                            text={t("signup.signup_step_1.select_currency")}
+                            SelectOption={SelectOption}
+                        />
+                    </View>
+                    <View>
+                        <View style={styles.bonusCodeLabelWrapper}>
+                            <Text style={styles.label}>{t("signup.signup_step_1.bonus_code")}</Text>
+                            <Text style={styles.optionalLabel}>{t("signup.signup_step_1.optional")}</Text>
+                        </View>
+                        <Input
+                            onChange={(text: string) => setCodeBonus(text)}
+                        />
+                    </View>
+                </View>
+
+                <View style={styles.buttonContainer}>
+                    <Link href={{
+                        pathname: '/signup/step3', params: {
+                            email: email, password: password, image: image,
+                            name: name, codeBonus: codeBonus, country: country,
+                            currency: currency
+                        }
+                    }} asChild>
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            style={styles.buttonWrapper}
+                        >
+                            <View style={styles.submitButton}>
+                                <Feather name="arrow-right" size={24} color={'white'} />
+                            </View>
+                        </TouchableOpacity>
+                    </Link>
+                </View>
             </KeyboardAvoidingView>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 };
-
-const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height: windowHeight,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        paddingHorizontal: 15,
+        paddingBottom: 10,
+        paddingTop: 70
     },
-    scrollView: {
-        flexGrow: 1,
-        justifyContent: 'center',
-    },
-    innerContainer: {
+    keyboardAvoidingView: {
         flex: 1,
-        flexDirection: 'column',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        paddingTop: 56,
-        justifyContent: 'space-between',
-        height: windowHeight,
-        paddingBottom: 30
-    },
-    subInnerContainer: {
-        width: "100%",
     },
     imageContainer: {
-        height: 200,
+        height: 150,
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
@@ -207,46 +203,37 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    inputContainer: {
+    contentWrapper: {
+        flexGrow: 1,
+        gap: 7
+    },
+    header: {
         width: '100%',
+        marginBottom: 15,
+    },
+    headerText: {
+        fontSize: fontSize.titles.large,
+        fontWeight: 'bold',
+    },
+    inputGroup: {
+        width: '100%',
+        marginTop: 1,
     },
     label: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'normal',
         marginBottom: 4
     },
-    selectContainer: {
+    buttonContainer: {
         width: '100%',
-        gap: 10
+        flexDirection: 'column',
+        gap: 20,
+        paddingBottom: 8,
     },
-    bonusCodeLabelWrapper: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 4
-    },
-    optionalLabel: {
-        bottom: 1,
-        fontSize: 14,
-        backgroundColor: '#E5E7EB',
-        color: '#6B7280',
-        paddingHorizontal: 6,
-        paddingVertical: 4,
-        fontWeight: '600',
-        borderRadius: 8,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    nextButtonContainer: {
-        width: '100%',
-    },
-    nextButtonWrapper: {
+    buttonWrapper: {
         borderRadius: 8,
     },
-    nextButtonHighlight: {
-        borderRadius: 8,
-        width: '100%'
-    },
-    nextButton: {
+    submitButton: {
         flexDirection: 'row',
         backgroundColor: '#000000',
         width: '100%',
@@ -256,8 +243,22 @@ const styles = StyleSheet.create({
         padding: 4,
         borderRadius: 10,
     },
-    icon: {
-        color: 'white',
-        padding: 11,
+
+    bonusCodeLabelWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 4
+    },
+    optionalLabel: {
+        bottom: 1,
+        fontSize: fontSize.labels.mini,
+        backgroundColor: '#E5E7EB',
+        color: '#6B7280',
+        paddingHorizontal: 6,
+        paddingVertical: 4,
+        fontWeight: '600',
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 });

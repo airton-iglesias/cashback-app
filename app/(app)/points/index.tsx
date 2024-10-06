@@ -5,6 +5,8 @@ import Topbar from '@/components/header';
 import InfoCloudIcon from '@/assets/icons/infoCloudIcon';
 import Sidebar from '@/components/sidebar';
 import {useLocale} from "@/contexts/TranslationContext";
+import { fontSize } from '@/constants/fonts';
+import NotificationSidebar from '@/components/notificationSidebar';
 
 type CommerceData = {
     name: string;
@@ -23,8 +25,11 @@ type CommerceData = {
 export default function Points() {
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [showTopbar, setShowTopbar] = useState(true);
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [showSidebar, setShowSidebar] = useState(false);
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState(true);
+    const [showNotifications, setShowNotifications] = useState(false);
     const { t } = useLocale();
 
     const commerceDatas: CommerceData[] = [
@@ -42,6 +47,7 @@ export default function Points() {
             },
         },
     ];
+
     const openSidebar = () => {
         setShowSidebar(true);
         setIsSidebarOpen(true);
@@ -54,10 +60,23 @@ export default function Points() {
         }, 300);
     };
 
+    const openNotifications = () => {
+        setIsNotificationsOpen(true);
+        setShowNotifications(true);
+    };
+
+    const closeNotifications = () => {
+        setIsNotificationsOpen(false);
+        setTimeout(() => {
+            setShowNotifications(false);
+        }, 300);
+    };
+
     return (
         <SafeAreaView style={styles.safeArea}>
+            {showTopbar && <Topbar openSidebar={openSidebar} openNotifications={openNotifications} />}
             {showSidebar && <Sidebar closeSidebar={closeSidebar} isSidebarOpen={isSidebarOpen} />}
-            <Topbar openSidebar={openSidebar} />
+            {showNotifications && <NotificationSidebar closeSidebar={closeNotifications} isSidebarOpen={isNotificationsOpen} />}
             <View style={styles.relative}>
                 <View style={styles.infoButtonContainer}>
                     <TouchableOpacity style={styles.infoButton}
@@ -223,10 +242,10 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     modalHeaderText: {
-        fontSize: 24,
+        fontSize: fontSize.titles.medium,
         fontWeight: '700',
         left: 15,
-        marginBottom: 4
+        marginBottom: 3
     },
     relative: {
         position: 'relative',
@@ -247,7 +266,7 @@ const styles = StyleSheet.create({
     },
     infoButtonText: {
         color: '#3b82f6',
-        fontSize: 24,
+        fontSize: fontSize.labels.medium,
     },
     pointsContainer: {
         width: '100%',
@@ -262,7 +281,7 @@ const styles = StyleSheet.create({
         gap: 2,
     },
     pointsText: {
-        fontSize: 64,
+        fontSize: fontSize.titles.superlarge,
         fontWeight: 'bold',
         marginTop: 24,
     },
@@ -281,7 +300,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     headerText: {
-        fontSize: 20,
+        fontSize: fontSize.titles.medium,
         fontWeight: '500',
     },
     cardContainer: {
@@ -306,15 +325,15 @@ const styles = StyleSheet.create({
         gap: 8
     },
     cardTitle: {
-        fontSize: 20,
-        fontWeight: '400'
+        fontSize: fontSize.labels.medium,
+        fontWeight: 'bold'
     },
     cardDetails: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     cardDetailText: {
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         color: '#635C5C',
         marginLeft: 3
     },
@@ -333,7 +352,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     cardStatusText: {
-        fontSize: 14,
+        fontSize: fontSize.labels.mini,
         fontWeight: 'bold',
         color: '#00ACC1',
     },
@@ -365,7 +384,7 @@ const styles = StyleSheet.create({
         marginTop: 24,
     },
     modalTitle: {
-        fontSize: 32,
+        fontSize: fontSize.titles.medium,
         color: '#3b82f6',
     },
     modalContent: {
@@ -378,16 +397,16 @@ const styles = StyleSheet.create({
     modalSectionTitle: {
         color: '#4b5563',
         fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: fontSize.labels.extralarge,
     },
     modalSectionTitleAdd: {
         color: '#14b8a6',
         fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: fontSize.labels.extralarge,
     },
     modalSectionText: {
         color: '#4b5563',
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         textAlign: 'center',
     },
 });

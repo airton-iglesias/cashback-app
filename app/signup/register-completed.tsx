@@ -7,7 +7,7 @@ export default function RegisterCompleted() {
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            router.replace('/dashboard');
+            router.replace('/');
         }, 3000);
 
         return () => clearTimeout(timeout);

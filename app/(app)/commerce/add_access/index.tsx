@@ -8,6 +8,7 @@ import Switch from '@/components/switch';
 import CommerceHeader from '@/components/commerceHeader';
 import {useLocale} from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
+import { fontSize } from '@/constants/fonts';
 
 export default function CommerceAddAccess() {
     const [userID, setUserID] = useState('');
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
         borderTopColor: '#D1D5DB',
     },
     idLabel: {
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
     },
     idInput: {
         borderColor: '#DEE2E6',
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 48,
         paddingHorizontal: 16,
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         color: '#6C757D',
         marginTop: 8,
     },
@@ -153,11 +154,11 @@ const styles = StyleSheet.create({
     },
     personAvatarText: {
         color: '#0093FD',
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'bold',
     },
     personName: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         marginLeft: 16,
     },
     switchContainer: {
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
         paddingVertical: 16
     },
     switchLabel: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
     },
     footerContainer: {
         flex: 1,
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     },
     accessItemAvatarText: {
         color: '#0093FD',
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'bold',
     },
 });

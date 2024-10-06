@@ -2,12 +2,13 @@ import React from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import CommerceHeader from '@/components/commerceHeader';
-import {useLocale} from "@/contexts/TranslationContext";
+import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
+import { fontSize } from '@/constants/fonts';
 
 const data = [
-    { id: '1', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: true, positive: true  },
-    { id: '2', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: false, positive: false  },
+    { id: '1', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: true, positive: true },
+    { id: '2', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: false, positive: false },
     { id: '3', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: true, positive: false },
     { id: '4', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: false, positive: true },
     { id: '5', date: '22/08/2024', transactionId: '983487', amount: '50,00', deleted: true, positive: false },
@@ -43,10 +44,10 @@ export default function CommerceCreditExtract() {
         <SafeAreaView style={styles.container}>
 
             <CommerceHeader
-                    Title={t("commerce.credit_extract.headerLabel")}
-                    ScreenGoback={() => router.back()}
-                    ScreenClose={() => router.back()}
-                />
+                Title={t("commerce.credit_extract.headerLabel")}
+                ScreenGoback={() => router.back()}
+                ScreenClose={() => router.back()}
+            />
             <FlatList
                 data={data}
                 renderItem={({ item }) => (
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
         opacity: 0.6,
     },
     whoDeleted: {
-        fontSize: 17,
+        fontSize: fontSize.labels.medium,
         marginBottom: 10,
     },
     trashIcon: {
@@ -99,18 +100,18 @@ const styles = StyleSheet.create({
         right: -10
     },
     date: {
-        fontSize: 20,
+        fontSize: fontSize.labels.extralarge,
         color: '#495057',
         fontWeight: '400'
     },
     transactionId: {
-        fontSize: 17,
+        fontSize: fontSize.labels.medium,
         marginBottom: 3,
         fontWeight: 'bold',
         marginTop: 5
     },
     amount: {
-        fontSize: 25,
+        fontSize: fontSize.titles.medium,
         fontWeight: 'bold',
         color: 'red',
     },

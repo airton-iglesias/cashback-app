@@ -6,6 +6,7 @@ import ModalCommerce from '@/components/modalCommerce';
 import { useLocale } from "@/contexts/TranslationContext";
 import CommerceHeader from '@/components/commerceHeader';
 import { router } from 'expo-router';
+import { fontSize } from '@/constants/fonts';
 
 const data = [
     {
@@ -92,7 +93,7 @@ export default function CommerceMenu() {
                     <TouchableOpacity
                         activeOpacity={0.7}
                         style={styles.menuItemButton}
-                        onPress={() => setCommerceModalVisible(!commerceModalVisible)}
+                        onPress={() => router.push({pathname: "/(app)/commerce_informations", params: { selectedItem: JSON.stringify(data[0])}})}
                     >
                         <View style={styles.iconContainer}>
                             <Feather name="eye" size={24} color="#0A3A74" />
@@ -198,13 +199,6 @@ export default function CommerceMenu() {
                     </View>
                 </View>
             </Modal>
-
-
-            <ModalCommerce
-                modalVisible={commerceModalVisible}
-                selectedItem={data[0]}
-                handleCloseModal={() => setCommerceModalVisible(!commerceModalVisible)}
-            />
         </SafeAreaView >
     );
 }
@@ -240,7 +234,7 @@ const styles = StyleSheet.create({
         marginRight: 16,
     },
     menuItemText: {
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'normal',
     },
     deleteIconContainer: {
@@ -267,7 +261,7 @@ const styles = StyleSheet.create({
     },
     modalText: {
         textAlign: 'center',
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         color: '#DC3545'
     },
     buttonContainer: {

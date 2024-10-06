@@ -7,6 +7,7 @@ import Sidebar from "@/components/sidebar";
 import NotificationSidebar from "@/components/notificationSidebar";
 import { useLocale } from "@/contexts/TranslationContext";
 import { Link } from "expo-router";
+import { fontSize } from "@/constants/fonts";
 
 type CommerceData = {
     name: string;
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     headerText: {
-        fontSize: 20,
+        fontSize: fontSize.labels.extralarge,
         fontWeight: '500',
     },
     cardContainer: {
@@ -254,15 +255,16 @@ const styles = StyleSheet.create({
         gap: 8
     },
     cardTitle: {
-        fontSize: 20,
-        fontWeight: '400'
+        fontSize: fontSize.labels.extralarge,
+        fontWeight: '700'
     },
     cardDetails: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: 4
     },
     cardDetailText: {
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         color: '#635C5C',
         marginLeft: 4
     },
@@ -280,7 +282,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     cardStatusText: {
-        fontSize: 14,
+        fontSize: fontSize.labels.mini,
         fontWeight: 'bold',
     },
     separator: {
@@ -298,7 +300,7 @@ const styles = StyleSheet.create({
     },
     emptyStateText: {
         width: 210,
-        fontSize: 20,
+        fontSize: fontSize.labels.extralarge,
         fontWeight: '700',
         color: '#636363',
         marginTop: 24,

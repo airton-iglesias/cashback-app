@@ -83,23 +83,52 @@
             "tokens": "Tokens"
         },
         "creditsScreen": {
+            "deposit": "Depositar",
             "fidelity": "Fidelidade",
             "extract": "Extrato",
             "search": "Buscar",
             "item": "Item",
             "value": "Valor",
-            "creditExtract": "Extrato de Créditos"
-        },
-        "tokensScreen": {
-            "depositToken": "Depositar token",
+            "creditExtract": "Extrato de Créditos",
+            "modalback": "Voltar",
+            "warning": "Qualquer dado mal colocado pode levar a perda irreversível do seu depósito.",
+            "warning2": "Os Tokens Zoi depositados na sua carteira de deposito, são convertidos para créditos automaticamente, ao preço atual do mercado.",
             "token": "Token",
             "blockchain": "Blockchain",
-            "depositWallat": "Carteira de depósito",
-            "warning": "Qualquer dado mal colocado pode levar a perda irreversível do seu depósito."
+            "depositWallat": "Carteira de depósito"
+        },
+        "tokensScreen": {
+            "graphic": "Gráfico",
+            "win": "Ganhar",
+            "extract": "Extrato",
+            "tax_distribution": "Distribuição de taxas",
+            "pool_distribution": "Distribuição de pool",
+            "next_distribution": "Proxima distribuição",
+            "modal": {
+                "zoi": {
+                    "title1": "Como desbloquear",
+                    "title2": "os tokens ZOI",
+                    "criterionTitle": "Critério",
+                    "criterionDescription": "1 token ZOI é desbloqueado a cada $0.01 queimado pela sua carteira",
+                    "importantTitle": "Importante",
+                    "importantDescription": "O valor para desbloquear os token ZOI podem ser alterados sem aviso, pela alteração do valor do token ZOI no mercado."
+                },
+                "pool": {
+                    "title1": "Informações de como funciona",
+                    "title2": "a distribuição de taxas",
+                    "taxTitle": "Sobre taxas",
+                    "taxDescription": "Texto explicando a distribuição das taxas",
+                    "poolTitle": "Sobre pools",
+                    "poolDescription": "Texto explicando como pool funciona"
+                }
+            },
+            "warning": "Os Tokens ZOI estarão disponíveis para sacar na próxima atualização, consulte o road map."
         }
     },
     "dashboardQRCode": {
-        "label": "Aponte para o QR Code"
+        "label": "Aponte para o QR Code",
+        "noPermission": "É necessário conceder a permissão para o uso da câmera!",
+        "permissionButton": "Conceder permissão"
     },
     "sidebar": {
         "profile": "Meu perfil",
@@ -121,7 +150,7 @@
         }
     },
     "recoveryDatas": {
-        "goBack": "voltar",
+        "goBack": "Voltar",
         "inputLabel": "Email para envio de confirmação",
         "checkInbox": "Verifique sua caixa de email",
         "newPasswordLabel": "Crie uma nova senha",
@@ -143,6 +172,7 @@
             "withoutInfos": "Sem informação"
         },
         "new_commerce": {
+            "currentStepper": "de",
             "step0": {
                 "edit": "Editar",
                 "new": "Novo",
@@ -152,8 +182,7 @@
                 "promotion": "Promoção",
                 "placeLabel": "Físico ou online?",
                 "fisic": "Físico",
-                "web": "Web",
-                "currentStepper": "1 de 6"
+                "web": "Web"
             },
             "step1": {
                 "headerLabel": "Dados básicos",
@@ -162,8 +191,7 @@
                 "associationLabel": "Associar",
                 "userPoints": "Creditar pontos no usuário",
                 "referedBy": "Referido por",
-                "ID": "ID",
-                "currentStepper": "2 de 6"
+                "ID": "ID"
             },
             "step2": {
                 "headerLabel": "Local e horário",
@@ -174,43 +202,43 @@
                 "startHour": "Hora de início",
                 "endHour": "Hora de fim",
                 "locationLabel": "Local do estabelecimento",
-                "adressPlaceholder": "Complexo Desportivo municipal do...",
-                "currentStepper": "3 de 6"
+                "adressPlaceholder": "Complexo Desportivo municipal do..."
             },
             "step3": {
                 "headerLabel": "Descrição",
-                "descriptionLabel": "Descreva o evento",
+                "descriptionLabel": "Descreva o item",
                 "modalLabel": "Inserção de link",
                 "linkTitle": "Título do link",
                 "linkTitlePlaceholder": "Título",
                 "linkAdress": "Endereço do link",
-                "linkAdressPlaceholder": "https://...",
-                "currentStepper": "4 de 6"
+                "linkAdressPlaceholder": "https://..."
             },
             "step4": {
                 "headerLabel": "Imagens e vídeos",
-                "logoLabel": "Logomarca",
+                "logoLabel": "Imagem/marca/perfil",
                 "bannerLabel": "Cartaz",
-                "descriptionImageLabel": "Imagens de descrição",
-                "currentStepper": "5 de 6"
+                "descriptionMediasLabel": "Mídias de descrição",
+                "modalTitle": "Informações sobre as mídias",
+                "modalBanner": "Cartaz",
+                "modalBannerDescription": "Texto explicando sobre as mídias",
+                "modalCarroselMedias": "Carrossel",
+                "modalCarroselDescription": "Texto explicando sobre as mídias"
             },
-            "step5":{
+            "step5": {
                 "headerLabel": "Cashback",
                 "baseDiscount": " Desconto base em %",
                 "cashbackType": "Tipo de Cashback",
                 "selectLabel": "Selecione",
                 "minimalValueLabel": "Valor mínimo",
                 "minimalCurrencyPlaceholder": "50c",
-                "discountSectionPorcentage": "Desconto da etapa em %",
-                "discountSectionPorcentagePlaceholder": "20",
-                "currentStepper": "6 de 6"
+                "discountSectionPorcentage": "Desconto da etapa",
+                "discountSectionPorcentagePlaceholder": "20 %"
             },
             "step6": {
                 "headerLabel": "Mais informações",
                 "emailContactLabel": "Email para a nossa equipe o contatar",
-                "warning1": "Vamos contata-lo por email, para encontrar a melhor forma de os nossos clientes se tonarem vossos clientes.",
-                "warning2": "Indique um email seguro, com retorno rápido.",
-                "currentStepper": "6 de 6"
+                "warning1": "Vamos contata-lo por email, para encontrar a melhor forma de os nossos clientes se tornarem vossos clientes.",
+                "warning2": "Indique um email seguro, com retorno rápido."
             },
             "gobackModal": {
                 "description1": "Ao voltar, os dados serão perdidos.",
@@ -258,7 +286,7 @@
             "title": "QR Code",
             "id": "ID",
             "description1": "Scan QR Code",
-            "description2": "do comerciante"
+            "description2": "do cliente"
         }
     },
     "modalCommerce": {
@@ -302,7 +330,13 @@
             "additionDescription": "1 ponto é adicionado a cada $0.01 em créditos movimentados."
         }
     },
-    "mapLocation":{
+    "mapLocation": {
         "headerLabel": "Voltar"
+    },
+    "sendDiscount": {
+        "home": {
+            "description1": "Scan QR Code",
+            "description2": "do comerciante"
+        }
     }
 }

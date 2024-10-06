@@ -2,6 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import CountryFlag from 'react-native-country-flag';
+import { fontSize } from '@/constants/fonts';
 
 const SelectOption = ({ item, isSelected, onSelect }: any) => {
   return (
@@ -16,7 +17,7 @@ const SelectOption = ({ item, isSelected, onSelect }: any) => {
       <View  style={styles.optionWrapper}>
         <View style={styles.optionContent}>
           {item.flag ? <CountryFlag isoCode={item.flag} size={20} /> : null}
-          <Text style={{fontSize: 18}}>{item.text}</Text>
+          <Text style={{fontSize: fontSize.labels.medium}}>{item.text}</Text>
         </View>
         {isSelected && <Feather name="check" size={24} color="black" />}
       </View>
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 56,
     paddingHorizontal: 20,
-    fontSize: 20,
+    fontSize: fontSize.labels.medium,
     flexDirection: 'row',
     color: '#6b7280'
   },

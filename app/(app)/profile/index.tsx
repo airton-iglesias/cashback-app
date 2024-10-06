@@ -10,8 +10,9 @@ import SelectOption from '@/components/selectOption';
 import Input from '@/components/input';
 import Switch from '@/components/switch';
 import * as Clipboard from 'expo-clipboard';
-import {useLocale} from "@/contexts/TranslationContext";
+import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
+import { fontSize } from '@/constants/fonts';
 
 
 export default function Profile() {
@@ -36,9 +37,9 @@ export default function Profile() {
     ];
 
     const currencyOptions = [
-        { id: 1, text: 'EUR'},
-        { id: 2, text: 'BRL'},
-        { id: 3, text: 'USD'},
+        { id: 1, text: 'EUR' },
+        { id: 2, text: 'BRL' },
+        { id: 3, text: 'USD' },
     ];
 
     const handleImagePick = async () => {
@@ -66,23 +67,24 @@ export default function Profile() {
     return (
         <SafeAreaView style={styles.safeArea}>
             <KeyboardAvoidingView>
+                <View style={styles.header}>
+                    <TouchableOpacity
+                        style={styles.backButton}
+                        onPress={() => router.back()}
+                    >
+                        <Ionicons name="chevron-back" size={20} color="black" />
+                        <Text style={styles.backButtonText}>{t("profile.headerBackLabel")}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.saveButton}
+                    >
+                        <Text style={styles.saveButtonText}>{t("profile.headerSaveLabel")}</Text>
+                        <Feather name="check" size={24} color="#0D6EFD" />
+                    </TouchableOpacity>
+                </View>
+
                 <ScrollView contentContainerStyle={styles.scrollView}>
                     <View style={styles.container}>
-                        <View style={styles.header}>
-                            <TouchableOpacity
-                                style={styles.backButton}
-                                onPress={() => router.back()}
-                            >
-                                <Ionicons name="chevron-back" size={20} color="black" />
-                                <Text style={styles.backButtonText}>{t("profile.headerBackLabel")}</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.saveButton}
-                            >
-                                <Text style={styles.saveButtonText}>{t("profile.headerSaveLabel")}</Text>
-                                <Feather name="check" size={24} color="#0D6EFD" />
-                            </TouchableOpacity>
-                        </View>
                         <View style={styles.imageContainer}>
                             <TouchableWithoutFeedback onPress={handleImagePick} style={{ borderRadius: 8 }}>
                                 {image ? (
@@ -204,18 +206,20 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         flexGrow: 1,
-        paddingBottom: 30
+        paddingBottom: 120
     },
     container: {
         flex: 1,
         alignItems: 'center',
         paddingHorizontal: 20,
-        paddingTop: 56,
     },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
+        paddingTop: 45,
+        paddingHorizontal: 15,
+        paddingBottom: 15
     },
     backButton: {
         flexDirection: 'row',
@@ -223,7 +227,7 @@ const styles = StyleSheet.create({
         padding: 4,
     },
     backButtonText: {
-        fontSize: 20,
+        fontSize: fontSize.labels.extralarge,
         fontWeight: 'normal',
         marginLeft: 5
     },
@@ -233,7 +237,7 @@ const styles = StyleSheet.create({
         padding: 4,
     },
     saveButtonText: {
-        fontSize: 20,
+        fontSize: fontSize.labels.extralarge,
         fontWeight: 'normal',
         color: '#3b82f6',
         marginRight: 4
@@ -273,7 +277,7 @@ const styles = StyleSheet.create({
         marginTop: 16
     },
     label: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'normal',
     },
     inputWrapper: {
@@ -290,14 +294,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-    },
-    optionalLabel: {
-        fontSize: 14,
-        backgroundColor: '#F3F4F6',
-        color: '#6B7280',
-        padding: 4,
-        borderRadius: 8,
-        fontWeight: '600',
     },
     switchGroup: {
         width: '100%',
@@ -326,7 +322,7 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     optionText: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         color: '#3b82f6',
     },
     formGroupID: {
@@ -340,21 +336,9 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         width: '100%',
         height: 48,
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         borderColor: '#ADB5BD',
         paddingHorizontal: 10
-    },
-    bonusCodeInput:{
-        borderWidth: 1,
-        borderTopLeftRadius: 6,
-        borderBottomLeftRadius: 6,
-        width: '100%',
-        height: 48,
-        fontSize: 18,
-        borderColor: '#ADB5BD',
-        paddingHorizontal: 10,
-        flex: 1,
-        color: '#000'
     },
     couponInput: {
         borderColor: '#ADB5BD',
@@ -362,7 +346,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 6,
         borderBottomLeftRadius: 6,
         paddingHorizontal: 20,
-        fontSize: 18,
+        fontSize: fontSize.labels.medium,
         backgroundColor: '#FFF',
         width: '78%',
         height: 48,

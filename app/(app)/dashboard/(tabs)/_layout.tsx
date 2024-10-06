@@ -1,5 +1,5 @@
-import { Tabs } from 'expo-router';
-import React, { useState, useEffect } from 'react';
+import { Tabs, useFocusEffect } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, BackHandler, SafeAreaView, StyleSheet } from 'react-native';
 import { BlurView } from 'expo-blur';
 import HomeIcon from '@/assets/icons/homeIcon';
@@ -10,40 +10,34 @@ import CashbackIcon from '@/assets/icons/cashbackIcon';
 import NotificationSidebar from '@/components/notificationSidebar';
 import Sidebar from '@/components/sidebar';
 import Topbar from '@/components/header';
+import { SidebarProvider, useSidebar } from '@/contexts/sidebarsContext';
+import { usePathname } from 'expo-router';
 
 export default function TabLayout() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [showSidebar, setShowSidebar] = useState(false);
+  return (
+    <SidebarProvider>
+      <Content />
+    </SidebarProvider>
+  );
+}
+
+function Content() {
+  const {
+    isSidebarOpen,
+    isNotificationsOpen,
+    showSidebar,
+    showNotifications,
+    openSidebar,
+    closeSidebar,
+    openNotifications,
+    closeNotifications,
+  } = useSidebar();
+
   const [showTopbar, setShowTopbar] = useState(true);
-
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(true);
-  const [showNotifications, setShowNotifications] = useState(false);
-
-  const openSidebar = () => {
-    setShowSidebar(true);
-    setIsSidebarOpen(true);
-  };
-
-  const closeSidebar = () => {
-    setIsSidebarOpen(false);
-    setTimeout(() => {
-      setShowSidebar(false);
-    }, 300);
-  };
-
-  const openNotifications = () => {
-    setIsNotificationsOpen(true);
-    setShowNotifications(true);
-  };
-
-  const closeNotifications = () => {
-    setIsNotificationsOpen(false);
-    setTimeout(() => {
-      setShowNotifications(false);
-    }, 300);
-  };
+  const [currentScreen, setCurrentScreen] = useState();
 
   const handleTabChange = (currentTab: any) => {
+    setCurrentScreen(currentTab);
     if (currentTab === 'qrcode' || currentTab === 'search') {
       setShowTopbar(false);
     } else {
@@ -51,22 +45,21 @@ export default function TabLayout() {
     }
   };
 
+  const pathname = usePathname();
+  useFocusEffect(
+    useCallback(() => {
+      if(pathname === '/dashboard' && currentScreen === 'qrcode' || currentScreen === 'search' ){
+        setShowTopbar(true);
+      }
+    }, [pathname])
+  );
+
   useEffect(() => {
     const backAction = () => {
       if (isSidebarOpen) {
         closeSidebar();
         return true;
       }
-      return false;
-    };
-
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-
-    return () => backHandler.remove();
-  }, [isSidebarOpen]);
-
-  useEffect(() => {
-    const backAction = () => {
       if (isNotificationsOpen) {
         closeNotifications();
         return true;
@@ -77,7 +70,7 @@ export default function TabLayout() {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
 
     return () => backHandler.remove();
-  }, [isNotificationsOpen]);
+  }, [isSidebarOpen, isNotificationsOpen]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

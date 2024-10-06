@@ -10,6 +10,8 @@ import PaintBrushIcon from '@/assets/icons/paintBrushIcon';
 import { useStepperContext } from '@/contexts/CommerceStepperContext';
 import { useLocale } from '@/contexts/TranslationContext';
 import { router } from 'expo-router';
+import FooterNewCommerce from '@/components/footerNewCommerce';
+import { fontSize } from '@/constants/fonts';
 
 export default function New_Commerce_Step_4() {
     const richText = useRef<RichEditor | null>(null);
@@ -24,10 +26,11 @@ export default function New_Commerce_Step_4() {
     const [isColorPickerVisible, setIsColorPickerVisible] = useState<boolean>(false);
     const [colorPickerPosition, setColorPickerPosition] = useState({ top: 53, left: 210 });
     const { t } = useLocale();
+    const scrollRef = useRef<ScrollView>(null);
 
     const measurePaintBrushPosition = () => {
         if (paintBrushRef.current) {
-            paintBrushRef.current.measure((x, y, width, height, pageX, pageY) => {
+            paintBrushRef.current.measure((pageX, pageY) => {
                 setColorPickerPosition({
                     top: pageY - 133,
                     left: pageX - 5,
@@ -83,12 +86,20 @@ export default function New_Commerce_Step_4() {
             </View>
         );
     };
+
+    const handleTextChange = (descriptionText: string) => {
+        setStepperData({ description: descriptionText });
+        setTimeout(() => {
+          scrollRef.current?.scrollToEnd({ animated: false });
+        }, 100);
+      };
+
+
     return (
         <SafeAreaView style={styles.container}>
 
             <CommerceHeader
                 Title={t("commerce.new_commerce.step3.headerLabel")}
-                ScreenGoback={() => router.back()}
                 ScreenClose={() => { setModalBackVisible(true) }}
             />
 
@@ -141,44 +152,26 @@ export default function New_Commerce_Step_4() {
                 />
                 {renderColorPicker()}
                 <View style={styles.textInput}>
-                    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                    <ScrollView ref={scrollRef} contentContainerStyle={{ flexGrow: 1 }}>
                         <RichEditor
                             ref={richText}
                             style={{ flex: 1 }}
                             editorStyle={{
                                 backgroundColor: 'white',
-                                contentCSSText: 'font-size: 20px;',
+                                contentCSSText: 'font-size: 16px;',
                             }}
-                            onChange={descriptionText => {
-                                setStepperData({ description: descriptionText });
-                            }}
+                            onChange={handleTextChange}
                             initialContentHTML={description}
                         />
                     </ScrollView>
                 </View>
             </View>
 
-            <View style={styles.footer}>
-                <View style={styles.stepperLayoutContainer}>
-                    <Text style={styles.stepperLayoutText}>{t("commerce.new_commerce.step3.currentStepper")}</Text>
-                    <View style={styles.stepperLayout}></View>
-                    <View style={styles.stepperLayout}></View>
-                    <View style={styles.stepperLayout}></View>
-                    <View style={styles.stepperLayoutSelected}></View>
-                    <View style={styles.stepperLayout}></View>
-                    <View style={styles.stepperLayout}></View>
-                </View>
-
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={() => router.push("/commerce/new/images_and_videos")}
-                    style={styles.nextButton}
-                >
-                    <View style={styles.nextButtonContent}>
-                        <Feather name="arrow-right" size={24} color="white" />
-                    </View>
-                </TouchableOpacity>
-            </View>
+            <FooterNewCommerce
+                backStep={() => router.back()}
+                nextStep={() => router.push("/commerce/new/images_and_videos")}
+                currentStep={4}
+            />
 
             <Modal
                 animationType="slide"
@@ -269,7 +262,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
     },
     descriptionLabel: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
     },
     formattingBar: {
         flexDirection: 'row',
@@ -303,59 +296,8 @@ const styles = StyleSheet.create({
         borderColor: '#E3E3E3',
         borderRadius: 8,
         padding: 5,
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         color: '#6C757D',
-    },
-    footer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 16,
-        height: 120
-    },
-    stepperLayoutContainer: {
-        flexDirection: 'row',
-        gap: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-    },
-    stepperLayout: {
-        height: 6,
-        width: 14,
-        backgroundColor: '#121212',
-        borderRadius: 22,
-        opacity: 0.5,
-        marginTop: 2
-    },
-    stepperLayoutSelected: {
-        opacity: 1,
-        width: 31,
-        backgroundColor: '#121212',
-        borderRadius: 22,
-        height: 6,
-        marginTop: 2
-    },
-    stepperLayoutText: {
-        fontSize: 20,
-        fontWeight: 'normal',
-    },
-    nextButton: {
-        borderRadius: 8,
-        height: '100%',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        flex: 1
-    },
-    nextButtonContent: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'black',
-        width: 78,
-        height: 78,
-        borderRadius: 999,
-        paddingHorizontal: 16,
     },
     pencilButton: {
         height: 30,
@@ -377,7 +319,6 @@ const styles = StyleSheet.create({
         width: 50,
         gap: 15,
     },
-
     modalContainer: {
         height: '100%',
         justifyContent: 'flex-end',
@@ -396,7 +337,7 @@ const styles = StyleSheet.create({
     },
     modalText: {
         textAlign: 'center',
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
     },
     modalInputWrapper: {
         width: '100%',

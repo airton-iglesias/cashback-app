@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import { Feather, AntDesign } from '@expo/vector-icons';
 import { useLocale } from '@/contexts/TranslationContext';
+import { fontSize } from '@/constants/fonts';
 
 export default function CommerceGoBackModal({ modalVisible, setModalVisible, ScreenGoback }: any) {
     const { t } = useLocale();
@@ -27,7 +28,7 @@ export default function CommerceGoBackModal({ modalVisible, setModalVisible, Scr
                             style={styles.modalSaveButton}
                         >
                             <View style={styles.modalButtonSaveContent}>
-                                <Feather name="check" size={24} color="white" />
+                                <Feather name="check" size={24} color="black" />
                             </View>
                         </TouchableOpacity>
 
@@ -37,7 +38,7 @@ export default function CommerceGoBackModal({ modalVisible, setModalVisible, Scr
                             style={styles.modalSaveButton}
                         >
                             <View style={styles.modalButtonCancelContent}>
-                                <AntDesign name="close" size={24} color="black" />
+                                <AntDesign name="close" size={24} color="white" />
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -54,12 +55,11 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     modalView: {
-        backgroundColor: 'white',
+        backgroundColor: 'black',
         paddingHorizontal: 20,
         paddingVertical: 30,
         alignItems: 'center',
         shadowRadius: 4,
-        borderColor: '#D7D7D7',
         borderWidth: 1,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
     },
     modalText: {
         textAlign: 'center',
-        fontSize: 20,
-        color: '#000'
+        fontSize: fontSize.labels.medium,
+        color: 'white'
     },
     buttonContainer: {
         gap: 10,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     },
     modalButtonSaveContent: {
         flexDirection: 'row',
-        backgroundColor: '#000000',
+        backgroundColor: 'white',
         width: '100%',
         height: 52,
         justifyContent: 'center',
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     },
     modalButtonCancelContent: {
         flexDirection: 'row',
-        backgroundColor: '#E9ECEF',
+        backgroundColor: '#232323',
         width: '100%',
         height: 52,
         justifyContent: 'center',

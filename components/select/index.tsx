@@ -3,6 +3,7 @@ import { View, TouchableWithoutFeedback, Text, Modal, FlatList, TouchableOpacity
 import { Entypo } from '@expo/vector-icons';
 import CountryFlag from 'react-native-country-flag';
 import { Feather } from '@expo/vector-icons';
+import { fontSize } from '@/constants/fonts';
 
 const Select = ({ options, onChangeSelect, text, SelectOption }: any) => {
   const [selected, setSelected] = useState<any>(null);
@@ -30,7 +31,7 @@ const Select = ({ options, onChangeSelect, text, SelectOption }: any) => {
         <View style={styles.buttonWrapper}>
           <View style={styles.buttonOption}>
             {selected && selected.flag ? <CountryFlag isoCode={selected.flag} size={20} /> : null}
-            <Text style={{ fontSize: 16 }}>{selected ? selected.text : text}</Text>
+            <Text style={{ fontSize: fontSize.labels.medium }}>{selected ? selected.text : text}</Text>
           </View>
           <Entypo name="chevron-thin-down" size={20} color="#9ca3af" />
         </View>
@@ -43,8 +44,8 @@ const Select = ({ options, onChangeSelect, text, SelectOption }: any) => {
       >
         <View style={styles.modalWrapper}>
           <TouchableOpacity style={styles.backButton} onPress={() => setModalVisible(false)}>
-            <Feather name="arrow-left" size={30} style={{ color: 'black', marginTop: 2 }} />
-            <Text style={{ fontSize: 24 }}>
+            <Feather name="arrow-left" size={30} style={{ color: 'black' }} />
+            <Text style={{ fontSize: fontSize.titles.mini, fontWeight: 'bold' }}>
               {text}
             </Text>
           </TouchableOpacity>

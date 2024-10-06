@@ -1,7 +1,9 @@
+import { fontSize } from '@/constants/fonts';
 import { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-export default function Input({ label, placeholder, type, onChange, keyboardType, maxLength, customPaddingLeft, customColor, value }: any) {
+export default function Input({ label, placeholder, type, onChange, 
+    keyboardType, maxLength, customPaddingLeft, customColor, customBackground, value, customLabelColor }: any) {
     
     const [inputValue, setInputValue] = useState(value ? value:'');
 
@@ -60,7 +62,7 @@ export default function Input({ label, placeholder, type, onChange, keyboardType
 
     return (
         <View style={styles.inputSection}>
-            {label ? <Text style={styles.inputLabel}>{label}</Text> : null}
+            {label ? <Text style={[styles.inputLabel, customLabelColor ? {color: customLabelColor}: null]}>{label}</Text> : null}
             <View style={styles.inputWrapper}>
                 {isInputFocus ?
                     <View
@@ -86,7 +88,8 @@ export default function Input({ label, placeholder, type, onChange, keyboardType
                         styles.textInput,
                         isInputFocus && (isInputError ? styles.inputError : styles.inputFocused),
                         customPaddingLeft ? {paddingLeft: customPaddingLeft}: null,
-                        customColor ? {color: customColor}:{color: '#212529'}
+                        customColor ? {color: customColor}:{color: '#212529'},
+                        customBackground ? {backgroundColor: customBackground}:null
                     ]}
                 />
             </View>
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     inputLabel: {
-        fontSize: 20,
+        fontSize: fontSize.labels.medium,
         fontWeight: 'normal',
         marginBottom: 4
     },
@@ -135,7 +138,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         width: '100%',
         height: 48,
-        fontSize: 18,
+        fontSize: fontSize.labels.mini,
         borderColor: '#ADB5BD',
         paddingHorizontal: 10
     },
