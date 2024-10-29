@@ -2,26 +2,25 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableHighlight, View, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
-import { router, useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import { fontSize } from "@/constants/fonts";
 
 
-export default function Step3() {    
-    const { email, password, image, name, country, currency, codeBonus } = useLocalSearchParams();
+export default function Step3() {
     const [pin, setPin] = useState<string>('');
 
     const buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     const [pressedButton, setPressedButton] = useState<number | null>(null);
     const { t } = useLocale();
-    
+
     useEffect(() => {
         if (pin.length === 6) {
             router.push({
                 pathname: '/signup/step4',
-                params: { email, password, image, name, country, currency, codeBonus, pin },
+                params: { pin },
               });
         }
-    }, [pin, router]);
+    }, [pin]);
 
     const handlePressIn = (value: number) => {
         setPressedButton(value);
@@ -38,22 +37,29 @@ export default function Step3() {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.content}>
+
                 <Text style={styles.title}>{t('signup.signup_step_2.new_pin')}</Text>
+
                 <View style={styles.pinContainer}>
                     <View style={styles.pinRow}>
                         {Array(6).fill(0).map((_, index) => (
                             <Text key={index} style={styles.pinText}>
-                                {pin[index] ? <Text style={styles.pinDotMarked}>{pin[index]}</Text> : <Text style={styles.pinDot}>•</Text>}
+                                {
+                                    pin[index] ? <Text style={styles.pinDotMarked}>{pin[index]}</Text>
+                                        : <Text style={styles.pinDot}>•</Text>
+                                }
                             </Text>
                         ))}
                     </View>
                 </View>
+
                 <View style={styles.buttonGrid}>
+
                     {buttons.map((value) => (
                         <TouchableHighlight
                             key={value}
                             onPress={() => setPin((prev) => prev.length < 6 ? prev + value.toString() : prev)}
-                            underlayColor="#000000" 
+                            underlayColor="#000000"
                             onPressIn={() => handlePressIn(value)}
                             onPressOut={handlePressOut}
                             style={[styles.button, pressedButton === value && styles.buttonPressed]}
@@ -63,18 +69,23 @@ export default function Step3() {
                             </View>
                         </TouchableHighlight>
                     ))}
+
                     <View style={styles.buttonPlaceholder}></View>
+
                     <TouchableHighlight
                         onPress={() => setPin((prev) => prev.length < 6 ? prev + '0' : prev)}
-                        underlayColor="#000000" 
+                        underlayColor="#000000"
                         onPressIn={() => handlePressIn(0)}
                         onPressOut={handlePressOut}
                         style={[styles.button, pressedButton === 0 && styles.buttonPressed]}
                     >
                         <View style={styles.buttonContent}>
-                            <Text style={[styles.buttonText, pressedButton === 0 && styles.buttonTextPressed]}>0</Text>
+                            <Text style={[styles.buttonText, pressedButton === 0 && styles.buttonTextPressed]}>
+                                0
+                            </Text>
                         </View>
                     </TouchableHighlight>
+
                     <TouchableHighlight
                         onPress={handleDelete}
                         underlayColor="#000000"
@@ -82,10 +93,17 @@ export default function Step3() {
                         onPressOut={handlePressOut}
                         style={[styles.button, pressedButton === -1 && styles.buttonPressed]}
                     >
+
                         <View style={styles.buttonContent}>
-                            <MaterialCommunityIcons name="backspace-outline" size={32} color={pressedButton === -1 ? '#ffffff' : '#000000'} />
+                            <MaterialCommunityIcons
+                                name="backspace-outline"
+                                size={32}
+                                color={pressedButton === -1 ? '#ffffff' : '#000000'}
+                            />
                         </View>
+
                     </TouchableHighlight>
+
                 </View>
             </View>
         </SafeAreaView>
@@ -126,7 +144,7 @@ const styles = StyleSheet.create({
     pinDot: {
         color: '#d1d5db',
     },
-    pinDotMarked:{
+    pinDotMarked: {
         color: '#000',
     },
     buttonGrid: {

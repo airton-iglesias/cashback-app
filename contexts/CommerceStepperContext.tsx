@@ -34,6 +34,8 @@ interface StepperData {
     baseDiscount: string;
     cashbackForm: string;
     sections: Section[];
+    proprietary: string;
+    currencyType: string;
 }
 
 interface StepperContextProps extends StepperData {
@@ -66,6 +68,8 @@ export const StepperProvider = ({ children }: { children: ReactNode }) => {
         baseDiscount: '',
         cashbackForm: '',
         sections: [],
+        proprietary: '',
+        currencyType: ''
     });
 
     const updateStepperData = (data: Partial<StepperData>) => {

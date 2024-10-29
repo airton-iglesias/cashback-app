@@ -3,26 +3,30 @@ import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, Scrol
 import { Feather } from '@expo/vector-icons';
 import Input from '@/components/input';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import CommerceHeader from '@/components/commerceHeader';
-import CommerceGoBackModal from '@/components/commerceGoBackModal';
+import CommerceHeader from '@/components/commerce/commerceHeader';
+import CommerceGoBackModal from '@/components/commerce/commerceGoBackModal';
 import { useStepperContext } from '@/contexts/CommerceStepperContext';
 import { useLocale } from '@/contexts/TranslationContext';
 import { router } from 'expo-router';
-import FooterNewCommerce from '@/components/footerNewCommerce';
+import FooterNewCommerce from '@/components/commerce/footerNewCommerce';
+import { Skeleton } from 'moti/skeleton';
 
 export default function New_Commerce_Step_3() {
-
-    const { PlaceType,
+    const {
+        PlaceType,
+        CashbackType,
         webSite,
         startDate,
         endDate,
         startHour,
         endHour,
-        mapAdress, setStepperData
+        mapAdress,
+        setStepperData
     } = useStepperContext();
 
     const { t } = useLocale();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [mapLoading, setMapLoading] = useState<boolean>(true);
     const INITIAL_REGION = {
         latitude: 38.7266085,
         longitude: -9.1503216,
@@ -33,7 +37,6 @@ export default function New_Commerce_Step_3() {
     const handleGoBackConfirmed = () => {
         setModalVisible(false);
         router.replace("/commerce")
-
         return;
     };
 
@@ -57,49 +60,53 @@ export default function New_Commerce_Step_3() {
                         />
                     </View>
 
-                    <View style={styles.dateTimeSection}>
-                        <View style={styles.dateTimeBlock}>
-                            <Input
-                                label={t("commerce.new_commerce.step2.startDate")}
-                                value={startDate}
-                                maxLength={10}
-                                type={'date'}
-                                onChange={(text: string) => setStepperData({ startDate: text })}
-                            />
-                        </View>
-                        <View style={styles.dateTimeBlock}>
-                            <Input
-                                label={t("commerce.new_commerce.step2.endDate")}
-                                value={endDate}
-                                maxLength={10}
-                                type={'date'}
-                                onChange={(text: string) => setStepperData({ endDate: text })}
-                            />
-                        </View>
-                    </View>
+                    {CashbackType !== "Permanente" && (
+                        <View>
+                            <View style={styles.dateTimeSection}>
+                                <View style={styles.dateTimeBlock}>
+                                    <Input
+                                        label={t("commerce.new_commerce.step2.startDate")}
+                                        value={startDate}
+                                        maxLength={10}
+                                        type={'date'}
+                                        onChange={(text: string) => setStepperData({ startDate: text })}
+                                    />
+                                </View>
+                                <View style={styles.dateTimeBlock}>
+                                    <Input
+                                        label={t("commerce.new_commerce.step2.endDate")}
+                                        value={endDate}
+                                        maxLength={10}
+                                        type={'date'}
+                                        onChange={(text: string) => setStepperData({ endDate: text })}
+                                    />
+                                </View>
+                            </View>
 
-                    <View style={styles.dateTimeSection}>
-                        <View style={styles.dateTimeBlock}>
-                            <Input
-                                label={t("commerce.new_commerce.step2.startHour")}
-                                value={startHour}
-                                type={'time'}
-                                maxLength={8}
-                                onChange={(text: string) => setStepperData({ startHour: text })}
-                            />
+                            <View style={styles.dateTimeSection}>
+                                <View style={styles.dateTimeBlock}>
+                                    <Input
+                                        label={t("commerce.new_commerce.step2.startHour")}
+                                        value={startHour}
+                                        type={'time'}
+                                        maxLength={8}
+                                        onChange={(text: string) => setStepperData({ startHour: text })}
+                                    />
+                                </View>
+                                <View style={styles.dateTimeBlock}>
+                                    <Input
+                                        label={t("commerce.new_commerce.step2.endHour")}
+                                        value={endHour}
+                                        type={'time'}
+                                        maxLength={8}
+                                        onChange={(text: string) => setStepperData({ endHour: text })}
+                                    />
+                                </View>
+                            </View>
                         </View>
-                        <View style={styles.dateTimeBlock}>
-                            <Input
-                                label={t("commerce.new_commerce.step2.endHour")}
-                                value={endHour}
-                                type={'time'}
-                                maxLength={8}
-                                onChange={(text: string) => setStepperData({ endHour: text })}
-                            />
-                        </View>
-                    </View>
+                    )}
 
-                    {PlaceType && PlaceType === "Físico" ?
+                    {PlaceType === "Físico" && (
                         <View>
                             <View style={styles.longInputWrapper}>
                                 <Input
@@ -111,7 +118,13 @@ export default function New_Commerce_Step_3() {
                             </View>
                             <View style={styles.mapContainer}>
                                 <View style={styles.mapPlaceholder}>
-                                    {/*
+                                    <Skeleton
+                                        width={'100%'}
+                                        height={'100%'}
+                                        colorMode='light'
+                                        show={mapLoading}
+                                    >
+                                        {/*
                                         <MapView
                                             style={styles.map}
                                             provider={PROVIDER_GOOGLE}
@@ -121,12 +134,11 @@ export default function New_Commerce_Step_3() {
                                             initialRegion={INITIAL_REGION}
                                         />
                                     */}
+                                    </Skeleton>
                                 </View>
                             </View>
                         </View>
-                        :
-                        null
-                    }
+                    )}
                 </ScrollView>
 
                 <FooterNewCommerce

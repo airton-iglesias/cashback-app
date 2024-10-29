@@ -44,7 +44,7 @@ const Select = ({ options, onChangeSelect, text, SelectOption }: any) => {
       >
         <View style={styles.modalWrapper}>
           <TouchableOpacity style={styles.backButton} onPress={() => setModalVisible(false)}>
-            <Feather name="arrow-left" size={30} style={{ color: 'black' }} />
+            <Feather name="arrow-left" size={30} style={{ color: 'black'}} />
             <Text style={{ fontSize: fontSize.titles.mini, fontWeight: 'bold' }}>
               {text}
             </Text>
@@ -88,8 +88,9 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   backButton:{
-    left: 20, 
+    left: 15, 
     flexDirection: 'row', 
-    gap: 10
+    gap: 5,
+    alignItems: 'center',
   }
 })

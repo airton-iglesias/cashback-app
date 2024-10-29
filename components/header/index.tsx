@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { TextInput, TouchableOpacity, View, StyleSheet } from "react-native";
+import { TextInput, TouchableOpacity, View, StyleSheet, Pressable } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import StoreIcon from "@/assets/icons/storeIcon";
-import { Link, usePathname } from "expo-router";
+import { Link, router, usePathname } from "expo-router";
 import { fontSize } from "@/constants/fonts";
-
 
 export default function Topbar({ openSidebar, openNotifications }: any) {
     const route = usePathname();
@@ -31,33 +30,40 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                 </View>
 
                 <View style={styles.textInputContainer}>
-                    <TextInput
-                        cursorColor={'white'}
-                        placeholder="0"
-                        onChangeText={(number) => setValue(number)}
-                        placeholderTextColor="#4b5563"
-                        textAlign={route === "/commerce" ? "center" : "right"}
-                        value={value}
-                        readOnly={route === "/commerce"}
-                        style={[
-                            styles.textInput,
-                            {
-                                paddingRight: route === "/commerce" ? 0 : 60,
-                                color: route === "/commerce" ? '#28A745' : 'white'
+                    <Pressable
+                        onPress={() => {
+                            if(route === "/commerce"){
+                                router.navigate("/(app)/points")
                             }
-                        ]}
-                        keyboardType={"numeric"}
-                    />
-                    {route === "/commerce" ?
-                        null
-                        :
+                        }}
+                    >
+                        <TextInput
+                            cursorColor={'white'}
+                            placeholder="0"
+                            onChangeText={(number) => setValue(number)}
+                            placeholderTextColor="#4b5563"
+                            textAlign={route === "/commerce" ? "center" : "right"}
+                            value={value}
+                            readOnly={route === "/commerce"}
+                            style={[
+                                styles.textInput,
+                                {
+                                    paddingRight: route === "/commerce" ? 0 : 60,
+                                    color: route === "/commerce" ? '#28A745' : 'white'
+                                }
+                            ]}
+                            keyboardType={"numeric"}
+                        />
+                    </Pressable>
+                    {route !== "/commerce" && (
                         <TouchableOpacity
                             activeOpacity={0.7}
                             style={styles.plusWrapper}
+                            onPress={() => router.navigate("/(app)/dashboard/(tabs)/wallet")}
                         >
                             <Feather name="plus" size={20} color="#6FC768" />
                         </TouchableOpacity>
-                    }
+                    )}
                 </View>
 
                 <TouchableOpacity
@@ -84,15 +90,13 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
 
 const styles = StyleSheet.create({
     topBar: {
-        height: 110,
+        height: 80,
         position: 'absolute',
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 16,
         justifyContent: 'space-between',
         width: '100%',
-        paddingTop: 32,
-        paddingBottom: 6,
         zIndex: 10,
         top: 0,
         gap: 10,

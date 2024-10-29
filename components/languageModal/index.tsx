@@ -1,4 +1,4 @@
-import { Modal, Text, ScrollView, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Modal, Text, ScrollView, View, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
 import { fontSize } from "@/constants/fonts";
@@ -9,7 +9,6 @@ export default function LanguageModal({ modalVisible, handleCloseModal }: any) {
         { code: 'en', name: 'English' },
         { code: 'fr', name: 'Français' },
     ];
-
 
     const { t } = useLocale();
     const { currentLanguage, changeLanguage } = useLocale();
@@ -23,7 +22,11 @@ export default function LanguageModal({ modalVisible, handleCloseModal }: any) {
             <View style={styles.container}>
                 <View style={styles.logoContainer}>
                     <View style={styles.logo}>
-                        <Text style={styles.logoText}>LOGO</Text>
+                        <Image
+                            source={require("@/assets/images/logo-light.png")}
+                            resizeMode="contain"
+                            style={styles.logoImage}
+                        />
                     </View>
                 </View>
                 <Text style={styles.title}>{t("language.header")}</Text>
@@ -84,6 +87,12 @@ const styles = StyleSheet.create({
     logoText: {
         fontSize: 60,
         fontWeight: 'bold',
+    },
+    logoImage: {
+        flex: 1, 
+        width: '100%', 
+        height: '100%', 
+        backgroundColor: 'white'
     },
     title: {
         color: '#000',

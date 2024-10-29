@@ -5,8 +5,8 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Switch from '@/components/switch';
-import CommerceHeader from '@/components/commerceHeader';
-import {useLocale} from "@/contexts/TranslationContext";
+import CommerceHeader from '@/components/commerce/commerceHeader';
+import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
 

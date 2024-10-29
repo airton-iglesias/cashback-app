@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, Text, TouchableHighlight, View, StyleSheet } from "react-native";
+import { SafeAreaView, Text, TouchableHighlight, View, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
-import { router, useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import { fontSize } from "@/constants/fonts";
 
 export default function Signup_Step_3() {
-    const [confirmPin, setConfirmPin] = useState<string>('');
+    const [pin, setPin] = useState<string>('');
 
     const buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     const [pressedButton, setPressedButton] = useState<number | null>(null);
@@ -14,11 +14,36 @@ export default function Signup_Step_3() {
     const { t } = useLocale();
 
     useEffect(() => {
-        if (confirmPin.length === 6) {
-                router.replace("/dashboard");
-                return;
-            };
-        }, [confirmPin, router]);
+        if (pin.length === 6) {
+            /* make the request to the API here
+            Example: 
+            
+            const pinReponse = await
+                fetch('domain of application here', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        pin: pin,
+                    }),
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    },
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Something went wrong');
+                    setValidateError(true);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setValidateError(true);
+                });
+            */
+            router.replace("/dashboard");
+            return;
+        };
+    }, [pin, router]);
 
     const handlePressIn = (value: number) => {
         setPressedButton(value);
@@ -29,19 +54,19 @@ export default function Signup_Step_3() {
     };
 
     const handleDelete = () => {
-        setConfirmPin((prev) => prev.slice(0, -1));
+        setPin((prev) => prev.slice(0, -1));
     };
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={[styles.content, validateError ? { gap: 40 } : { gap: 60 }]}>
+            <View style={[styles.content, validateError ? { gap: 30 } : { gap: 60 }]}>
                 {validateError ? <Text style={styles.errorLabel}>{t('signup.signup_step_3.pin_error')}</Text> : null}
 
                 <View style={styles.pinContainer}>
                     <View style={styles.pinRow}>
                         {Array(6).fill(0).map((_, index) => (
                             <Text key={index} style={styles.pinText}>
-                                {confirmPin[index] ? <Text style={styles.pinDotMarked}>•</Text> : <Text style={styles.pinDot}>•</Text>}
+                                {pin[index] ? <Text style={styles.pinDotMarked}>•</Text> : <Text style={styles.pinDot}>•</Text>}
                             </Text>
                         ))}
                     </View>
@@ -51,7 +76,7 @@ export default function Signup_Step_3() {
                     {buttons.map((value) => (
                         <TouchableHighlight
                             key={value}
-                            onPress={() => setConfirmPin((prev) => prev.length < 6 ? prev + value.toString() : prev)}
+                            onPress={() => setPin((prev) => prev.length < 6 ? prev + value.toString() : prev)}
                             underlayColor="#000000"
                             onPressIn={() => handlePressIn(value)}
                             onPressOut={handlePressOut}
@@ -66,7 +91,7 @@ export default function Signup_Step_3() {
                     <View style={styles.buttonPlaceholder}></View>
 
                     <TouchableHighlight
-                        onPress={() => setConfirmPin((prev) => prev.length < 6 ? prev + '0' : prev)}
+                        onPress={() => setPin((prev) => prev.length < 6 ? prev + '0' : prev)}
                         underlayColor="#000000"
                         onPressIn={() => handlePressIn(0)}
                         onPressOut={handlePressOut}
@@ -89,6 +114,16 @@ export default function Signup_Step_3() {
                         </View>
                     </TouchableHighlight>
 
+                    {
+                        validateError && (
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={() => router.navigate("/recover_datas")}
+                            >
+                                <Text style={styles.recoverLabel}>Recuperar Pin</Text>
+                            </TouchableOpacity>
+                        )
+                    }
                 </View>
             </View>
         </SafeAreaView>
@@ -182,5 +217,11 @@ const styles = StyleSheet.create({
         fontSize: fontSize.labels.medium,
         fontWeight: '400',
         color: '#B02A37'
+    },
+    recoverLabel: {
+        fontSize: fontSize.labels.medium,
+        fontWeight: '400',
+        color: '#0D6EFD',
+        marginTop: 40
     }
 });

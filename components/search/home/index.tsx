@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import React  from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Feather, EvilIcons } from '@expo/vector-icons';
 import Topbar from '@/components/header';
@@ -9,13 +9,13 @@ import { fontSize } from '@/constants/fonts';
 
 export default function Home({
     filterType, place, maxDistance, handleMaxDistance, handleSearchValue, handleLocation, handlePlace,
-    handleFilterType, showResults, openSidebar, openNotifications }: any) {
+    handleFilterType, openSidebar, openNotifications, loading, setLoading, handleSearch }: any) {
 
     const { t } = useLocale();
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <Topbar openSidebar={openSidebar} openNotifications={openNotifications}/>
+            <Topbar openSidebar={openSidebar} openNotifications={openNotifications} />
             <View style={styles.container}>
 
                 <View style={styles.inputWrapper}>
@@ -55,6 +55,7 @@ export default function Home({
                             filterType === "Promoções" ? styles.activeButtonText : styles.buttonText}>{t("dashboardSearch.home.promotions")}</Text>
                     </TouchableOpacity>
                 </View>
+
                 <View>
                     <Text style={styles.sectionLabel}>{t("dashboardSearch.home.whereLabel")}</Text>
                     <View style={styles.buttonRowPlace}>
@@ -76,6 +77,7 @@ export default function Home({
                         </TouchableOpacity>
                     </View>
                 </View>
+
                 <View>
                     <TouchableOpacity
                         activeOpacity={0.7}
@@ -93,6 +95,7 @@ export default function Home({
                         />
                     </View>
                 </View>
+
                 <View style={styles.sliderSection}>
                     <View style={styles.distanceTextWrapper}>
                         <Text style={styles.sectionLabel}>{t("dashboardSearch.home.maxDistance")}</Text>
@@ -110,15 +113,21 @@ export default function Home({
                         thumbTintColor={'#000000'}
                     />
                 </View>
+
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.nextButton}
-                    onPress={() => showResults(true)}
+                    onPress={() => {setLoading(true); handleSearch();}}
                 >
                     <View style={styles.nextButtonContent}>
-                        <Feather name="check" size={24} color="white" />
+                        {loading ?
+                            <ActivityIndicator size={24} color="#fff" />
+                            :
+                            <Feather name="check" size={24} color="white" />
+                        }
                     </View>
                 </TouchableOpacity>
+
             </View>
         </SafeAreaView>
     );
@@ -127,7 +136,7 @@ export default function Home({
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 15,
-        paddingTop: 150,
+        paddingTop: 105,
         backgroundColor: '#FFFFFF',
         flex: 1,
     },

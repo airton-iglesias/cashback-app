@@ -4,12 +4,12 @@ import { Feather } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { Video } from 'expo-av';
-import CommerceHeader from '@/components/commerceHeader';
-import CommerceGoBackModal from '@/components/commerceGoBackModal';
+import CommerceHeader from '@/components/commerce/commerceHeader';
+import CommerceGoBackModal from '@/components/commerce/commerceGoBackModal';
 import { useStepperContext } from '@/contexts/CommerceStepperContext';
 import { useLocale } from '@/contexts/TranslationContext';
 import { router } from 'expo-router';
-import FooterNewCommerce from '@/components/footerNewCommerce';
+import FooterNewCommerce from '@/components/commerce/footerNewCommerce';
 import { fontSize } from '@/constants/fonts';
 import InfoCloudIcon from '@/assets/icons/infoCloudIcon';
 

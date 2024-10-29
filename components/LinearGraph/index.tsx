@@ -4,13 +4,14 @@ import { GraphPoint, LineGraph } from 'react-native-graph';
 import { AntDesign } from '@expo/vector-icons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { fontSize } from '@/constants/fonts';
+import { Skeleton } from 'moti/skeleton';
 
 const getDayLabel = (date: Date) => {
     const daysOfWeek = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
     return daysOfWeek[date.getDay()];
 };
 
-const LinearGraph = () => {
+const LinearGraph = ({ loading }: any) => {
     const points: GraphPoint[] = [
         { date: new Date(2024, 9, 1), value: 2700 },
         { date: new Date(2024, 9, 2), value: 2800 },
@@ -23,7 +24,7 @@ const LinearGraph = () => {
 
     const currentPoint = points[points.length - 1];
     const [selectedPoint, setSelectedPoint] = useState<GraphPoint>(currentPoint);
-    const percentageChange = ((selectedPoint.value - points[0].value) /  points[0].value) * 100;
+    const percentageChange = ((selectedPoint.value - points[0].value) / points[0].value) * 100;
     const [gestureStarted, setGestureStarted] = useState(false);
 
     const onPointSelected = (point: GraphPoint) => {
@@ -45,56 +46,67 @@ const LinearGraph = () => {
 
     return (
         <GestureHandlerRootView style={styles.container}>
-            <View style={styles.currentValueContainer}>
-                <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-                    <Text style={styles.currentValueText}>
-                        ${selectedPoint?.value.toFixed(2).replace(".", ",")}
-                    </Text>
-                    <View style={styles.percentageChangeText}>
-                        {percentageChange >= 0 ? <AntDesign name="arrowup" size={12} color="#28A745" />
-                            : <AntDesign name="arrowdown" size={12} color="#DC3545" />}
-                        <Text
-                            style={[
-                                percentageChange >= 0 ? { color: '#28A745', } : { color: '#DC3545' },
-                                styles.valorizationPercentLabel
-                            ]}
-                        >
-                            {percentageChange.toFixed(2)}%
-                        </Text>
+            <Skeleton
+                show={loading}
+                width={'100%'}
+                height={'82%'}
+                colorMode='light'
+            >
+                {loading ? null :
+                    <View style={{ width: '100%', height: '100%' }}>
+                        <View style={styles.currentValueContainer}>
+                            <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                                <Text style={styles.currentValueText}>
+                                    ${selectedPoint?.value.toFixed(2).replace(".", ",")}
+                                </Text>
+                                <View style={styles.percentageChangeText}>
+                                    {percentageChange >= 0 ? <AntDesign name="arrowup" size={12} color="#28A745" />
+                                        : <AntDesign name="arrowdown" size={12} color="#DC3545" />}
+                                    <Text
+                                        style={[
+                                            percentageChange >= 0 ? { color: '#28A745', } : { color: '#DC3545' },
+                                            styles.valorizationPercentLabel
+                                        ]}
+                                    >
+                                        {percentageChange.toFixed(2)}%
+                                    </Text>
+                                </View>
+                            </View>
+
+                            <View style={styles.percentageChangeText}>
+                                <Text>
+                                    {isLastPoint ? 'Hoje' : getDayLabel(selectedPoint?.date)}
+                                </Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.graphicPlaceholder}>
+                            <LineGraph
+                                style={{ width: '100%', height: '100%' }}
+                                points={points}
+                                animated={true}
+                                color="#017560"
+                                gradientFillColors={['#0175605D', '#7476df00']}
+                                enablePanGesture
+                                onPointSelected={(p) => onPointSelected(p)}
+                                onGestureStart={() => onGestureStart()}
+                                onGestureEnd={() => onGestureEnd()}
+                                enableIndicator
+                                indicatorPulsating
+                                enableFadeInMask
+                            />
+                        </View>
+
+                        <View style={styles.dayLabelsContainer}>
+                            {points.map((point, index) => (
+                                <Text key={index} style={styles.dayLabel}>
+                                    {getDayLabel(point.date)}
+                                </Text>
+                            ))}
+                        </View>
                     </View>
-                </View>
-
-                <View style={styles.percentageChangeText}>
-                    <Text>
-                        {isLastPoint ? 'Hoje' : getDayLabel(selectedPoint?.date)}
-                    </Text>
-                </View>
-            </View>
-
-            <View style={styles.graphicPlaceholder}>
-                <LineGraph
-                    style={{ width: '100%', height: '100%' }}
-                    points={points}
-                    animated={true}
-                    color="#017560"
-                    gradientFillColors={['#0175605D', '#7476df00']}
-                    enablePanGesture
-                    onPointSelected={(p) => onPointSelected(p)}
-                    onGestureStart={() => onGestureStart()}
-                    onGestureEnd={() => onGestureEnd()}
-                    enableIndicator
-                    indicatorPulsating
-                    enableFadeInMask
-                />
-            </View>
-
-            <View style={styles.dayLabelsContainer}>
-                {points.map((point, index) => (
-                    <Text key={index} style={styles.dayLabel}>
-                        {getDayLabel(point.date)}
-                    </Text>
-                ))}
-            </View>
+                }
+            </Skeleton>
         </GestureHandlerRootView>
     );
 };

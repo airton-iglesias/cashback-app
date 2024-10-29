@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 0,
         zIndex: 20,
-        paddingVertical: 35
+        paddingBottom: 35
     },
     container: {
         flex: 1,

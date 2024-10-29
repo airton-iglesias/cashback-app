@@ -1,11 +1,11 @@
 import { fontSize } from "@/constants/fonts";
 import React from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import Input from "@/components/input";
 import { useLocale } from "@/contexts/TranslationContext";
 
-export default function LoyaltyComponent({ loyaltyDatas, setSearch }: any) {
+export default function LoyaltyComponent({ loyaltyDatas, setSearch, loading }: any) {
     const { t } = useLocale();
 
     return (
@@ -29,34 +29,43 @@ export default function LoyaltyComponent({ loyaltyDatas, setSearch }: any) {
             </View>
 
             <View style={styles.listContainer}>
-                {loyaltyDatas.length !== 0 ? (
-                    <FlatList
-                        data={loyaltyDatas}
-                        keyExtractor={(item) => item.id} 
-                        renderItem={({ item, index }) => (
-                            <View style={styles.componentContainer}>
-                                <View style={styles.componentSubContainer}>
-                                    <Text numberOfLines={1} style={styles.componentName}>{item.name}</Text>
-                                </View>
-                                <View style={styles.componentValueLimitContainer}>
-                                    <View style={styles.componentValueContainer}>
-                                        <Text numberOfLines={1} style={styles.componentValue}>
-                                            {item.value}
-                                        </Text>
+                {loyaltyDatas !== null ? (
+
+                    loading ?
+                        <ActivityIndicator size={34} color={'#000'} />
+                        :
+
+                        <FlatList
+                            data={loyaltyDatas}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item, index }) => (
+                                <View style={styles.componentContainer}>
+                                    <View style={styles.componentSubContainer}>
+                                        <Text numberOfLines={1} style={styles.componentName}>{item.name}</Text>
+                                    </View>
+                                    <View style={styles.componentValueLimitContainer}>
+                                        <View style={styles.componentValueContainer}>
+                                            <Text numberOfLines={1} style={styles.componentValue}>
+                                                {item.value}
+                                            </Text>
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
-                        )}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingBottom: 440 }}
-                    />
+                            )}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{ paddingBottom: 440 }}
+                        />
+
                 ) : (
-                    <View style={styles.emptyContainer}>
-                        <Text style={styles.emptyText}>{t("dashboardWallat.creditsScreen.noData")}</Text>
-                    </View>
+                    loading ?
+                        <ActivityIndicator size={34} color={'#000'} />
+                        :
+                        <View style={styles.emptyContainer}>
+                            <Text style={styles.emptyText}>{t("dashboardWallat.creditsScreen.noData")}</Text>
+                        </View>
                 )}
             </View>
-        </View>
+        </View >
     );
 }
 

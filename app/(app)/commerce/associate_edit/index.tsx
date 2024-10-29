@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, Modal } from 'react-native';
 import { Feather, AntDesign } from '@expo/vector-icons';
 import Switch from '@/components/switch';
-import CommerceHeader from '@/components/commerceHeader';
-import {useLocale} from "@/contexts/TranslationContext";
+import CommerceHeader from '@/components/commerce/commerceHeader';
+import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
 

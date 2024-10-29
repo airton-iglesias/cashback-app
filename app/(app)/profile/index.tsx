@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import {
-    Image, KeyboardAvoidingView, SafeAreaView, ScrollView,
-    Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, StyleSheet
-} from "react-native";
+import React, { useEffect, useState } from 'react';
+import { Image, KeyboardAvoidingView, ScrollView,
+    Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, StyleSheet,
+    Modal } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
 import Select from '@/components/select';
@@ -13,27 +12,29 @@ import * as Clipboard from 'expo-clipboard';
 import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
-
+import SelectLanguage from '@/components/selectLanguage';
+import { Skeleton } from 'moti/skeleton';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Profile() {
     const { t } = useLocale();
-    const datas = [{
-        accountID: 'O23I4U5',
-        bonusCode: '2435IJ3'
-    }]
+
+    const [loadingProfile, setLoadingProfile] = useState(true);
+    const [isPermissionModalVisible, setIsPermissionModalVisible] = useState(false);
 
     const [image, setImage] = useState<any>(null);
-    const [name, setName] = useState<string>('Name Example');
-    const [email, setEmail] = useState<string>('example@example.com');
-    const [telemovel, setTelemovel] = useState<string>('9999999999');
+    const [name, setName] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [telemovel, setTelemovel] = useState<string>('');
     const [country, setCountry] = useState<string>('Selecione o país');
     const [currency, setCurrency] = useState<string>('Selecione a moeda');
     const [location, setLocation] = useState(false);
+    const [accountID, setAccountID] = useState<string | null>(null);
 
     const countryOptions = [
-        { id: 1, text: 'Portugal', flag: 'PT' },
-        { id: 2, text: 'Brasil', flag: 'BR' },
-        { id: 3, text: 'Estados Unidos', flag: 'US' },
+        { id: 1, text: 'Portugal' },
+        { id: 2, text: 'Brasil' },
+        { id: 3, text: 'Estados Unidos' },
     ];
 
     const currencyOptions = [
@@ -42,11 +43,42 @@ export default function Profile() {
         { id: 3, text: 'USD' },
     ];
 
+    useEffect(() => {
+        const loadProfileData = async () => {
+            setLoadingProfile(true);
+            try {
+                const fetchedProfileData = {
+                    accountID: 'O23I4U5',
+                    name: 'Name Example',
+                    email: 'example@example.com',
+                    telemovel: '9999999999',
+                    country: 'Portugal',
+                    currency: 'EUR',
+                    location: false
+                };
+
+                setAccountID(fetchedProfileData.accountID);
+                setName(fetchedProfileData.name);
+                setEmail(fetchedProfileData.email);
+                setTelemovel(fetchedProfileData.telemovel);
+                setCountry(fetchedProfileData.country);
+                setCurrency(fetchedProfileData.currency);
+                setLocation(fetchedProfileData.location);
+            } catch (error) {
+                console.error("Erro ao carregar o perfil", error);
+            } finally {
+                setTimeout(() => setLoadingProfile(false), 2000)
+            }
+        };
+
+        loadProfileData();
+    }, []);
+
     const handleImagePick = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (!permissionResult.granted) {
-            alert("Permission to access camera roll is required!");
+            setIsPermissionModalVisible(true);
             return;
         }
 
@@ -60,12 +92,13 @@ export default function Profile() {
             setImage(pickerResult.assets[0].uri);
         }
     };
+
     const copyToClipboard = (item: string) => {
         Clipboard.setStringAsync(item);
     };
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={{ backgroundColor: 'white' }}>
             <KeyboardAvoidingView>
                 <View style={styles.header}>
                     <TouchableOpacity
@@ -87,129 +120,258 @@ export default function Profile() {
                     <View style={styles.container}>
                         <View style={styles.imageContainer}>
                             <TouchableWithoutFeedback onPress={handleImagePick} style={{ borderRadius: 8 }}>
-                                {image ? (
-                                    <View>
-                                        <Image source={{ uri: image }} style={styles.image} />
-                                        <View style={styles.cameraIconContainer}>
-                                            <Feather name="camera" size={20} color="black" />
+                                {loadingProfile ?
+                                    <Skeleton
+                                        show
+                                        radius={'round'}
+                                        colorMode='light'
+                                        height={128}
+                                        width={128}
+                                    />
+                                    :
+                                    image ? (
+                                        <View>
+                                            <Image source={{ uri: image }} style={styles.image} />
+                                            <View style={styles.cameraIconContainer}>
+                                                <Feather name="camera" size={20} color="black" />
+                                            </View>
                                         </View>
-                                    </View>
-                                ) : (
-                                    <View>
-                                        <Image source={require("@/assets/icons/user-icon.png")} style={styles.image} />
-                                        <View style={styles.cameraIconContainer}>
-                                            <Feather name="camera" size={20} color="black" />
+                                    ) : (
+                                        <View>
+                                            <Image source={require("@/assets/icons/user-icon.png")} style={styles.image} />
+                                            <View style={styles.cameraIconContainer}>
+                                                <Feather name="camera" size={20} color="black" />
+                                            </View>
                                         </View>
-                                    </View>
-                                )}
+                                    )
+                                }
                             </TouchableWithoutFeedback>
                         </View>
 
-                        <View style={styles.formGroupID}>
-                            <TextInput
-                                cursorColor={'#ADB5BD'}
-                                style={styles.couponInput}
-                                value={'ID: ' + datas[0].accountID}
-                                placeholderTextColor={'#ADB5BD'}
-                                editable={false}
-                                textAlign='center'
+                        {loadingProfile ?
+                            <Skeleton
+                                height={50}
+                                width={150}
+                                colorMode='light'
                             />
-                            <TouchableOpacity style={styles.copyIconContainer} onPress={() => copyToClipboard(datas[0].accountID)}>
-                                <Ionicons name="copy-outline" size={18} color="#495057" />
-                            </TouchableOpacity>
+                            :
+                            <View style={styles.formGroupID}>
+                                <TextInput
+                                    cursorColor={'#ADB5BD'}
+                                    style={styles.couponInput}
+                                    value={'ID: ' + accountID}
+                                    placeholderTextColor={'#ADB5BD'}
+                                    editable={false}
+                                    textAlign='center'
+                                />
+                                <TouchableOpacity style={styles.copyIconContainer} onPress={() => copyToClipboard(accountID || '')}>
+                                    <Ionicons name="copy-outline" size={18} color="#495057" />
+                                </TouchableOpacity>
+                            </View>
+                        }
+
+                        <View style={styles.formGroup}>
+                            {loadingProfile ?
+                                <Skeleton
+                                    width={'100%'}
+                                    height={48}
+                                    colorMode='light'
+                                />
+                                :
+                                <Input
+                                    label={t("profile.nameLabel")}
+                                    onChange={(text: string) => setName(text)}
+                                    value={name}
+                                />
+                            }
                         </View>
 
                         <View style={styles.formGroup}>
-                            <Input
-                                label={t("profile.nameLabel")}
-                                onChange={(text: string) => setName(text)}
-                                value={name}
-                            />
+                            {loadingProfile ?
+                                <Skeleton
+                                    width={'100%'}
+                                    height={48}
+                                    colorMode='light'
+                                />
+                                :
+                                <Input
+                                    label={t("profile.emailLabel")}
+                                    type={'email'}
+                                    value={email}
+                                    onChange={(text: string) => setEmail(text)}
+                                />
+                            }
                         </View>
 
-
                         <View style={styles.formGroup}>
-                            <Input
-                                label={t("profile.emailLabel")}
-                                type={'email'}
-                                value={email}
-                                onChange={(text: string) => setEmail(text)}
-                            />
-                        </View>
-
-
-                        <View style={styles.formGroup}>
-                            <Input
-                                label={t("profile.phoneLabel")}
-                                value={telemovel}
-                                onChange={(text: string) => setTelemovel(text)}
-                            />
+                            {loadingProfile ?
+                                <Skeleton
+                                    width={'100%'}
+                                    height={48}
+                                    colorMode='light'
+                                />
+                                :
+                                <Input
+                                    label={t("profile.phoneLabel")}
+                                    value={telemovel}
+                                    onChange={(text: string) => setTelemovel(text)}
+                                />
+                            }
                         </View>
 
                         <View style={styles.selectGroup}>
-                            <Text style={styles.label}>{t("profile.countryLabel")}</Text>
-                            <Select
-                                options={countryOptions}
-                                onChangeSelect={(item: any) => setCountry(item.name)}
-                                text={country}
-                                SelectOption={SelectOption}
-                            />
+                            {loadingProfile ?
+                                <Skeleton
+                                    width={'100%'}
+                                    height={48}
+                                    colorMode='light'
+                                />
+                                :
+                                <View style={{ gap: 4 }}>
+                                    <Text style={styles.label}>{t("profile.countryLabel")}</Text>
+                                    <Select
+                                        options={countryOptions}
+                                        onChangeSelect={(item: any) => setCountry(item.name)}
+                                        text={country}
+                                        SelectOption={SelectOption}
+                                    />
+                                </View>
+                            }
                         </View>
 
                         <View style={styles.selectGroup}>
-                            <Text style={styles.label}>{t("profile.currencyLabel")}</Text>
-                            <Select
-                                options={currencyOptions}
-                                onChangeSelect={(item: any) => setCurrency(item.name)}
-                                text={currency}
-                                SelectOption={SelectOption}
-                            />
+                            {loadingProfile ?
+                                <Skeleton
+                                    width={'100%'}
+                                    height={48}
+                                    colorMode='light'
+                                />
+                                :
+                                <View style={{ gap: 4 }}>
+                                    <Text style={styles.label}>{t("profile.currencyLabel")}</Text>
+                                    <Select
+                                        options={currencyOptions}
+                                        onChangeSelect={(item: any) => setCurrency(item.name)}
+                                        text={currency}
+                                        SelectOption={SelectOption}
+                                    />
+                                </View>
+                            }
+                        </View>
+
+                        <View style={styles.selectGroup}>
+                            {loadingProfile ?
+                                <Skeleton
+                                    width={'100%'}
+                                    height={48}
+                                    colorMode='light'
+                                />
+                                :
+                                <View style={{ gap: 4 }}>
+                                    <Text style={styles.label}>{t("profile.languageLabel")}</Text>
+                                    <SelectLanguage
+                                        SelectOption={SelectOption}
+                                    />
+                                </View>
+                            }
                         </View>
 
                         <View style={styles.switchGroup}>
-                            <View style={styles.optionRow}>
-                                <Text style={styles.label}>{t("profile.locationLabel")}</Text>
-                                <Switch onChange={(mode: boolean) => setLocation(mode)} />
-                            </View>
+                            {loadingProfile ?
+                                <Skeleton
+                                    width={'100%'}
+                                    height={48}
+                                    colorMode='light'
+                                />
+                                :
+                                <View style={styles.optionRow}>
+                                    <Text style={styles.label}>{t("profile.locationLabel")}</Text>
+                                    <Switch onChange={(mode: boolean) => setLocation(mode)} />
+                                </View>
+                            }
+
 
                             <View style={styles.optionRow}>
-                                <TouchableOpacity
-                                    style={styles.optionButton}
-                                    onPress={() => router.push("/recover_datas/")}
-                                >
-                                    <Text style={styles.optionText}>{t("profile.changePin")}</Text>
-                                    <Entypo name="chevron-right" size={24} color="black" />
-                                </TouchableOpacity>
+                                {loadingProfile ?
+                                    <Skeleton
+                                        width={'100%'}
+                                        height={48}
+                                        colorMode='light'
+                                    />
+                                    :
+                                    <TouchableOpacity
+                                        style={styles.optionButton}
+                                        onPress={() => router.push("/recover_datas/")}
+                                    >
+                                        <Text style={styles.optionText}>{t("profile.changePin")}</Text>
+                                        <Entypo name="chevron-right" size={24} color="black" />
+                                    </TouchableOpacity>
+                                }
                             </View>
 
+
                             <View style={styles.optionRow}>
-                                <TouchableOpacity
-                                    style={styles.optionButton}
-                                    onPress={() => router.push("/recover_datas/")}
-                                >
-                                    <Text style={styles.optionText}>{t("profile.changePassword")}</Text>
-                                    <Entypo name="chevron-right" size={24} color="black" />
-                                </TouchableOpacity>
+                                {loadingProfile ?
+                                    <Skeleton
+                                        width={'100%'}
+                                        height={48}
+                                        colorMode='light'
+                                    />
+                                    :
+                                    <TouchableOpacity
+                                        style={styles.optionButton}
+                                        onPress={() => router.push("/recover_datas/")}
+                                    >
+                                        <Text style={styles.optionText}>{t("profile.changePassword")}</Text>
+                                        <Entypo name="chevron-right" size={24} color="black" />
+                                    </TouchableOpacity>
+                                }
                             </View>
                         </View>
                     </View>
+
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={isPermissionModalVisible}
+                        onRequestClose={() => setIsPermissionModalVisible(!isPermissionModalVisible)}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalView}>
+                                <View style={{ width: '100%', alignItems: 'center' }}>
+                                    <View style={styles.iconContainer}>
+                                        <Feather name="alert-triangle" size={24} color="#664D03" />
+                                    </View>
+                                </View>
+
+                                <View style={{ width: '100%', alignItems: 'center' }}>
+                                    <Text style={styles.modalText}>{t("profile.noPermissionGallery")}</Text>
+                                </View>
+
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    onPress={() => setIsPermissionModalVisible(!isPermissionModalVisible)}
+                                    style={styles.modalSaveButton}
+                                >
+                                    <View style={styles.modalButtonSaveContent}>
+                                        <Feather name="check" size={24} color="black" />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
 
+
 const styles = StyleSheet.create({
-    safeArea: {
-        flex: 1,
-        backgroundColor: 'white',
-    },
     scrollView: {
-        flexGrow: 1,
-        paddingBottom: 120
+        paddingBottom: 140
     },
     container: {
-        flex: 1,
         alignItems: 'center',
         paddingHorizontal: 20,
     },
@@ -217,9 +379,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
-        paddingTop: 45,
         paddingHorizontal: 15,
-        paddingBottom: 15
+        height: 60
     },
     backButton: {
         flexDirection: 'row',
@@ -280,11 +441,6 @@ const styles = StyleSheet.create({
         fontSize: fontSize.labels.medium,
         fontWeight: 'normal',
     },
-    inputWrapper: {
-        position: 'relative',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     selectGroup: {
         width: '100%',
         gap: 8,
@@ -331,15 +487,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 70,
         flexDirection: 'row'
     },
-    textInput: {
-        borderWidth: 1,
-        borderRadius: 6,
-        width: '100%',
-        height: 48,
-        fontSize: fontSize.labels.medium,
-        borderColor: '#ADB5BD',
-        paddingHorizontal: 10
-    },
     couponInput: {
         borderColor: '#ADB5BD',
         borderWidth: 1,
@@ -365,4 +512,57 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         zIndex: 10,
     },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        width: '100%',
+        zIndex: 10
+    },
+    modalContent: {
+        width: '100%',
+        padding: 25,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalText: {
+        fontSize: 18,
+        marginVertical: 20,
+        color: '#fff',
+        textAlign: 'center'
+    },
+    iconContainer: {
+        height: 56,
+        width: 56,
+        borderRadius: 28,
+        backgroundColor: '#FFF3CD',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalView: {
+        backgroundColor: '#000',
+        paddingHorizontal: 20,
+        paddingVertical: 30,
+        alignItems: 'center',
+        shadowRadius: 4,
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+        gap: 20,
+        width: '100%'
+    },
+    modalSaveButton: {
+        width: '100%',
+        borderRadius: 8,
+    },
+    modalButtonSaveContent: {
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        width: '100%',
+        height: 52,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 4,
+        borderRadius: 10,
+    }
 });

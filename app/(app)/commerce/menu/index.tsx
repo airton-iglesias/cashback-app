@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal } from 'react-native';
 import { Feather, Octicons, AntDesign, SimpleLineIcons } from '@expo/vector-icons';
 import QRCodeIcon from '@/assets/icons/qrcodeIcon';
-import ModalCommerce from '@/components/modalCommerce';
 import { useLocale } from "@/contexts/TranslationContext";
-import CommerceHeader from '@/components/commerceHeader';
+import CommerceHeader from '@/components/commerce/commerceHeader';
 import { router } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
 
@@ -93,7 +92,7 @@ export default function CommerceMenu() {
                     <TouchableOpacity
                         activeOpacity={0.7}
                         style={styles.menuItemButton}
-                        onPress={() => router.push({pathname: "/(app)/commerce_informations", params: { selectedItem: JSON.stringify(data[0])}})}
+                        onPress={() => router.push({ pathname: "/(app)/commerce_informations", params: { selectedItem: JSON.stringify(data[0]) } })}
                     >
                         <View style={styles.iconContainer}>
                             <Feather name="eye" size={24} color="#0A3A74" />

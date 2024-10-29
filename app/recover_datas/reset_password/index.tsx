@@ -1,37 +1,85 @@
-import { SafeAreaView, TouchableOpacity, View, StyleSheet, Text } from "react-native";
+import { SafeAreaView, TouchableOpacity, View, StyleSheet, Text, ActivityIndicator } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import Input from "@/components/input";
 import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
 import { fontSize } from "@/constants/fonts";
+import { useState } from "react";
 
 export default function ResetPassword() {
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const [loading, setLoading] = useState<boolean>(false);
     const { t } = useLocale();
+
+    const handleSubmit = async () => {
+        setLoading(true);
+        if (password === confirmPassword) {
+            /* make the request to the API here
+            //Example: 
+            const passowrdResponse = await
+                fetch('domain of application here', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        password: password,
+                    }),
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    },
+                })
+                .then((response) => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw new Error('Something went wrong');
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+
+                //...Other things
+            */
+
+            setTimeout(() => {
+                setLoading(false);
+                router.push('/recover_datas/reset_success');
+            }, 1000);
+        }
+    }
+
     return (
         <SafeAreaView>
             <View style={styles.container}>
                 <View style={styles.infoWrapper}>
                     <Text style={styles.infoText}>{t("recoveryDatas.newPasswordLabel")}</Text>
                     <Text style={styles.infolabel}>{t("recoveryDatas.requirementsLabel")}</Text>
-                    <View style={{width: '100%', paddingHorizontal: 15, marginTop: 20}}>
+                    <View style={{ width: '100%', paddingHorizontal: 15, marginTop: 20 }}>
                         <Input
                             label={t("recoveryDatas.password")}
+                            onChange={(Text: string) => setPassword(Text)}
                         />
                     </View>
-                    <View style={{width: '100%', paddingHorizontal: 15, marginTop: 20}}>
+                    <View style={{ width: '100%', paddingHorizontal: 15, marginTop: 20 }}>
                         <Input
                             label={t("recoveryDatas.confirmPassword")}
+                            onChange={(Text: string) => setConfirmPassword(Text)}
                         />
                     </View>
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
-                        activeOpacity={0.6}
+                        activeOpacity={0.7}
                         style={styles.buttonWrapper}
-                        onPress={() => router.push('/recover_datas/reset_sucess')}
+                        onPress={handleSubmit}
+                        disabled={loading}
                     >
                         <View style={styles.submitButton}>
-                            <Feather name="check" size={24} color="white" />
+                            {loading ?
+                                <ActivityIndicator size={24} color="#fff" />
+                                :
+                                <Feather name="arrow-right" size={24} color={'white'} />
+                            }
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -48,12 +96,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         height: '100%'
     },
-    infoText:{
+    infoText: {
         fontSize: fontSize.labels.medium,
         fontWeight: 'bold',
         marginTop: 25
     },
-    infolabel:{
+    infolabel: {
         fontSize: fontSize.labels.medium,
         fontWeight: '400',
         marginTop: 10,
@@ -114,10 +162,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         marginTop: 15
     },
-    infoWrapper:{
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 40  
+    infoWrapper: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 40
     },
     buttonContainer: {
         flex: 1,

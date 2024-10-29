@@ -4,13 +4,13 @@ import { AntDesign, Feather, FontAwesome6 } from '@expo/vector-icons';
 import { actions, RichEditor, RichToolbar } from "react-native-pell-rich-editor";
 import UnderlineIcon from '@/assets/icons/underlineIcon';
 import Input from '@/components/input';
-import CommerceHeader from '@/components/commerceHeader';
-import CommerceGoBackModal from '@/components/commerceGoBackModal';
+import CommerceHeader from '@/components/commerce/commerceHeader';
+import CommerceGoBackModal from '@/components/commerce/commerceGoBackModal';
 import PaintBrushIcon from '@/assets/icons/paintBrushIcon';
 import { useStepperContext } from '@/contexts/CommerceStepperContext';
 import { useLocale } from '@/contexts/TranslationContext';
 import { router } from 'expo-router';
-import FooterNewCommerce from '@/components/footerNewCommerce';
+import FooterNewCommerce from '@/components/commerce/footerNewCommerce';
 import { fontSize } from '@/constants/fonts';
 
 export default function New_Commerce_Step_4() {
@@ -90,9 +90,9 @@ export default function New_Commerce_Step_4() {
     const handleTextChange = (descriptionText: string) => {
         setStepperData({ description: descriptionText });
         setTimeout(() => {
-          scrollRef.current?.scrollToEnd({ animated: false });
+            scrollRef.current?.scrollToEnd({ animated: false });
         }, 100);
-      };
+    };
 
 
     return (

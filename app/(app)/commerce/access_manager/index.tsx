@@ -1,32 +1,65 @@
-import React from 'react';
-import {SafeAreaView,View,Text,TouchableOpacity,Image,ScrollView,StyleSheet,} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, View, Text, TouchableOpacity, Image, ScrollView, StyleSheet, FlatList, } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
-import CommerceHeader from '@/components/commerceHeader';
-import {useLocale} from "@/contexts/TranslationContext";
+import CommerceHeader from '@/components/commerce/commerceHeader';
+import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
+import { Skeleton } from 'moti/skeleton';
+import UserSkeleton from '@/components/userSkeleton';
 
 export default function CommerceAccessManager() {
     const { t } = useLocale();
+    const [loading, setLoading] = useState(true);
+    const [userDatas, setUserDatas] = useState<any>([]);
 
-    const userDatas = [
-        {
-            id: '#32594',
-            name: 'Pedro',
-            image: null
-        },
-        {
-            id: '#32594',
-            name: 'Fernanda',
-            image: require('@/assets/images/bar2.png')
-        },
-    ];
+    useEffect(() => {
+        const fetchSelectDatas = async () => {
+            /* make the request to the API here
+            //Example: 
+            const selectDataReponse = await
+                fetch('domain of application here', {
+                    method: 'GET',
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Something went wrong');
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+            */
+
+            //temporary variable
+            const dataReponse: any = [
+                {
+                    id: '#32594',
+                    name: 'Pedro',
+                    image: null
+                },
+                {
+                    id: '#32595',
+                    name: 'Fernanda',
+                    image: require('@/assets/images/bar2.png')
+                }
+            ];
+
+            setTimeout(() => {
+                setUserDatas(dataReponse);
+                setLoading(false);
+            }, 2000);
+        }
+
+        fetchSelectDatas();
+    }, []);
 
 
     return (
         <SafeAreaView style={styles.safeArea}>
 
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <View style={styles.scrollViewContent}>
                 <CommerceHeader
                     Title={'Soverteria - Loja 1'}
                     SubTitle={'32594'}
@@ -37,33 +70,42 @@ export default function CommerceAccessManager() {
                 <View style={styles.manageAccessContainer}>
                     <Text style={styles.manageAccessTitle}>{t("commerce.access_manager.label")}</Text>
                 </View>
-                {
-                    userDatas.map((user, index) =>
-                        <View style={styles.accessItemContainer} key={index}>
-                            <View style={styles.acessItemOutter}>
-                                <TouchableOpacity
-                                    activeOpacity={0.7}
-                                    onPress={() => router.push("/commerce/associate_edit")}
-                                    style={styles.accessItemButton}
-                                >
-                                    <View style={styles.accessItemInner}>
-                                        <View style={styles.accessItemAvatar}>
-                                            {user.image ?
-                                                <Image source={user.image} style={styles.userImage} resizeMode={'cover'} />
-                                                :
-                                                <Text style={styles.accessItemAvatarText}>{user.name.slice(0, 2)}</Text>
-                                            }
+
+
+                {loading ?
+                    <UserSkeleton />
+                    :
+                    <FlatList
+                        data={userDatas}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item: user }) => (
+                            <View style={styles.accessItemContainer} >
+                                <View style={styles.acessItemOutter}>
+                                    <TouchableOpacity
+                                        activeOpacity={0.7}
+                                        onPress={() => router.push("/commerce/associate_edit")}
+                                        style={styles.accessItemButton}
+                                    >
+                                        <View style={styles.accessItemInner}>
+                                            <View style={styles.accessItemAvatar}>
+                                                {user.image ? (
+                                                    <Image source={user.image} style={styles.userImage} resizeMode={'cover'} />
+                                                ) : (
+                                                    <Text style={styles.accessItemAvatarText}>{user.name.slice(0, 2)}</Text>
+                                                )}
+                                            </View>
+                                            <View style={{ marginLeft: 15 }}>
+                                                <Text style={styles.accessItemName}>{user.name}</Text>
+                                                <Text style={styles.accessItemId}>{user.id}</Text>
+                                            </View>
                                         </View>
-                                        <View style={{ marginLeft: 15 }}>
-                                            <Text style={styles.accessItemName}>{user.name}</Text>
-                                            <Text style={styles.accessItemId}>{user.id}</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
-                    )
+                        )}
+                    />
                 }
+
 
                 <TouchableOpacity
                     onPress={() => router.push("/commerce/add_access")}
@@ -72,7 +114,7 @@ export default function CommerceAccessManager() {
                 >
                     <FontAwesome6 name="plus" size={24} color="white" />
                 </TouchableOpacity>
-            </ScrollView>
+            </View>
 
         </SafeAreaView >
     );

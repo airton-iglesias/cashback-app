@@ -1,29 +1,74 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
 import { FontAwesome6, Feather } from '@expo/vector-icons';
 import Select from '@/components/select';
 import SelectOption from '@/components/selectOption';
 import Input from '@/components/input';
-import CommerceHeader from '@/components/commerceHeader';
-import CommerceGoBackModal from '@/components/commerceGoBackModal';
+import CommerceHeader from '@/components/commerce/commerceHeader';
+import CommerceGoBackModal from '@/components/commerce/commerceGoBackModal';
 import { useStepperContext } from '@/contexts/CommerceStepperContext';
 import { useLocale } from '@/contexts/TranslationContext';
 import { router } from 'expo-router';
-import FooterNewCommerce from '@/components/footerNewCommerce';
+import FooterNewCommerce from '@/components/commerce/footerNewCommerce';
 import { fontSize } from '@/constants/fonts';
+import { Skeleton } from 'moti/skeleton';
 
 export default function New_Commerce_Step_6() {
-    const { baseDiscount, cashbackForm, sections, setStepperData } = useStepperContext();
+    const { baseDiscount, cashbackForm, currencyType, sections, setStepperData } = useStepperContext();
     const [tempSections, setTempSections] = useState(sections);
 
     const scrollViewRef = useRef<ScrollView>(null);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const { t } = useLocale();
 
-    const typesOptions = [
+    const [typesOptions, setTypesOptions] = useState<any>([
         { id: 1, text: 'Fidelização' },
         { id: 2, text: 'Livre' },
-    ];
+        { id: 3, text: 'Queima' },
+    ]);
+
+    const [currencyOptions, setCurrencyOptions] = useState<any>([
+        { id: 1, text: 'EUR' },
+        { id: 2, text: 'BRL' },
+        { id: 3, text: 'USD' },
+    ]);
+
+    const [selectLoading, setSelectLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        const fetchSelectDatas = async () => {
+            /* make the request to the API here
+            //Example: 
+            const selectDataReponse = await
+                fetch('domain of application here', {
+                    method: 'GET',
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Something went wrong');
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+            */
+
+            //temporary variable
+            const selectDataReponse: any = [
+                { id: 1, text: 'Fidelização' },
+                { id: 2, text: 'Livre' },
+                { id: 3, text: 'Queima' },
+            ];
+
+            setTimeout(() => {
+                setTypesOptions(selectDataReponse);
+                setSelectLoading(false);
+            }, 2000);
+        }
+
+        fetchSelectDatas();
+    }, []);
 
 
     const addSection = () => {
@@ -61,6 +106,26 @@ export default function New_Commerce_Step_6() {
                     contentContainerStyle={styles.scrollViewContent}
                 >
                     <View style={styles.sectionContainer}>
+
+                        <View style={styles.section}>
+                            <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.currencyType")}</Text>
+                            <Skeleton
+                                show={selectLoading}
+                                colorMode='light'
+                                width={'100%'}
+                                height={48}
+                            >
+                                {selectLoading ? null :
+                                    <Select
+                                        options={currencyOptions}
+                                        onChangeSelect={(item: any) => setStepperData({ currencyType: item.text })}
+                                        text={cashbackForm !== '' ? cashbackForm : t("commerce.new_commerce.step5.selectLabel")}
+                                        SelectOption={SelectOption}
+                                    />
+                                }
+                            </Skeleton>
+                        </View>
+
                         <View style={styles.section}>
                             <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.baseDiscount")}</Text>
                             <View style={styles.inputWrapper}>
@@ -75,12 +140,21 @@ export default function New_Commerce_Step_6() {
 
                         <View style={styles.section}>
                             <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.cashbackType")}</Text>
-                            <Select
-                                options={typesOptions}
-                                onChangeSelect={(item: any) => setStepperData({ cashbackForm: item.text })}
-                                text={cashbackForm !== '' ? cashbackForm : t("commerce.new_commerce.step5.selectLabel")}
-                                SelectOption={SelectOption}
-                            />
+                            <Skeleton
+                                show={selectLoading}
+                                colorMode='light'
+                                width={'100%'}
+                                height={48}
+                            >
+                                {selectLoading ? null :
+                                    <Select
+                                        options={typesOptions}
+                                        onChangeSelect={(item: any) => setStepperData({ cashbackForm: item.text })}
+                                        text={cashbackForm !== '' ? cashbackForm : t("commerce.new_commerce.step5.selectLabel")}
+                                        SelectOption={SelectOption}
+                                    />
+                                }
+                            </Skeleton>
                         </View>
                         {sections.length === 0 && (
                             <TouchableOpacity
@@ -132,17 +206,27 @@ export default function New_Commerce_Step_6() {
 
                             <View style={styles.section}>
                                 <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.cashbackType")}</Text>
-                                <Select
-                                    options={typesOptions}
-                                    onChangeSelect={(item: any) => {
-                                        const updatedSections = sections.map((s, i) =>
-                                            i === index ? { ...s, type: item.text } : s
-                                        );
-                                        setStepperData({ sections: updatedSections });
-                                    }}
-                                    text={section.type !== '' ? section.type : t("commerce.new_commerce.step5.selectLabel")}
-                                    SelectOption={SelectOption}
-                                />
+
+                                <Skeleton
+                                    show={selectLoading}
+                                    colorMode='light'
+                                    width={'100%'}
+                                    height={48}
+                                >
+                                    {selectLoading ? null :
+                                        <Select
+                                            options={typesOptions}
+                                            onChangeSelect={(item: any) => {
+                                                const updatedSections = sections.map((s, i) =>
+                                                    i === index ? { ...s, type: item.text } : s
+                                                );
+                                                setStepperData({ sections: updatedSections });
+                                            }}
+                                            text={section.type !== '' ? section.type : t("commerce.new_commerce.step5.selectLabel")}
+                                            SelectOption={SelectOption}
+                                        />
+                                    }
+                                </Skeleton>
                             </View>
 
                             {sections.length > 0 && (

@@ -9,7 +9,6 @@ export default function RegisterCompleted() {
         const timeout = setTimeout(() => {
             router.replace('/');
         }, 3000);
-
         return () => clearTimeout(timeout);
     }, [router]);
 

@@ -1,5 +1,5 @@
 import { View, StyleSheet } from "react-native";
-import CommerceHeader from "@/components/commerceHeader";
+import CommerceHeader from "@/components/commerce/commerceHeader";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { useLocale } from "@/contexts/TranslationContext";
 import { router } from "expo-router";

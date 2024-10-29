@@ -95,7 +95,8 @@
             "warning2": "Os Tokens Zoi depositados na sua carteira de deposito, são convertidos para créditos automaticamente, ao preço atual do mercado.",
             "token": "Token",
             "blockchain": "Blockchain",
-            "depositWallat": "Carteira de depósito"
+            "depositWallat": "Carteira de depósito",
+            "noData": "Sem informações no momento"
         },
         "tokensScreen": {
             "graphic": "Gráfico",
@@ -133,7 +134,7 @@
     "sidebar": {
         "profile": "Meu perfil",
         "points": "Pontos",
-        "aboutUs": "Sobre nós",
+        "aboutUs": "Informações",
         "help": "Ajuda",
         "logout": "Logout"
     },
@@ -191,7 +192,8 @@
                 "associationLabel": "Associar",
                 "userPoints": "Creditar pontos no usuário",
                 "referedBy": "Referido por",
-                "ID": "ID"
+                "ID": "ID",
+                "propriety": "Proprietário"
             },
             "step2": {
                 "headerLabel": "Local e horário",
@@ -232,7 +234,8 @@
                 "minimalValueLabel": "Valor mínimo",
                 "minimalCurrencyPlaceholder": "50c",
                 "discountSectionPorcentage": "Desconto da etapa",
-                "discountSectionPorcentagePlaceholder": "20 %"
+                "discountSectionPorcentagePlaceholder": "20 %",
+                "currencyType": "Moeda"
             },
             "step6": {
                 "headerLabel": "Mais informações",
@@ -259,7 +262,10 @@
         "credit_extract": {
             "headerLabel": "Extrato de crédito",
             "id": "ID",
-            "eliminatedBy": "Eliminado por"
+            "eliminatedBy": "Eliminado por",
+            "modal": {
+                "title": "Remover extrato?"
+            }
         },
         "access_manager": {
             "label": "Gerir acessos"
@@ -300,6 +306,7 @@
         "getDiscountLocally": "Obtenha o seu desconto no local",
         "discountBase": "Desconto base",
         "discountAbove": "Desconto acima de",
+        "burn": "Queima",
         "about": "Sobre"
     },
     "profile": {
@@ -312,7 +319,9 @@
         "currencyLabel": "Moeda",
         "locationLabel": "Localização",
         "changePin": "Alterar Pin",
-        "changePassword": "Alterar Password"
+        "changePassword": "Alterar Password",
+        "languageLabel": "Idioma",
+        "noPermissionGallery": "É necessário conceder a permissão para o uso da galeria."
     },
     "points": {
         "info": "Info",

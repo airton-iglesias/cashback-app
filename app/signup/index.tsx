@@ -1,21 +1,57 @@
 import React, { useState } from 'react';
 import {
-    Image, Dimensions, KeyboardAvoidingView, SafeAreaView, ScrollView,
+    Image, Dimensions, KeyboardAvoidingView, SafeAreaView,
     Text, View, StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
 } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { useLocale } from '@/contexts/TranslationContext';
 import Input from '@/components/input';
-import { Link } from 'expo-router';
+import { router } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
 
 export default function Signup_Step_0() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [confirmPassword, setConfirmPassword] = useState<string>('');
 
     const { t } = useLocale();
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const handleSubmit = async () => {
+        setLoading(true);
+        if (password === confirmPassword) {
+            /* make the request to the API here
+            Example: 
+            
+            const loginReponse = await
+                fetch('domain of application here', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                    }),
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    },
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Something went wrong');
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+            */
+        }
+        setTimeout(() => {
+            setLoading(false);
+            router.navigate("/signup/step2");
+        }, 1000);
+    }
 
     return (
 
@@ -51,24 +87,30 @@ export default function Signup_Step_0() {
                         />
                     </View>
 
-
                 </View>
 
                 <View style={styles.buttonContainer}>
-                    <Link href={"/signup/step2"} asChild>
-                        <TouchableOpacity
-                            activeOpacity={0.7}
-                            style={styles.buttonWrapper}
-                        >
-                            <View style={styles.submitButton}>
-                                <Feather name="arrow-right" size={24} color={'white'} />
-                            </View>
-                        </TouchableOpacity>
-                    </Link>
 
                     <TouchableOpacity
                         activeOpacity={0.7}
                         style={styles.buttonWrapper}
+                        onPress={handleSubmit}
+                        disabled={loading}
+                    >
+                        <View style={styles.submitButton}>
+                            {loading ?
+                                <ActivityIndicator size={24} color="#fff" />
+                                :
+                                <Feather name="arrow-right" size={24} color={'white'} />
+                            }
+                        </View>
+                    </TouchableOpacity>
+
+
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={styles.buttonWrapper}
+                        disabled={loading}
                     >
                         <View style={styles.googleButton}>
                             <Image source={require("@/assets/icons/google-icon.png")} style={styles.googleIcon} />
@@ -80,7 +122,6 @@ export default function Signup_Step_0() {
     );
 };
 
-const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
     container: {
         flex: 1,

@@ -1,20 +1,20 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, StyleSheet, BackHandler } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import CommerceHeader from '@/components/commerceHeader';
-import RadioCommerce from '@/components/radioCommerce';
-import RadioCommerceType from '@/components/radioCommerceType';
-import CommerceGoBackModal from '@/components/commerceGoBackModal';
+import CommerceHeader from '@/components/commerce/commerceHeader';
+import RadioCommerce from '@/components/commerce/radioCommerce';
+import RadioCommerceType from '@/components/commerce/radioCommerceType';
+import CommerceGoBackModal from '@/components/commerce/commerceGoBackModal';
 import { useStepperContext } from '@/contexts/CommerceStepperContext';
 import { useLocale } from '@/contexts/TranslationContext';
 import { useFocusEffect, router, useLocalSearchParams } from 'expo-router';
-import FooterNewCommerce from '@/components/footerNewCommerce';
+import FooterNewCommerce from '@/components/commerce/footerNewCommerce';
 import { fontSize } from '@/constants/fonts';
 
 
 export default function New_Commerce() {
 
-    const  { editor }   = useLocalSearchParams();
+    const { editor } = useLocalSearchParams();
 
     const {
         selectedType, selectedPlace, setStepperData
@@ -78,7 +78,7 @@ export default function New_Commerce() {
 
             <FooterNewCommerce
                 backStep={() => router.back()}
-                nextStep={()=> router.push("/commerce/new/basic_datas")}
+                nextStep={() => router.push("/commerce/new/basic_datas")}
                 currentStep={1}
             />
             <CommerceGoBackModal

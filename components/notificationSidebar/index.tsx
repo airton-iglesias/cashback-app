@@ -5,34 +5,71 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import NotificationItem from "./notificationItem";
 import { useLocale } from "@/contexts/TranslationContext";
 import { fontSize } from "@/constants/fonts";
+import { Skeleton } from "moti/skeleton";
+import SkeletonNotification from "./skeletonNotification";
 
 export default function NotificationSidebar({ closeSidebar, isSidebarOpen }: any) {
     const sidebarOffset = useSharedValue(400);
     const { t } = useLocale();
 
-    const [data, setData] = useState([
-        {
-            id: "1",
-            notificationType: "new_admin",
-            title: "Casa do Bacalhau",
-            description: "Maria",
-            image: "url",
-        },
-        {
-            id: "2",
-            notificationType: "cashback_canceled",
-            title: "Casa do Bacalhau",
-            description: "Maria",
-            image: "url",
-        },
-        {
-            id: "3",
-            notificationType: "deposit_successful",
-            title: "Casa do Bacalhau",
-            description: "1000",
-            image: null,
-        },
-    ]);
+    const [data, setData] = useState([]);
+
+    const [loading, setLoading] = useState(true);
+
+
+    useEffect(() => {
+        const fetchSelectDatas = async () => {
+            /* make the request to the API here
+            //Example: 
+            const selectDataReponse = await
+                fetch('domain of application here', {
+                    method: 'GET',
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Something went wrong');
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+            */
+
+            //temporary variable
+            const DataReponse: any = [
+                {
+                    id: "1",
+                    notificationType: "new_admin",
+                    title: "Casa do Bacalhau",
+                    description: "Maria",
+                    image: "url",
+                },
+                {
+                    id: "2",
+                    notificationType: "cashback_canceled",
+                    title: "Casa do Bacalhau",
+                    description: "Maria",
+                    image: "url",
+                },
+                {
+                    id: "3",
+                    notificationType: "deposit_successful",
+                    title: "Casa do Bacalhau",
+                    description: "1000",
+                    image: null,
+                }
+            ];
+
+            setTimeout(() => {
+                setData(DataReponse);
+                setLoading(false);
+            }, 2000);
+        }
+
+        fetchSelectDatas();
+    }, []);
+
 
     const handleRemoveNotification = (index: number) => {
         setData((prevData) => prevData.filter((_, i) => i !== index));
@@ -56,7 +93,7 @@ export default function NotificationSidebar({ closeSidebar, isSidebarOpen }: any
         sidebarOffset.value = withTiming(400, { duration: 300 });
         closeSidebar();
     };
-    
+
     return (
         <View style={styles.overlay}>
             <View style={styles.backgroundOverlay}></View>
@@ -64,7 +101,14 @@ export default function NotificationSidebar({ closeSidebar, isSidebarOpen }: any
                 <View style={styles.container}>
 
                     <View style={styles.header}>
-                        <Text style={styles.headerText}>{t("sidebarNotification.allNotifications")} ({data.length})</Text>
+                        <Skeleton
+                            show={loading}
+                            height={40}
+                            width={150}
+                            colorMode="dark"
+                        >
+                            {loading ? null : <Text style={styles.headerText}>{t("sidebarNotification.allNotifications")} ({data.length || 0})</Text>}
+                        </Skeleton>
                         <TouchableOpacity onPress={handleCloseSidebar} style={styles.closeButton} activeOpacity={0.7}>
                             <MaterialCommunityIcons name="close-circle-outline" size={32} color="white" />
                         </TouchableOpacity>
@@ -72,20 +116,23 @@ export default function NotificationSidebar({ closeSidebar, isSidebarOpen }: any
 
                     <View style={styles.content}>
                         {
-                            data.length === 0 ?
-                                null
+                            loading ?
+                                <SkeletonNotification />
                                 :
-                                <FlatList
-                                    data={data}
-                                    renderItem={({ item, index }) => (
-                                        <NotificationItem
-                                            index={index}
-                                            item={item}
-                                            handleRemoveNotification={handleRemoveNotification}
-                                        />
-                                    )}
-                                    showsVerticalScrollIndicator={false}
-                                />
+                                data.length === 0 ?
+                                    null
+                                    :
+                                    <FlatList
+                                        data={data}
+                                        renderItem={({ item, index }) => (
+                                            <NotificationItem
+                                                index={index}
+                                                item={item}
+                                                handleRemoveNotification={handleRemoveNotification}
+                                            />
+                                        )}
+                                        showsVerticalScrollIndicator={false}
+                                    />
                         }
                     </View>
                 </View>
@@ -117,7 +164,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 0,
         zIndex: 20,
-        paddingTop: 40
+        paddingTop: 10
     },
     container: {
         flex: 1,

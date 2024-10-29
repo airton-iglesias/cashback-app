@@ -22,8 +22,33 @@ export default function ResetPinConfirm() {
 
     useEffect(() => {
         if (ConfirmPin.length === 6) {
-            if(ConfirmPin === pin){
-                router.replace('/recover_datas/reset_sucess');
+            if (ConfirmPin === pin) {
+                /* make the request to the API here
+                Example: 
+                
+                const pinReponse = await
+                    fetch('domain of application here', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            pin: pin,
+                        }),
+                        headers: {
+                            'Content-type': 'application/json; charset=UTF-8',
+                        },
+                    })
+                    .then((response) => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw new Error('Something went wrong');
+                        setValidateError(true);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        setValidateError(true);
+                    });
+                */
+                router.replace('/recover_datas/reset_success');
                 return;
             }
             setValidateError(true);
@@ -40,7 +65,7 @@ export default function ResetPinConfirm() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={[styles.content, validateError ? { marginTop: 67, gap: 30} : { marginTop: 67, gap: 60 }]}>
+            <View style={[styles.content, validateError ? { marginTop: 67, gap: 30 } : { marginTop: 67, gap: 60 }]}>
                 <Text style={styles.title}>{t("recoveryDatas.confirmPin")}</Text>
                 {validateError ? <Text style={styles.errorText}>{t("recoveryDatas.pinError")}</Text> : null}
                 <View style={styles.pinContainer}>

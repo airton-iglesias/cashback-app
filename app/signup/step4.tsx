@@ -7,26 +7,47 @@ import { fontSize } from "@/constants/fonts";
 
 export default function Signup_Step_3() {
 
-    const { email, password, image, name, country, currency, codeBonus, pin } = useLocalSearchParams();
+    const { pin } = useLocalSearchParams();
     const [confirmPin, setConfirmPin] = useState<string>('');
 
     const buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     const [pressedButton, setPressedButton] = useState<number | null>(null);
-    const [validateError, setValidateError] = useState(false);
+    const [validateError, setValidateError] = useState<boolean>(false);
     const { t } = useLocale();
 
     useEffect(() => {
         if (confirmPin.length === 6) {
             if (pin === confirmPin) {
-                router.push({
-                    pathname: '/signup/register-completed',
-                    params: { email, password, image, name, country, currency, codeBonus, pin },
-                  });
+
+                /* make the request to the API here
+                Example: 
+                
+                const pinReponse = await
+                    fetch('domain of application here', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            pin: pin,
+                        }),
+                        headers: {
+                            'Content-type': 'application/json; charset=UTF-8',
+                        },
+                    })
+                    .then((response) => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw new Error('Something went wrong');
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    });
+                */
+                router.navigate('/signup/register-completed');
                 return;
             };
             setValidateError(true);
         };
-    }, [confirmPin, router]);
+    }, [confirmPin]);
 
     const handlePressIn = (value: number) => {
         setPressedButton(value);
@@ -43,7 +64,7 @@ export default function Signup_Step_3() {
     return (
         <SafeAreaView style={styles.container}>
             <View style={[styles.content, validateError ? { gap: 40 } : { gap: 60 }]}>
-                
+
                 <Text style={styles.title}>{t('signup.signup_step_3.confirm_pin')}</Text>
                 {validateError ? <Text style={styles.errorLabel}>{t('signup.signup_step_3.pin_error')}</Text> : null}
 

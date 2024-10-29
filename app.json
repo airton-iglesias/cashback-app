@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "cashback-app",
-    "slug": "cashback-app",
+    "name": "Fullclient",
+    "slug": "Fullclient",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -21,7 +21,7 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": [],
-      "package": "com.cashbackapp"
+      "package": "com.fullclient"
     },
     "web": {
       "bundler": "metro",
@@ -41,7 +41,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "c2aadba8-d813-453c-9aa7-eda6f0c55df2"
+        "projectId": "b56cc90a-1d46-4fb9-9112-53a45c596cdd"
       }
     }
   }

@@ -6,7 +6,6 @@ export default function NewCommerceLayout() {
     <StepperProvider>
       <Stack screenOptions={{headerShown: false}}>
         <Stack.Screen name='cashback_items' options={{animation: 'none'}}/>
-
       </Stack>
     </StepperProvider>
   );

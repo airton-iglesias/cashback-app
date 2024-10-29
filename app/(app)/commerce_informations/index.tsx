@@ -153,7 +153,7 @@ const data = [
         }
     },
 ];
-import {  ScrollView, TouchableOpacity, View, Text, Image, TextInput, StyleSheet } from "react-native";
+import { ScrollView, TouchableOpacity, View, Text, Image, TextInput, StyleSheet } from "react-native";
 import * as Clipboard from 'expo-clipboard';
 import { MaterialCommunityIcons, Octicons, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
@@ -164,6 +164,7 @@ import { fontSize } from "@/constants/fonts";
 import React from "react";
 import CalendarIcon from "@/assets/icons/calendarIcon";
 import Carousel from "@/components/carousel";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface flexDiscountProps {
     currency: string;
@@ -172,7 +173,7 @@ interface flexDiscountProps {
 }
 
 export default function Commerce_Informations() {
-    const params:any = useLocalSearchParams();
+    const params: any = useLocalSearchParams();
     const selectedItem: any = params.selectedItem ? JSON.parse(params.selectedItem) : data[0];
 
     const { t } = useLocale();
@@ -181,7 +182,7 @@ export default function Commerce_Informations() {
     };
 
     return (
-        <ScrollView contentContainerStyle={{backgroundColor: 'white', paddingTop: 30}}>
+        <SafeAreaView style={{ backgroundColor: 'white' }}>
             <View style={styles.headerContainer}>
                 <TouchableOpacity onPress={() => router.back()} style={styles.closeButton} activeOpacity={0.7}>
                     <Octicons name="chevron-left" size={32} color="black" />
@@ -189,153 +190,163 @@ export default function Commerce_Informations() {
                 <Text style={styles.headerText}>{t("modalCommerce.headerLabel")}</Text>
             </View>
 
-            <Carousel carouselData={selectedItem.modal.carouselImages} />
+            <ScrollView>
+                <Carousel carouselData={selectedItem.modal.carouselImages} />
 
-            {selectedItem && (
-                <View style={styles.contentContainer}>
-                    <View style={styles.section}>
-                        <View style={styles.sectionHeader}>
-                            <View style={{ flex: 1 }}>
-                                <Text numberOfLines={2} style={styles.title}>{selectedItem.title}</Text>
+                {selectedItem && (
+                    <View style={styles.contentContainer}>
+                        <View style={styles.section}>
+                            <View style={styles.sectionHeader}>
+                                <View style={{ flex: 1 }}>
+                                    <Text numberOfLines={2} style={styles.title}>{selectedItem.title}</Text>
+                                </View>
+                                <View style={styles.cashbackType}>
+                                    <Text style={styles.cashbackTypeLabel}>{selectedItem.modal.cashbackType}</Text>
+                                </View>
                             </View>
-                            <View style={styles.cashbackType}>
-                                <Text style={styles.cashbackTypeLabel}>{selectedItem.modal.cashbackType}</Text>
+                            <View style={styles.sectionItem}>
+                                {!selectedItem.modal.locationMap ? (
+                                    <>
+                                        <View style={styles.iconContainer}>
+                                            <Feather name="external-link" size={24} color="#0A58CA" />
+                                        </View>
+                                        <View>
+                                            <Text style={styles.label}>{t("modalCommerce.oficial_website")}</Text>
+                                            <Text style={styles.link}>{selectedItem.modal.website}</Text>
+                                        </View>
+                                    </>
+                                ) : (
+                                    <>
+                                        <TouchableOpacity
+                                            activeOpacity={0.7}
+                                            onPress={() => router.push("/map_location")}
+                                        >
+                                            <Image style={styles.image} source={require("@/assets/images/mapPreview.png")} />
+                                        </TouchableOpacity>
+                                        <View>
+                                            <Text style={styles.location}>{selectedItem.location} | {selectedItem.modal.distance}</Text>
+                                            <Text style={styles.link}>{selectedItem.modal.website}</Text>
+                                        </View>
+                                    </>
+                                )}
+                            </View>
+                            <View style={styles.sectionItem}>
+                                <Image style={styles.image} source={require("@/assets/images/reidobacalhau.png")} />
+                                <View style={styles.infoContainer}>
+                                    <Text style={styles.label}>{t("modalCommerce.eventCreatedBy")}</Text>
+                                    <Text style={styles.link}>{selectedItem.modal.createdBy}</Text>
+                                </View>
+                            </View>
+                            <View style={styles.sectionItem}>
+                                <View style={styles.calendarIconContainer}>
+                                    <CalendarIcon />
+                                </View>
+                                <View style={styles.infoContainer}>
+                                    <Text style={styles.label}>{t("modalCommerce.when")}</Text>
+                                    <Text style={styles.date}>{selectedItem.modal.eventDate}</Text>
+                                </View>
                             </View>
                         </View>
-                        <View style={styles.sectionItem}>
-                            {!selectedItem.modal.locationMap ? (
-                                <>
-                                    <View style={styles.iconContainer}>
-                                        <Feather name="external-link" size={24} color="#0A58CA" />
-                                    </View>
-                                    <View>
-                                        <Text style={styles.label}>{t("modalCommerce.oficial_website")}</Text>
-                                        <Text style={styles.link}>{selectedItem.modal.website}</Text>
-                                    </View>
-                                </>
-                            ) : (
-                                <>
-                                    <TouchableOpacity
-                                        activeOpacity={0.7}
-                                        onPress={() => router.push("/map_location")}
-                                    >
-                                        <Image style={styles.image} source={require("@/assets/images/mapPreview.png")} />
-                                    </TouchableOpacity>
-                                    <View>
-                                        <Text style={styles.location}>{selectedItem.location} | {selectedItem.modal.distance}</Text>
-                                        <Text style={styles.link}>{selectedItem.modal.website}</Text>
-                                    </View>
-                                </>
-                            )}
-                        </View>
-                        <View style={styles.sectionItem}>
-                            <Image style={styles.image} source={require("@/assets/images/reidobacalhau.png")} />
-                            <View style={styles.infoContainer}>
-                                <Text style={styles.label}>{t("modalCommerce.eventCreatedBy")}</Text>
-                                <Text style={styles.link}>{selectedItem.modal.createdBy}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.sectionItem}>
-                            <View style={styles.calendarIconContainer}>
-                                <CalendarIcon />
-                            </View>
-                            <View style={styles.infoContainer}>
-                                <Text style={styles.label}>{t("modalCommerce.when")}</Text>
-                                <Text style={styles.date}>{selectedItem.modal.eventDate}</Text>
-                            </View>
-                        </View>
-                    </View>
 
-                    {selectedItem.modal.cupomCode ? (
-                        <View style={styles.couponContainer}>
-                            <View style={styles.couponIconContainer}>
-                                <MaterialIcons name="local-fire-department" size={40} color="#146C43" />
-                            </View>
-                            <View style={styles.couponContent}>
-                                <Text style={styles.couponText}>{t("modalCommerce.getDiscount")}</Text>
-                                <Text style={styles.couponCodeText}>{t("modalCommerce.discountCode")}</Text>
-                                <View style={styles.couponInputContainer}>
-                                    <TextInput
-                                        cursorColor={'#ADB5BD'}
-                                        style={styles.couponInput}
-                                        value={selectedItem.modal.cupomCode}
-                                        placeholderTextColor={'#ADB5BD'}
-                                        editable={false}
-                                    />
-                                    <TouchableOpacity style={styles.copyIconContainer} onPress={copyToClipboard} activeOpacity={0.7}>
-                                        <Ionicons name="copy-outline" size={18} color="#495057" />
+                        {selectedItem.modal.cupomCode ? (
+                            <View style={styles.couponContainer}>
+                                <View style={styles.couponIconContainer}>
+                                    <MaterialIcons name="local-fire-department" size={40} color="#146C43" />
+                                </View>
+                                <View style={styles.couponContent}>
+                                    <Text style={styles.couponText}>{t("modalCommerce.getDiscount")}</Text>
+                                    <Text style={styles.couponCodeText}>{t("modalCommerce.discountCode")}</Text>
+                                    <View style={styles.couponInputContainer}>
+                                        <TextInput
+                                            cursorColor={'#ADB5BD'}
+                                            style={styles.couponInput}
+                                            value={selectedItem.modal.cupomCode}
+                                            placeholderTextColor={'#ADB5BD'}
+                                            editable={false}
+                                        />
+                                        <TouchableOpacity style={styles.copyIconContainer} onPress={copyToClipboard} activeOpacity={0.7}>
+                                            <Ionicons name="copy-outline" size={18} color="#495057" />
+                                        </TouchableOpacity>
+                                    </View>
+                                    <TouchableOpacity style={styles.accessButtonContainer} activeOpacity={0.7}>
+                                        <View style={styles.accessButton}>
+                                            <Text style={styles.accessButtonText}>{t("modalCommerce.access")}</Text>
+                                        </View>
                                     </TouchableOpacity>
                                 </View>
-                                <TouchableOpacity style={styles.accessButtonContainer} activeOpacity={0.7}>
-                                    <View style={styles.accessButton}>
-                                        <Text style={styles.accessButtonText}>{t("modalCommerce.access")}</Text>
-                                    </View>
+                            </View>
+                        ) : (
+                            <View style={styles.noCouponContainer}>
+                                <View style={styles.noCouponIconContainer}>
+                                    <MaterialIcons name="local-fire-department" size={40} color="#146C43" />
+                                </View>
+                                <Text style={[styles.noCouponText, { marginTop: 5 }]}>{t("modalCommerce.getDiscountLocaly")}</Text>
+                                <TouchableOpacity style={{ flexDirection: 'row', marginTop: 4 }} onPress={copyToClipboard} activeOpacity={0.7}>
+                                    <Text style={[styles.noCouponText, { fontWeight: '700' }]}>{selectedItem.modal.cupomCode}</Text>
+                                    <Ionicons style={styles.copyIcon} name="copy-outline" size={20} color="black" />
                                 </TouchableOpacity>
                             </View>
-                        </View>
-                    ) : (
-                        <View style={styles.noCouponContainer}>
-                            <View style={styles.noCouponIconContainer}>
-                                <MaterialIcons name="local-fire-department" size={40} color="#146C43" />
-                            </View>
-                            <Text style={[styles.noCouponText, { marginTop: 5 }]}>{t("modalCommerce.getDiscountLocaly")}</Text>
-                            <TouchableOpacity style={{ flexDirection: 'row', marginTop: 4 }} onPress={copyToClipboard} activeOpacity={0.7}>
-                                <Text style={[styles.noCouponText, { fontWeight: '700' }]}>{selectedItem.modal.cupomCode}</Text>
-                                <Ionicons style={styles.copyIcon} name="copy-outline" size={20} color="black" />
-                            </TouchableOpacity>
-                        </View>
-                    )}
+                        )}
 
-                    <View style={styles.section}>
-                        <View style={styles.discountContainer}>
-                            <Text style={styles.discountTitle}>{t("modalCommerce.discountBase")}</Text>
-                            <View style={styles.discountValueContainer}>
-                                <Text style={styles.discountValue}>{selectedItem.modal.baseDiscount}</Text>
-                                <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#D9A100" style={styles.ticketIcon} />
-                            </View>
-                        </View>
-
-                        {selectedItem.modal.flexDiscount && selectedItem.modal.flexDiscount.length > 0 &&
-                            selectedItem.modal.flexDiscount.map((item: flexDiscountProps, index: number) => (
-                                <View key={index} style={styles.discountContainer}>
-                                    <Text style={styles.discountTitle}>
-                                        {t("modalCommerce.discountAbove")} {item.value} {item.currency}
-                                    </Text>
-                                    <View style={styles.discountValueContainer}>
-                                        <Text style={styles.discountValue}>{item.discount}</Text>
-                                        <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#D9A100" style={styles.ticketIcon} />
-                                    </View>
+                        <View style={styles.section}>
+                            <View style={styles.discountContainer}>
+                                <Text style={styles.discountTitle}>{t("modalCommerce.discountBase")}</Text>
+                                <View style={styles.discountValueContainer}>
+                                    <Text style={styles.discountValue}>{selectedItem.modal.baseDiscount}</Text>
+                                    <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#D9A100" style={styles.ticketIcon} />
                                 </View>
-                            ))
-                        }
-                    </View>
+                            </View>
 
-                    <View style={styles.aboutContainer}>
-                        <Text style={styles.aboutTitle}>{t("modalCommerce.about")}</Text>
-                        <ScrollView
-                            contentContainerStyle={{ flexGrow: 1 }}
-                        >
-                            <WebView
-                                style={[styles.aboutText, { height: 200 }]}
-                                originWhitelist={['*']}
-                                nestedScrollEnabled
-                                source={{
-                                    html:
-                                        `<div style='font-size: 40px; color: #4A4949'>${selectedItem.modal.about || ''}</div>`
-                                }}
-                                onShouldStartLoadWithRequest={(request) => {
-                                    if (request.url.startsWith('http')) {
-                                        Linking.openURL(request.url);
+                            {selectedItem.modal.flexDiscount && selectedItem.modal.flexDiscount.length > 0 &&
+                                selectedItem.modal.flexDiscount.map((item: flexDiscountProps, index: number) => (
+                                    <View key={index} style={styles.discountContainer}>
+                                        <Text style={styles.discountTitle}>
+                                            {t("modalCommerce.discountAbove")} {item.value} {item.currency}
+                                        </Text>
+                                        <View style={styles.discountValueContainer}>
+                                            <Text style={styles.discountValue}>{item.discount}</Text>
+                                            <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#D9A100" style={styles.ticketIcon} />
+                                        </View>
+                                    </View>
+                                ))
+                            }
+
+                            <View style={styles.discountContainer}>
+                                <Text style={styles.discountTitle}>{t("modalCommerce.burn")}</Text>
+                                <View style={styles.burnValueContainer}>
+                                    <Text style={styles.burnValue}>{selectedItem.modal.baseDiscount}</Text>
+                                    <MaterialIcons name="local-fire-department" size={16} color="#520DC2" style={styles.ticketIcon} />
+                                </View>
+                            </View>
+                        </View>
+
+                        <View style={styles.aboutContainer}>
+                            <Text style={styles.aboutTitle}>{t("modalCommerce.about")}</Text>
+                            <ScrollView
+                                contentContainerStyle={{ flexGrow: 1 }}
+                            >
+                                <WebView
+                                    style={[styles.aboutText, { height: 200 }]}
+                                    originWhitelist={['*']}
+                                    nestedScrollEnabled
+                                    source={{
+                                        html:
+                                            `<div style='font-size: 40px; color: #4A4949'>${selectedItem.modal.about || ''}</div>`
+                                    }}
+                                    onShouldStartLoadWithRequest={(request) => {
+                                        if (request.url.startsWith('http')) {
+                                            Linking.openURL(request.url);
+                                            return false;
+                                        }
                                         return false;
-                                    }
-                                    return false;
-                                }}
-                            />
-                        </ScrollView>
+                                    }}
+                                />
+                            </ScrollView>
+                        </View>
                     </View>
-                </View>
-            )}
-        </ScrollView>
+                )}
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
@@ -568,8 +579,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    burnValueContainer: {
+        backgroundColor: '#E0CFFC',
+        flexDirection: 'row',
+        paddingVertical: 4,
+        paddingHorizontal: 8,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     discountValue: {
         color: '#D9A100',
+        fontSize: fontSize.labels.medium,
+        fontWeight: '700',
+    },
+    burnValue: {
+        color: '#520DC2',
         fontSize: fontSize.labels.medium,
         fontWeight: '700',
     },

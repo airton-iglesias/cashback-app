@@ -4,8 +4,8 @@ import { fontSize } from "@/constants/fonts";
 
 export default function CommerceHeader({ Title, SubTitle, ScreenGoback, ScreenClose }: any) {
     return (
-        <View style={[styles.headerContainer, ScreenGoback ? {paddingHorizontal: 20}:null]}>
-            {ScreenGoback ?
+        <View style={[styles.headerContainer, ScreenGoback ? { paddingHorizontal: 20 } : null]}>
+            {ScreenGoback && (
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.backButton}
@@ -13,13 +13,14 @@ export default function CommerceHeader({ Title, SubTitle, ScreenGoback, ScreenCl
                 >
                     <Octicons name="chevron-left" size={32} color="black" />
                 </TouchableOpacity>
-                : null
-            }
+            )}
+
             <View style={styles.headerTextContainer}>
-                <Text style={[styles.headerTitle, ScreenGoback ? {marginLeft: 24}:null]} >{Title}</Text>
-                {SubTitle ? <Text style={styles.headerSubtitle}>{SubTitle}</Text> : null}
+                <Text style={[styles.headerTitle, ScreenGoback && { marginLeft: 24 }]} >{Title}</Text>
+                {SubTitle && <Text style={styles.headerSubtitle}>{SubTitle}</Text>}
             </View>
-            {ScreenClose ?
+
+            {ScreenClose && (
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.closeButton}
@@ -27,8 +28,7 @@ export default function CommerceHeader({ Title, SubTitle, ScreenGoback, ScreenCl
                 >
                     <AntDesign name="close" size={28} color="black" />
                 </TouchableOpacity>
-                : null
-            }
+            )}
 
         </View>
     );
@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
         height: 80,
         borderBottomWidth: 1,
         borderColor: '#DADADA',
-        marginTop: 30
 
     },
     backButton: {

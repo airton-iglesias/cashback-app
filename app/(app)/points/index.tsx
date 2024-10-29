@@ -1,26 +1,16 @@
-import React, { useState } from 'react';
-import { Image, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Feather, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Feather, Octicons } from '@expo/vector-icons';
 import Topbar from '@/components/header';
 import InfoCloudIcon from '@/assets/icons/infoCloudIcon';
 import Sidebar from '@/components/sidebar';
-import {useLocale} from "@/contexts/TranslationContext";
+import { useLocale } from "@/contexts/TranslationContext";
 import { fontSize } from '@/constants/fonts';
 import NotificationSidebar from '@/components/notificationSidebar';
-
-type CommerceData = {
-    name: string;
-    promotion?: {
-        name: string;
-        id: string;
-        role: string;
-    };
-    event?: {
-        name: string;
-        id: string;
-        role: string;
-    };
-};
+import ListCommerces from '@/components/commerce/listCommerces';
+import { Skeleton } from 'moti/skeleton';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import EstablishmentSkeleton from '@/components/establishmentSkeleton';
 
 export default function Points() {
 
@@ -30,23 +20,54 @@ export default function Points() {
     const [showSidebar, setShowSidebar] = useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(true);
     const [showNotifications, setShowNotifications] = useState(false);
+    const [loading, setLoading] = useState(true)
     const { t } = useLocale();
+    const [commerceDatas, setCommerceDatas] = useState<any>([]);
+    const insets = useSafeAreaInsets();
 
-    const commerceDatas: CommerceData[] = [
-        {
-            name: 'Nome do comercio',
-            promotion: {
-                name: 'Nome da promoção',
-                id: '#99999',
-                role: 'Administrador'
-            },
-            event: {
-                name: 'Nome do evento',
-                id: '#99999',
-                role: 'Administrador'
-            },
-        },
-    ];
+    useEffect(() => {
+        const fetchSelectDatas = async () => {
+            /* make the request to the API here
+            //Example: 
+            const selectDataReponse = await
+                fetch('domain of application here', {
+                    method: 'GET',
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Something went wrong');
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+            */
+
+            //temporary variable
+            const dataReponse: any = [{
+                name: 'Nome do comercio',
+                amount_points: "2.552",
+                promotion: {
+                    name: 'Nome da promoção',
+                    id: '#99999',
+                    role: 'Administrador'
+                },
+                event: {
+                    name: 'Nome do evento',
+                    id: '#99999',
+                    role: 'Administrador'
+                },
+            }];
+
+            setTimeout(() => {
+                setCommerceDatas(dataReponse);
+                setLoading(false);
+            }, 2000);
+        }
+
+        fetchSelectDatas();
+    }, []);
 
     const openSidebar = () => {
         setShowSidebar(true);
@@ -73,152 +94,100 @@ export default function Points() {
     };
 
     return (
-        <SafeAreaView style={styles.safeArea}>
-            {showTopbar && <Topbar openSidebar={openSidebar} openNotifications={openNotifications} />}
-            {showSidebar && <Sidebar closeSidebar={closeSidebar} isSidebarOpen={isSidebarOpen} />}
-            {showNotifications && <NotificationSidebar closeSidebar={closeNotifications} isSidebarOpen={isNotificationsOpen} />}
-            <View style={styles.relative}>
-                <View style={styles.infoButtonContainer}>
-                    <TouchableOpacity style={styles.infoButton}
-                        onPress={() => setModalVisible(true)}
-                    >
-                        <InfoCloudIcon size={26} color={'#3b82f6'} style={{ marginTop: 3 }} />
-                        <Text style={styles.infoButtonText}>{t("points.info")}</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.pointsContainer}>
-                    <View style={styles.starsContainer}>
-                        <Feather name="star" size={13} color="gray" />
-                        <Feather name="star" size={13} color="gray" />
-                        <Feather name="star" size={13} color="black" />
-                        <Feather name="star" size={13} color="gray" />
-                        <Feather name="star" size={13} color="gray" />
+        <View style={[styles.container, { paddingTop: insets.top}, modalVisible ? {backgroundColor: 'white'}:{backgroundColor: '#212121'} ]}>
+            <View style={{ backgroundColor: 'white', flex: 1 }}>
+                {showTopbar && <Topbar openSidebar={openSidebar} openNotifications={openNotifications} />}
+                {showSidebar && <Sidebar closeSidebar={closeSidebar} isSidebarOpen={isSidebarOpen} />}
+                {showNotifications && <NotificationSidebar closeSidebar={closeNotifications} isSidebarOpen={isNotificationsOpen} />}
+                <View style={styles.relative}>
+                    <View style={styles.infoButtonContainer}>
+                        <TouchableOpacity style={styles.infoButton}
+                            onPress={() => setModalVisible(true)}
+                        >
+                            <InfoCloudIcon size={26} color={'#3b82f6'} style={{ marginTop: 3 }} />
+                            <Text style={styles.infoButtonText}>{t("points.info")}</Text>
+                        </TouchableOpacity>
                     </View>
-                    <Text style={styles.pointsText}>2.552</Text>
+                    <View style={styles.pointsContainer}>
+                        <View style={styles.starsContainer}>
+                            <Feather name="star" size={13} color="gray" />
+                            <Feather name="star" size={13} color="gray" />
+                            <Feather name="star" size={13} color="black" />
+                            <Feather name="star" size={13} color="gray" />
+                            <Feather name="star" size={13} color="gray" />
+                        </View>
+                        <View style={{ marginTop: 24, alignItems: 'center' }}>
+                            <Skeleton
+                                show={loading}
+                                width={'60%'}
+                                height={55}
+                                colorMode='light'
+                            >
+                                {loading ? null : <Text style={[styles.pointsText, { alignSelf: 'center' }]}>{commerceDatas[0].amount_points}</Text>}
+                            </Skeleton>
+                        </View>
+                    </View>
+
+
+                    {loading ?
+                        <EstablishmentSkeleton />
+                        :
+                        <FlatList
+                            data={commerceDatas}
+                            renderItem={({ item }) => <ListCommerces data={item} />}
+                            contentContainerStyle={{ paddingBottom: 110 }}
+                        />
+                    }
+
+
                 </View>
 
-                <ScrollView>
-                    {commerceDatas.map((data, index) => (
-                        <View key={index} style={[styles.sectionContainer, index % 2 == 0 ? { backgroundColor: '#F8F9FA' } : { backgroundColor: 'white' }]}>
-                            <View style={[styles.cardContainer, { gap: 30 }]} key={index}>
+                <Modal
+                    animationType="slide"
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalHeaderContainer}>
+                        <TouchableOpacity
+                            style={styles.modalBackButton}
+                            onPress={() => setModalVisible(false)}
+                        >
+                            <Octicons name="chevron-left" size={32} color="black" />
+                            <Text style={styles.modalHeaderText}>{t("points.modal.headerLabel")}</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                                <View>
-                                    <View style={styles.card}>
-                                        <Image source={require('@/assets/images/sorveteria.png')} style={styles.image} />
-                                        <View style={styles.cardContent}>
-                                            <Text style={styles.cardTitle}>{data.name}</Text>
-                                            <View style={styles.cardDetails}>
-                                                <Feather name="user" size={16} color="#635C5C" />
-                                                <Text style={styles.cardDetailText}>Administrador</Text>
-                                                <View style={styles.cardDetailItem}>
-                                                    <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
-                                                    <Text style={styles.cardDetailText}>#99999</Text>
-                                                </View>
-                                            </View>
-                                            <View style={[styles.cardStatus, { backgroundColor: '#D1E7DD', }]}>
-                                                <Text style={[styles.cardStatusText, { color: '#0A3622' }]}>{t("points.permanent")}</Text>
-                                            </View>
-                                        </View>
-                                        {data.promotion || data.event ? (<View style={styles.separator}></View>) : null}
-                                    </View>
-                                </View>
-
-                                {data.promotion && (
-                                    <View>
-                                        <View style={styles.card}>
-                                            <Image source={require('@/assets/images/sorveteria2.png')} style={[styles.image, styles.roundedImage]} />
-                                            <View style={styles.cardContent}>
-                                                <Text style={styles.cardTitle}>{data.promotion?.name || t("points.withoutInfo")}</Text>
-                                                <View style={styles.cardDetails}>
-                                                    <Feather name="user" size={16} color="#635C5C" />
-                                                    <Text style={styles.cardDetailText}>{data.promotion?.role || t("points.withoutInfo")}</Text>
-                                                    <View style={styles.cardDetailItem}>
-                                                        <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
-                                                        <Text style={styles.cardDetailText}>{data.promotion?.id || t("points.withoutInfo")}</Text>
-                                                    </View>
-                                                </View>
-                                                <View style={[styles.cardStatus, { backgroundColor: '#CFF4FC', }]}>
-                                                    <Text style={[styles.cardStatusText, { color: '#055160' }]}>{t("points.promotion")}</Text>
-                                                </View>
-                                            </View>
-                                            {data.event && (<View style={styles.separator}></View>)}
-                                        </View>
-                                    </View>
-                                )}
-
-                                {data.event && (
-                                    <View>
-                                        <View style={styles.card}>
-                                            <Image source={require('@/assets/images/sorveteria3.png')} style={[styles.image, styles.roundedImage]} />
-                                            <View style={styles.cardContent}>
-                                                <Text style={styles.cardTitle}>{data.event?.name || t("points.withoutInfo")}</Text>
-                                                <View style={styles.cardDetails}>
-                                                    <Feather name="user" size={16} color="#635C5C" />
-                                                    <Text style={styles.cardDetailText}>{data.event?.role || t("points.withoutInfo")}</Text>
-                                                    <View style={styles.cardDetailItem}>
-                                                        <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#635C5C" />
-                                                        <Text style={styles.cardDetailText}>{data.event?.id || t("points.withoutInfo")}</Text>
-                                                    </View>
-                                                </View>
-                                                <View style={[styles.cardStatus, { backgroundColor: '#FFF3CD', }]}>
-                                                    <Text style={[styles.cardStatusText, { color: '#664D03' }]}>{t("points.event")}</Text>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
-                                )}
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalIconContainer}>
+                            <View style={styles.modalIconBackground}>
+                                <InfoCloudIcon width={36} height={36} color={'#3b82f6'} />
+                            </View>
+                            <View style={styles.modalTitleContainer}>
+                                <Text style={styles.modalTitle}>{t("points.modal.title1")}</Text>
+                                <Text style={styles.modalTitle}>{t("points.modal.title2")}</Text>
                             </View>
                         </View>
-                    ))}
-                </ScrollView>
-
+                        <View style={styles.modalContent}>
+                            <View style={styles.modalSection}>
+                                <Text style={styles.modalSectionTitle}>{t("points.modal.deductionPoints")}</Text>
+                                <Text style={styles.modalSectionText}>{t("points.modal.deductionDescription")}</Text>
+                            </View>
+                            <View style={styles.modalSection}>
+                                <Text style={styles.modalSectionTitleAdd}>{t("points.modal.additionPoints")}</Text>
+                                <Text style={styles.modalSectionText}>{t("points.modal.additionDescription")}</Text>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
             </View>
-
-            <Modal
-                animationType="slide"
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalHeaderContainer}>
-                    <TouchableOpacity
-                        style={styles.modalBackButton}
-                        onPress={() => setModalVisible(false)}
-                    >
-                        <Octicons name="chevron-left" size={32} color="black" />
-                        <Text style={styles.modalHeaderText}>{t("points.modal.headerLabel")}</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalIconContainer}>
-                        <View style={styles.modalIconBackground}>
-                            <InfoCloudIcon width={36} height={36} color={'#3b82f6'} />
-                        </View>
-                        <View style={styles.modalTitleContainer}>
-                            <Text style={styles.modalTitle}>{t("points.modal.title1")}</Text>
-                            <Text style={styles.modalTitle}>{t("points.modal.title2")}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.modalContent}>
-                        <View style={styles.modalSection}>
-                            <Text style={styles.modalSectionTitle}>{t("points.modal.deductionPoints")}</Text>
-                            <Text style={styles.modalSectionText}>{t("points.modal.deductionDescription")}</Text>
-                        </View>
-                        <View style={styles.modalSection}>
-                            <Text style={styles.modalSectionTitleAdd}>{t("points.modal.additionPoints")}</Text>
-                            <Text style={styles.modalSectionText}>{t("points.modal.additionDescription")}</Text>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-        </SafeAreaView>
+        </View>
     );
 }
 
+
 const styles = StyleSheet.create({
-    safeArea: {
+    container: {
         flex: 1,
-        backgroundColor: 'white',
     },
     modalBackButton: {
         position: 'absolute',
@@ -249,12 +218,13 @@ const styles = StyleSheet.create({
     },
     relative: {
         position: 'relative',
-        paddingTop: 110
+        paddingTop: 80,
+        flex: 1
     },
     infoButtonContainer: {
         position: 'absolute',
         right: 24,
-        top: 135,
+        top: 95,
         alignItems: 'center',
         zIndex: 10,
     },
@@ -283,7 +253,6 @@ const styles = StyleSheet.create({
     pointsText: {
         fontSize: fontSize.titles.superlarge,
         fontWeight: 'bold',
-        marginTop: 24,
     },
     sectionRow: {
         flexDirection: 'row',

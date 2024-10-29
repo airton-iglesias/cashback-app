@@ -5,10 +5,12 @@ interface SidebarContextProps {
   isNotificationsOpen: boolean;
   showSidebar: boolean;
   showNotifications: boolean;
+  showTopbar: boolean;
   openSidebar: () => void;
   closeSidebar: () => void;
   openNotifications: () => void;
   closeNotifications: () => void;
+  hideTopbar: (value: boolean) => void;
 }
 
 const SidebarContext = createContext<SidebarContextProps | undefined>(undefined);
@@ -27,6 +29,8 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  const [showTopbar, setShowTopbar] = useState(true);
 
   const openSidebar = () => {
     setShowSidebar(true);
@@ -52,6 +56,11 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }, 300);
   };
 
+  const hideTopbar = (value: boolean) => {
+    setShowTopbar(value);
+  };
+  
+
   return (
     <SidebarContext.Provider
       value={{
@@ -63,6 +72,8 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
         closeSidebar,
         openNotifications,
         closeNotifications,
+        showTopbar,
+        hideTopbar
       }}
     >
       {children}

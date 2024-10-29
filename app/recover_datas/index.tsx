@@ -1,15 +1,51 @@
-import { SafeAreaView, TouchableOpacity, View, StyleSheet, Text } from "react-native";
+import { TouchableOpacity, View, StyleSheet, Text, ActivityIndicator } from "react-native";
 import { Octicons, Feather } from '@expo/vector-icons';
 import Input from "@/components/input";
 import { useState } from "react";
 import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
 import { fontSize } from "@/constants/fonts";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RecoveryDatas() {
 
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState<string>('');
+
+    const [loading, setLoading] = useState<boolean>(false);
     const { t } = useLocale();
+
+    const handleSubmit = async () => {
+        setLoading(true);
+        /* make the request to the API here
+        //Example: 
+        const loginResponse = await
+            fetch('domain of application here', {
+                method: 'POST',
+                body: JSON.stringify({
+                    email: email,
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+            .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Something went wrong');
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+
+            //...Other things
+        */
+
+        setTimeout(() => {
+            setLoading(false);
+            router.replace("/recover_datas/checkinbox");
+        }, 1000);
+    }
 
     return (
         <SafeAreaView>
@@ -37,10 +73,15 @@ export default function RecoveryDatas() {
                     <TouchableOpacity
                         activeOpacity={0.6}
                         style={styles.buttonWrapper}
-                        onPress={() => router.push('/recover_datas/checkinbox')}
+                        onPress={handleSubmit}
+                        disabled={loading}
                     >
                         <View style={styles.submitButton}>
-                            <Feather name="arrow-right" size={24} color={'white'} />
+                            {loading ?
+                                <ActivityIndicator size={24} color="#fff" />
+                                :
+                                <Feather name="arrow-right" size={24} color={'white'} />
+                            }
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -53,13 +94,12 @@ export default function RecoveryDatas() {
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        paddingTop: 30,
         justifyContent: 'space-between',
-        height: '100%'
+        height: '100%',
     },
     backButton: {
         position: 'absolute',
-        left: 25,
+        left: 15,
         width: 70,
         height: 40,
         paddingTop: 3,
@@ -80,12 +120,11 @@ const styles = StyleSheet.create({
         position: 'relative',
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 20,
         width: '100%',
-        height: 80,
+        height: 70,
         borderBottomWidth: 1,
         borderColor: '#DADADA',
-        marginBottom: 10
+        marginBottom: 10,
     },
     headerText: {
         fontSize: fontSize.titles.medium,

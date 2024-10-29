@@ -3,25 +3,26 @@ import {
     Image, SafeAreaView, Text, TouchableWithoutFeedback,
     View, KeyboardAvoidingView, StyleSheet,
     TouchableOpacity,
-    Keyboard
+    Keyboard,
+    ActivityIndicator
 } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import CheckBox from "@/components/checkbox";
 import { useLocale } from "@/contexts/TranslationContext";
 import LanguageModal from "@/components/languageModal";
 import Input from "@/components/input";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { fontSize } from "@/constants/fonts";
 
 export default function SigninScreen() {
-
-    const { t } = useLocale();
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isChecked, setChecked] = useState(false);
+
+    const { t } = useLocale();
     const [modalVisible, setModalVisible] = useState(false);
     const [keyboardIsVisible, setKeyboardIsVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -42,8 +43,40 @@ export default function SigninScreen() {
         setTimeout(() => {
             setModalVisible(true)
         }, 300)
+    }, []);
 
-    }, [])
+    const handleSubmit = async () => {
+        setLoading(true);
+        /* make the request to the API here
+        //Example: 
+        const loginResponse = await
+            fetch('domain of application here', {
+                method: 'POST',
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+            .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Something went wrong');
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+
+            //...Other things
+        */
+        setTimeout(() => {
+            setLoading(false);
+            router.replace("/pin");
+        }, 1000);
+    }
 
     const handleCheck = () => {
         setChecked(!isChecked);
@@ -54,22 +87,24 @@ export default function SigninScreen() {
     };
 
     return (
-        <SafeAreaView style={[styles.container, keyboardIsVisible ? { paddingTop: 70 } : null]}>
+        <SafeAreaView style={[styles.container, keyboardIsVisible && ({ paddingTop: 70 })]}>
             <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
                 <LanguageModal
                     modalVisible={modalVisible}
                     handleCloseModal={handleCloseModal}
                 />
 
-                {keyboardIsVisible ?
-                    null
-                    :
+                {!keyboardIsVisible && (
                     <View style={styles.logoContainer}>
                         <View style={styles.logo}>
-                            <Text style={styles.logoText}>LOGO</Text>
+                            <Image
+                                source={require("@/assets/images/logo-light.png")}
+                                resizeMode="contain"
+                                style={styles.logoImage}
+                            />
                         </View>
                     </View>
-                }
+                )}
 
                 <View style={styles.contentWrapper}>
 
@@ -107,20 +142,26 @@ export default function SigninScreen() {
                 </View>
 
                 <View style={styles.buttonContainer}>
-                    <Link replace href={"/pin"} asChild>
-                        <TouchableOpacity
-                            activeOpacity={0.7}
-                            style={styles.buttonWrapper}
-                        >
-                            <View style={styles.submitButton}>
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={styles.buttonWrapper}
+                        onPress={handleSubmit}
+                        disabled={loading}
+                    >
+                        <View style={styles.submitButton}>
+                            {loading ? 
+                                <ActivityIndicator size={24} color="#fff" />
+                                :
                                 <Feather name="arrow-right" size={24} color={'white'} />
-                            </View>
-                        </TouchableOpacity>
-                    </Link>
+                            }
+                        </View>
+                    </TouchableOpacity>
+
 
                     <TouchableOpacity
                         activeOpacity={0.7}
                         style={styles.buttonWrapper}
+                        disabled={loading}
                     >
                         <View style={styles.googleButton}>
                             <Image source={require("@/assets/icons/google-icon.png")} style={styles.googleIcon} />
@@ -254,4 +295,10 @@ const styles = StyleSheet.create({
         fontSize: 60,
         fontWeight: 'bold',
     },
+    logoImage: {
+        flex: 1, 
+        width: '100%', 
+        height: '100%', 
+        backgroundColor: 'white'
+    }
 });

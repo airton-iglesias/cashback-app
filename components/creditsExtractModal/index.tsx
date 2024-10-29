@@ -1,41 +1,74 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView, Modal } from 'react-native';
-import { Octicons } from '@expo/vector-icons';
+import { Octicons, Feather } from '@expo/vector-icons';
 import { useLocale } from '@/contexts/TranslationContext';
 import { fontSize } from '@/constants/fonts';
+import ExtractSkeleton from '../extractSkeleton';
 
 interface ModalExtractProps {
     modalVisible: boolean;
     handleCloseModal: () => void;
 }
 
-const Item = ({ date, transactionId, amount, positive }: any) => (
+const Item = ({  date, transactionId, amount, deleted, positive }: any) => (
     <View style={styles.item}>
-        <View style={{ justifyContent: 'center', marginTop: 5 }}>
-            <Text style={styles.date}>{date}</Text>
-            <Text style={styles.transactionId}>ID: {transactionId}</Text>
+        <View style={{ justifyContent: 'space-around', height: '100%' }}>
+            <Text style={[styles.date, deleted && styles.deletedText]}>{date}</Text>
+            <Text style={[styles.transactionId, deleted && styles.deletedText]}>ID: {transactionId}</Text>
         </View>
         <View>
-            <Text style={[styles.amount, positive ? styles.positive : styles.negative]}>{amount}</Text>
+            <Text style={[styles.amount, deleted && styles.deletedText, positive && styles.positive]}>{amount}</Text>
         </View>
     </View>
 );
 
 export default function CreditsExtractModal({ modalVisible, handleCloseModal }: ModalExtractProps) {
-    const [datas, setDatas] = useState([
-        { id: '1', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: true },
-        { id: '2', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-        { id: '3', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: true },
-        { id: '4', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-        { id: '5', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: true },
-        { id: '6', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-        { id: '7', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-        { id: '8', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-        { id: '9', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-        { id: '10', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-        { id: '11', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
-    ]);
     const { t } = useLocale();
+    const [loading, setLoading] = useState(true);
+    const [datas, setDatas] = useState<any>([]);
+
+    useEffect(() => {
+        const fetchSelectDatas = async () => {
+            /* make the request to the API here
+            //Example: 
+            const selectDataReponse = await
+                fetch('domain of application here', {
+                    method: 'GET',
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Something went wrong');
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+            */
+
+            //temporary variable
+            const dataReponse: any = [
+                { id: '1', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: true },
+                { id: '2', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+                { id: '3', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: true },
+                { id: '4', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+                { id: '5', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: true },
+                { id: '6', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+                { id: '7', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+                { id: '8', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+                { id: '9', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+                { id: '10', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+                { id: '11', date: '22/08/2024', transactionId: '983487', amount: '50,00', positive: false },
+            ];
+
+            setTimeout(() => {
+                setDatas(dataReponse);
+                setLoading(false);
+            }, 5000);
+        }
+
+        fetchSelectDatas();
+    }, []);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -54,18 +87,22 @@ export default function CreditsExtractModal({ modalVisible, handleCloseModal }: 
                     </TouchableOpacity>
                     <Text style={styles.headerText}>{t("dashboardWallat.creditsScreen.creditExtract")}</Text>
                 </View>
-                <FlatList
-                    data={datas}
-                    renderItem={({ item }) => (
-                        <Item
-                            date={item.date}
-                            transactionId={item.transactionId}
-                            amount={item.amount}
-                            positive={item.positive}
-                        />
-                    )}
-                    keyExtractor={item => item.id}
-                />
+
+                {loading ? <ExtractSkeleton /> :
+                    <FlatList
+                        data={datas}
+                        renderItem={({ item }) => (
+                            <Item
+                                date={item.date}
+                                transactionId={item.transactionId}
+                                amount={item.amount}
+                                positive={item.positive}
+                            />
+                        )}
+                        keyExtractor={item => item.id}
+                    />
+
+                }
             </Modal>
         </SafeAreaView>
     );
@@ -127,39 +164,50 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     item: {
+        position: 'relative',
         backgroundColor: 'white',
         paddingHorizontal: 20,
         paddingVertical: 15,
         borderWidth: 1,
         borderColor: '#DBDBDB',
-        marginVertical: 8,
+        marginVertical: 12,
         marginHorizontal: 15,
         borderRadius: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        height: 100
+    },
+    deletedText: {
+        opacity: 0.6,
+    },
+    whoDeleted: {
+        fontSize: fontSize.labels.medium,
+    },
+    trashIcon: {
+        position: 'absolute',
+        backgroundColor: '#F8D7DA',
+        padding: 10,
+        borderRadius: 999,
+        top: -20,
+        right: -10
     },
     date: {
         fontSize: fontSize.labels.extralarge,
         color: '#495057',
         fontWeight: '400'
-
     },
     transactionId: {
         fontSize: fontSize.labels.medium,
-        marginBottom: 10,
         fontWeight: 'bold',
-        marginTop: 5
     },
     amount: {
         fontSize: fontSize.titles.medium,
         fontWeight: 'bold',
+        color: 'red',
     },
     positive: {
         color: 'green',
-    },
-    negative: {
-        color: 'red',
     },
 });
 

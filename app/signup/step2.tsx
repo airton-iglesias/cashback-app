@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocalSearchParams } from 'expo-router';
+import React, { Suspense, useEffect, useState } from 'react';
+import { Link, router, useLocalSearchParams } from 'expo-router';
 import {
-    Dimensions, Image, Keyboard, KeyboardAvoidingView, SafeAreaView,
+    ActivityIndicator,
+    Image, Keyboard, KeyboardAvoidingView, SafeAreaView,
     StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
@@ -11,46 +12,99 @@ import SelectOption from '@/components/selectOption';
 import { useLocale } from '@/contexts/TranslationContext';
 import Input from '@/components/input';
 import { fontSize } from '@/constants/fonts';
-
-
-const windowHeight = Dimensions.get('window').height;
+import { Skeleton } from 'moti/skeleton'
 
 export default function SigninScreen() {
-    const { email, password } = useLocalSearchParams();
     const [image, setImage] = useState<any>(null);
     const [name, setName] = useState<string>('');
     const [codeBonus, setCodeBonus] = useState<string>('');
     const [country, setCountry] = useState<string>('');
     const [currency, setCurrency] = useState<string>('');
+
     const [keyboardIsVisible, setKeyboardIsVisible] = useState(false);
+    const [countryOptions, setCountryOptions] = useState([]);
+    const [currencyOptions, setCurrencyOptions] = useState([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [selectLoading, setSelectLoading] = useState<boolean>(true);
     const { t } = useLocale();
 
-    const countryOptions = [
-        { id: 1, text: 'Portugal', flag: 'PT' },
-        { id: 2, text: 'Brasil', flag: 'BR' },
-        { id: 3, text: 'Estados Unidos', flag: 'US' },
-    ];
-
-    const currencyOptions = [
-        { id: 1, text: 'EUR', flag: 'EU' },
-        { id: 2, text: 'BRL', flag: 'BR' },
-        { id: 3, text: 'USD', flag: 'US' },
-    ];
-
     useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-            setKeyboardIsVisible(true);
-        });
+        const fetchSelectDatas = async () => {
+            /* make the request to the API here
+            //Example: 
+            const selectDataReponse = await
+                fetch('domain of application here', {
+                    method: 'GET',
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Something went wrong');
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+            */
 
-        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-            setKeyboardIsVisible(false);
-        });
+            //temporary variable
+            const selectDataReponse: any = {
+                country: [
+                    { id: 1, text: 'Portugal', flag: 'PT' },
+                    { id: 2, text: 'Brasil', flag: 'BR' },
+                    { id: 3, text: 'Estados Unidos', flag: 'US' },
+                ],
+                currency: [
+                    { id: 1, text: 'EUR', flag: 'EU' },
+                    { id: 2, text: 'BRL', flag: 'BR' },
+                    { id: 3, text: 'USD', flag: 'US' }
+                ]
+            };
 
-        return () => {
-            keyboardDidShowListener.remove();
-            keyboardDidHideListener.remove();
-        };
+            setTimeout(() => {
+                setCountryOptions(selectDataReponse.country);
+                setCurrencyOptions(selectDataReponse.currency);
+                setSelectLoading(false);
+            }, 2000);
+        }
+
+        fetchSelectDatas();
     }, []);
+
+    const handleSubmit = async () => {
+        setLoading(true);
+        /* make the request to the API here
+        Example: 
+        
+        const loginReponse = await
+            fetch('domain of application here', {
+                method: 'POST',
+                body: JSON.stringify({
+                    image: image,
+                    name: name,
+                    codeBonus: codeBonus,
+                    country: country,
+                    currency: currency
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Something went wrong');
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+        */
+        setTimeout(() => {
+            setLoading(false);
+            router.navigate("/signup/step3");
+        }, 1000);
+    };
 
     const handleImagePick = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -71,14 +125,25 @@ export default function SigninScreen() {
         }
     };
 
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+            setKeyboardIsVisible(true);
+        });
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+            setKeyboardIsVisible(false);
+        });
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
+
     return (
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
                 <View style={styles.contentWrapper}>
 
-                    {keyboardIsVisible ?
-                        null
-                        :
+                    {!keyboardIsVisible && (
                         <View style={styles.imageContainer}>
                             <TouchableWithoutFeedback onPress={handleImagePick} style={{ borderRadius: 8 }}>
                                 {image ? (
@@ -101,7 +166,7 @@ export default function SigninScreen() {
                                 )}
                             </TouchableWithoutFeedback>
                         </View>
-                    }
+                    )}
 
                     <View style={styles.inputGroup}>
                         <Input
@@ -113,23 +178,49 @@ export default function SigninScreen() {
 
                     <View style={styles.inputGroup}>
                         <Text style={styles.label}>{t('signup.signup_step_1.country')}</Text>
-                        <Select
-                            options={countryOptions}
-                            onChangeSelect={(item: any) => setCountry(`${item.text}`)}
-                            text={t("signup.signup_step_1.select_country")}
-                            SelectOption={SelectOption}
-                        />
+
+                        <Skeleton
+                            show={selectLoading}
+                            colorMode='light'
+                            width={'100%'}
+                            height={48}
+                        >
+                            {selectLoading ?
+                                null
+                                :
+                                <Select
+                                    options={countryOptions}
+                                    onChangeSelect={(item: any) => setCountry(`${item.text}`)}
+                                    text={t("signup.signup_step_1.select_country")}
+                                    SelectOption={SelectOption}
+                                />
+                            }
+                        </Skeleton>
+
                     </View>
 
                     <View style={styles.inputGroup}>
                         <Text style={styles.label}>{t('signup.signup_step_1.currency')}</Text>
-                        <Select
-                            options={currencyOptions}
-                            onChangeSelect={(item: any) => setCurrency(`${item.text}`)}
-                            text={t("signup.signup_step_1.select_currency")}
-                            SelectOption={SelectOption}
-                        />
+                        <Skeleton
+                            show={selectLoading}
+                            colorMode='light'
+                            width={'100%'}
+                            height={48}
+                        >
+                            {selectLoading ?
+                                null
+                                :
+                                <Select
+                                    options={currencyOptions}
+                                    onChangeSelect={(item: any) => setCurrency(`${item.text}`)}
+                                    text={t("signup.signup_step_1.select_currency")}
+                                    SelectOption={SelectOption}
+                                />
+                            }
+                        </Skeleton>
+
                     </View>
+
                     <View>
                         <View style={styles.bonusCodeLabelWrapper}>
                             <Text style={styles.label}>{t("signup.signup_step_1.bonus_code")}</Text>
@@ -142,22 +233,20 @@ export default function SigninScreen() {
                 </View>
 
                 <View style={styles.buttonContainer}>
-                    <Link href={{
-                        pathname: '/signup/step3', params: {
-                            email: email, password: password, image: image,
-                            name: name, codeBonus: codeBonus, country: country,
-                            currency: currency
-                        }
-                    }} asChild>
-                        <TouchableOpacity
-                            activeOpacity={0.7}
-                            style={styles.buttonWrapper}
-                        >
-                            <View style={styles.submitButton}>
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={styles.buttonWrapper}
+                        onPress={handleSubmit}
+                        disabled={loading}
+                    >
+                        <View style={styles.submitButton}>
+                            {loading ?
+                                <ActivityIndicator size={24} color="#fff" />
+                                :
                                 <Feather name="arrow-right" size={24} color={'white'} />
-                            </View>
-                        </TouchableOpacity>
-                    </Link>
+                            }
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
         </SafeAreaView >
@@ -170,7 +259,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         paddingHorizontal: 15,
         paddingBottom: 10,
-        paddingTop: 70
+        paddingTop: 70,
     },
     keyboardAvoidingView: {
         flex: 1,
@@ -205,7 +294,7 @@ const styles = StyleSheet.create({
     },
     contentWrapper: {
         flexGrow: 1,
-        gap: 7
+        gap: 10
     },
     header: {
         width: '100%',

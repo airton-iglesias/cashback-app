@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
@@ -6,97 +6,51 @@ import { useLocale } from '@/contexts/TranslationContext';
 import { fontSize } from '@/constants/fonts';
 import LoyaltyComponent from '../loyaltyComponent';
 import WallatDeposit from '../wallatDeposit';
+import { Skeleton } from 'moti/skeleton';
 
-export default function WallatCredits({ creditsAmount, currencyType, openExtract }: any) {
+export default function WallatCredits({ currencyType, openExtract }: any) {
 
     const [search, setSearch] = useState<string>('');
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedCurrency, setSelectedCurrency] = useState<string | null>('cEUR');
     const [currentComponent, setCurrentComponent] = useState<string>("deposit");
+    const [loading, setLoading] = useState<boolean>(true);
     const { t } = useLocale();
 
-    const [datas, setDatas] = useState([
-        {
-            creditsAmount: "50,00",
-            currencyType: "cEUR",
-            tokensAmount: "999999999999999,00",
-            tokensBlockedAmount: "99999999999999,00",
-            token: "X",
-            blockChain: "XXXX",
-            wallatLink: "https://www.google.com",
-            loyaltyDatas: [
-                {
-                    id: "1",
-                    name: "Rei do bacalhau",
-                    value: "100,00",
-                },
-                {
-                    id: "2",
-                    name: "Rei do sorvete",
-                    value: "100,00",
-                },
-                {
-                    id: "3",
-                    name: "Rei do peixe",
-                    value: "100,00",
-                },
-                {
-                    id: "4",
-                    name: "Sorveteria",
-                    value: "100,00",
-                },
-                {
-                    id: "5",
-                    name: "Pizzaria",
-                    value: "100,00",
-                },
-                {
-                    id: "6",
-                    name: "Pizzaria",
-                    value: "100,00",
-                },
-                {
-                    id: "7",
-                    name: "Pizzaria",
-                    value: "100,00",
-                },
-                {
-                    id: "8",
-                    name: "Pizzaria",
-                    value: "100,00",
-                },
-                {
-                    id: "9",
-                    name: "Pizzaria",
-                    value: "100,00",
-                },
-                {
-                    id: "10",
-                    name: "Pizzaria",
-                    value: "100,00",
-                },
-                {
-                    id: "11",
-                    name: "Pizzaria",
-                    value: "100,00",
-                },
-                {
-                    id: "12",
-                    name: "Pizzaria",
-                    value: "100,00",
-                },
-                {
-                    id: "13",
-                    name: "Pizzaria",
-                    value: "100,00",
-                }, {
-                    id: "14",
-                    name: "Pizzaria",
-                    value: "100,00",
-                },
-            ],
-        }
-    ]);
+    const [datas, setDatas] = useState<any>(null);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setDatas({
+                creditsAmount: "50,00",
+                currencyType: "cEUR",
+                tokensAmount: "999999999999999,00",
+                tokensBlockedAmount: "99999999999999,00",
+                token: "X",
+                blockChain: "XXXX",
+                wallatLink: "https://www.google.com",
+                loyaltyDatas: [
+                    { id: "1", name: "Rei do bacalhau", value: "100,00" },
+                    { id: "2", name: "Rei do sorvete", value: "100,00" },
+                    { id: "3", name: "Rei do peixe", value: "100,00" },
+                    { id: "4", name: "Sorveteria", value: "100,00" },
+                    { id: "5", name: "Pizzaria", value: "100,00" },
+                    { id: "6", name: "Pizzaria", value: "100,00" },
+                    { id: "7", name: "Pizzaria", value: "100,00" },
+                    { id: "8", name: "Pizzaria", value: "100,00" },
+                    { id: "9", name: "Pizzaria", value: "100,00" },
+                    { id: "10", name: "Pizzaria", value: "100,00" },
+                    { id: "11", name: "Pizzaria", value: "100,00" },
+                    { id: "12", name: "Pizzaria", value: "100,00" },
+                    { id: "13", name: "Pizzaria", value: "100,00" },
+                    { id: "14", name: "Pizzaria", value: "100,00" },
+                ],
+            });
+            setLoading(false);
+        }, 2000);
+
+        return () => clearTimeout(timeout);
+    }, []);
 
     const options = [
         {
@@ -109,7 +63,7 @@ export default function WallatCredits({ creditsAmount, currencyType, openExtract
         },
     ];
 
-    const filteredData = datas[0].loyaltyDatas.filter((item: { name: string; }) => {
+    const filteredData = datas?.loyaltyDatas.filter((item: { name: string; }) => {
         const matchesSearchInput = item.name.toLowerCase().includes(search.toLowerCase());
         return matchesSearchInput;
     });
@@ -120,21 +74,23 @@ export default function WallatCredits({ creditsAmount, currencyType, openExtract
     };
 
     const renderComponent = () => {
-        if (currentComponent === "deposit"){
+        if (currentComponent === "deposit") {
             return (
                 <WallatDeposit
-                    token={datas[0].token}
-                    blockChain={datas[0].blockChain}
-                    wallatLink={datas[0].wallatLink}
+                    token={datas?.token}
+                    blockChain={datas?.blockChain}
+                    wallatLink={datas?.wallatLink}
+                    loading={loading}
                 />
             )
         }
 
-        if(currentComponent === "fidelity"){
+        if (currentComponent === "fidelity") {
             return (
                 <LoyaltyComponent
                     setSearch={(text: string) => setSearch(text)}
-                    loyaltyDatas={datas[0].loyaltyDatas}
+                    loyaltyDatas={datas?.loyaltyDatas}
+                    loading={loading}
                 />
             )
         }
@@ -143,22 +99,41 @@ export default function WallatCredits({ creditsAmount, currencyType, openExtract
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
+
                 <View style={styles.amountContainer}>
-                    <Text numberOfLines={1} style={styles.amountText}>{datas[0].creditsAmount}</Text>
-                    <TouchableOpacity style={styles.currencyContainer} onPress={() => setModalVisible(true)}>
-                        <Text style={styles.currencyText}>{selectedCurrency || currencyType}</Text>
-                        <Entypo name="chevron-small-down" size={24} color="black" />
-                    </TouchableOpacity>
+                    <Skeleton
+                        colorMode='light'
+                        show={loading}
+                        width={'70%'}
+                        height={40}
+                    >
+                        {loading ? null : <Text numberOfLines={1} style={styles.amountText}>{datas?.creditsAmount}</Text>}
+                    </Skeleton>
+                    <Skeleton
+                        colorMode='light'
+                        show={loading}
+                        width={'45%'}
+                        height={40}
+                    >
+                        {loading ? null :
+                            <TouchableOpacity style={styles.currencyContainer} onPress={() => setModalVisible(true)}>
+                                <Text style={styles.currencyText}>{selectedCurrency || currencyType}</Text>
+                                <Entypo name="chevron-small-down" size={24} color="black" />
+                            </TouchableOpacity>
+                        }
+                    </Skeleton>
+
                 </View>
+
             </View>
 
             <View style={styles.fidelityHeader}>
                 <View style={styles.fidelityTitleContainer}>
                     <TouchableOpacity style={styles.fidelityButton} activeOpacity={0.7} onPress={() => setCurrentComponent("deposit")}>
-                        <Text style={[styles.fidelityTitle, currentComponent === "deposit" ? { color: '#0D6EFD' }: { color: '#000' }]}>{t("dashboardWallat.creditsScreen.deposit")}</Text>
+                        <Text style={[styles.fidelityTitle, currentComponent === "deposit" ? { color: '#0D6EFD' } : { color: '#000' }]}>{t("dashboardWallat.creditsScreen.deposit")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.fidelityButton} activeOpacity={0.7} onPress={() => setCurrentComponent("fidelity")}>
-                        <Text style={[styles.fidelityTitle, currentComponent === "fidelity" ? { color: '#0D6EFD' }: { color: '#000' }]}>{t("dashboardWallat.creditsScreen.fidelity")}</Text>
+                        <Text style={[styles.fidelityTitle, currentComponent === "fidelity" ? { color: '#0D6EFD' } : { color: '#000' }]}>{t("dashboardWallat.creditsScreen.fidelity")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.fidelityButton} activeOpacity={0.7} onPress={openExtract}>
                         <Text style={[styles.fidelityTitle, { color: '#000' }]}>{t("dashboardWallat.creditsScreen.extract")}</Text>
@@ -222,8 +197,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         borderRadius: 8,
-        padding: 16,
         marginTop: 8,
+        height: 65,
+        padding: 16
     },
     amountText: {
         fontSize: fontSize.titles.large,
@@ -234,6 +210,7 @@ const styles = StyleSheet.create({
     currencyContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        height: '100%'
     },
     currencyText: {
         fontSize: fontSize.titles.mini,

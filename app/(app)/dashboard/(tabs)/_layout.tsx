@@ -31,25 +31,34 @@ function Content() {
     closeSidebar,
     openNotifications,
     closeNotifications,
+    showTopbar,
+    hideTopbar
   } = useSidebar();
 
-  const [showTopbar, setShowTopbar] = useState(true);
   const [currentScreen, setCurrentScreen] = useState();
+  const pathname = usePathname();
 
   const handleTabChange = (currentTab: any) => {
     setCurrentScreen(currentTab);
     if (currentTab === 'qrcode' || currentTab === 'search') {
-      setShowTopbar(false);
+      hideTopbar(false);
     } else {
-      setShowTopbar(true);
+      hideTopbar(true);
     }
   };
 
-  const pathname = usePathname();
   useFocusEffect(
     useCallback(() => {
-      if(pathname === '/dashboard' && currentScreen === 'qrcode' || currentScreen === 'search' ){
-        setShowTopbar(true);
+      if (pathname === '/dashboard' && currentScreen === 'qrcode' || currentScreen === 'search') {
+        hideTopbar(true);
+      }
+
+      if (pathname === '/dashboard/qrcode' && currentScreen === 'send_cashback') {
+        hideTopbar(false);
+      }
+
+      if (pathname === '/dashboard/search' && currentScreen === 'search') {
+        hideTopbar(false);
       }
     }, [pathname])
   );

@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import { useLocale } from '@/contexts/TranslationContext';
 import { fontSize } from '@/constants/fonts';
 import InfoCloudIcon from '@/assets/icons/infoCloudIcon';
-import { GraphPoint } from 'react-native-graph';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import LinearGraph from '@/components/LinearGraph';
+import { Skeleton } from 'moti/skeleton';
 
 export default function WallatTokens({ openExtract }: any) {
     const [currentComponent, setCurrentComponent] = useState<string>("graphic");
@@ -15,27 +14,43 @@ export default function WallatTokens({ openExtract }: any) {
     const totalSegments = 9;
     const activeSegments = 1.5;
     const { t } = useLocale();
-    const [datas, setDatas] = useState([
-        {
-            tokensAmount: "999999999999999,00",
-            zoiAmount: "999999999999999,00",
-            token: "X",
-            blockChain: "XXXX",
-            wallatLink: "https://www.google.com",
-            poolPorcentage: '2%'
-        }
-    ]);
+    const [loading, setLoading] = useState(true);
+    const [datas, setDatas] = useState<any>(null);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setDatas({
+                tokensAmount: "999999999999999,00",
+                zoiAmount: "999999999999999,00",
+                token: "X",
+                blockChain: "XXXX",
+                wallatLink: "https://www.google.com",
+                poolPorcentage: '2%'
+            });
+            setLoading(false);
+        }, 2000);
+
+        return () => clearTimeout(timeout);
+    }, []);
 
     return (
         <View style={styles.container}>
             <View style={styles.currencyContainer}>
                 <View style={styles.currencyAmountContainer}>
-                    <Text
-                        numberOfLines={1}
-                        style={[styles.currencyAmountText, { color: '#0D6EFD' }]}
+                    <Skeleton
+                        show={loading}
+                        colorMode='light'
+                        width={150}
                     >
-                        {datas[0].tokensAmount}
-                    </Text>
+                        {loading ? null :
+                            <Text
+                                numberOfLines={1}
+                                style={[styles.currencyAmountText, { color: '#0D6EFD' }]}
+                            >
+                                {datas?.tokensAmount}
+                            </Text>
+                        }
+                    </Skeleton>
                     <View style={styles.tokensCurrencyContainer}>
                         <Text style={[styles.CurrencyText, { color: '#0D6EFD' }]}>Tokens</Text>
                     </View>
@@ -44,12 +59,20 @@ export default function WallatTokens({ openExtract }: any) {
 
             <View style={styles.currencyContainer}>
                 <View style={styles.currencyAmountContainer}>
-                    <Text
-                        numberOfLines={1}
-                        style={[styles.currencyAmountText, { color: '#495057' }]}
+                    <Skeleton
+                        show={loading}
+                        colorMode='light'
+                        width={150}
                     >
-                        {datas[0].zoiAmount}
-                    </Text>
+                        {loading ? null :
+                            <Text
+                                numberOfLines={1}
+                                style={[styles.currencyAmountText, { color: '#495057' }]}
+                            >
+                                {datas?.zoiAmount}
+                            </Text>
+                        }
+                    </Skeleton>
                     <View style={styles.tokensCurrencyContainer}>
                         <Feather name="lock" size={15} color="#495057" style={{ marginTop: 3 }} />
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
@@ -81,7 +104,7 @@ export default function WallatTokens({ openExtract }: any) {
 
                 <View style={{ flex: 1 }}>
 
-                    <LinearGraph />
+                    <LinearGraph loading={loading} />
 
                     <View style={[styles.warningContainer, { marginHorizontal: 15, top: 5, paddingRight: 16 }]}>
                         <Ionicons name="alert-circle-outline" size={30} color="#a16207" />
@@ -109,40 +132,64 @@ export default function WallatTokens({ openExtract }: any) {
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <View>
                                     <View style={{ flexDirection: 'row', gap: 5 }}>
-                                        <Text style={styles.walletLabel}>{t("dashboardWallat.tokensScreen.pool_distribution")} {datas[0].poolPorcentage}</Text>
+                                        <Skeleton
+                                            show={loading}
+                                            colorMode='light'
+                                            height={16}
+                                            width={100}
+                                        >
+                                            {loading ? null : <Text style={styles.walletLabel}>{t("dashboardWallat.tokensScreen.pool_distribution")} {datas?.poolPorcentage}</Text>}
+                                        </Skeleton>
                                         <TouchableOpacity onPress={() => setModalPoolVisible(true)}>
                                             <Feather name="info" size={12} color="#0052FF" style={{ marginTop: 2 }} />
                                         </TouchableOpacity>
                                     </View>
                                     <View style={styles.walletRow}>
-                                        <Text numberOfLines={1} style={styles.walletLabel}>{t("dashboardWallat.tokensScreen.next_distribution")}: 03/04/2024</Text>
+                                        <Skeleton
+                                            show={loading}
+                                            colorMode='light'
+                                            height={16}
+                                            width={160}
+                                        >
+                                            {
+                                            loading ? null : <Text numberOfLines={1} style={styles.walletLabel}>{t("dashboardWallat.tokensScreen.next_distribution")}: 03/04/2024</Text>}
+                                        </Skeleton>
                                     </View>
                                 </View>
                                 <Feather name="check-circle" size={24} color="#4ade80" />
                             </View>
                             <View style={styles.poolGraphicContainer}>
-                                <View style={styles.poolGraphic}>
-                                    {Array.from({ length: totalSegments }).map((_, index) => {
-                                        let fillStyle = styles.inactiveSegment;
+                                <Skeleton
+                                    show={loading}
+                                    width={'100%'}
+                                    height={'100%'}
+                                    colorMode='light'
+                                >
+                                    {loading ? null :
+                                        <View style={styles.poolGraphic}>
+                                            {Array.from({ length: totalSegments }).map((_, index) => {
+                                                let fillStyle = styles.inactiveSegment;
 
-                                        if (index < Math.floor(activeSegments)) {
-                                            fillStyle = styles.activeSegment;
-                                        } else if (index === Math.floor(activeSegments) && activeSegments % 1 !== 0) {
-                                            fillStyle = styles.halfActiveSegment;
-                                        }
+                                                if (index < Math.floor(activeSegments)) {
+                                                    fillStyle = styles.activeSegment;
+                                                } else if (index === Math.floor(activeSegments) && activeSegments % 1 !== 0) {
+                                                    fillStyle = styles.halfActiveSegment;
+                                                }
 
-                                        return (
-                                            <View
-                                                key={index}
-                                                style={[styles.segment]}
-                                            >
-                                                <View
-                                                    style={[fillStyle]}
-                                                />
-                                            </View>
-                                        );
-                                    })}
-                                </View>
+                                                return (
+                                                    <View
+                                                        key={index}
+                                                        style={[styles.segment]}
+                                                    >
+                                                        <View
+                                                            style={[fillStyle]}
+                                                        />
+                                                    </View>
+                                                );
+                                            })}
+                                        </View>
+                                    }
+                                </Skeleton>
                             </View>
                         </View>
                     </View>
@@ -417,7 +464,6 @@ const styles = StyleSheet.create({
     poolGraphicContainer: {
         height: 22,
         width: '100%',
-        backgroundColor: '#D9D9D9',
         borderRadius: 5,
         overflow: 'hidden'
     },

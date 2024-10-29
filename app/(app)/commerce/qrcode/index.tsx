@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
-import { SafeAreaView, Text, TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { SafeAreaView, Text, TextInput, View, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
-import CommerceHeader from '@/components/commerceHeader';
+import CommerceHeader from '@/components/commerce/commerceHeader';
 import { useLocale } from "@/contexts/TranslationContext";
 import * as Clipboard from 'expo-clipboard';
 import QRCode from 'react-native-qrcode-svg';
@@ -11,14 +11,45 @@ import { qrCodeTemplate } from '@/components/qrCodeTemplate';
 import { fontSize } from '@/constants/fonts';
 
 export default function Commerce_Qrcode() {
-    const [commerceID, setCommerceID] = useState('#DF56G4DF');
+    const [commerceID, setCommerceID] = useState('');
+    const [loading, setLoading] = useState(true);
     const { t } = useLocale();
     const qrCodeRef = useRef<any>(null);
+
+    useEffect(() => {
+        const fetchSelectDatas = async () => {
+            /* make the request to the API here
+            //Example: 
+            const selectDataReponse = await
+                fetch('domain of application here', {
+                    method: 'GET',
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Something went wrong');
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+            */
+
+            //temporary variable
+            const dataReponse: any = '#DF56G4DF';
+
+            setTimeout(() => {
+                setCommerceID(dataReponse);
+                setLoading(false);
+            }, 2000);
+        }
+
+        fetchSelectDatas();
+    }, []);
 
     const copyToClipboard = () => {
         Clipboard.setStringAsync(commerceID);
     };
-
 
     const handlePrint = async () => {
         if (qrCodeRef.current) {
@@ -35,9 +66,6 @@ export default function Commerce_Qrcode() {
         }
     };
 
-
-
-
     return (
         <SafeAreaView style={styles.safeArea}>
 
@@ -53,7 +81,7 @@ export default function Commerce_Qrcode() {
                 <View style={styles.inputWrapper}>
                     <View>
                         <TextInput
-                            value={commerceID}
+                            value={loading ? '' : commerceID}
                             editable={false}
                             style={styles.textInput}
                             textAlign='center'
@@ -66,14 +94,21 @@ export default function Commerce_Qrcode() {
 
                 <View style={styles.qrcodeContainer}>
                     <View style={styles.qrcodeWrapper}>
-                        <QRCode
-                            value={commerceID}
-                            size={230}
-                            color="white"
-                            backgroundColor="black"
-                            getRef={(ref) => (qrCodeRef.current = ref)}
-                            quietZone={-1}
-                        />
+                        {loading ?
+                            <ActivityIndicator
+                                size={40}
+                                color={'#000'}
+                            />
+                            :
+                            <QRCode
+                                value={commerceID}
+                                size={230}
+                                color="white"
+                                backgroundColor="black"
+                                getRef={(ref) => (qrCodeRef.current = ref)}
+                                quietZone={-1}
+                            />
+                        }
                     </View>
 
                     <View style={styles.qrcodeTextContainer}>
@@ -86,6 +121,7 @@ export default function Commerce_Qrcode() {
                     activeOpacity={0.7}
                     style={styles.printerLabel}
                     onPress={handlePrint}
+                    disabled={loading}
                 >
                     <Feather name="printer" size={20} color='#0D6EFD' />
                     <Text style={[styles.qrcodeText, { color: '#0D6EFD' }]}>Imprimir</Text>

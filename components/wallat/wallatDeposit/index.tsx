@@ -4,8 +4,9 @@ import * as Clipboard from 'expo-clipboard';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocale } from '@/contexts/TranslationContext';
 import { fontSize } from '@/constants/fonts';
+import { Skeleton } from 'moti/skeleton';
 
-export default function WallatDeposit({ token, blockChain, wallatLink }: any) {
+export default function WallatDeposit({ token, blockChain, wallatLink, loading }: any) {
     const { t } = useLocale();
     const copyToClipboard = () => {
         Clipboard.setStringAsync(wallatLink);
@@ -15,19 +16,49 @@ export default function WallatDeposit({ token, blockChain, wallatLink }: any) {
         <View style={styles.container}>
             <View style={styles.detailRow}>
                 <Text style={styles.detailLabel}>{t("dashboardWallat.creditsScreen.token")}</Text>
-                <Text numberOfLines={1} style={styles.detailValue}>{token}</Text>
+                <Skeleton
+                    show={loading}
+                    width={100}
+                    height={24}
+                    colorMode='light'
+                >
+                    {loading ? null : <Text numberOfLines={1} style={styles.detailValue}>{token}</Text>}
+                </Skeleton>
             </View>
             <View style={styles.detailRow}>
                 <Text style={styles.detailLabel}>{t("dashboardWallat.creditsScreen.blockchain")}</Text>
-                <Text numberOfLines={1} style={styles.detailValue}>{blockChain}</Text>
+                <Skeleton
+                    show={loading}
+                    width={100}
+                    height={24}
+                    colorMode='light'
+                >
+                    {loading ? null : <Text numberOfLines={1} style={styles.detailValue}>{blockChain}</Text>}
+                </Skeleton>
             </View>
             <View style={styles.walletContainer}>
                 <Text style={styles.walletLabel}>{t("dashboardWallat.creditsScreen.depositWallat")}</Text>
                 <View style={styles.walletRow}>
-                    <Text numberOfLines={1} style={styles.walletLink}>{wallatLink}</Text>
-                    <TouchableOpacity onPress={copyToClipboard}>
-                        <Ionicons style={styles.copyIcon} name="copy-outline" size={20} color="black" />
-                    </TouchableOpacity>
+                    <Skeleton
+                        show={loading}
+                        colorMode='light'
+                        height={24}
+                        width={200}
+                    >
+                        {loading ? null : <Text numberOfLines={1} style={styles.walletLink}>{wallatLink}</Text>}
+                    </Skeleton>
+                    <Skeleton
+                        show={loading}
+                        colorMode='light'
+                        height={24}
+                        width={30}
+                    >
+                        {loading ? null :
+                            <TouchableOpacity onPress={copyToClipboard}>
+                                <Ionicons style={styles.copyIcon} name="copy-outline" size={20} color="black" />
+                            </TouchableOpacity>
+                        }
+                    </Skeleton>
                 </View>
             </View>
             <View style={styles.warningContainer}>
@@ -102,6 +133,7 @@ const styles = StyleSheet.create({
     detailValue: {
         fontSize: fontSize.labels.medium,
         color: '#3B82F6',
+        alignSelf: 'flex-end'
     },
     walletContainer: {
         marginVertical: 12,
