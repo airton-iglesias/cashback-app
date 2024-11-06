@@ -342,10 +342,30 @@
     "mapLocation": {
         "headerLabel": "Voltar"
     },
-    "sendDiscount": {
+    "send_discount": {
         "home": {
+            "get_discount": "Obter desconto",
+            "commerce_id": "Insira o ID do comerciante aqui",
             "description1": "Scan QR Code",
             "description2": "do comerciante"
+        },
+        "value_cashback": {
+            "get_discount": "Obter desconto",
+            "commerce_id": "Insira o ID do comerciante aqui",
+            "purchase_value": "Valor da compra",
+            "immediate_discount": "Desconto imediato",
+            "send": "Enviar",
+            "cashback": "Cashback",
+            "burn": "Queima",
+            "type": "Tipo",
+            "tax": "Taxa",
+            "cashback_type": "Livre"
+        },
+        "cashback_success": {
+            "get_discount": "Receber desconto",
+            "purchase_value": "Valor da compra",
+            "immediate_discount": "Desconto imediato",
+            "to": "ÀS"
         }
     }
 }

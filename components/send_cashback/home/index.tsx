@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, Text, TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useLocale } from "@/contexts/TranslationContext";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -7,15 +7,13 @@ import { router } from 'expo-router';
 
 export default function Send_Discount_Home({ changeScreen }: any) {
     const [commerceID, setCommerceID] = useState<string>('');
-    const [clientID, setClientID] = useState<string>('Este e o ID do cliente');
     const { t } = useLocale();
-    const qrCodeRef = useRef<any>(null);
 
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <View>
-                    <Text style={styles.header}>{"Obter desconto"}</Text>
+                    <Text style={styles.header}>{t("send_discount.home.get_discount")}</Text>
                 </View>
                 <View style={styles.inputWrapper}>
                     <View>
@@ -24,7 +22,7 @@ export default function Send_Discount_Home({ changeScreen }: any) {
                             textAlign='center'
                             value={commerceID}
                             onChangeText={setCommerceID}
-                            placeholder={'Insira o ID do comerciante aqui'}
+                            placeholder={t("send_discount.home.commerce_id")}
                             onSubmitEditing={() => changeScreen("amountValue")}
                         />
                     </View>
@@ -37,8 +35,8 @@ export default function Send_Discount_Home({ changeScreen }: any) {
                 </TouchableOpacity>
 
                 <View style={styles.qrcodeTextContainer}>
-                    <Text style={styles.qrcodeText}>{t("sendDiscount.home.description1")}</Text>
-                    <Text style={styles.qrcodeText}>{t("sendDiscount.home.description2")}</Text>
+                    <Text style={styles.qrcodeText}>{t("send_discount.home.description1")}</Text>
+                    <Text style={styles.qrcodeText}>{t("send_discount.home.description2")}</Text>
                 </View>
             </View>
         </SafeAreaView>

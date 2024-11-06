@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { SafeAreaView, Text, View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Feather, Octicons } from '@expo/vector-icons';
 import LikeIcon from '@/assets/icons/likeIcon';
 import { router, useLocalSearchParams } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
+import { useLocale } from '@/contexts/TranslationContext';
 
 export default function Send_Discount_Sucess() {
-
     const { buyValue, discountValue } = useLocalSearchParams();
-
-    const [timeLeft, setTimeLeft] = useState(10);
-
+    const [currencyType, setCurrencyType] = useState<string>('EUR');
+    const [timeLeft, setTimeLeft] = useState(120);
     const [currentDate, setCurrentDate] = useState('');
+
+    const { t } = useLocale();
 
     useEffect(() => {
         const now = new Date();
-        const formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ÀS ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        const formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${t("send_discount.cashback_success.to")} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
         setCurrentDate(formattedDate);
     }, []);
 
@@ -55,7 +56,7 @@ export default function Send_Discount_Sucess() {
             <ScrollView>
                 <View style={styles.container}>
                     <View style={{ width: '100%' }}>
-                        <Text style={styles.header}>Receber Desconto</Text>
+                        <Text style={styles.header}>{t("send_discount.cashback_success.get_discount")}</Text>
                     </View>
 
                     <View style={styles.infoContainer}>
@@ -69,8 +70,8 @@ export default function Send_Discount_Sucess() {
 
                     <View style={{ width: '100%' }}>
                         <View style={styles.valueInfoLabelWrapper}>
-                            <Text style={styles.valueInfoLabel}>Valor da compra</Text>
-                            <Text style={[styles.valueInfoLabel, { fontSize: fontSize.labels.supermini, marginTop: 4 }]}>EUR</Text>
+                            <Text style={styles.valueInfoLabel}>{t("send_discount.cashback_success.purchase_value")}</Text>
+                            <Text style={[styles.valueInfoLabel, { fontSize: fontSize.labels.supermini, marginTop: 4 }]}>{currencyType}</Text>
                         </View>
                         <View style={styles.valueInfoContainer}>
                             <View style={styles.valueInfoInnerContainer}>
@@ -81,8 +82,8 @@ export default function Send_Discount_Sucess() {
 
                     <View style={{ width: '100%' }}>
                         <View style={styles.discountInfoLabelWrapper}>
-                            <Text style={styles.discountInfoLabel}>Desconto Imediáto</Text>
-                            <Text style={[styles.discountInfoLabel, { fontSize: fontSize.labels.supermini, marginTop: 4 }]}>EUR</Text>
+                            <Text style={styles.discountInfoLabel}>{t("send_discount.cashback_success.immediate_discount")}</Text>
+                            <Text style={[styles.discountInfoLabel, { fontSize: fontSize.labels.supermini, marginTop: 4 }]}>{currencyType}</Text>
                         </View>
                         <View style={styles.discountInfoContainer}>
                             <View style={styles.discountInfoInnerContainer}>

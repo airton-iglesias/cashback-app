@@ -106,7 +106,7 @@ export default function WallatTokens({ openExtract }: any) {
 
                     <LinearGraph loading={loading} />
 
-                    <View style={[styles.warningContainer, { marginHorizontal: 15, top: 5, paddingRight: 16 }]}>
+                    <View style={[styles.warningContainer, { marginHorizontal: 15, top: 15, paddingRight: 16 }]}>
                         <Ionicons name="alert-circle-outline" size={30} color="#a16207" />
                         <Text style={styles.warningText}>
                             {t("dashboardWallat.tokensScreen.warning")}
@@ -490,7 +490,6 @@ const styles = StyleSheet.create({
     halfActiveSegment: {
         backgroundColor: '#198754',
         height: '100%',
-        width: '50%',  // Definindo o tamanho em 50%
+        width: '50%', 
     },
-
 });

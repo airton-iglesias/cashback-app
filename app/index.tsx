@@ -89,6 +89,7 @@ export default function SigninScreen() {
     return (
         <SafeAreaView style={[styles.container, keyboardIsVisible && ({ paddingTop: 70 })]}>
             <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
+                
                 <LanguageModal
                     modalVisible={modalVisible}
                     handleCloseModal={handleCloseModal}

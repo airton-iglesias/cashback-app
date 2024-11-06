@@ -17,10 +17,6 @@ import { Skeleton } from 'moti/skeleton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Profile() {
-    const { t } = useLocale();
-
-    const [loadingProfile, setLoadingProfile] = useState(true);
-    const [isPermissionModalVisible, setIsPermissionModalVisible] = useState(false);
 
     const [image, setImage] = useState<any>(null);
     const [name, setName] = useState<string>('');
@@ -30,6 +26,10 @@ export default function Profile() {
     const [currency, setCurrency] = useState<string>('Selecione a moeda');
     const [location, setLocation] = useState(false);
     const [accountID, setAccountID] = useState<string | null>(null);
+
+    const { t } = useLocale();
+    const [loadingProfile, setLoadingProfile] = useState(true);
+    const [isPermissionModalVisible, setIsPermissionModalVisible] = useState(false);
 
     const countryOptions = [
         { id: 1, text: 'Portugal' },
@@ -290,7 +290,6 @@ export default function Profile() {
                                 </View>
                             }
 
-
                             <View style={styles.optionRow}>
                                 {loadingProfile ?
                                     <Skeleton
@@ -308,7 +307,6 @@ export default function Profile() {
                                     </TouchableOpacity>
                                 }
                             </View>
-
 
                             <View style={styles.optionRow}>
                                 {loadingProfile ?

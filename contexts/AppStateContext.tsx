@@ -1,35 +1,30 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-interface AppStateContextProps {
-    isCommercePath: boolean;
-    changeCommercePath: any;
+interface AppStateContextType {
+  isSwitchedAccount: boolean;
+  switchAccount: () => void;
 }
 
-const AppStateContext = createContext<AppStateContextProps | undefined>(undefined);
+const AppStateContext = createContext<AppStateContextType | undefined>(undefined);
 
-export const useAppState = () => {
-  const context = useContext(AppStateContext);
-  if (!context) {
-    throw new Error('useSidebar deve ser usado dentro de SidebarProvider');
-  }
-  return context;
-};
+export const AppStateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [isSwitchedAccount, setIsSwitchedAccount] = useState(false);
 
-export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isCommercePath, setIsCommercePath] = useState(false);
-  
-  const changeCommercePath = (isCommercePath: boolean) => {
-    setIsCommercePath(!isCommercePath);
+  const switchAccount = () => {
+    setIsSwitchedAccount(prevState => !prevState);
   };
 
   return (
-    <AppStateContext.Provider
-      value={{
-        isCommercePath,
-        changeCommercePath
-      }}
-    >
+    <AppStateContext.Provider value={{ isSwitchedAccount, switchAccount }}>
       {children}
     </AppStateContext.Provider>
   );
+};
+
+export const useAppState = () => {
+  const context = useContext(AppStateContext);
+  if (context === undefined) {
+    throw new Error('useAppState must be used within an AppStateProvider');
+  }
+  return context;
 };

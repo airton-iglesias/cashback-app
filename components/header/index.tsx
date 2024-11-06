@@ -3,11 +3,12 @@ import { TextInput, TouchableOpacity, View, StyleSheet, Pressable } from "react-
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import StoreIcon from "@/assets/icons/storeIcon";
-import { Link, router, usePathname } from "expo-router";
+import { Link, router } from "expo-router";
 import { fontSize } from "@/constants/fonts";
+import { useAppState } from "@/contexts/AppStateContext";
 
 export default function Topbar({ openSidebar, openNotifications }: any) {
-    const route = usePathname();
+    const { isSwitchedAccount, switchAccount } = useAppState();
     const [value, setValue] = useState('');
 
     return (
@@ -15,12 +16,13 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
             <View style={[styles.topBar]}>
                 <View style={styles.iconContainer}>
                     <View style={styles.statusIndicator}></View>
-                    <Link href={route === "/commerce" ? "/dashboard" : "/commerce"} replace asChild>
+                    <Link href={isSwitchedAccount ? "/dashboard" : "/commerce"} replace asChild>
                         <TouchableOpacity
                             style={styles.switchAccountButton}
                             activeOpacity={0.7}
+                            onPress={switchAccount}
                         >
-                            {route === "/commerce" ?
+                            {isSwitchedAccount ?
                                 <Feather name="users" size={24} color="white" />
                                 :
                                 <StoreIcon height={26} width={26} color={"white"} />
@@ -32,7 +34,7 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                 <View style={styles.textInputContainer}>
                     <Pressable
                         onPress={() => {
-                            if(route === "/commerce"){
+                            if(isSwitchedAccount){
                                 router.navigate("/(app)/points")
                             }
                         }}
@@ -42,20 +44,20 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                             placeholder="0"
                             onChangeText={(number) => setValue(number)}
                             placeholderTextColor="#4b5563"
-                            textAlign={route === "/commerce" ? "center" : "right"}
+                            textAlign={isSwitchedAccount ? "center" : "right"}
                             value={value}
-                            readOnly={route === "/commerce"}
+                            readOnly={isSwitchedAccount}
                             style={[
                                 styles.textInput,
                                 {
-                                    paddingRight: route === "/commerce" ? 0 : 60,
-                                    color: route === "/commerce" ? '#28A745' : 'white'
+                                    paddingRight: isSwitchedAccount ? 0 : 60,
+                                    color: isSwitchedAccount ? '#28A745' : 'white'
                                 }
                             ]}
                             keyboardType={"numeric"}
                         />
                     </Pressable>
-                    {route !== "/commerce" && (
+                    {!isSwitchedAccount && (
                         <TouchableOpacity
                             activeOpacity={0.7}
                             style={styles.plusWrapper}

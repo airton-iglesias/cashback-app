@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Text, TextInput, View, StyleSheet, ScrollView, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Text, TextInput, View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Feather, Octicons } from '@expo/vector-icons';
 import { fontSize } from '@/constants/fonts';
 import { router } from 'expo-router';
+import { useLocale } from '@/contexts/TranslationContext';
 
 export default function AmountCashback({ changeScreen }: any) {
     const [commerceID, setCommerceID] = useState<string>('');
     const [buyValue, setBuyValue] = useState<string>('0,00');
     const [discountValue, setDiscountValue] = useState<string>('0,00');
+    const [currencyType, setCurrencyType] = useState<string>('cEUR');
+    const [taxValue, setTaxValue] = useState<string>('0.01');
+    const [burn, setBurn] = useState<string>('500');
+    const [cashback, setCashback] = useState<string>('500');
+    const [send, setSend] = useState<string>('500');
+
+    const { t } = useLocale();
 
     const formatCurrency = (value: string) => {
         const formattedValue = (Number(value) / 100).toLocaleString('pt-BR', {
@@ -43,7 +51,7 @@ export default function AmountCashback({ changeScreen }: any) {
             <ScrollView>
                 <View style={styles.container}>
                     <View>
-                        <Text style={styles.header}>Obter desconto</Text>
+                        <Text style={styles.header}>{t("send_discount.value_cashback.get_discount")}</Text>
                     </View>
 
                     <View style={styles.inputWrapper}>
@@ -52,7 +60,7 @@ export default function AmountCashback({ changeScreen }: any) {
                             textAlign='center'
                             value={commerceID}
                             onChangeText={setCommerceID}
-                            placeholder={'Insira o ID do comerciante aqui'}
+                            placeholder={t("send_discount.value_cashback.commerce_id")}
                             onSubmitEditing={() => changeScreen("amountValue")}
                         />
                     </View>
@@ -66,7 +74,7 @@ export default function AmountCashback({ changeScreen }: any) {
                     </View>
 
                     <View style={{ width: '100%' }}>
-                        <Text style={styles.valueInfoLabel}>Valor da compra</Text>
+                        <Text style={styles.valueInfoLabel}>{t("send_discount.value_cashback.purchase_value")}</Text>
                         <View style={styles.valueInfoContainer}>
                             <View style={styles.valueInfoInnerContainer}>
                                 <TextInput
@@ -84,7 +92,7 @@ export default function AmountCashback({ changeScreen }: any) {
                     {buyValue !== "0,00" && (
                         <View style={{ width: '100%' }}>
                             <View style={{ width: '100%' }}>
-                                <Text style={styles.discountInfoLabel}>Desconto Imediato</Text>
+                                <Text style={styles.discountInfoLabel}>{t("send_discount.value_cashback.immediate_discount")}</Text>
                                 <View style={styles.discountInfoContainer}>
                                     <View style={styles.discountInfoInnerContainer}>
                                         <TextInput
@@ -102,33 +110,33 @@ export default function AmountCashback({ changeScreen }: any) {
 
                             <View style={styles.listContainer}>
                                 <View style={styles.row}>
-                                    <Text style={styles.label}>Enviar</Text>
+                                    <Text style={styles.label}>{t("send_discount.value_cashback.send")}</Text>
                                     <View style={styles.ValueContainer}>
-                                        <Text style={styles.value}>500</Text>
-                                        <Text style={styles.currency}>cEUR</Text>
+                                        <Text style={styles.value}>{send}</Text>
+                                        <Text style={styles.currency}>{currencyType}</Text>
                                     </View>
                                 </View>
                                 <View style={styles.row}>
-                                    <Text style={styles.label}>Cashbak</Text>
+                                    <Text style={styles.label}>{t("send_discount.value_cashback.cashback")}</Text>
                                     <View style={styles.ValueContainer}>
-                                        <Text style={styles.value}>500</Text>
-                                        <Text style={styles.currency}>cEUR</Text>
+                                        <Text style={styles.value}>{cashback}</Text>
+                                        <Text style={styles.currency}>{currencyType}</Text>
                                     </View>
                                 </View>
                                 <View style={styles.row}>
-                                    <Text style={styles.label}>Burn</Text>
+                                    <Text style={styles.label}>{t("send_discount.value_cashback.burn")}</Text>
                                     <View style={styles.ValueContainer}>
-                                        <Text style={styles.value}>500</Text>
-                                        <Text style={styles.currency}>cEUR</Text>
+                                        <Text style={styles.value}>{burn}</Text>
+                                        <Text style={styles.currency}>{currencyType}</Text>
                                     </View>
                                 </View>
                                 <View style={styles.row}>
-                                    <Text style={styles.label}>Tipo</Text>
-                                    <Text style={styles.value}>Livre</Text>
+                                    <Text style={styles.label}>{t("send_discount.value_cashback.type")}</Text>
+                                    <Text style={styles.value}>{t("send_discount.value_cashback.cashback_type")}</Text>
                                 </View>
                                 <View style={styles.row}>
-                                    <Text style={styles.label}>Taxa</Text>
-                                    <Text style={styles.value}>0.01</Text>
+                                    <Text style={styles.label}>{t("send_discount.value_cashback.tax")}</Text>
+                                    <Text style={styles.value}>{taxValue}</Text>
                                 </View>
                             </View>
 
@@ -136,17 +144,17 @@ export default function AmountCashback({ changeScreen }: any) {
                                 <TouchableOpacity
                                     activeOpacity={0.7}
                                     style={styles.buttonWrapper}
-                                    onPress={() => router.push({pathname: '/(app)/send_cashback_success', params: {buyValue, discountValue}})}
+                                    onPress={() => router.push({ pathname: '/(app)/send_cashback_success', params: { buyValue, discountValue } })}
                                 >
-                                <View style={styles.submitButton}>
-                                    <Feather name="arrow-right" size={24} color={'white'} />
-                                </View>
-                            </TouchableOpacity>
-                        </View>
+                                    <View style={styles.submitButton}>
+                                        <Feather name="arrow-right" size={24} color={'white'} />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     )}
-            </View>
-        </ScrollView>
+                </View>
+            </ScrollView>
         </SafeAreaView >
     );
 }

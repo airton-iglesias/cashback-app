@@ -6,8 +6,6 @@ import { fontSize } from "@/constants/fonts";
 export default function LanguageModal({ modalVisible, handleCloseModal }: any) {
     const languages = [
         { code: 'pt', name: 'Português' },
-        { code: 'en', name: 'English' },
-        { code: 'fr', name: 'Français' },
     ];
 
     const { t } = useLocale();
@@ -29,8 +27,8 @@ export default function LanguageModal({ modalVisible, handleCloseModal }: any) {
                         />
                     </View>
                 </View>
-                <Text style={styles.title}>{t("language.header")}</Text>
                 <View style={styles.languageContainer}>
+                    <Text style={styles.title}>{t("language.header")}</Text>
                     <ScrollView>
                         <View style={styles.languageOptionsWrapper}>
                             {languages.map((language, index) => (
@@ -89,14 +87,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     logoImage: {
-        flex: 1, 
-        width: '100%', 
-        height: '100%', 
+        flex: 1,
+        width: '100%',
+        height: '100%',
         backgroundColor: 'white'
     },
     title: {
-        color: '#000',
-        marginVertical: 30,
+        color: '#fff',
+        marginTop: 30,
         fontSize: fontSize.titles.large,
         fontWeight: 'bold',
         paddingHorizontal: 15,
@@ -149,6 +147,7 @@ const styles = StyleSheet.create({
         borderTopEndRadius: 20,
         borderTopStartRadius: 20,
         height: '100%',
+        marginTop: 50,
         flex: 1
     },
     buttonWrapper: {

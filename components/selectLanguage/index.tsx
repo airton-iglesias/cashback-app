@@ -14,8 +14,6 @@ const SelectLanguage = ({ SelectOption }: any) => {
 
     const languages = [
         { code: 'pt', name: 'Português' },
-        { code: 'en', name: 'English' },
-        { code: 'fr', name: 'Français' },
     ];
 
     const getLanguageName = (code: string) => {

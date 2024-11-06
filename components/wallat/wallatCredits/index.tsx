@@ -107,7 +107,11 @@ export default function WallatCredits({ currencyType, openExtract }: any) {
                         width={'70%'}
                         height={40}
                     >
-                        {loading ? null : <Text numberOfLines={1} style={styles.amountText}>{datas?.creditsAmount}</Text>}
+                        {loading ? null :
+                            <View style={styles.currencyWrapper}>
+                                <Text numberOfLines={1} style={styles.amountText}>{datas?.creditsAmount}</Text>
+                            </View>
+                        }
                     </Skeleton>
                     <Skeleton
                         colorMode='light'
@@ -201,11 +205,14 @@ const styles = StyleSheet.create({
         height: 65,
         padding: 16
     },
+    currencyWrapper: {
+        alignItems: 'flex-start', 
+        flex: 1, 
+        justifyContent: 'center', 
+    },
     amountText: {
         fontSize: fontSize.titles.large,
         fontWeight: 'bold',
-        textAlign: 'left',
-        flex: 1,
     },
     currencyContainer: {
         flexDirection: 'row',
