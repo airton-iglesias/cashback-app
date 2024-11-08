@@ -4,24 +4,24 @@ import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
 import { fontSize } from "@/constants/fonts";
 
-export default function RecoverDatas() {
+export default function VerificationCodeSent() {
     const { t } = useLocale();
-    
+
     return (
         <SafeAreaView>
             <View style={styles.container}>
                 <View style={styles.infoWrapper}>
                     <Feather name="send" size={71} color="black" />
-                    <Text style={styles.infoText}>{t("recoveryDatas.checkInbox")}</Text>
+                    <Text style={styles.infoText}>{t("signup.verificationCodeSent.title")}</Text>
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         activeOpacity={0.6}
                         style={styles.buttonWrapper}
-                        onPress={() => router.replace("/")}
+                        onPress={() => router.navigate("/resetPassword/verificationCode")}
                     >
                         <View style={styles.submitButton}>
-                            <Feather name="check" size={24} color="white" />
+                            <Feather name="arrow-right" size={24} color="white" />
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -36,12 +36,15 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         paddingTop: 30,
         justifyContent: 'space-between',
-        height: '100%'
+        height: '100%',
+        backgroundColor: 'white'
     },
-    infoText:{
+    infoText: {
         fontSize: fontSize.titles.mini,
         fontWeight: 'bold',
-        marginTop: 25
+        marginTop: 25,
+        paddingHorizontal: 25,
+        textAlign: 'center'
     },
     backButton: {
         position: 'absolute',
@@ -97,10 +100,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         marginTop: 15
     },
-    infoWrapper:{
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 120  
+    infoWrapper: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 120
     },
     buttonContainer: {
         flex: 1,

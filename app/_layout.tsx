@@ -41,13 +41,7 @@ export default function RootLayout() {
 
   return (
     <TranslationProvider>
-        <Stack initialRouteName='index'>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(app)" options={{ headerShown: false }} />
-          <Stack.Screen name="recover_datas" options={{ headerShown: false }} />
-          <Stack.Screen name="signup" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" options={{ headerShown: false }}/>
-        </Stack>
+      <Stack screenOptions={{ headerShown: false }} />
     </TranslationProvider>
   );
 }

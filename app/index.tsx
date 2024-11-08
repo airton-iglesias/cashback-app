@@ -1,29 +1,41 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
-    Image, SafeAreaView, Text, TouchableWithoutFeedback,
-    View, KeyboardAvoidingView, StyleSheet,
-    TouchableOpacity,
-    Keyboard,
-    ActivityIndicator
-} from "react-native";
+    ActivityIndicator, Image, Keyboard, KeyboardAvoidingView, Text,
+    TouchableOpacity, TouchableWithoutFeedback, View, StyleSheet,
+    Platform, ScrollView
+} from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import CheckBox from "@/components/checkbox";
-import { useLocale } from "@/contexts/TranslationContext";
-import LanguageModal from "@/components/languageModal";
-import Input from "@/components/input";
-import { Link, router } from "expo-router";
-import { fontSize } from "@/constants/fonts";
+import { Link, router } from 'expo-router';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { getSignInSchema, SignInData } from '@/schemas/authSchemas';
+import CheckBox from '@/components/checkbox';
+import Input from '@/components/input';
+import LanguageModal from '@/components/languageModal';
+import { useLocale } from '@/contexts/TranslationContext';
+import { fontSize } from '@/constants/fonts';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SigninScreen() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    // State variables for UI 
     const [isChecked, setChecked] = useState(false);
-
-    const { t } = useLocale();
     const [modalVisible, setModalVisible] = useState(false);
     const [keyboardIsVisible, setKeyboardIsVisible] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [requestError, setRequestError] = useState<boolean>(false);
 
+    // Translation function
+    const { t } = useLocale();
+
+    // React Hook Form setup
+    const signInSchema = React.useMemo(() => getSignInSchema(t), [t]);
+    const { control, handleSubmit, formState: { errors } } = useForm<SignInData>({
+        resolver: zodResolver(signInSchema),
+        mode: 'onChange',
+    });
+
+    // Effect to handle keyboard visibility changes
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
             setKeyboardIsVisible(true);
@@ -32,212 +44,247 @@ export default function SigninScreen() {
         const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
             setKeyboardIsVisible(false);
         });
-
         return () => {
             keyboardDidShowListener.remove();
             keyboardDidHideListener.remove();
         };
     }, []);
 
+    // Effect to display the language modal after a delay
     useEffect(() => {
-        setTimeout(() => {
-            setModalVisible(true)
-        }, 300)
+        const timer = setTimeout(() => {
+            setModalVisible(false);
+        }, 300);
+        return () => clearTimeout(timer);
     }, []);
 
-    const handleSubmit = async () => {
+    const onSubmit = async (data: SignInData) => {
+        if (requestError) { setRequestError(!requestError); }
         setLoading(true);
-        /* make the request to the API here
-        //Example: 
-        const loginResponse = await
-            fetch('domain of application here', {
-                method: 'POST',
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                }),
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8',
-                },
-            })
-            .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Something went wrong');
-            })
-            .catch((error) => {
-                console.log(error)
-            });
 
-            //...Other things
-        */
-        setTimeout(() => {
+        try {
+            // Implement your authentication API call here using data.email and data.password
+            setRequestError(!requestError);
+            setTimeout(() => {
+                setLoading(false);
+                router.replace('/pin');
+            }, 2000);
+
+        } catch (error) {
             setLoading(false);
-            router.replace("/pin");
-        }, 1000);
-    }
-
-    const handleCheck = () => {
-        setChecked(!isChecked);
-    };
-
-    const handleCloseModal = () => {
-        setModalVisible(false);
+            setRequestError(!requestError);
+            console.error(error);
+        }
     };
 
     return (
-        <SafeAreaView style={[styles.container, keyboardIsVisible && ({ paddingTop: 70 })]}>
-            <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
-                
-                <LanguageModal
-                    modalVisible={modalVisible}
-                    handleCloseModal={handleCloseModal}
-                />
+        <SafeAreaView style={styles.container}>
+            {/* Modal for language selection */}
+            <LanguageModal
+                modalVisible={modalVisible}
+                handleCloseModal={() => setModalVisible(!modalVisible)}
+            />
 
-                {!keyboardIsVisible && (
-                    <View style={styles.logoContainer}>
-                        <View style={styles.logo}>
-                            <Image
-                                source={require("@/assets/images/logo-light.png")}
-                                resizeMode="contain"
-                                style={styles.logoImage}
-                            />
-                        </View>
-                    </View>
-                )}
-
-                <View style={styles.contentWrapper}>
-
-                    <View style={[styles.header, keyboardIsVisible ? null : { marginTop: 20 }]}>
-                        <Text style={styles.headerText}>{t('signin.header')}</Text>
-                    </View>
-
-                    <View style={styles.inputGroup}>
-                        <Input
-                            label={t('signin.email')}
-                            onChange={(text: string) => setEmail(text)}
-                            type={'email'}
+            {/* Logo section, hidden when the keyboard is visible */}
+            {!keyboardIsVisible && (
+                <View style={styles.logoContainer}>
+                    <View style={styles.logo}>
+                        <Image
+                            source={require('@/assets/images/logo-light.png')}
+                            resizeMode="contain"
+                            style={styles.logoImage}
                         />
-                    </View>
-
-                    <View style={styles.inputGroup}>
-                        <Input
-                            label={t('signin.password')}
-                            onChange={(text: string) => setPassword(text)}
-                            type={'password'}
-                        />
-                    </View>
-
-                    <View style={styles.checkboxContainer}>
-                        <CheckBox
-                            label=" "
-                            labelStyle={{ color: '#fff000', fontSize: 16 }}
-                            iconColor="#fff"
-                            checkColor="#fff600"
-                            value={isChecked}
-                            onChange={handleCheck}
-                        />
-                        <Text style={styles.checkboxLabel}>{t('signin.keepLogged')}</Text>
                     </View>
                 </View>
+            )}
 
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        activeOpacity={0.7}
-                        style={styles.buttonWrapper}
-                        onPress={handleSubmit}
-                        disabled={loading}
-                    >
-                        <View style={styles.submitButton}>
-                            {loading ? 
-                                <ActivityIndicator size={24} color="#fff" />
-                                :
-                                <Feather name="arrow-right" size={24} color={'white'} />
-                            }
-                        </View>
-                    </TouchableOpacity>
-
-
-                    <TouchableOpacity
-                        activeOpacity={0.7}
-                        style={styles.buttonWrapper}
-                        disabled={loading}
-                    >
-                        <View style={styles.googleButton}>
-                            <Image source={require("@/assets/icons/google-icon.png")} style={styles.googleIcon} />
-                        </View>
-                    </TouchableOpacity>
-
-                    <View style={styles.linkWrapper}>
-                        <Link href={"/signup"} asChild>
-                            <TouchableWithoutFeedback>
-                                <Text style={styles.link}>{t('signin.createAccount')}</Text>
-                            </TouchableWithoutFeedback>
-                        </Link>
-
-                        <Link href={{
-                            pathname: '/recover_datas',
-                            params: { type: 'password' },
-                        }} asChild>
-                            <TouchableWithoutFeedback>
-                                <Text style={styles.link}>{t('signin.forgotPassword')}</Text>
-                            </TouchableWithoutFeedback>
-                        </Link>
+            {/* Error message section */}
+            {requestError && (
+                <View style={[styles.errorMessageContainer, keyboardIsVisible && { marginTop: 20 }]}>
+                    <View style={styles.errorMessageWrapper}>
+                        <Text style={styles.errorMessage}>{t("signin.InvalidCrentials")}</Text>
                     </View>
                 </View>
+            )}
+
+            {/* KeyboardAvoidingView and ScrollView */}
+            <KeyboardAvoidingView
+                style={styles.keyboardAvoidingView}
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            >
+                <ScrollView
+                    contentContainerStyle={styles.scrollViewContent}
+                    keyboardShouldPersistTaps="handled"
+                >
+                    {/* Main content */}
+                    <View style={styles.contentWrapper}>
+                        {/* Form */}
+                        <View>
+                            {/* Title */}
+                            <View style={styles.header}>
+                                <Text style={styles.headerText}>{t('signin.header')}</Text>
+                            </View>
+
+                            <View style={styles.form}>
+
+                            </View>
+                            {/* Email input field */}
+                            <View style={styles.inputGroup}>
+                                <Controller
+                                    control={control}
+                                    name="email"
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <Input
+                                            label={t('signin.email')}
+                                            onChange={(text: string) => {
+                                                onChange(text.toLowerCase());
+                                            }}
+                                            onBlur={onBlur}
+                                            value={value}
+                                            type="email"
+                                            error={errors.email?.message}
+                                            keyboardType={"email-address"}
+                                        />
+                                    )}
+                                />
+                            </View>
+
+                            {/* Password input field */}
+                            <View style={styles.inputGroup}>
+                                <Controller
+                                    control={control}
+                                    name="password"
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <Input
+                                            label={t('signin.password')}
+                                            onChange={onChange}
+                                            onBlur={onBlur}
+                                            value={value}
+                                            type="password"
+                                            error={errors.password?.message}
+                                        />
+                                    )}
+                                />
+                            </View>
+
+                            {/* "Keep me logged in" checkbox */}
+                            <View style={styles.checkboxContainer}>
+                                <CheckBox
+                                    labelStyle={{ color: '#fff000', fontSize: 16 }}
+                                    iconColor="#fff"
+                                    checkColor="#fff600"
+                                    value={isChecked}
+                                    onChange={() => setChecked(!isChecked)}
+                                />
+                                <Text style={styles.checkboxLabel}>{t('signin.keepLogged')}</Text>
+                            </View>
+                        </View>
+
+                        {/* Button container */}
+                        <View style={styles.buttonContainer}>
+                            {/* Submit button */}
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                style={styles.buttonWrapper}
+                                onPress={handleSubmit(onSubmit)}
+                                disabled={loading}
+                            >
+                                <View style={styles.submitButton}>
+                                    {loading ? (
+                                        <ActivityIndicator size={24} color="#fff" />
+                                    ) : (
+                                        <Feather name="arrow-right" size={24} color="white" />
+                                    )}
+                                </View>
+                            </TouchableOpacity>
+
+                            {/* Google Sign-In button */}
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                style={styles.buttonWrapper}
+                                disabled={loading}
+                            >
+                                <View style={styles.googleButton}>
+                                    <Image
+                                        source={require('@/assets/icons/google-icon.png')}
+                                        style={styles.googleIcon}
+                                    />
+                                </View>
+                            </TouchableOpacity>
+
+                            {/* Links for sign-up and password recovery */}
+                            <View style={styles.linkWrapper}>
+                                {/* Link to the sign-up screen */}
+                                <Link href="/signup" asChild>
+                                    <TouchableWithoutFeedback>
+                                        <Text style={styles.link}>{t('signin.createAccount')}</Text>
+                                    </TouchableWithoutFeedback>
+                                </Link>
+
+                                {/* Link to the password recovery screen */}
+                                <Link
+                                    href={{ pathname: '/resetPassword', params: { type: 'password' } }}
+                                    asChild
+                                >
+                                    <TouchableWithoutFeedback>
+                                        <Text style={styles.link}>{t('signin.forgotPassword')}</Text>
+                                    </TouchableWithoutFeedback>
+                                </Link>
+                            </View>
+                        </View>
+                    </View>
+                </ScrollView>
             </KeyboardAvoidingView>
-        </SafeAreaView >
+        </SafeAreaView>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        paddingHorizontal: 15,
-        paddingBottom: 35
     },
     keyboardAvoidingView: {
         flex: 1,
     },
+    scrollViewContent: {
+        flexGrow: 1,
+        paddingHorizontal: 15,
+        paddingBottom: 35,
+    },
     contentWrapper: {
         flexGrow: 1,
-        gap: 10
+        justifyContent: 'space-between',
+    },
+    form: {
+        marginTop: 20
     },
     header: {
-        width: '100%',
-        marginBottom: 10
+        marginTop: 20,
     },
     headerText: {
         fontSize: fontSize.titles.large,
         fontWeight: 'bold',
     },
     inputGroup: {
-        width: '100%',
-        marginTop: 1,
+        marginBottom: 10,
     },
     checkboxContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 3,
-        width: '100%',
-        height: 40,
-        marginBottom: 5
+        marginBottom: 20,
     },
     checkboxLabel: {
         fontSize: fontSize.labels.medium,
-        marginBottom: 2,
-        marginLeft: 5
+        marginLeft: 5,
     },
     buttonContainer: {
         width: '100%',
-        flexDirection: 'column',
-        gap: 20,
-        paddingBottom: 8,
+        alignSelf: 'flex-end',
     },
     buttonWrapper: {
         borderRadius: 8,
+        marginBottom: 15,
     },
     submitButton: {
         flexDirection: 'row',
@@ -265,24 +312,19 @@ const styles = StyleSheet.create({
         height: 32,
     },
     linkWrapper: {
-        gap: 15,
-        height: 56,
-        width: '100%',
-        justifyContent: 'center',
+        marginTop: 15,
         alignItems: 'center',
-        padding: 4,
-        borderRadius: 10,
-        marginTop: 15
     },
     link: {
         fontSize: fontSize.labels.medium,
         color: '#1E40AF',
+        marginBottom: 10,
     },
     logoContainer: {
         width: '100%',
         height: 150,
         padding: 5,
-        marginTop: 60
+        marginTop: 40,
     },
     logo: {
         width: '100%',
@@ -292,14 +334,30 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 20,
     },
-    logoText: {
-        fontSize: 60,
-        fontWeight: 'bold',
-    },
     logoImage: {
-        flex: 1, 
-        width: '100%', 
-        height: '100%', 
-        backgroundColor: 'white'
-    }
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'white',
+    },
+    errorMessageContainer: {
+        width: '100%',
+        height: 60,
+        paddingHorizontal: 15
+    },
+    errorMessageWrapper: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 15,
+        borderRadius: 10,
+        backgroundColor: '#F8D7DA',
+        marginBottom: 10,
+        height: '100%',
+        width: '100%'
+    },
+    errorMessage: {
+        textAlign: 'center',
+        color: '#B02A37',
+    },
 });
+

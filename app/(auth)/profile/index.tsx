@@ -300,7 +300,7 @@ export default function Profile() {
                                     :
                                     <TouchableOpacity
                                         style={styles.optionButton}
-                                        onPress={() => router.push("/recover_datas/")}
+                                        onPress={() => router.push("/resetPin")}
                                     >
                                         <Text style={styles.optionText}>{t("profile.changePin")}</Text>
                                         <Entypo name="chevron-right" size={24} color="black" />
@@ -318,7 +318,7 @@ export default function Profile() {
                                     :
                                     <TouchableOpacity
                                         style={styles.optionButton}
-                                        onPress={() => router.push("/recover_datas/")}
+                                        onPress={() => router.push("/resetPassword/verificationCodeSent")}
                                     >
                                         <Text style={styles.optionText}>{t("profile.changePassword")}</Text>
                                         <Entypo name="chevron-right" size={24} color="black" />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+    ActivityIndicator,
     Image,
     KeyboardAvoidingView,
     Platform,
@@ -18,7 +19,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Input from '@/components/input';
 import { useLocale } from '@/contexts/TranslationContext';
 import { fontSize } from '@/constants/fonts';
-import { getSignUpSchema, SignUpData } from '@/schemas/authSchemas';
+import { getPasswordSchema, PasswordData } from '@/schemas/authSchemas';
 
 
 export default function SignUp() {
@@ -28,28 +29,32 @@ export default function SignUp() {
     // Translation function
     const { t } = useLocale();
 
-    const signUpStep1Schema = React.useMemo(() => getSignUpSchema(t), [t]);
+    const passwordSchema = React.useMemo(() => getPasswordSchema(t), [t]);
     const {
         control,
         handleSubmit,
         formState: { errors },
-    } = useForm<SignUpData>({
-        resolver: zodResolver(signUpStep1Schema),
+    } = useForm<PasswordData>({
+        resolver: zodResolver(passwordSchema),
         mode: 'onChange',
     });
 
     // Function to handle form submission
-    const onSubmit = async (data: SignUpData) => {
+    const onSubmit = async (data: PasswordData) => {
         setLoading(true);
         try {
-            setLoading(false);
-            router.push({
-                pathname: '/signup/userInfos',
-                params: {
-                    email: data.email,
-                    password: data.password,
-                },
-            });
+            //Make the request to api here
+
+            setTimeout(() => {
+                setLoading(false);
+                router.push({
+                    pathname: '/resetPassword/resetPasswordCompleted',
+                    params: {
+                        RequestSuccessful: 'true'
+                    },
+                });
+            }, 1000);
+
         } catch (error) {
             setLoading(false);
             console.error(error);
@@ -70,28 +75,10 @@ export default function SignUp() {
                         <View>
                             {/* Header section */}
                             <View style={styles.header}>
-                                <Text style={styles.headerText}>{t('signup.begin.header')}</Text>
+                                <Text style={styles.headerText}>{t('recoveryDatas.newPasswordLabel')}</Text>
                             </View>
                             {/* Formulário */}
                             <View style={styles.form}>
-                                {/* Email input field */}
-                                <View style={styles.inputGroup}>
-                                    <Controller
-                                        control={control}
-                                        name="email"
-                                        render={({ field: { onChange, onBlur, value } }) => (
-                                            <Input
-                                                label={t('signup.begin.email')}
-                                                onChange={(text: string) => onChange(text.toLowerCase())}
-                                                onBlur={onBlur}
-                                                value={value || ''}
-                                                type="email"
-                                                error={errors.email?.message}
-                                            />
-                                        )}
-                                    />
-                                </View>
-                                {/* Enf of component */}
 
                                 {/* Password input field */}
                                 <View style={styles.inputGroup}>
@@ -100,7 +87,7 @@ export default function SignUp() {
                                         name="password"
                                         render={({ field: { onChange, onBlur, value } }) => (
                                             <Input
-                                                label={t('signup.begin.password')}
+                                                label={t('recoveryDatas.password')}
                                                 onChange={onChange}
                                                 onBlur={onBlur}
                                                 value={value || ''}
@@ -119,7 +106,7 @@ export default function SignUp() {
                                         name="confirmPassword"
                                         render={({ field: { onChange, onBlur, value } }) => (
                                             <Input
-                                                label={t('signup.begin.confirmPassword')}
+                                                label={t('recoveryDatas.confirmPassword')}
                                                 onChange={onChange}
                                                 onBlur={onBlur}
                                                 value={value || ''}
@@ -143,22 +130,11 @@ export default function SignUp() {
                                 disabled={loading}
                             >
                                 <View style={styles.submitButton}>
-                                    <Feather name="arrow-right" size={24} color="white" />
-                                </View>
-                            </TouchableOpacity>
-                            {/* Enf of component */}
-
-                            {/* Google Sign-In button */}
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                style={styles.buttonWrapper}
-                                disabled={loading}
-                            >
-                                <View style={styles.googleButton}>
-                                    <Image
-                                        source={require('@/assets/icons/google-icon.png')}
-                                        style={styles.googleIcon}
-                                    />
+                                    {loading ?
+                                        <ActivityIndicator size={24} color="#fff" />
+                                        :
+                                        <Feather name="arrow-right" size={24} color={'white'} />
+                                    }
                                 </View>
                             </TouchableOpacity>
                             {/* Enf of component */}

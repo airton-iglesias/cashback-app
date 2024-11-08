@@ -5,7 +5,7 @@ import CountryFlag from 'react-native-country-flag';
 import { Feather } from '@expo/vector-icons';
 import { fontSize } from '@/constants/fonts';
 
-const Select = ({ options, onChangeSelect, text, SelectOption }: any) => {
+const Select = ({ options, onChangeSelect, text, SelectOption, error }: any) => {
   const [selected, setSelected] = useState<any>(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -44,7 +44,7 @@ const Select = ({ options, onChangeSelect, text, SelectOption }: any) => {
       >
         <View style={styles.modalWrapper}>
           <TouchableOpacity style={styles.backButton} onPress={() => setModalVisible(false)}>
-            <Feather name="arrow-left" size={30} style={{ color: 'black'}} />
+            <Feather name="arrow-left" size={30} style={{ color: 'black' }} />
             <Text style={{ fontSize: fontSize.titles.mini, fontWeight: 'bold' }}>
               {text}
             </Text>
@@ -56,6 +56,7 @@ const Select = ({ options, onChangeSelect, text, SelectOption }: any) => {
           renderItem={renderOption}
         />
       </Modal>
+      {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 }
@@ -87,10 +88,15 @@ const styles = StyleSheet.create({
     height: 48,
     marginTop: 20
   },
-  backButton:{
-    left: 15, 
-    flexDirection: 'row', 
+  backButton: {
+    left: 15,
+    flexDirection: 'row',
     gap: 5,
     alignItems: 'center',
+  },
+  errorText: {
+    color: '#DC3545',
+    fontSize: fontSize.labels.medium,
+    marginTop: 5,
   }
 })

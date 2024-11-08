@@ -8,38 +8,72 @@
         "password": "Password",
         "keepLogged": "Manter-me conectado",
         "createAccount": "Criar nova conta",
-        "forgotPassword": "Esqueceu sua senha?"
+        "forgotPassword": "Esqueceu sua senha?",
+        "emailInvalid": "Por favor, insira um endereço de email válido.",
+        "passwordInvalid": "Sua senha deve conter no mínimo 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.",
+        "InvalidCrentials": "Algo deu errado. Por favor, verifique as suas credenciais e tente novamente!",
+        "RequiredField": "Campo obrigatório"
     },
     "signup": {
-        "signup_step_0": {
+        "begin": {
             "header": "Nova conta",
             "email": "Email ou Telemovel",
             "password": "Password",
-            "confirmPassword": "Confirme o Password"
+            "confirmPassword": "Confirme o Password",
+            "RequiredField": "Campo obrigatório",
+            "passwordInvalid": "Sua senha deve conter no mínimo 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.",
+            "emailInvalid": "Por favor, insira um endereço de email válido.",
+            "passwordsDoNotMatch": "As senhas não coincidem."
         },
-        "signup_step_1": {
+        "userInfos": {
             "name": "Nome",
             "country": "País",
             "select_country": "Selecione o País",
             "currency": "Moeda",
             "select_currency": "Selecione a moeda",
             "optional": "Opcional",
-            "bonus_code": "Código Bonus"
+            "bonus_code": "Código Bonus",
+            "RequiredField": "Campo obrigatório",
+            "nameInvalid": "Por favor, insira um nome válido."
         },
-        "signup_step_2": {
-            "new_pin": "Criar pin"
+        "newPIN": {
+            "title": "Crie um novo PIN"
         },
-        "signup_step_3": {
-            "confirm_pin": "Confirmar pin",
-            "pin_error": "Pin inválido ou errado!"
+        "confirmPIN": {
+            "confirm_pin": "Confirme o PIN",
+            "pin_error": "Os pins não são iguais!"
         },
-        "signup_step_4": {
-            "processing_register": "Processando seu cadastro..."
+        "verificationCodeSent": {
+            "title": "Um código de verificação foi enviado para a sua caixa de email!"
+        },
+        "verificationCode":{
+            "title": "Verificação de email",
+            "subtitle": "Insira o código de verificação enviado para o seu email",
+            "dontReceiveCode": "Não recebeu o código?",
+            "resendCode": "Reenviar código",
+            "wrongCode": "O código inserido é inválido!",
+            "RequiredField":"Campo obrigatório",
+            "lengthInvalid": "O código precisa ter 6 dígitos."
+        },
+        "sentenceWallet": {
+            "title": "Frase",
+            "label": "Frase de recuperação de carteira",
+            "copy": "Copiar",
+            "warning1": "A frase foi enviada para o seu email como forma de armazenamento;",
+            "warning2": "cada Frase é única e dá-lhe acesso à sua carteira crypto em qualquer lugar;",
+            "warning3": "a Frase, não é recuperável;",
+            "warning4": "a perda da sua Frase pode levar à perda da sua carteira, para sempre."
+        },
+        "register_completed": {
+            "error": "Algo deu errado. Por favor, tente novamente."
         }
     },
     "pin": {
         "recoverPin": "Recuperar Pin",
-        "pinError": "Pin validate error"
+        "pinError": "O Pin inserido não é válido.",
+        "pinError2": "Se você esqueceu, ",
+        "pressHere": "clique aqui",
+        "pinError3": " para recuperar."
     },
     "dashboardSearch": {
         "home": {
@@ -151,13 +185,14 @@
         }
     },
     "recoveryDatas": {
-        "goBack": "Voltar",
-        "inputLabel": "Email para envio de confirmação",
+        "title": "Recuperar password",
+        "emailError": "O email inserido não existe.",
+        "inputLabel": "Email para envio de código de confirmação",
         "checkInbox": "Verifique sua caixa de email",
         "newPasswordLabel": "Crie uma nova senha",
         "requirementsLabel": "Com 8 caracteres ou mais, sendo alfanúmero.",
-        "password": "Passowrd",
-        "confirmPassword": "Confirmar Password",
+        "password": "Password",
+        "confirmPassword": "Confirme o Password",
         "resetPin": "Redefinir pin",
         "confirmPin": "Confirmar pin",
         "pinError": "Pin validate error"

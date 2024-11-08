@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+    ActivityIndicator,
     Image,
     KeyboardAvoidingView,
     Platform,
@@ -18,38 +19,38 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Input from '@/components/input';
 import { useLocale } from '@/contexts/TranslationContext';
 import { fontSize } from '@/constants/fonts';
-import { getSignUpSchema, SignUpData } from '@/schemas/authSchemas';
+import { getEmailSchema, EmailData } from '@/schemas/authSchemas';
 
 
-export default function SignUp() {
+export default function ResetPassword() {
     // State variables for loading state
     const [loading, setLoading] = useState(false);
+    const [codeError, setCodeError] = useState<boolean>(true);
 
     // Translation function
     const { t } = useLocale();
 
-    const signUpStep1Schema = React.useMemo(() => getSignUpSchema(t), [t]);
+    const emailSchema = React.useMemo(() => getEmailSchema(t), [t]);
     const {
         control,
         handleSubmit,
         formState: { errors },
-    } = useForm<SignUpData>({
-        resolver: zodResolver(signUpStep1Schema),
+    } = useForm<EmailData>({
+        resolver: zodResolver(emailSchema),
         mode: 'onChange',
     });
 
     // Function to handle form submission
-    const onSubmit = async (data: SignUpData) => {
+    const onSubmit = async (data: EmailData) => {
         setLoading(true);
+        console.log(data.email);
+
         try {
-            setLoading(false);
-            router.push({
-                pathname: '/signup/userInfos',
-                params: {
-                    email: data.email,
-                    password: data.password,
-                },
-            });
+            setTimeout(() => {
+                setLoading(false);
+                router.navigate('/resetPassword/verificationCodeSent');
+            }, 1000);
+
         } catch (error) {
             setLoading(false);
             console.error(error);
@@ -70,8 +71,18 @@ export default function SignUp() {
                         <View>
                             {/* Header section */}
                             <View style={styles.header}>
-                                <Text style={styles.headerText}>{t('signup.begin.header')}</Text>
+                                <Text style={styles.headerText}>{t('recoveryDatas.title')}</Text>
                             </View>
+
+                            {/* Error Message */}
+                            {codeError && (
+                                <View style={styles.errorMessageContainer}>
+                                    <View style={styles.errorMessageWrapper}>
+                                        <Text style={styles.errorMessage}>{t('recoveryDatas.emailError')}</Text>
+                                    </View>
+                                </View>
+                            )}
+
                             {/* Formulário */}
                             <View style={styles.form}>
                                 {/* Email input field */}
@@ -81,50 +92,12 @@ export default function SignUp() {
                                         name="email"
                                         render={({ field: { onChange, onBlur, value } }) => (
                                             <Input
-                                                label={t('signup.begin.email')}
+                                                label={t('recoveryDatas.inputLabel')}
                                                 onChange={(text: string) => onChange(text.toLowerCase())}
                                                 onBlur={onBlur}
                                                 value={value || ''}
                                                 type="email"
                                                 error={errors.email?.message}
-                                            />
-                                        )}
-                                    />
-                                </View>
-                                {/* Enf of component */}
-
-                                {/* Password input field */}
-                                <View style={styles.inputGroup}>
-                                    <Controller
-                                        control={control}
-                                        name="password"
-                                        render={({ field: { onChange, onBlur, value } }) => (
-                                            <Input
-                                                label={t('signup.begin.password')}
-                                                onChange={onChange}
-                                                onBlur={onBlur}
-                                                value={value || ''}
-                                                type="password"
-                                                error={errors.password?.message}
-                                            />
-                                        )}
-                                    />
-                                </View>
-                                {/* Enf of component */}
-
-                                {/* Confirm password input field */}
-                                <View style={styles.inputGroup}>
-                                    <Controller
-                                        control={control}
-                                        name="confirmPassword"
-                                        render={({ field: { onChange, onBlur, value } }) => (
-                                            <Input
-                                                label={t('signup.begin.confirmPassword')}
-                                                onChange={onChange}
-                                                onBlur={onBlur}
-                                                value={value || ''}
-                                                type="password"
-                                                error={errors.confirmPassword?.message}
                                             />
                                         )}
                                     />
@@ -143,22 +116,11 @@ export default function SignUp() {
                                 disabled={loading}
                             >
                                 <View style={styles.submitButton}>
-                                    <Feather name="arrow-right" size={24} color="white" />
-                                </View>
-                            </TouchableOpacity>
-                            {/* Enf of component */}
-
-                            {/* Google Sign-In button */}
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                style={styles.buttonWrapper}
-                                disabled={loading}
-                            >
-                                <View style={styles.googleButton}>
-                                    <Image
-                                        source={require('@/assets/icons/google-icon.png')}
-                                        style={styles.googleIcon}
-                                    />
+                                    {loading ?
+                                        <ActivityIndicator size={24} color="#fff" />
+                                        :
+                                        <Feather name="arrow-right" size={24} color={'white'} />
+                                    }
                                 </View>
                             </TouchableOpacity>
                             {/* Enf of component */}
@@ -239,4 +201,24 @@ const styles = StyleSheet.create({
         width: 32,
         height: 32,
     },
+    errorMessageContainer: {
+        width: '100%',
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 10,
+        marginTop: 20
+    },
+    errorMessageWrapper: {
+        borderRadius: 10,
+        backgroundColor: '#F8D7DA',
+        height: '100%',
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    errorMessage: {
+        textAlign: 'center',
+        color: '#B02A37',
+    }
 });
