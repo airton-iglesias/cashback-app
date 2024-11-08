@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
     ActivityIndicator,
-    Image,
     KeyboardAvoidingView,
     Platform,
     SafeAreaView,
@@ -29,17 +28,13 @@ export default function SignUp() {
     // Translation function
     const { t } = useLocale();
 
+    // React Hook Form setup
     const passwordSchema = React.useMemo(() => getPasswordSchema(t), [t]);
-    const {
-        control,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<PasswordData>({
+    const { control, handleSubmit, formState: { errors }, } = useForm<PasswordData>({
         resolver: zodResolver(passwordSchema),
         mode: 'onChange',
     });
 
-    // Function to handle form submission
     const onSubmit = async (data: PasswordData) => {
         setLoading(true);
         try {
@@ -77,7 +72,7 @@ export default function SignUp() {
                             <View style={styles.header}>
                                 <Text style={styles.headerText}>{t('recoveryDatas.newPasswordLabel')}</Text>
                             </View>
-                            {/* Formulário */}
+                            {/* Form section */}
                             <View style={styles.form}>
 
                                 {/* Password input field */}

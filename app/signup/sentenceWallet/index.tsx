@@ -9,12 +9,14 @@ import { fontSize } from "@/constants/fonts";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SentenceWallet() {
-
+    // Sentence received from the previous screen
     const { sentence } = useLocalSearchParams();
 
+    // State variables for UI
     const [loading, setLoading] = useState<boolean>(false);
     const { t } = useLocale();
 
+    // Function to copy the sentence to the clipboard
     const copyToClipboard = (item: string) => {
         Clipboard.setStringAsync(item);
     };
@@ -27,12 +29,18 @@ export default function SentenceWallet() {
                     <View style={styles.headerContainer}>
                         <Text style={styles.headerText}>{t("signup.sentenceWallet.title")}</Text>
                     </View>
+                    {/* End of Component */}
 
+                    {/* Sentence text */}
                     <View style={styles.inputWrapper}>
                         <View style={styles.inputLabelWrapper}>
+                            {/* Label */}
                             <View style={styles.inputLabelSubWrapper}>
                                 <Text style={styles.inputLabel}>{t("signup.sentenceWallet.label")}</Text>
                             </View>
+                            {/* End of Label */}
+
+                            {/* Copy button */}
                             <TouchableOpacity
                                 style={styles.copyButton}
                                 activeOpacity={0.7}
@@ -41,16 +49,22 @@ export default function SentenceWallet() {
                                 <Ionicons name="copy-outline" size={12} color="#fff" />
                                 <Text style={styles.copyText}>{t("signup.sentenceWallet.copy")}</Text>
                             </TouchableOpacity>
+                            {/* End of Copy button */}
                         </View>
                         <View
                             style={styles.input}
                         >
+                            {/* sentence */}
                             <Text style={styles.inputText} selectable>
                                 {sentence}
                             </Text>
+                            {/* End of sentence */}
                         </View>
                     </View>
                 </View>
+                {/* End of component */}
+
+                {/* Warning */}
                 <View style={styles.warningContainer}>
                     <View style={styles.warningItemsWrapper}>
                         <View style={styles.warningIconWrapper}>
@@ -64,6 +78,9 @@ export default function SentenceWallet() {
                         </View>
                     </View>
                 </View>
+                {/* End of Warning */}
+
+                {/* Submtit button */}
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         activeOpacity={0.6}
@@ -80,6 +97,7 @@ export default function SentenceWallet() {
                         </View>
                     </TouchableOpacity>
                 </View>
+                {/* End of component */}
             </View>
         </SafeAreaView>
     );

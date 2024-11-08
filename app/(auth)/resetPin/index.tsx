@@ -10,10 +10,13 @@ export default function VerificationCodeSent() {
     return (
         <SafeAreaView>
             <View style={styles.container}>
+                {/* header */}
                 <View style={styles.infoWrapper}>
                     <Feather name="send" size={71} color="black" />
                     <Text style={styles.infoText}>{t("signup.verificationCodeSent.title")}</Text>
                 </View>
+
+                {/* Submit button */}
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         activeOpacity={0.6}
@@ -25,6 +28,7 @@ export default function VerificationCodeSent() {
                         </View>
                     </TouchableOpacity>
                 </View>
+                {/* Enf of component */}
             </View>
         </SafeAreaView>
     );

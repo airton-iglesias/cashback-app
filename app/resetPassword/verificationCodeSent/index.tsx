@@ -6,7 +6,6 @@ import { fontSize } from "@/constants/fonts";
 
 export default function VerificationCodeSent() {
     const { t } = useLocale();
-
     return (
         <SafeAreaView>
             <View style={styles.container}>

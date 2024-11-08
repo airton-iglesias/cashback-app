@@ -9,12 +9,13 @@ export default function resetPasswordCompleted() {
 
     const { RequestSuccessful } = useLocalSearchParams();
     const { t } = useLocale();
+    
     console.log(RequestSuccessful)
 
-    {/* Redirect to the home screen after 3 seconds */ }
+    {/* Redirect to the signin screen after 3 seconds */ }
     useEffect(() => {
         const timeout = setTimeout(() => {
-            // This will be changed to the new logic
+            // redirect to the signin screen
             router.replace("/");
         }, 3000);
         return () => clearTimeout(timeout);

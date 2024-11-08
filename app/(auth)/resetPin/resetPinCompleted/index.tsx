@@ -6,15 +6,17 @@ import { fontSize } from "@/constants/fonts";
 import { useLocale } from '@/contexts/TranslationContext';
 
 export default function resetPinCompleted() {
-
+    // get the params from previous screen
     const { RequestSuccessful } = useLocalSearchParams();
+
+    //Translation function
     const { t } = useLocale();
-    console.log(RequestSuccessful)
 
     {/* Redirect to the home screen after 3 seconds */ }
     useEffect(() => {
+
+        // This will be changed to the new logic
         const timeout = setTimeout(() => {
-            // This will be changed to the new logic
             router.replace('/pin');
         }, 3000);
         return () => clearTimeout(timeout);
@@ -33,7 +35,6 @@ export default function resetPinCompleted() {
                     </View>
                 )}
             </View>
-
         </SafeAreaView>
     );
 }

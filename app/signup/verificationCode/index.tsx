@@ -13,18 +13,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function VerificationCode() {
 
-    const [code, setCode] = useState<string>('');
-
+    // State variables for UI 
     const [loading, setLoading] = useState<boolean>(false);
     const [codeError, setCodeError] = useState<boolean>(false);
     const { t } = useLocale();
 
+    // React Hook Form setup
     const signInSchema = React.useMemo(() => getEmailVerificationSchema(t), [t]);
     const { control, handleSubmit, formState: { errors } } = useForm<EmailVerificationData>({
         resolver: zodResolver(signInSchema),
         mode: 'onChange',
     });
 
+    
     const onSubmit = async (data: EmailVerificationData) => {
         setLoading(true);
         // make the request to the API here
@@ -61,8 +62,8 @@ export default function VerificationCode() {
                         </View>
                     )}
 
+                    {/* Verification code inputs */}
                     <View style={styles.inputWrapper}>
-
                         <Controller
                             control={control}
                             name="code"
@@ -82,13 +83,19 @@ export default function VerificationCode() {
                             )}
                         />
                     </View>
+                    {/* end of component */}
                 </View>
+
+                {/* dont received email Button */}
                 <View style={styles.resendCodeContainer}>
                     <Text style={{ fontSize: fontSize.labels.medium }}>{t("signup.verificationCode.dontReceiveCode")}</Text>
                     <TouchableOpacity>
                         <Text style={{ color: '#1E40AF', fontSize: fontSize.labels.medium }}>{t("signup.verificationCode.resendCode")}</Text>
                     </TouchableOpacity>
                 </View>
+                {/* End of component */}
+
+                {/* Submit Button */}
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         activeOpacity={0.6}
@@ -105,6 +112,7 @@ export default function VerificationCode() {
                         </View>
                     </TouchableOpacity>
                 </View>
+                {/* End of component */}
             </View>
         </SafeAreaView>
     );

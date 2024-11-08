@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { useLocale } from '@/contexts/TranslationContext';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
 import { SafeAreaView } from 'react-native-safe-area-context';
 

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { TouchableOpacity, View, StyleSheet, Text, ActivityIndicator } from "react-native";
-import { Octicons, Feather } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import Input from "@/components/input";
 import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
@@ -13,12 +13,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function VerificationCode() {
 
-    const [code, setCode] = useState<string>('');
-
+    // State variables for UI
     const [loading, setLoading] = useState<boolean>(false);
     const [codeError, setCodeError] = useState<boolean>(true);
     const { t } = useLocale();
 
+    // React Hook Form setup
     const signInSchema = React.useMemo(() => getEmailVerificationSchema(t), [t]);
     const { control, handleSubmit, formState: { errors } } = useForm<EmailVerificationData>({
         resolver: zodResolver(signInSchema),
@@ -56,8 +56,8 @@ export default function VerificationCode() {
                         </View>
                     )}
 
+                    {/* Code verification inputs */}
                     <View style={styles.inputWrapper}>
-
                         <Controller
                             control={control}
                             name="code"
@@ -77,13 +77,19 @@ export default function VerificationCode() {
                             )}
                         />
                     </View>
+                    {/* End of component */}
                 </View>
+
+                {/* Dont receive code button*/}
                 <View style={styles.resendCodeContainer}>
                     <Text style={{ fontSize: fontSize.labels.medium }}>{t("signup.verificationCode.dontReceiveCode")}</Text>
                     <TouchableOpacity>
                         <Text style={{ color: '#1E40AF', fontSize: fontSize.labels.medium }}>{t("signup.verificationCode.resendCode")}</Text>
                     </TouchableOpacity>
                 </View>
+                {/* End of component */}
+
+                {/* Submit button */}
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         activeOpacity={0.6}
@@ -100,6 +106,7 @@ export default function VerificationCode() {
                         </View>
                     </TouchableOpacity>
                 </View>
+                {/* End of component */}
             </View>
         </SafeAreaView>
     );

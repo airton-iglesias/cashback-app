@@ -42,6 +42,7 @@ export default function UserInfos() {
     // Translation function
     const { t } = useLocale();
 
+    // React Hook Form setup
     const signUpSchema = React.useMemo(() => getSignUpStep1Schema(t), [t]);
     const { control, handleSubmit, formState: { errors } } = useForm<SignUpStep1Data>({
         resolver: zodResolver(signUpSchema),
@@ -91,7 +92,6 @@ export default function UserInfos() {
         }, 2000);
 
     };
-
 
     // Effect to handle keyboard visibility
     useEffect(() => {
