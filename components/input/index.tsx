@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import Feather from '@expo/vector-icons/Feather';
 import { fontSize } from '@/constants/fonts';
 
 interface InputProps {
@@ -85,6 +86,18 @@ const Input: React.FC<InputProps> = ({
                         customBackground ? { backgroundColor: customBackground } : null,
                     ]}
                 />
+                {type === 'password' && (
+                    <TouchableOpacity
+                        style={styles.iconWrapper}
+                        onPress={() => setSecureEntry(!secureEntry)}
+                    >
+                        <Feather
+                            name={secureEntry ? 'eye' : 'eye-off'}
+                            size={24}
+                            color="#6C757D"
+                        />
+                    </TouchableOpacity>
+                )}
             </View>
             {error && <Text style={styles.errorText}>{error}</Text>}
         </View>
@@ -103,13 +116,19 @@ const styles = StyleSheet.create({
     inputWrapper: {
         position: 'relative',
         justifyContent: 'center',
-        alignItems: 'center',
+    },
+    iconWrapper: {
+        position: 'absolute',
+        right: 10,
+        height: '100%',
+        justifyContent: 'center',
     },
     inputHighlight: {
         position: 'absolute',
-        borderWidth: 4,
-        width: '101.5%',
-        height: 53,
+        borderWidth: 5,
+        width: '102.5%',
+        left: -4.5,
+        height: 55,
         borderRadius: 10,
         opacity: 0,
     },

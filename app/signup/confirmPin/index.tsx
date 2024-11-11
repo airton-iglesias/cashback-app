@@ -57,6 +57,7 @@ export default function ConfirmPin() {
             onPressIn={() => setPressedButton(value)}
             onPressOut={() => setPressedButton(null)}
             style={[styles.button, pressedButton === value && styles.buttonPressed]}
+            disabled={loading}
         >
             <View style={styles.buttonContent}>
                 <Text
@@ -130,6 +131,7 @@ export default function ConfirmPin() {
                             styles.button,
                             pressedButton === -1 && styles.buttonPressed,
                         ]}
+                        disabled={loading}
                     >
                         <View style={styles.buttonContent}>
                             <MaterialCommunityIcons

@@ -1,13 +1,6 @@
-import React, { useState } from 'react';
-import {
-    Text,
-    TouchableHighlight,
-    View,
-    StyleSheet,
-    TouchableOpacity,
-    ActivityIndicator,
-} from 'react-native';
-import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { Text, TouchableHighlight, View, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocale } from '@/contexts/TranslationContext';
 import { router } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
@@ -25,26 +18,26 @@ export default function SignupStep3() {
     // Translation function
     const { t } = useLocale();
 
-    const onSubmit = async () => {
-        setLoading(true);
+    useEffect(() => {
+        if (pin.length === 6) {
+            setLoading(true);
 
-        try {
-            // Make the request to API here.
-            // The Timeout is to simulate an API call delay, you can remove it when making the API call
-            setTimeout(() => {
-                if (pin.length === 6) {
+            try {
+                // Make the request to API here.
+                //{...}
+                // The Timeout is to simulate an API call delay, you can remove it when making the API call
+                setTimeout(() => {
+
                     setLoading(false);
                     router.replace("/dashboard");
                     return;
-                }
-
+                }, 2000);
+            }
+            catch (error) {
                 setLoading(false);
-            }, 2000);
+            }
         }
-        catch (error) {
-            setLoading(false);
-        }
-    };
+    }, [pin]);
 
     //Renders a numeric button for the number pad
     const renderButton = (value: number) => (
@@ -57,6 +50,7 @@ export default function SignupStep3() {
             onPressIn={() => setPressedButton(value)}
             onPressOut={() => setPressedButton(null)}
             style={[styles.button, pressedButton === value && styles.buttonPressed]}
+            disabled={loading}
         >
             <View style={styles.buttonContent}>
                 <Text
@@ -85,6 +79,7 @@ export default function SignupStep3() {
                                 <Text style={styles.errorMessage}>{t('pin.pinError2')}</Text>
                                 <TouchableOpacity
                                     onPress={() => router.navigate('/resetPin')}
+                                    activeOpacity={0.7}
                                 >
                                     <Text style={[styles.errorMessage, { textDecorationLine: 'underline' }]}>
                                         {t('pin.pressHere')}
@@ -131,6 +126,7 @@ export default function SignupStep3() {
                             styles.button,
                             pressedButton === -1 && styles.buttonPressed,
                         ]}
+                        disabled={loading}
                     >
                         <View style={styles.buttonContent}>
                             <MaterialCommunityIcons
@@ -143,24 +139,10 @@ export default function SignupStep3() {
                     {/* End of Component */}
                 </View>
 
-                {/* Buttons wrapper */}
-                <View style={styles.buttonContainer}>
-                    {/* Submit button */}
-                    <TouchableOpacity
-                        activeOpacity={0.7}
-                        style={styles.buttonWrapper}
-                        onPress={onSubmit}
-                    >
-                        <View style={styles.submitButton}>
-                            {loading ? (
-                                <ActivityIndicator size={24} color="#fff" />
-                            ) : (
-                                <Feather name="arrow-right" size={24} color="white" />
-                            )}
-                        </View>
-                    </TouchableOpacity>
-                    {/* End of component */}
-                </View>
+                {loading && (
+                    <ActivityIndicator size="large" color="#000000" style={{ marginTop: 20 }} />
+                )}
+
             </View>
         </SafeAreaView>
     );
