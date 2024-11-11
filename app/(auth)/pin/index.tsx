@@ -25,17 +25,26 @@ export default function SignupStep3() {
     // Translation function
     const { t } = useLocale();
 
-    // Submit pin function
-    const onSubmit = () => {
+    const onSubmit = async () => {
         setLoading(true);
 
-        if (pin.length === 6) {
-            // Make the request to the API here
-            router.replace("/dashboard");
-        }
+        try {
+            // Make the request to API here.
+            // The Timeout is to simulate an API call delay, you can remove it when making the API call
+            setTimeout(() => {
+                if (pin.length === 6) {
+                    setLoading(false);
+                    router.replace("/dashboard");
+                    return;
+                }
 
-        setLoading(false);
-    }
+                setLoading(false);
+            }, 2000);
+        }
+        catch (error) {
+            setLoading(false);
+        }
+    };
 
     //Renders a numeric button for the number pad
     const renderButton = (value: number) => (

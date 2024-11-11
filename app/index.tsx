@@ -89,7 +89,7 @@ export default function SigninScreen() {
                 setLoading(false);
                 // If no valid 17-word phrase is found
                 router.replace('/walletRecovery');
-            }, 2000)
+            }, 2000);
         }
         catch (error) {
             setLoading(false);
