@@ -28,7 +28,7 @@ export default function Send_Discount_Home({ changeScreen }: any) {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.qrcodeContainer} onPress={() => router.navigate("/(app)/dashboard/qrcode")} activeOpacity={0.7}>
+                <TouchableOpacity style={styles.qrcodeContainer} onPress={() => router.navigate("/dashboard/qrcode")} activeOpacity={0.7}>
                     <View style={styles.qrcodeSubContainer}>
                         <MaterialCommunityIcons name="line-scan" size={100} color="white" />
                     </View>

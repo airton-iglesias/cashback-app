@@ -5,7 +5,7 @@ import { router } from "expo-router";
 
 export default function CommerceItem({item}: any) {
     return (
-        <TouchableOpacity style={styles.item} onPress={() => router.navigate("/(app)/commerce_informations")} activeOpacity={0.7}>
+        <TouchableOpacity style={styles.item} onPress={() => router.navigate("/commerce_informations")} activeOpacity={0.7}>
             <Image style={styles.image} source={require('@/assets/images/reidobacalhau.png')} />
             <View style={styles.textContainer}>
                 <Text numberOfLines={2} style={styles.title}>{item.title}</Text>

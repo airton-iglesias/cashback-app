@@ -144,7 +144,7 @@ export default function AmountCashback({ changeScreen }: any) {
                                 <TouchableOpacity
                                     activeOpacity={0.7}
                                     style={styles.buttonWrapper}
-                                    onPress={() => router.push({ pathname: '/(app)/send_cashback_success', params: { buyValue, discountValue } })}
+                                    onPress={() => router.push({ pathname: '/send_cashback_success', params: { buyValue, discountValue } })}
                                 >
                                     <View style={styles.submitButton}>
                                         <Feather name="arrow-right" size={24} color={'white'} />

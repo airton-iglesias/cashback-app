@@ -92,7 +92,7 @@ export default function CommerceMenu() {
                     <TouchableOpacity
                         activeOpacity={0.7}
                         style={styles.menuItemButton}
-                        onPress={() => router.push({ pathname: "/(app)/commerce_informations", params: { selectedItem: JSON.stringify(data[0]) } })}
+                        onPress={() => router.push({ pathname: "/commerce_informations", params: { selectedItem: JSON.stringify(data[0]) } })}
                     >
                         <View style={styles.iconContainer}>
                             <Feather name="eye" size={24} color="#0A3A74" />

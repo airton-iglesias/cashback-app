@@ -47,7 +47,7 @@ const VideoPost = ({ post, activePostID, setIsMuted, isMuted }: videoPost) => {
         if (activePostID === post.id && pathname === "/dashboard") {
             video.current.pauseAsync();
         }
-        router.navigate("/(app)/commerce_informations")
+        router.navigate("/commerce_informations")
     };
 
     return (
