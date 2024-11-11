@@ -139,6 +139,7 @@ export default function SignupStep3() {
                     {/* End of Component */}
                 </View>
 
+                {/* Loading Indicator */}
                 {loading && (
                     <ActivityIndicator size="large" color="#000000" style={{ marginTop: 20 }} />
                 )}
