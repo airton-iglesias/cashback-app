@@ -9,7 +9,6 @@ export default function RegisterCompleted() {
 
     const { RequestSuccessful } = useLocalSearchParams();
     const { t } = useLocale();
-    console.log(RequestSuccessful)
 
     {/* Redirect to the home screen after 3 seconds */ }
     useEffect(() => {

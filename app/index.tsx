@@ -16,6 +16,7 @@ import LanguageModal from '@/components/languageModal';
 import { useLocale } from '@/contexts/TranslationContext';
 import { fontSize } from '@/constants/fonts';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StorageService } from '@/services/storageService';
 
 export default function SigninScreen() {
     // State variables for UI 
@@ -37,45 +38,65 @@ export default function SigninScreen() {
 
     // Effect to handle keyboard visibility changes
     useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-            setKeyboardIsVisible(true);
-        });
+        const showListener = Keyboard.addListener('keyboardDidShow', () => setKeyboardIsVisible(true));
+        const hideListener = Keyboard.addListener('keyboardDidHide', () => setKeyboardIsVisible(false));
 
-        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-            setKeyboardIsVisible(false);
-        });
         return () => {
-            keyboardDidShowListener.remove();
-            keyboardDidHideListener.remove();
+            showListener.remove();
+            hideListener.remove();
         };
     }, []);
 
     // Effect to display the language modal after a delay
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setModalVisible(false);
+        const timer = setTimeout(async () => {
+            const userLanguage = await StorageService.getItem('USER_LANGUAGE');
+            if (!userLanguage) {
+                setModalVisible(true);
+            }
         }, 300);
         return () => clearTimeout(timer);
     }, []);
 
     const onSubmit = async (data: SignInData) => {
-        if (requestError) { setRequestError(!requestError); }
+        if (requestError) {
+            setRequestError(!requestError);
+        }
         setLoading(true);
 
         try {
-            // Implement your authentication API call here using data.email and data.password
-            setRequestError(!requestError);
-            setTimeout(() => {
-                setLoading(false);
-                router.replace('/pin');
-            }, 2000);
+            // Make the request to API here. The params is data.email and data.password
 
-        } catch (error) {
+            // After successful authentication
+            // Check if the user has a valid 17-word phrase in storage
+            const walletPhrase = await StorageService.getItem('walletPhrase');
+
+            //console.log(walletPhrase)
+
+            // The Timeout is to simulate an API call delay, you can remove it when making the API call
+            setTimeout(() => {
+                if (walletPhrase) {
+                    setLoading(false);
+                    router.push({
+                        pathname: "/signinSuccess",
+                        params: {
+                            RequestSuccessful: 'true'
+                        },
+                    });
+                    return;
+                }
+
+                setLoading(false);
+                // If no valid 17-word phrase is found
+                router.replace('/walletRecovery');
+            }, 2000)
+        }
+        catch (error) {
             setLoading(false);
-            setRequestError(!requestError);
-            console.error(error);
+            setRequestError(true);
         }
     };
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -84,6 +105,7 @@ export default function SigninScreen() {
                 modalVisible={modalVisible}
                 handleCloseModal={() => setModalVisible(!modalVisible)}
             />
+            {/* End of language modal */}
 
             {/* Logo section, hidden when the keyboard is visible */}
             {!keyboardIsVisible && (
@@ -97,6 +119,7 @@ export default function SigninScreen() {
                     </View>
                 </View>
             )}
+            {/* End of logo section */}
 
             {/* Error message section */}
             {requestError && (
@@ -106,8 +129,8 @@ export default function SigninScreen() {
                     </View>
                 </View>
             )}
+            {/* End of error message section */}
 
-            {/* KeyboardAvoidingView and ScrollView */}
             <KeyboardAvoidingView
                 style={styles.keyboardAvoidingView}
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -124,61 +147,66 @@ export default function SigninScreen() {
                             <View style={styles.header}>
                                 <Text style={styles.headerText}>{t('signin.header')}</Text>
                             </View>
+                            {/* End of Title */}
 
                             <View style={styles.form}>
+                                {/* Email input field */}
+                                <View style={styles.inputGroup}>
+                                    <Controller
+                                        control={control}
+                                        name="email"
+                                        render={({ field: { onChange, onBlur, value } }) => (
+                                            <Input
+                                                label={t('signin.email')}
+                                                onChange={(text: string) => {
+                                                    onChange(text.toLowerCase());
+                                                }}
+                                                onBlur={onBlur}
+                                                value={value}
+                                                type="email"
+                                                error={errors.email?.message}
+                                                keyboardType={"email-address"}
+                                            />
+                                        )}
+                                    />
+                                </View>
+                                {/* End of email input field */}
 
-                            </View>
-                            {/* Email input field */}
-                            <View style={styles.inputGroup}>
-                                <Controller
-                                    control={control}
-                                    name="email"
-                                    render={({ field: { onChange, onBlur, value } }) => (
-                                        <Input
-                                            label={t('signin.email')}
-                                            onChange={(text: string) => {
-                                                onChange(text.toLowerCase());
-                                            }}
-                                            onBlur={onBlur}
-                                            value={value}
-                                            type="email"
-                                            error={errors.email?.message}
-                                            keyboardType={"email-address"}
-                                        />
-                                    )}
-                                />
-                            </View>
 
-                            {/* Password input field */}
-                            <View style={styles.inputGroup}>
-                                <Controller
-                                    control={control}
-                                    name="password"
-                                    render={({ field: { onChange, onBlur, value } }) => (
-                                        <Input
-                                            label={t('signin.password')}
-                                            onChange={onChange}
-                                            onBlur={onBlur}
-                                            value={value}
-                                            type="password"
-                                            error={errors.password?.message}
-                                        />
-                                    )}
-                                />
-                            </View>
+                                {/* Password input field */}
+                                <View style={styles.inputGroup}>
+                                    <Controller
+                                        control={control}
+                                        name="password"
+                                        render={({ field: { onChange, onBlur, value } }) => (
+                                            <Input
+                                                label={t('signin.password')}
+                                                onChange={onChange}
+                                                onBlur={onBlur}
+                                                value={value}
+                                                type="password"
+                                                error={errors.password?.message}
+                                            />
+                                        )}
+                                    />
+                                </View>
+                                {/* End of password input field */}
 
-                            {/* "Keep me logged in" checkbox */}
-                            <View style={styles.checkboxContainer}>
-                                <CheckBox
-                                    labelStyle={{ color: '#fff000', fontSize: 16 }}
-                                    iconColor="#fff"
-                                    checkColor="#fff600"
-                                    value={isChecked}
-                                    onChange={() => setChecked(!isChecked)}
-                                />
-                                <Text style={styles.checkboxLabel}>{t('signin.keepLogged')}</Text>
+                                {/* "Keep me logged in" checkbox */}
+                                <View style={styles.checkboxContainer}>
+                                    <CheckBox
+                                        labelStyle={{ color: '#fff000', fontSize: 16 }}
+                                        iconColor="#fff"
+                                        checkColor="#fff600"
+                                        value={isChecked}
+                                        onChange={() => setChecked(!isChecked)}
+                                    />
+                                    <Text style={styles.checkboxLabel}>{t('signin.keepLogged')}</Text>
+                                </View>
+                                {/* End ofKeep me logged in input field */}
                             </View>
                         </View>
+                        {/* End of Form */}
 
                         {/* Button container */}
                         <View style={styles.buttonContainer}>
@@ -197,6 +225,7 @@ export default function SigninScreen() {
                                     )}
                                 </View>
                             </TouchableOpacity>
+                            {/* End of submit button */}
 
                             {/* Google Sign-In button */}
                             <TouchableOpacity
@@ -211,6 +240,7 @@ export default function SigninScreen() {
                                     />
                                 </View>
                             </TouchableOpacity>
+                            {/* End of Google Sign-In button */}
 
                             {/* Links for sign-up and password recovery */}
                             <View style={styles.linkWrapper}>
@@ -220,6 +250,7 @@ export default function SigninScreen() {
                                         <Text style={styles.link}>{t('signin.createAccount')}</Text>
                                     </TouchableWithoutFeedback>
                                 </Link>
+                                {/* End of link to the sign-up screen */}
 
                                 {/* Link to the password recovery screen */}
                                 <Link
@@ -230,14 +261,16 @@ export default function SigninScreen() {
                                         <Text style={styles.link}>{t('signin.forgotPassword')}</Text>
                                     </TouchableWithoutFeedback>
                                 </Link>
+                                {/* End of link to the password recovery screen */}
                             </View>
                         </View>
                     </View>
+
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {

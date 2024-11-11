@@ -53,7 +53,7 @@ export default function UserInfos() {
     useEffect(() => {
         const fetchSelectData = async () => {
             // Make the request to the API here
-
+            // {...}
             // Temporary hardcoded data
             const selectDataResponse: any = {
                 country: [
@@ -82,10 +82,11 @@ export default function UserInfos() {
     const onSubmit = async (data: SignUpStep1Data) => {
         setLoading(true);
         // make the request to the API here
+        // the params are: data.email, data.password, data.country, data.currency, data.codeBonus, image
+        //console.log(email, password, data.country, data.currency, image, data.codeBonus);
+        //{...}
 
-        //parameters:
-        console.log(email, password, data.country, data.currency, image, data.codeBonus);
-
+        // The Timeout is to simulate an API call delay, you can remove it when making the API call
         setTimeout(() => {
             setLoading(false);
             router.replace('/signup/verificationCodeSent');
@@ -95,15 +96,12 @@ export default function UserInfos() {
 
     // Effect to handle keyboard visibility
     useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-            setKeyboardIsVisible(true);
-        });
-        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-            setKeyboardIsVisible(false);
-        });
+        const showListener = Keyboard.addListener('keyboardDidShow', () => setKeyboardIsVisible(true));
+        const hideListener = Keyboard.addListener('keyboardDidHide', () => setKeyboardIsVisible(false));
+
         return () => {
-            keyboardDidShowListener.remove();
-            keyboardDidHideListener.remove();
+            showListener.remove();
+            hideListener.remove();
         };
     }, []);
 
@@ -111,10 +109,7 @@ export default function UserInfos() {
     const handleImagePick = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-        if (!permissionResult.granted) {
-            setIsPermissionModalVisible(!isPermissionModalVisible);
-            return;
-        }
+        if (!permissionResult.granted) { setIsPermissionModalVisible(!isPermissionModalVisible); return; }
 
         const pickerResult = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
@@ -122,9 +117,7 @@ export default function UserInfos() {
             quality: 1,
         });
 
-        if (!pickerResult.canceled) {
-            setImage(pickerResult.assets[0].uri);
-        }
+        if (!pickerResult.canceled) { setImage(pickerResult.assets[0].uri); }
     };
 
     return (
@@ -157,7 +150,7 @@ export default function UserInfos() {
                             </TouchableWithoutFeedback>
                         </View>
                     )}
-                    {/* End of component */}
+                    {/* End of image input field */}
 
                     {/* Name input field */}
                     <View style={styles.inputGroup}>
@@ -175,7 +168,7 @@ export default function UserInfos() {
                             )}
                         />
                     </View>
-                    {/* End of component */}
+                    {/* End of Name input field */}
 
                     {/* Country input field */}
                     <View style={styles.inputGroup}>
@@ -203,7 +196,7 @@ export default function UserInfos() {
                             )}
                         </Skeleton>
                     </View>
-                    {/* End of component */}
+                    {/* End of Country input field */}
 
                     {/* Currency input field */}
                     <View style={styles.inputGroup}>
@@ -231,7 +224,7 @@ export default function UserInfos() {
                             )}
                         </Skeleton>
                     </View>
-                    {/* End of component */}
+                    {/* End of Currency input field */}
 
                     {/* CodeBonus input field */}
                     <View>
@@ -251,7 +244,7 @@ export default function UserInfos() {
                             )}
                         />
                     </View>
-                    {/* End of component */}
+                    {/* End of CodeBonus input field */}
                 </View>
 
                 {/* Buttons wrapper */}
@@ -271,7 +264,8 @@ export default function UserInfos() {
                             }
                         </View>
                     </TouchableOpacity>
-                    {/* End of component */}
+                    {/* End of Submit button */}
+
                 </View>
             </KeyboardAvoidingView>
         </SafeAreaView>

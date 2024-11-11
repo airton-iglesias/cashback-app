@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
 import {
-    ActivityIndicator,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+    ActivityIndicator, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView,
+    StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -39,7 +32,12 @@ export default function SignUp() {
         setLoading(true);
         try {
             //Make the request to api here
+            //pass the data.password as parameter to the API call
 
+            //{...}
+
+            // The Timeout is to simulate an API call delay, you can remove it when making the API call
+            // the parameter need to be a "string boolean", cause the parameter in router.push() don't accept boolean
             setTimeout(() => {
                 setLoading(false);
                 router.push({
@@ -50,9 +48,9 @@ export default function SignUp() {
                 });
             }, 1000);
 
-        } catch (error) {
+        } 
+        catch (error) {
             setLoading(false);
-            console.error(error);
         }
     };
 
@@ -72,6 +70,8 @@ export default function SignUp() {
                             <View style={styles.header}>
                                 <Text style={styles.headerText}>{t('recoveryDatas.newPasswordLabel')}</Text>
                             </View>
+                            {/* End of header*/}   
+
                             {/* Form section */}
                             <View style={styles.form}>
 
@@ -92,7 +92,7 @@ export default function SignUp() {
                                         )}
                                     />
                                 </View>
-                                {/* Enf of component */}
+                                {/* Enf of password input field */}
 
                                 {/* Confirm password input field */}
                                 <View style={styles.inputGroup}>
@@ -111,7 +111,7 @@ export default function SignUp() {
                                         )}
                                     />
                                 </View>
-                                {/* Enf of component */}
+                                {/* Enf of confirm password input field */}
                             </View>
                         </View>
 
@@ -132,7 +132,7 @@ export default function SignUp() {
                                     }
                                 </View>
                             </TouchableOpacity>
-                            {/* Enf of component */}
+                            {/* Enf of submit button */}
                         </View>
                     </View>
                 </ScrollView>
@@ -194,20 +194,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 4,
         borderRadius: 10,
-    },
-    googleButton: {
-        flexDirection: 'row',
-        gap: 2,
-        backgroundColor: '#E5E7EB',
-        height: 52,
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 4,
-        borderRadius: 10,
-    },
-    googleIcon: {
-        width: 32,
-        height: 32,
     },
 });

@@ -1,12 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {
-    Text,
-    TouchableHighlight,
-    View,
-    StyleSheet,
-    TouchableOpacity,
-    ActivityIndicator,
-} from 'react-native';
+import React, { useState } from 'react';
+import { Text, TouchableHighlight, View, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { useLocale } from '@/contexts/TranslationContext';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -31,32 +24,32 @@ export default function ConfirmPin() {
     // Check if the confirmed PIN matches the original PIN
     const onSubmit = () => {
         setLoading(true);
-        if (confirmPin.length === 6) {
-            if (pin === confirmPin) {
-                // Make the request to the API here
-                //console.log(pin)
 
-                // It need to be a "string boolean", cause the parameter in router.push() don't accept boolean
-                setTimeout(() => {
-                    setLoading(false);
-                    router.push({
-                        pathname: '/signup/registerCompleted',
-                        params: {
-                            RequestSuccessful: 'true'
-                        },
-                    });
-                }, 1000);
+        if (pin === confirmPin && confirmPin.length === 6) {
+            // Make the request to the API here
+            //console.log(pin)
+            //{...}
 
-                return;
-            }
-            setLoading(false);
-            setValidateError(true);
+            // It need to be a "string boolean", cause the parameter in router.push() don't accept boolean
+            setTimeout(() => {
+                setLoading(false);
+                router.push({
+                    pathname: '/signup/registerCompleted',
+                    params: {
+                        RequestSuccessful: 'true'
+                    },
+                });
+            }, 1000);
+
+            return;
         }
+        setLoading(false);
+        setValidateError(true);
     }
 
+    //Renders a numeric button for the number pad
     const renderButton = (value: number) => (
-        <TouchableHighlight
-            key={value}
+        <TouchableHighlight key={value}
             onPress={() =>
                 setConfirmPin((prev) => (prev.length < 6 ? prev + value.toString() : prev))
             }
@@ -85,6 +78,7 @@ export default function ConfirmPin() {
                 <Text style={styles.title}>
                     {t('signup.confirmPIN.confirm_pin')}
                 </Text>
+                {/* End of title */}
 
                 {/* Error Message */}
                 {validateError && (
@@ -94,6 +88,7 @@ export default function ConfirmPin() {
                         </View>
                     </View>
                 )}
+                {/* End of Error Message */}
 
                 {/* PIN Display */}
                 <View style={styles.pinContainer}>
@@ -109,17 +104,21 @@ export default function ConfirmPin() {
                         ))}
                     </View>
                 </View>
-                {/* End of Component */}
+                {/* End of PIN Display */}
 
                 {/* Number Pad */}
                 <View style={styles.buttonGrid}>
+                    {/* 1-9 Buttons */}
                     {buttons.map(renderButton)}
+                    {/* End of 1-9 Buttons */}
 
                     {/* Placeholder for alignment */}
                     <View style={styles.buttonPlaceholder} />
+                    {/* End of Placeholder */}
 
                     {/* Zero Button */}
                     {renderButton(0)}
+                    {/* End of Zero Button */}
 
                     {/* Delete Button */}
                     <TouchableHighlight
@@ -140,7 +139,7 @@ export default function ConfirmPin() {
                             />
                         </View>
                     </TouchableHighlight>
-                    {/* End of Component */}
+                    {/* End of Delete Button */}
                 </View>
 
                 {/* Buttons wrapper */}
@@ -159,8 +158,9 @@ export default function ConfirmPin() {
                             }
                         </View>
                     </TouchableOpacity>
-                    {/* End of component */}
+                    {/* End of Submit button */}
                 </View>
+                {/* End of Buttons wrapper */}
             </View>
         </SafeAreaView>
     );

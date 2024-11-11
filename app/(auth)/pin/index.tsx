@@ -33,6 +33,8 @@ export default function SignupStep3() {
             // Make the request to the API here
             router.replace("/dashboard");
         }
+
+        setLoading(false);
     }
 
     //Renders a numeric button for the number pad

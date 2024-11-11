@@ -43,8 +43,6 @@ export type SignUpData = {
   confirmPassword: string;
 };
 
-
-
 export const getSignUpStep1Schema = (t: (key: string) => string) => {
   return z
     .object({
@@ -66,7 +64,7 @@ export type SignUpStep1Data = {
   image?: any;
 };
 
-export const getEmailVerificationSchema = (t: (key: string) => string) => {
+export const getCodeVerificationSchema = (t: (key: string) => string) => {
   return z
     .object({
       code: z.string({ required_error: t('signup.verificationCode.RequiredField') }).min(6, {
@@ -76,7 +74,7 @@ export const getEmailVerificationSchema = (t: (key: string) => string) => {
     .required();
 };
 
-export type EmailVerificationData = {
+export type CodeVerificationData = {
   code: string
 };
 
@@ -113,4 +111,19 @@ export const getPasswordSchema = (t: (key: string) => string) => {
 export type PasswordData = {
   password: string;
   confirmPassword: string;
+};
+
+export const getWalletRecoverySchema = (t: (key: string) => string) => {
+  return z.object({
+    phrase: z.string()
+      .transform((value) => value.replace(/[^a-zA-ZÀ-ÿ0-9\s]/g, '').trim())
+      .transform((value) => value.split(/\s+/))
+      .refine((words) => words.length === 17, {
+        message: t("walletRecovery.phraseError"),
+      })
+  });
+};
+
+export type WalletRecoveryData = {
+  phrase: string;
 };

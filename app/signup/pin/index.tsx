@@ -22,14 +22,12 @@ export default function Pin() {
     // Translation function
     const { t } = useLocale();
 
-    // Navigate to the next step
+    // Navigate to the next step passing the pin as a parameter
     const onSubmit = () => {
         if (pin.length === 6) {
             router.push({
                 pathname: '/signup/confirmPin',
-                params: {
-                    pin: pin
-                },
+                params: { pin: pin },
             });
         }
     }
@@ -64,7 +62,7 @@ export default function Pin() {
             <View style={styles.content}>
                 {/* Title */}
                 <Text style={styles.title}>{t('signup.newPIN.title')}</Text>
-                {/* End of Component */}
+                {/* End of title */}
 
                 {/* PIN Display */}
                 <View style={styles.pinContainer}>
@@ -80,16 +78,21 @@ export default function Pin() {
                         ))}
                     </View>
                 </View>
-                {/* End of Component */}
+                {/* End of PIN Display */}
 
                 {/* Number Pad */}
                 <View style={styles.buttonGrid}>
+                    {/* 1-9 Buttons */}
                     {buttons.map(renderButton)}
+                    {/* End of 1-9 Buttons */}
 
                     {/* Placeholder for alignment */}
                     <View style={styles.buttonPlaceholder} />
+                    {/* End of Placeholder */}
 
+                    {/* 0 Button */}
                     {renderButton(0)}
+                    {/* End of 0 Button */}
 
                     {/* Delete Button */}
                     <TouchableHighlight
@@ -110,7 +113,7 @@ export default function Pin() {
                             />
                         </View>
                     </TouchableHighlight>
-                    {/* End of Component */}
+                    {/* End of Delete Button */}
                 </View>
 
                 {/* Buttons wrapper */}
@@ -125,8 +128,9 @@ export default function Pin() {
                             <Feather name="arrow-right" size={24} color="white" />
                         </View>
                     </TouchableOpacity>
-                    {/* End of component */}
+                    {/* End of Submit button */}
                 </View>
+                {/* End of Buttons wrapper */}
             </View>
         </SafeAreaView>
     );

@@ -1,51 +1,63 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, View, StyleSheet, Text, ActivityIndicator } from "react-native";
-import { Feather } from '@expo/vector-icons';
+import { TouchableOpacity, View, StyleSheet, Text, ActivityIndicator, Modal } from "react-native";
+import { Feather, Fontisto } from '@expo/vector-icons';
 import Input from "@/components/input";
 import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { getEmailVerificationSchema, EmailVerificationData } from '@/schemas/authSchemas';
+import { getCodeVerificationSchema, CodeVerificationData } from '@/schemas/authSchemas';
 import { fontSize } from "@/constants/fonts";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function VerificationCode() {
 
     // State variables for UI
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [codeError, setCodeError] = useState<boolean>(false);
     const { t } = useLocale();
 
     // React Hook Form setup
-    const signInSchema = React.useMemo(() => getEmailVerificationSchema(t), [t]);
-    const { control, handleSubmit, formState: { errors } } = useForm<EmailVerificationData>({
-        resolver: zodResolver(signInSchema),
+    const codeVerificationSchema = React.useMemo(() => getCodeVerificationSchema(t), [t]);
+    const { control, handleSubmit, formState: { errors } } = useForm<CodeVerificationData>({
+        resolver: zodResolver(codeVerificationSchema),
         mode: 'onChange',
     });
 
-    const onSubmit = async (data: EmailVerificationData) => {
+    const onSubmit = async (data: CodeVerificationData) => {
         setLoading(true);
-        // make the request to the API here
-        //email code to pass in the params of request
-        console.log(data.code)
+        // make the request to the API here, passing data.code as parameter
+        //console.log(data.code)
 
-        // if the request is successful, navigate to the next screen passing the sentence as a param
+        //{...}
+
+        // The Timeout is to simulate an API call delay, you can remove it when making the API call
         setTimeout(() => {
             setLoading(false);
             router.replace("/resetPin/pin");
         }, 1000);
-    }
+    };
+
+    
+    // Function to handle the resend email code
+    const resendEmailCode = () => {
+        setIsModalVisible(!isModalVisible)
+        // make the request to the API here
+
+        //{...}
+    };
 
     return (
         <SafeAreaView>
             <View style={styles.container}>
                 <View>
                     {/* Header */}
-                    <View style={styles.headerContainer}>
+                    <View>
                         <Text style={styles.headerText}>{t("signup.verificationCode.title")}</Text>
                     </View>
+                    {/* End of Header */}
 
                     {/* Error Message */}
                     {codeError && (
@@ -55,6 +67,7 @@ export default function VerificationCode() {
                             </View>
                         </View>
                     )}
+                    {/* End of Error Message */}
 
                     {/* validation code input */}
                     <View style={styles.inputWrapper}>
@@ -77,17 +90,17 @@ export default function VerificationCode() {
                             )}
                         />
                     </View>
-                    {/* End of component */}
+                    {/* End of validation code input */}
                 </View>
 
                 {/* Dont received email button */}
                 <View style={styles.resendCodeContainer}>
                     <Text style={{ fontSize: fontSize.labels.medium }}>{t("signup.verificationCode.dontReceiveCode")}</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity activeOpacity={0.7} onPress={resendEmailCode}>
                         <Text style={{ color: '#1E40AF', fontSize: fontSize.labels.medium }}>{t("signup.verificationCode.resendCode")}</Text>
                     </TouchableOpacity>
                 </View>
-                {/* End of component */}
+                {/* End of dont received email button */}
 
                 {/* Submit button */}
                 <View style={styles.buttonContainer}>
@@ -106,8 +119,41 @@ export default function VerificationCode() {
                         </View>
                     </TouchableOpacity>
                 </View>
-                {/* End of component */}
+                {/* End of submit button */}
             </View>
+
+            {/* Resended email warning modal */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isModalVisible}
+                onRequestClose={() => setIsModalVisible(!isModalVisible)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalView}>
+                        <View style={{ width: '100%', alignItems: 'center' }}>
+                            <View style={styles.iconContainer}>
+                                <Fontisto name="email" size={24} color="#664D03" />
+                            </View>
+                        </View>
+
+                        <View style={{ width: '100%', alignItems: 'center' }}>
+                            <Text style={styles.modalText}>{t("recoveryDatas.emailResend")}</Text>
+                        </View>
+
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            onPress={() => setIsModalVisible(!isModalVisible)}
+                            style={styles.modalSaveButton}
+                        >
+                            <View style={styles.modalButtonSaveContent}>
+                                <Feather name="check" size={24} color="black" />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            {/* End of Resended email warning modal */}
         </SafeAreaView>
     );
 }
@@ -120,9 +166,6 @@ const styles = StyleSheet.create({
         height: '100%',
         paddingTop: 40,
         backgroundColor: 'white'
-    },
-    headerContainer: {
-
     },
     headerText: {
         fontSize: fontSize.titles.medium,
@@ -185,5 +228,51 @@ const styles = StyleSheet.create({
     errorMessage: {
         textAlign: 'center',
         color: '#B02A37',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        width: '100%',
+        zIndex: 10
+    },
+    modalText: {
+        fontSize: 18,
+        marginVertical: 20,
+        color: '#fff',
+        textAlign: 'center'
+    },
+    iconContainer: {
+        height: 56,
+        width: 56,
+        borderRadius: 28,
+        backgroundColor: '#FFF3CD',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalView: {
+        backgroundColor: '#000',
+        paddingHorizontal: 20,
+        paddingVertical: 30,
+        alignItems: 'center',
+        shadowRadius: 4,
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+        gap: 20,
+        width: '100%'
+    },
+    modalSaveButton: {
+        width: '100%',
+        borderRadius: 8,
+    },
+    modalButtonSaveContent: {
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        width: '100%',
+        height: 52,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 4,
+        borderRadius: 10,
     }
 });

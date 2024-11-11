@@ -14,11 +14,17 @@ export default function SentenceWallet() {
 
     // State variables for UI
     const [loading, setLoading] = useState<boolean>(false);
+    const [copiedSuccess, setCopiedSuccess] = useState<boolean>(false);
     const { t } = useLocale();
 
     // Function to copy the sentence to the clipboard
     const copyToClipboard = (item: string) => {
         Clipboard.setStringAsync(item);
+        setCopiedSuccess(true);
+
+        setTimeout(() => {
+            setCopiedSuccess(false);
+        }, 2000);
     };
 
     return (
@@ -26,13 +32,26 @@ export default function SentenceWallet() {
             <View style={styles.container}>
                 <View>
                     {/* Header */}
-                    <View style={styles.headerContainer}>
+                    <View>
                         <Text style={styles.headerText}>{t("signup.sentenceWallet.title")}</Text>
                     </View>
-                    {/* End of Component */}
+                    {/* End of Header */}
 
-                    {/* Sentence text */}
+                    {/* Error message section */}
+                    {copiedSuccess && (
+                        <View style={[styles.copiedMessageContainer]}>
+                            <View style={styles.copiedMessageWrapper}>
+                                <Text style={styles.copiedMessage}>
+                                    {t("signup.sentenceWallet.copiedSuccess")}
+                                </Text>
+                            </View>
+                        </View>
+                    )}
+                    {/* End of Error message section */}
+
+                    {/* Sentence text section */}
                     <View style={styles.inputWrapper}>
+                        {/* Input label */}
                         <View style={styles.inputLabelWrapper}>
                             {/* Label */}
                             <View style={styles.inputLabelSubWrapper}>
@@ -51,18 +70,20 @@ export default function SentenceWallet() {
                             </TouchableOpacity>
                             {/* End of Copy button */}
                         </View>
-                        <View
-                            style={styles.input}
-                        >
+                        {/* End of Input label */}
+                        
+                        {/* Input of sentence */}
+                        <View style={styles.input}>
                             {/* sentence */}
                             <Text style={styles.inputText} selectable>
                                 {sentence}
                             </Text>
                             {/* End of sentence */}
                         </View>
+                        {/* End of Input of sentence */}
                     </View>
                 </View>
-                {/* End of component */}
+                {/* End of Sentence text section */}
 
                 {/* Warning */}
                 <View style={styles.warningContainer}>
@@ -97,7 +118,7 @@ export default function SentenceWallet() {
                         </View>
                     </TouchableOpacity>
                 </View>
-                {/* End of component */}
+                {/* End of Submtit button */}
             </View>
         </SafeAreaView>
     );
@@ -110,9 +131,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         height: '100%',
         paddingTop: 40
-    },
-    headerContainer: {
-
     },
     headerText: {
         fontSize: fontSize.titles.medium,
@@ -215,6 +233,27 @@ const styles = StyleSheet.create({
     copyText: {
         fontSize: fontSize.labels.medium,
         color: '#fff'
+    },
+    copiedMessageContainer: {
+        width: '100%',
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 15,
+        marginBottom: 10,
+        marginTop: 20
+    },
+    copiedMessageWrapper: {
+        borderRadius: 10,
+        backgroundColor: '#D1E7DD',
+        height: '100%',
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    copiedMessage: {
+        textAlign: 'center',
+        color: '#146C43',
     }
 
 });

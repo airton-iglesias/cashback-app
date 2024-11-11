@@ -35,7 +35,7 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                     <Pressable
                         onPress={() => {
                             if(isSwitchedAccount){
-                                router.navigate("/(app)/points")
+                                router.navigate("/points")
                             }
                         }}
                     >
@@ -61,7 +61,7 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                         <TouchableOpacity
                             activeOpacity={0.7}
                             style={styles.plusWrapper}
-                            onPress={() => router.navigate("/(app)/dashboard/(tabs)/wallet")}
+                            onPress={() => router.navigate("/dashboard/(tabs)/wallet")}
                         >
                             <Feather name="plus" size={20} color="#6FC768" />
                         </TouchableOpacity>

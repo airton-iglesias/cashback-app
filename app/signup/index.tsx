@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
 import {
-    Image,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+    Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView,
+    StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -20,7 +13,6 @@ import { useLocale } from '@/contexts/TranslationContext';
 import { fontSize } from '@/constants/fonts';
 import { getSignUpSchema, SignUpData } from '@/schemas/authSchemas';
 
-
 export default function SignUp() {
     // State variables for loading state
     const [loading, setLoading] = useState(false);
@@ -28,37 +20,25 @@ export default function SignUp() {
     // Translation function
     const { t } = useLocale();
 
+    /// React Hook Form setup
     const signUpStep1Schema = React.useMemo(() => getSignUpSchema(t), [t]);
-    const {
-        control,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<SignUpData>({
+    const { control, handleSubmit, formState: { errors } } = useForm<SignUpData>({
         resolver: zodResolver(signUpStep1Schema),
         mode: 'onChange',
     });
 
     // Function to handle form submission
     const onSubmit = async (data: SignUpData) => {
-        setLoading(true);
-        try {
-            setLoading(false);
-            router.push({
-                pathname: '/signup/userInfos',
-                params: {
-                    email: data.email,
-                    password: data.password,
-                },
-            });
-        } catch (error) {
-            setLoading(false);
-            console.error(error);
-        }
+        router.push({
+            pathname: '/signup/userInfos',
+            params: {
+                email: data.email,
+                password: data.password,
+            },
+        });
     };
 
     return (
-
-
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView
                 style={styles.keyboardAvoidingView}
@@ -72,7 +52,9 @@ export default function SignUp() {
                             <View style={styles.header}>
                                 <Text style={styles.headerText}>{t('signup.begin.header')}</Text>
                             </View>
-                            {/* Formulário */}
+                            {/* End of header section */}
+
+                            {/* Form section */}
                             <View style={styles.form}>
                                 {/* Email input field */}
                                 <View style={styles.inputGroup}>
@@ -91,7 +73,7 @@ export default function SignUp() {
                                         )}
                                     />
                                 </View>
-                                {/* Enf of component */}
+                                {/* Enf of email input field */}
 
                                 {/* Password input field */}
                                 <View style={styles.inputGroup}>
@@ -110,7 +92,7 @@ export default function SignUp() {
                                         )}
                                     />
                                 </View>
-                                {/* Enf of component */}
+                                {/* Enf of password input field */}
 
                                 {/* Confirm password input field */}
                                 <View style={styles.inputGroup}>
@@ -129,8 +111,9 @@ export default function SignUp() {
                                         )}
                                     />
                                 </View>
-                                {/* Enf of component */}
+                                {/* Enf of confirm password input field */}
                             </View>
+                            {/* End of form section */}
                         </View>
 
                         {/* Button container */}
@@ -146,7 +129,7 @@ export default function SignUp() {
                                     <Feather name="arrow-right" size={24} color="white" />
                                 </View>
                             </TouchableOpacity>
-                            {/* Enf of component */}
+                            {/* End of submit button */}
 
                             {/* Google Sign-In button */}
                             <TouchableOpacity
@@ -161,8 +144,9 @@ export default function SignUp() {
                                     />
                                 </View>
                             </TouchableOpacity>
-                            {/* Enf of component */}
+                            {/* Enf of Google Sign-In button */}
                         </View>
+                        {/* End of button container */}
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>

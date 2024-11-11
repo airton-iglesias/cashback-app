@@ -62,11 +62,20 @@
             "warning1": "A frase foi enviada para o seu email como forma de armazenamento;",
             "warning2": "cada Frase é única e dá-lhe acesso à sua carteira crypto em qualquer lugar;",
             "warning3": "a Frase, não é recuperável;",
-            "warning4": "a perda da sua Frase pode levar à perda da sua carteira, para sempre."
+            "warning4": "a perda da sua Frase pode levar à perda da sua carteira, para sempre.",
+            "copiedSuccess": "Copiado com sucesso!"
         },
         "register_completed": {
             "error": "Algo deu errado. Por favor, tente novamente."
         }
+    },
+    "walletRecovery": {
+        "title": "Frase",
+        "label": "Insira sua frase de 17 palavras",
+        "warning": "A frase de 17 palavras é o fator de segurança mais alto, foi enviada para o seu e-mail quando criou conta. Ela permite acesso à sua carteira em qualquer lugar.",
+        "paste": "Colar",
+        "errorMessage": "Algo deu errado. Por favor, verifique sua frase e tente novamente.",
+        "phraseError": "A frase deve conter exatamente 17 palavras e sem caracteres especiais."
     },
     "pin": {
         "recoverPin": "Recuperar Pin",
@@ -195,7 +204,8 @@
         "confirmPassword": "Confirme o Password",
         "resetPin": "Redefinir pin",
         "confirmPin": "Confirmar pin",
-        "pinError": "Pin validate error"
+        "pinError": "Pin validate error",
+        "emailResend": "Um novo código de confirmação foi enviado para o seu email."
     },
     "commerce": {
         "home": {

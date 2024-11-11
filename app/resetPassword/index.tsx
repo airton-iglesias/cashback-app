@@ -1,15 +1,7 @@
 import React, { useState } from 'react';
 import {
-    ActivityIndicator,
-    Image,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+    ActivityIndicator, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView,
+    StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -23,19 +15,16 @@ import { getEmailSchema, EmailData } from '@/schemas/authSchemas';
 
 
 export default function ResetPassword() {
-    // State variables for loading state
+    // State variables for UI 
     const [loading, setLoading] = useState(false);
     const [codeError, setCodeError] = useState<boolean>(true);
 
     // Translation function
     const { t } = useLocale();
 
+    // React Hook Form setup
     const emailSchema = React.useMemo(() => getEmailSchema(t), [t]);
-    const {
-        control,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<EmailData>({
+    const { control, handleSubmit, formState: { errors } } = useForm<EmailData>({
         resolver: zodResolver(emailSchema),
         mode: 'onChange',
     });
@@ -43,9 +32,12 @@ export default function ResetPassword() {
     // Function to handle form submission
     const onSubmit = async (data: EmailData) => {
         setLoading(true);
-        console.log(data.email);
+        // Use data.email as parameter to make the request to the API here
+        //console.log(data.email);
+        //{...}
 
         try {
+            // The Timeout is to simulate an API call delay, you can remove it when making the API call
             setTimeout(() => {
                 setLoading(false);
                 router.navigate('/resetPassword/verificationCodeSent');
@@ -53,7 +45,6 @@ export default function ResetPassword() {
 
         } catch (error) {
             setLoading(false);
-            console.error(error);
         }
     };
 
@@ -73,6 +64,7 @@ export default function ResetPassword() {
                             <View style={styles.header}>
                                 <Text style={styles.headerText}>{t('recoveryDatas.title')}</Text>
                             </View>
+                            {/* End of Header section */}
 
                             {/* Error Message */}
                             {codeError && (
@@ -82,8 +74,9 @@ export default function ResetPassword() {
                                     </View>
                                 </View>
                             )}
+                            {/* End of Error Message */}
 
-                            {/* Formulário */}
+                            {/* Form */}
                             <View style={styles.form}>
                                 {/* Email input field */}
                                 <View style={styles.inputGroup}>
@@ -102,7 +95,7 @@ export default function ResetPassword() {
                                         )}
                                     />
                                 </View>
-                                {/* Enf of component */}
+                                {/* Enf of email input field */}
                             </View>
                         </View>
 
@@ -123,7 +116,7 @@ export default function ResetPassword() {
                                     }
                                 </View>
                             </TouchableOpacity>
-                            {/* Enf of component */}
+                            {/* Enf of Submit button */}
                         </View>
                     </View>
                 </ScrollView>
@@ -185,21 +178,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 4,
         borderRadius: 10,
-    },
-    googleButton: {
-        flexDirection: 'row',
-        gap: 2,
-        backgroundColor: '#E5E7EB',
-        height: 52,
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 4,
-        borderRadius: 10,
-    },
-    googleIcon: {
-        width: 32,
-        height: 32,
     },
     errorMessageContainer: {
         width: '100%',

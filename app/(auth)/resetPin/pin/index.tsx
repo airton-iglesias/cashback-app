@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
-import {
-    Text,
-    TouchableHighlight,
-    View,
-    StyleSheet,
-    TouchableOpacity,
-} from 'react-native';
+import { Text, TouchableHighlight, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { useLocale } from '@/contexts/TranslationContext';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router  } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -22,7 +16,7 @@ export default function Pin() {
     // Translation function
     const { t } = useLocale();
 
-    // Navigate to the next step
+    // Navigate to the next step passing the pin as a parameter
     const onSubmit = () => {
         if (pin.length === 6) {
             router.push({
@@ -80,16 +74,22 @@ export default function Pin() {
                         ))}
                     </View>
                 </View>
-                {/* End of Component */}
+                {/* End of PIN Display */}
 
                 {/* Number Pad */}
                 <View style={styles.buttonGrid}>
+                    {/* 1-9 Buttons */}
                     {buttons.map(renderButton)}
+                    {/* End of 1-9 Buttons */}
 
                     {/* Placeholder for alignment */}
                     <View style={styles.buttonPlaceholder} />
+                    {/* End of Placeholder */}
 
+                    {/* 0 Button */}
                     {renderButton(0)}
+                    {/* End of 0 Button */}
+
 
                     {/* Delete Button */}
                     <TouchableHighlight
@@ -110,7 +110,7 @@ export default function Pin() {
                             />
                         </View>
                     </TouchableHighlight>
-                    {/* End of Component */}
+                    {/* End of delete button */}
                 </View>
 
                 {/* Buttons wrapper */}
@@ -125,7 +125,7 @@ export default function Pin() {
                             <Feather name="arrow-right" size={24} color="white" />
                         </View>
                     </TouchableOpacity>
-                    {/* End of component */}
+                    {/* End of submit button */}
                 </View>
             </View>
         </SafeAreaView>

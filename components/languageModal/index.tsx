@@ -11,6 +11,11 @@ export default function LanguageModal({ modalVisible, handleCloseModal }: any) {
     const { t } = useLocale();
     const { currentLanguage, changeLanguage } = useLocale();
 
+    const handleLanguageChange = () => {
+        changeLanguage(currentLanguage);
+        handleCloseModal();
+    };
+
     return (
         <Modal
             animationType="slide"
@@ -52,7 +57,7 @@ export default function LanguageModal({ modalVisible, handleCloseModal }: any) {
             </View>
 
             <View style={styles.buttonWrapper}>
-                <TouchableOpacity style={styles.button} onPress={handleCloseModal} activeOpacity={0.7}>
+                <TouchableOpacity style={styles.button} onPress={handleLanguageChange} activeOpacity={0.7}>
                     <Feather name="arrow-right" size={24} color={'black'} />
                 </TouchableOpacity>
             </View>
