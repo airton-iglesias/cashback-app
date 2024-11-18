@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
-import { Feather, Ionicons } from '@expo/vector-icons';
+import { SafeAreaView, View, Text, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import Input from '@/components/input';
 import CommerceHeader from '@/components/commerce/commerceHeader';
 import CommerceGoBackModal from '@/components/commerce/commerceGoBackModal';

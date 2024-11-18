@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Pressable, Dimensions, Image, TouchableOpacity } from 'react-native';
-import { Video, ResizeMode } from 'expo-av';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useRef } from 'react';
@@ -24,28 +24,27 @@ type videoPost = {
 const screenHeight = Dimensions.get('window').height;
 
 const VideoPost = ({ post, activePostID, setIsMuted, isMuted }: videoPost) => {
-    const video = useRef<Video>(null);
     const pathname = usePathname();
 
+    const player = useVideoPlayer(post.source, player => {
+        player.loop = true;
+    });
+
     useEffect(() => {
-        if (!video.current) {
+        player.muted = isMuted;
+
+        if (activePostID === post.id && pathname === "/dashboard") {
+            player.play();
             return;
         }
-        if (activePostID === post.id && pathname === "/dashboard") {
-            video.current.playAsync();
-        }
-        else {
-            video.current.pauseAsync();
-        }
-    }, [activePostID, pathname]);
+
+        player.pause();
+
+    }, [activePostID, pathname, isMuted]);
 
     const ButtonPressed = () => {
-        if (!video.current) {
-            return;
-        }
-
         if (activePostID === post.id && pathname === "/dashboard") {
-            video.current.pauseAsync();
+            player.pause();
         }
         router.navigate("/commerce_informations")
     };
@@ -53,19 +52,17 @@ const VideoPost = ({ post, activePostID, setIsMuted, isMuted }: videoPost) => {
     return (
         <View style={{ height: screenHeight, flex: 1 }}>
             {post.type === "video" ?
-                <Video
-                    ref={video}
+                <VideoView
+                    player={player}
                     style={[StyleSheet.absoluteFill, { flex: 1 }]}
-                    source={{ uri: post.source }}
-                    resizeMode={ResizeMode.CONTAIN}
-                    isMuted={isMuted}
-                    isLooping
+                    contentFit={'contain'}
+                    nativeControls={false}
                 />
                 :
                 <Image
                     source={{ uri: post.source }}
                     style={[StyleSheet.absoluteFill, { flex: 1 }]}
-                    resizeMode={ResizeMode.CONTAIN}
+                    resizeMode={'contain'}
                 />
             }
 
@@ -79,21 +76,12 @@ const VideoPost = ({ post, activePostID, setIsMuted, isMuted }: videoPost) => {
                         <View style={styles.volumeContainer}>
                             <View style={[styles.volumeWrapper, post.type !== "video" && { backgroundColor: 'transparent', borderWidth: 0 }]}>
                                 {post.type === "video" && (
-                                    isMuted ? (
-                                        < TouchableOpacity
-                                            onPress={setIsMuted}
-                                            style={styles.volumebutton}
-                                        >
-                                            <MaterialIcons name="volume-off" size={24} color="white" />
-                                        </TouchableOpacity>
-                                    ) : (
-                                        <TouchableOpacity
-                                            onPress={setIsMuted}
-                                            style={styles.volumebutton}
-                                        >
-                                            <MaterialIcons name="volume-up" size={24} color="white" />
-                                        </TouchableOpacity>
-                                    )
+                                    < TouchableOpacity
+                                        onPress={setIsMuted}
+                                        style={styles.volumebutton}
+                                    >
+                                        <MaterialIcons name={isMuted ? "volume-off" : "volume-up"} size={24} color="white" />
+                                    </TouchableOpacity>
                                 )}
                             </View>
                         </View>

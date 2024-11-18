@@ -6,10 +6,10 @@ import Topbar from "@/components/header";
 import Sidebar from "@/components/sidebar";
 import NotificationSidebar from "@/components/notificationSidebar";
 import { useLocale } from "@/contexts/TranslationContext";
-import { Link } from "expo-router";
 import { fontSize } from "@/constants/fonts";
 import ListCommerces from "@/components/commerce/listCommerces";
 import EstablishmentSkeleton from "@/components/establishmentSkeleton";
+import { router } from "expo-router";
 
 export default function CommerceHome() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -139,14 +139,14 @@ export default function CommerceHome() {
                 )
             )}
 
-            <Link href={"/commerce/new"} asChild>
+
                 <TouchableOpacity
                     style={styles.fab}
                     activeOpacity={0.7}
+                    onPress={() => router.navigate("/commerce/new")}
                 >
                     <FontAwesome6 name="plus" size={24} color="white" />
                 </TouchableOpacity>
-            </Link>
         </View>
     );
 };

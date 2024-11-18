@@ -5,7 +5,6 @@ import CommerceHeader from '@/components/commerce/commerceHeader';
 import { useLocale } from "@/contexts/TranslationContext";
 import { router } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
-import { Skeleton } from 'moti/skeleton';
 import UserSkeleton from '@/components/userSkeleton';
 
 export default function CommerceAccessManager() {

@@ -41,7 +41,7 @@ export default function Send_Discount_Sucess() {
     }, [timeLeft]);
 
     const closeScreen = () => {
-        router.replace('/(app)/dashboard/(tabs)/send_cashback');
+        router.replace('/(auth)/dashboard/(tabs)/send_cashback');
     };
     const widthPercentage = (timeLeft / 120) * 100;
 
@@ -102,7 +102,7 @@ export default function Send_Discount_Sucess() {
 
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
-                            onPress={() => router.replace('/(app)/dashboard/(tabs)/send_cashback')}
+                            onPress={() => router.replace('/(auth)/dashboard/(tabs)/send_cashback')}
                             activeOpacity={0.7}
                             style={styles.buttonWrapper}
                         >

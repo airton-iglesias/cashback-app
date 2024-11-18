@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, Scrol
 import { Feather } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import { Video } from 'expo-av';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import CommerceHeader from '@/components/commerce/commerceHeader';
 import CommerceGoBackModal from '@/components/commerce/commerceGoBackModal';
 import { useStepperContext } from '@/contexts/CommerceStepperContext';
@@ -114,6 +114,11 @@ export default function New_Commerce_Step_5() {
         router.replace("/commerce")
     };
 
+    const player = useVideoPlayer(posterImage.uri, player => {
+        player.loop = true;
+    });
+
+
     return (
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
@@ -167,13 +172,10 @@ export default function New_Commerce_Step_5() {
                                         posterImage.type === 'image' ? (
                                             <Image source={{ uri: posterImage.uri }} style={styles.imageThumbnail} resizeMode={'cover'} />
                                         ) : (
-                                            <Video
-                                                source={{ uri: posterImage.uri }}
-                                                style={styles.videoThumbnail}
-                                                useNativeControls={false}
-                                                resizeMode={"contain" as any}
-                                                isLooping
-                                                shouldPlay={false}
+                                            <VideoView
+                                                player={player}
+                                                style={[StyleSheet.absoluteFill, { flex: 1 }]}
+                                                contentFit={'contain'}
                                             />
                                         )
                                     ) : (
@@ -221,12 +223,10 @@ export default function New_Commerce_Step_5() {
                                     {media.type === 'image' ? (
                                         <Image source={{ uri: media.uri }} style={styles.imageThumbnail} />
                                     ) : (
-                                        <Video
-                                            source={{ uri: media.uri }}
-                                            style={styles.videoThumbnail}
-                                            resizeMode={"contain" as any}
-                                            isLooping
-                                            shouldPlay={false}
+                                        <VideoView
+                                            player={player}
+                                            style={[StyleSheet.absoluteFill, { flex: 1 }]}
+                                            contentFit={'contain'}
                                         />
                                     )}
                                 </View>

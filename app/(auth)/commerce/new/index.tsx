@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, StyleSheet, BackHandler } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, BackHandler } from 'react-native';
 import CommerceHeader from '@/components/commerce/commerceHeader';
 import RadioCommerce from '@/components/commerce/radioCommerce';
 import RadioCommerceType from '@/components/commerce/radioCommerceType';

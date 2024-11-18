@@ -8,14 +8,7 @@ import {
     NativeSyntheticEvent,
     TouchableWithoutFeedback,
     StyleSheet,
-    Modal,
-    Text,
-    TouchableOpacity,
 } from 'react-native';
-import { Video } from 'expo-av';
-import { FontAwesome6, Octicons } from '@expo/vector-icons';
-import { fontSize } from '@/constants/fonts';
-import { useLocale } from '@/contexts/TranslationContext';
 
 interface CarouselItem {
     id: string;
@@ -30,11 +23,6 @@ export default function Carousel({ carouselData }: { carouselData: CarouselItem[
     const [activeIndex, setActiveIndex] = useState(0);
     const [isAutoScrollEnabled, setIsAutoScrollEnabled] = useState(true);
     const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [currentVideoUrl, setCurrentVideoUrl] = useState<string | null>(null);
-    const videoRef = useRef<Video | null>(null);
-    const [isPlaying, setIsPlaying] = useState(false);  // Novo estado para controlar a reprodução
-    const { t } = useLocale();
 
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
@@ -58,31 +46,6 @@ export default function Carousel({ carouselData }: { carouselData: CarouselItem[
     });
 
     const renderItem = ({ item }: { item: CarouselItem }) => {
-        if (item.type === 'video') {
-            return (
-                <TouchableWithoutFeedback
-                    onPressIn={() => setIsAutoScrollEnabled(false)}
-                    onPressOut={() => setIsAutoScrollEnabled(true)}
-                >
-                    <View style={styles.videoContainer}>
-                        <Image
-                            source={{ uri: item.image }}
-                            style={styles.image}
-                        />
-                        <TouchableOpacity
-                            style={styles.playButton}
-                            onPress={() => {
-                                setCurrentVideoUrl(item.videoUrl || null);
-                                setIsModalVisible(true);
-                            }}
-                        >
-                            <FontAwesome6 name="play" size={20} color="white" style={{ marginLeft: 3 }} />
-                        </TouchableOpacity>
-                    </View>
-                </TouchableWithoutFeedback>
-            );
-        }
-
         return (
             <TouchableWithoutFeedback
                 onPressIn={() => setIsAutoScrollEnabled(false)}
@@ -122,14 +85,6 @@ export default function Carousel({ carouselData }: { carouselData: CarouselItem[
         ));
     };
 
-    const handlePlaybackStatusUpdate = (status: any) => {
-        if (status.isPlaying) {
-            setIsPlaying(true);
-        } else {
-            setIsPlaying(false);
-        }
-    };
-
     return (
         <View>
             <FlatList
@@ -148,66 +103,6 @@ export default function Carousel({ carouselData }: { carouselData: CarouselItem[
             <View style={styles.dotContainer}>
                 {renderDotIndicators()}
             </View>
-
-            <Modal
-                visible={isModalVisible}
-                onRequestClose={() => {
-                    setIsModalVisible(false);
-                    if (videoRef.current) {
-                        videoRef.current.stopAsync();
-                    }
-                }}
-                animationType="slide"
-            >
-                <View>
-                    <TouchableOpacity
-                        style={{ flexDirection: 'row', gap: 10, alignItems: 'center', height: 50, paddingLeft: 20, paddingTop: 20 }}
-                        onPress={() => {
-                            setIsModalVisible(false);
-                            if (videoRef.current) {
-                                videoRef.current.stopAsync();
-                            }
-                        }}
-                    >
-                        <Octicons name="chevron-left" size={32} color="black" />
-                        <Text style={{ fontSize: fontSize.titles.mini }}>{t("profile.headerBackLabel")}</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.modalContainer}>
-                    <TouchableWithoutFeedback onPress={() => {
-                        if (videoRef.current) {
-                            
-                            videoRef.current.playFromPositionAsync(0);
-                        }
-                    }}>
-                        <View>
-                            {!isPlaying && (
-                                <View style={{ position: 'absolute', zIndex: 10, height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                                    <View style={{
-                                        width: 60,
-                                        height: 60,
-                                        zIndex: 10,
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}>
-                                        <FontAwesome6 name="play" size={20} color="white" />
-                                    </View>
-                                </View>
-                            )}
-
-                            {currentVideoUrl && (
-                                <Video
-                                    ref={videoRef}
-                                    source={{ uri: currentVideoUrl }}
-                                    style={styles.video}
-                                    resizeMode={"contain" as any}
-                                    onPlaybackStatusUpdate={handlePlaybackStatusUpdate} 
-                                />
-                            )}
-                        </View>
-                    </TouchableWithoutFeedback>
-                </View>
-            </Modal>
         </View>
     );
 }

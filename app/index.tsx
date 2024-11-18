@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {
     ActivityIndicator, Image, Keyboard, KeyboardAvoidingView, Text,
-    TouchableOpacity, TouchableWithoutFeedback, View, StyleSheet,
+    TouchableOpacity, View, StyleSheet,
     Platform, ScrollView
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -245,22 +245,17 @@ export default function SigninScreen() {
                             {/* Links for sign-up and password recovery */}
                             <View style={styles.linkWrapper}>
                                 {/* Link to the sign-up screen */}
-                                <Link href="/signup" asChild>
-                                    <TouchableWithoutFeedback>
-                                        <Text style={styles.link}>{t('signin.createAccount')}</Text>
-                                    </TouchableWithoutFeedback>
-                                </Link>
+
+                                <TouchableOpacity onPress={() => router.navigate('/signup')} activeOpacity={0.7}>
+                                    <Text style={styles.link}>{t('signin.createAccount')}</Text>
+                                </TouchableOpacity>
+
                                 {/* End of link to the sign-up screen */}
 
                                 {/* Link to the password recovery screen */}
-                                <Link
-                                    href={{ pathname: '/resetPassword', params: { type: 'password' } }}
-                                    asChild
-                                >
-                                    <TouchableWithoutFeedback>
-                                        <Text style={styles.link}>{t('signin.forgotPassword')}</Text>
-                                    </TouchableWithoutFeedback>
-                                </Link>
+                                <TouchableOpacity onPress={() => router.push({ pathname: '/resetPassword', params: { type: 'password' } })} activeOpacity={0.7}>
+                                    <Text style={styles.link}>{t('signin.forgotPassword')}</Text>
+                                </TouchableOpacity>
                                 {/* End of link to the password recovery screen */}
                             </View>
                         </View>
