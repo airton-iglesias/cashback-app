@@ -12,85 +12,141 @@ import { router } from 'expo-router';
 import FooterNewCommerce from '@/components/commerce/footerNewCommerce';
 import { fontSize } from '@/constants/fonts';
 import { Skeleton } from 'moti/skeleton';
+import { useForm, Controller, useFieldArray, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { getNewCommerceStep6Schema, NewCommerceStep6Data } from '@/schemas/commerceSchemas';
 
 export default function New_Commerce_Step_6() {
-    const { baseDiscount, cashbackForm, currencyType, sections, setStepperData } = useStepperContext();
-    const [tempSections, setTempSections] = useState(sections);
+    const { CashbackType, PlaceType, referenceUser, association, title, email,
+        userPoints, webSite, startDate, endDate, startHour, endHour, mapAdress, description, logoImage, posterImage,
+        descriptionMedia, baseDiscount, cashbackForm, sections, proprietary, currencyType, modality, coupon, link, setStepperData } = useStepperContext();
 
-    const scrollViewRef = useRef<ScrollView>(null);
+
+    // select variables
+
+    const [typesOptions, setTypesOptions] = useState<any>([]);
+    const [currencyOptions, setCurrencyOptions] = useState<any>([]);
+    const [modalityOptions, setModalityOptions] = useState<any>([]);
+
+    // State variables for UI 
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [selectLoading, setSelectLoading] = useState<boolean>(true);
+    const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
+    const scrollViewRef = useRef<ScrollView>(null);
     const { t } = useLocale();
 
-    const [typesOptions, setTypesOptions] = useState<any>([
-        { id: 1, text: 'Fidelização' },
-        { id: 2, text: 'Livre' },
-        { id: 3, text: 'Queima' },
-    ]);
+    // React Hook Form setup
+    const newCommerceStep6Schema = React.useMemo(() => getNewCommerceStep6Schema(t), [t]);
+    const { control, handleSubmit, formState: { errors } } = useForm<NewCommerceStep6Data>({
+        resolver: zodResolver(newCommerceStep6Schema), mode: "onChange",
+        defaultValues: {
+            currencyType,
+            baseDiscount,
+            cashbackForm,
+            sections: sections || [],
+            modality: '',
+            coupon: '',
+            link: '',
+        },
+    });
 
-    const [currencyOptions, setCurrencyOptions] = useState<any>([
-        { id: 1, text: 'EUR' },
-        { id: 2, text: 'BRL' },
-        { id: 3, text: 'USD' },
-    ]);
+    // FieldArray setup to keep track of the sections array
+    const { fields, append, remove } = useFieldArray({ control, name: 'sections' });
+    const watchedSections = useWatch({ control, name: 'sections' });
+    const watchedCurrencyType = useWatch({ control, name: 'currencyType' });
+    const watchedBaseDiscount = useWatch({ control, name: 'baseDiscount' });
+    const watchedCashbackForm = useWatch({ control, name: 'cashbackForm' });
+    const watchedModality = useWatch({ control, name: 'modality' });
+    const watchedcoupon = useWatch({ control, name: 'coupon' });
+    const watchedLink = useWatch({ control, name: 'link' });
 
-    const [selectLoading, setSelectLoading] = useState<boolean>(true);
+    // UseEffect to set the stepperData context refreshed
+    useEffect(() => {
+        setStepperData({
+            sections: watchedSections,
+            currencyType: watchedCurrencyType,
+            baseDiscount: watchedBaseDiscount,
+            cashbackForm: watchedCashbackForm,
+            modality: watchedModality,
+            coupon: watchedcoupon,
+            link: watchedLink
+        });
+    }, [watchedSections, watchedCurrencyType, watchedBaseDiscount, watchedCashbackForm, watchedModality, watchedcoupon, watchedLink]);
 
+
+    //UseEffect to request the selects data
     useEffect(() => {
         const fetchSelectDatas = async () => {
-            /* make the request to the API here
-            //Example: 
-            const selectDataReponse = await
-                fetch('domain of application here', {
-                    method: 'GET',
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Something went wrong');
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
-            */
 
-            //temporary variable
+            //make the request here
+            //{...}
+
+            // Variable Temporary
             const selectDataReponse: any = [
                 { id: 1, text: 'Fidelização' },
                 { id: 2, text: 'Livre' },
                 { id: 3, text: 'Queima' },
             ];
+            //Variable Temporary
+            const currencyOptionsResponse: any = [
+                { id: 1, text: 'EUR' },
+                { id: 2, text: 'BRL' },
+                { id: 3, text: 'USD' },
+            ];
+            //Variable Temporary
+            const tempModalityOptions = [
+                { id: 1, text: 'local' },
+                { id: 2, text: 'coupon' },
+                { id: 3, text: 'link' },
+            ];
 
+            // The Timeout is to simulate an API call delay, you can remove it when making the API call
             setTimeout(() => {
                 setTypesOptions(selectDataReponse);
+                setCurrencyOptions(currencyOptionsResponse);
+                setModalityOptions(tempModalityOptions);
                 setSelectLoading(false);
-            }, 2000);
-        }
+            }, 1000);
+        };
 
         fetchSelectDatas();
     }, []);
 
-
     const addSection = () => {
-        if (sections.length < 10) {
-            setStepperData({ sections: [...sections, { minValue: '', discount: '', type: '' }] });
-            setTempSections([...tempSections, { minValue: '', discount: '', type: '' }]);
-            setTimeout(() => {
-                scrollViewRef.current?.scrollToEnd({ animated: true });
-            }, 200);
+        if (fields.length < 10) {
+            append({ minValue: '', discount: '', cashbackType: '' });
         }
+        setTimeout(() => {
+            scrollViewRef.current?.scrollToEnd({ animated: true });
+        }, 200);
     };
 
     const removeSection = (index: number) => {
-        const newSections = [...sections];
-        newSections.splice(index, 1);
-        setStepperData({ sections: newSections });
-        router.replace("/commerce/new/cashback_items");
+        remove(index);
+    };
+
+    const onSubmit = () => {
+        setLoadingSubmit(true);
+
+        console.log(
+            CashbackType, PlaceType, //index
+            title, proprietary, association, userPoints, referenceUser, //basic_datas
+            webSite, startDate, endDate, startHour, endHour, mapAdress, //place_and_time datas
+            description, //description data
+            logoImage, posterImage, descriptionMedia, //images_and_videos datas
+            currencyType, baseDiscount, cashbackForm, sections, modality, coupon, link, //cashback_items datas
+            email, //contact_datas
+        )
+
+        setTimeout(() => {
+            setLoadingSubmit(false);
+            router.navigate("/commerce/new/register_completed");
+        }, 2000);
     };
 
     const handleGoBackConfirmed = () => {
         setModalVisible(false);
-        router.replace("/commerce")
+        router.replace("/commerce");
     };
 
     return (
@@ -107,6 +163,63 @@ export default function New_Commerce_Step_6() {
                 >
                     <View style={styles.sectionContainer}>
 
+                        {/* Seletor de Modalidade */}
+                        <View style={styles.section}>
+                            <Text style={styles.sectionTitle}>Modalidade</Text>
+                            <Controller
+                                control={control}
+                                name="modality"
+                                render={({ field: { onChange, value } }) => (
+                                    <Select
+                                        options={modalityOptions}
+                                        onChangeSelect={(item: any) => onChange(item.text)}
+                                        text={value || t("commerce.new_commerce.step5.selectLabel")}
+                                        SelectOption={SelectOption}
+                                        error={errors.modality?.message}
+                                    />
+                                )}
+                            />
+                        </View>
+
+                        {/* coupon input field */}
+                        {watchedModality === 'coupon' && (
+                            <View style={styles.section}>
+                                <Text style={styles.sectionTitle}>coupon</Text>
+                                <Controller
+                                    control={control}
+                                    name="coupon"
+                                    render={({ field: { onChange, value } }) => (
+                                        <Input
+                                            onChange={onChange}
+                                            value={value}
+                                            error={errors.coupon?.message}
+                                        />
+                                    )}
+                                />
+                            </View>
+                        )}
+                        {/* End of coupon input field */}
+
+                        {/* Link input field */}
+                        {watchedModality === 'link' && (
+                            <View style={styles.section}>
+                                <Text style={styles.sectionTitle}>Link</Text>
+                                <Controller
+                                    control={control}
+                                    name="link"
+                                    render={({ field: { onChange, value } }) => (
+                                        <Input
+                                            onChange={onChange}
+                                            value={value}
+                                            error={errors.link?.message}
+                                        />
+                                    )}
+                                />
+                            </View>
+                        )}
+                        {/* End of link input field */}
+
+                        {/* Select currency type */}
                         <View style={styles.section}>
                             <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.currencyType")}</Text>
                             <Skeleton
@@ -116,28 +229,46 @@ export default function New_Commerce_Step_6() {
                                 height={48}
                             >
                                 {selectLoading ? null :
-                                    <Select
-                                        options={currencyOptions}
-                                        onChangeSelect={(item: any) => setStepperData({ currencyType: item.text })}
-                                        text={cashbackForm !== '' ? cashbackForm : t("commerce.new_commerce.step5.selectLabel")}
-                                        SelectOption={SelectOption}
+                                    <Controller
+                                        control={control}
+                                        name="currencyType"
+                                        render={({ field: { onChange, value } }) => (
+                                            <Select
+                                                options={currencyOptions}
+                                                onChangeSelect={(item: any) => onChange(item.text)}
+                                                text={value || t("commerce.new_commerce.step5.selectLabel")}
+                                                SelectOption={SelectOption}
+                                                error={errors.currencyType?.message}
+                                            />
+                                        )}
                                     />
                                 }
                             </Skeleton>
                         </View>
+                        {/* End of select currency type */}
 
+                        {/* base discount input field */}
                         <View style={styles.section}>
                             <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.baseDiscount")}</Text>
                             <View style={styles.inputWrapper}>
-                                <Input
-                                    placeholder={'10'}
-                                    onChange={(discountValue: string) => setStepperData({ baseDiscount: discountValue })}
-                                    keyboardType={'numeric'}
-                                    value={baseDiscount?.toString()}
+                                <Controller
+                                    control={control}
+                                    name="baseDiscount"
+                                    render={({ field: { onChange, value } }) => (
+                                        <Input
+                                            placeholder={'10'}
+                                            onChange={onChange}
+                                            keyboardType={'numeric'}
+                                            value={value}
+                                            error={errors.baseDiscount?.message}
+                                        />
+                                    )}
                                 />
                             </View>
                         </View>
+                        {/* End of base discount input field */}
 
+                        {/* Cashback type input field */}
                         <View style={styles.section}>
                             <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.cashbackType")}</Text>
                             <Skeleton
@@ -147,16 +278,27 @@ export default function New_Commerce_Step_6() {
                                 height={48}
                             >
                                 {selectLoading ? null :
-                                    <Select
-                                        options={typesOptions}
-                                        onChangeSelect={(item: any) => setStepperData({ cashbackForm: item.text })}
-                                        text={cashbackForm !== '' ? cashbackForm : t("commerce.new_commerce.step5.selectLabel")}
-                                        SelectOption={SelectOption}
+                                    <Controller
+                                        control={control}
+                                        name="cashbackForm"
+                                        render={({ field: { onChange, value } }) => (
+                                            <Select
+                                                options={typesOptions}
+                                                onChangeSelect={(item: any) => onChange(item.text)}
+                                                text={value || t("commerce.new_commerce.step5.selectLabel")}
+                                                SelectOption={SelectOption}
+                                                error={errors.cashbackForm?.message}
+                                            />
+                                        )}
                                     />
                                 }
                             </Skeleton>
                         </View>
-                        {sections.length === 0 && (
+                        {/* End of cashback type input field */}
+
+
+                        {/* cashback new section button */}
+                        {fields.length === 0 && (
                             <TouchableOpacity
                                 activeOpacity={0.7}
                                 style={styles.addButtonContainer}
@@ -165,48 +307,59 @@ export default function New_Commerce_Step_6() {
                                 <FontAwesome6 name="plus" size={16} color="black" />
                             </TouchableOpacity>
                         )}
+                        {/* End of cashback new section button */}
                     </View>
 
-                    {sections.map((section, index) => (
-                        <View key={index} style={styles.sectionContainer}>
+                    {/* Sections */}
+                    {fields.map((field, index) => (
+                        <View key={field.id} style={styles.sectionContainer}>
                             <View style={styles.rowContainer}>
+                                {/* minimal value input field */}
                                 <View style={styles.smallSection}>
                                     <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.minimalValueLabel")}</Text>
                                     <View style={styles.inputWrapper}>
-                                        <Input
-                                            placeholder={t("commerce.new_commerce.step5.minimalCurrencyPlaceholder")}
-                                            keyboardType={'numeric'}
-                                            onChange={(value: string) => {
-                                                const updatedSections = sections.map((s, i) =>
-                                                    i === index ? { ...s, minValue: value } : s
-                                                );
-                                                setStepperData({ sections: updatedSections });
-                                            }}
-                                            value={section.minValue}
+                                        <Controller
+                                            control={control}
+                                            name={`sections.${index}.minValue`}
+                                            render={({ field: { onChange, value } }) => (
+                                                <Input
+                                                    placeholder={t("commerce.new_commerce.step5.minimalCurrencyPlaceholder")}
+                                                    keyboardType={'numeric'}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                    error={errors.sections?.[index]?.minValue?.message}
+                                                />
+                                            )}
                                         />
                                     </View>
                                 </View>
+                                {/* End of minimal value input field */}
+
+                                {/* Discount input field */}
                                 <View style={styles.largeSection}>
                                     <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.discountSectionPorcentage")}</Text>
                                     <View style={styles.inputWrapper}>
-                                        <Input
-                                            placeholder={t("commerce.new_commerce.step5.discountSectionPorcentagePlaceholder")}
-                                            keyboardType={'numeric'}
-                                            onChange={(value: string) => {
-                                                const updatedSections = sections.map((s, i) =>
-                                                    i === index ? { ...s, discount: value } : s
-                                                );
-                                                setStepperData({ sections: updatedSections });
-                                            }}
-                                            value={section.discount}
+                                        <Controller
+                                            control={control}
+                                            name={`sections.${index}.discount`}
+                                            render={({ field: { onChange, value } }) => (
+                                                <Input
+                                                    placeholder={t("commerce.new_commerce.step5.discountSectionPorcentagePlaceholder")}
+                                                    keyboardType={'numeric'}
+                                                    onChange={onChange}
+                                                    value={value}
+                                                    error={errors.sections?.[index]?.discount?.message}
+                                                />
+                                            )}
                                         />
                                     </View>
                                 </View>
+                                {/* End of Discount input field */}
                             </View>
 
+                            {/* Cashback type input field */}
                             <View style={styles.section}>
                                 <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step5.cashbackType")}</Text>
-
                                 <Skeleton
                                     show={selectLoading}
                                     colorMode='light'
@@ -214,60 +367,76 @@ export default function New_Commerce_Step_6() {
                                     height={48}
                                 >
                                     {selectLoading ? null :
-                                        <Select
-                                            options={typesOptions}
-                                            onChangeSelect={(item: any) => {
-                                                const updatedSections = sections.map((s, i) =>
-                                                    i === index ? { ...s, type: item.text } : s
-                                                );
-                                                setStepperData({ sections: updatedSections });
-                                            }}
-                                            text={section.type !== '' ? section.type : t("commerce.new_commerce.step5.selectLabel")}
-                                            SelectOption={SelectOption}
+                                        <Controller
+                                            control={control}
+                                            name={`sections.${index}.cashbackType`}
+                                            render={({ field: { onChange, value } }) => (
+                                                <Select
+                                                    options={typesOptions}
+                                                    onChangeSelect={(item: any) => onChange(item.text)}
+                                                    text={value || t("commerce.new_commerce.step5.selectLabel")}
+                                                    SelectOption={SelectOption}
+                                                    error={errors.sections?.[index]?.cashbackType?.message}
+                                                />
+                                            )}
                                         />
                                     }
                                 </Skeleton>
                             </View>
+                            {/* End of Cashback type input field */}
 
-                            {sections.length > 0 && (
-                                <View style={styles.buttonsDiscount}>
+
+                            <View style={styles.buttonsDiscount}>
+                                {/* Delete button */}
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    style={styles.trashButtonContainer}
+                                    onPress={() => removeSection(index)}
+                                >
+                                    <Feather name="trash" size={16} color="black" />
+                                </TouchableOpacity>
+                                {/* End of Delete button */}
+
+                                {/* Add button */}
+                                {index === fields.length - 1 && fields.length < 10 && (
                                     <TouchableOpacity
                                         activeOpacity={0.7}
-                                        style={styles.trashButtonContainer}
-                                        onPress={() => removeSection(index)}
+                                        style={styles.addButtonContainerBottom}
+                                        onPress={addSection}
                                     >
-                                        <Feather name="trash" size={16} color="black" />
+                                        <FontAwesome6 name="plus" size={16} color="black" />
                                     </TouchableOpacity>
-                                    {index === sections.length - 1 && sections.length < 10 && (
-                                        <TouchableOpacity
-                                            activeOpacity={0.7}
-                                            style={styles.addButtonContainerBottom}
-                                            onPress={addSection}
-                                        >
-                                            <FontAwesome6 name="plus" size={16} color="black" />
-                                        </TouchableOpacity>
-                                    )}
-                                </View>
-                            )}
+                                )}
+                                {/* End of Add button */}
+                            </View>
                         </View>
                     ))}
                 </ScrollView>
 
+                {/* Footer navigation */}
                 <FooterNewCommerce
                     backStep={() => router.back()}
-                    nextStep={() => router.navigate("/commerce/new/register_completed")}
+                    nextStep={handleSubmit(onSubmit)}
                     currentStep={6}
+                    disabled={loadingSubmit}
                 />
+                {/* End of Footer navigation */}
 
-                <CommerceGoBackModal
-                    modalVisible={modalVisible}
-                    setModalVisible={() => setModalVisible(false)}
-                    ScreenGoback={handleGoBackConfirmed}
-                />
+                {/* Return confirmation modal */}
+                <View>
+                    <CommerceGoBackModal
+                        modalVisible={modalVisible}
+                        setModalVisible={() => setModalVisible(false)}
+                        ScreenGoback={handleGoBackConfirmed}
+                    />
+                </View>
+                {/* End of Return confirmation modal */}
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
+
+// ... estilos permanecem os mesmos
 
 
 

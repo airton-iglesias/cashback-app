@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         width: '100%',
         position: 'absolute',
         zIndex: 10,
-        marginTop: 245,
+        marginTop: 200,
         alignItems: 'flex-end',
     },
     sortMenuWrapper: {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         width: 200,
         height: 195,
         borderRadius: 15,
-        right: 20,
+        right: 10,
         borderWidth: 1,
         borderColor: '#B8B8B8',
         paddingVertical: 15,

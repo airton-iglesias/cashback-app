@@ -59,16 +59,13 @@ export default function SigninScreen() {
     }, []);
 
     const onSubmit = async (data: SignInData) => {
-        if (requestError) {
-            setRequestError(!requestError);
-        }
+        if (requestError) { setRequestError(!requestError); }
         setLoading(true);
-
         try {
             // Make the request to API here. The params is data.email and data.password
 
             // After successful authentication
-            // Check if the user has a valid 17-word phrase in storage
+            // Check if the user has a valid 24-word phrase in storage
             const walletPhrase = await StorageService.getItem('walletPhrase');
 
             //console.log(walletPhrase)
@@ -87,7 +84,7 @@ export default function SigninScreen() {
                 }
 
                 setLoading(false);
-                // If no valid 17-word phrase is found
+                // If no valid 24-word phrase is found
                 router.replace('/walletRecovery');
             }, 2000);
         }
@@ -260,7 +257,6 @@ export default function SigninScreen() {
                             </View>
                         </View>
                     </View>
-
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>

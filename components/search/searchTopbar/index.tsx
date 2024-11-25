@@ -13,7 +13,7 @@ export default function searchTopbar({handleFilterChange, activeFilter, setSearc
                 <TouchableOpacity
                     style={styles.headerBackIcon}
                     activeOpacity={0.7}
-                    onPress={() => showResults(false)}
+                    onPress={() => showResults()}
                 >
                     <Entypo name="chevron-left" size={24} color="white" />
                 </TouchableOpacity>

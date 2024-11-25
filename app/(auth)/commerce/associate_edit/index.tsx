@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, Modal } from 'react-native';
-import { Feather, AntDesign } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, Modal, Image } from 'react-native';
+import { Feather, AntDesign, Ionicons } from '@expo/vector-icons';
+import * as Clipboard from 'expo-clipboard';
+
 import Switch from '@/components/switch';
 import CommerceHeader from '@/components/commerce/commerceHeader';
 import { useLocale } from "@/contexts/TranslationContext";
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
 
 export default function CommerceAssociateEdit() {
@@ -14,41 +16,82 @@ export default function CommerceAssociateEdit() {
 
     const [modalVisible, setModalVisible] = useState(false);
     const { t } = useLocale();
+    const { id, name, image }: any = useLocalSearchParams();
 
+    const copyToClipboard = () => {
+        Clipboard.setStringAsync(`${id}`);
+    };
+
+    useEffect(() => {
+        //Make the request to the API to get the associate data
+        //{...}
+
+        //setAdministrador(true);
+        //setCanSeeLogs(true);
+        //setCanEraseLogs(true);
+    }, []);
+
+    const onSubmit = () => {
+        /* make the request to the API here
+            you can use id to identify the associate
+            {...}
+        */
+        router.push("/commerce/access_manager")
+    };
     return (
         <SafeAreaView style={styles.safeArea}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
 
                 <CommerceHeader
-                    Title={'Pedro'}
-                    SubTitle={'32594'}
+                    Title={`${name}`}
+                    SubTitle={`${id}`}
                     ScreenGoback={() => router.back()}
-                    ScreenClose={() => router.replace("/commerce")}
+                    ScreenClose={() => router.replace("/commerce/access_manager")}
                 />
 
+                {/* Associate ID input field */}
                 <View style={styles.idContainer}>
                     <Text style={styles.idLabel}>{t("commerce.edit_associate.id")}</Text>
-                    <TextInput
-                        cursorColor={'#ADB5BD'}
-                        value={'355643'}
-                        style={styles.idInput}
-                    />
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <TextInput
+                            cursorColor={'#ADB5BD'}
+                            value={`${id}`}
+                            style={styles.idInput}
+                            readOnly
+                        />
+                        <TouchableOpacity style={styles.copyIconContainer} onPress={copyToClipboard} activeOpacity={0.7}>
+                            <Ionicons name="copy-outline" size={18} color="#495057" />
+                        </TouchableOpacity>
+                    </View>
                 </View>
+                {/* end of associate ID input field */}
 
+                {/* Associate image and name */}
                 <View style={styles.personContainer}>
-                    <TouchableOpacity style={styles.personButton}>
+                    <View style={styles.person}>
                         <View style={styles.personInfo}>
-                            <View style={styles.personAvatar}>
-                                <Text style={styles.personAvatarText}>Pe</Text>
-                            </View>
+                            {image ? (
+                                <Image
+                                    source={{ uri: image }}
+                                    style={styles.personAvatar}
+                                    resizeMode="cover"
+                                />
+                            ) : (
+                                <View style={styles.personAvatar}>
+                                    <Text style={styles.personAvatarText}>{name.slice(0, 2)}</Text>
+                                </View>
+
+                            )}
                             <View>
-                                <Text style={styles.personName}>Pedro</Text>
+                                <Text style={styles.personName}>{name}</Text>
                             </View>
                         </View>
-                    </TouchableOpacity>
+                    </View>
                 </View>
+                {/* end of associate image and name */}
 
                 <View style={styles.switchContainer}>
+                    {/* Associate is administrator switch field */}
                     <View style={styles.switchRow}>
                         <Text style={styles.switchLabel}>{t("commerce.edit_associate.admin")}</Text>
                         <Switch
@@ -56,6 +99,9 @@ export default function CommerceAssociateEdit() {
                             value={administrador}
                         />
                     </View>
+                    {/* end of associate is administrator switch field */}
+
+                    {/* Associate can see logs switch field */}
                     <View style={styles.switchRow}>
                         <Text style={styles.switchLabel}>{t("commerce.edit_associate.can_see_logs")}</Text>
                         <Switch
@@ -63,6 +109,9 @@ export default function CommerceAssociateEdit() {
                             value={canSeeLogs}
                         />
                     </View>
+                    {/* end of associate can see logs switch field */}
+
+                    {/* Associate can see and erase logs switch field */}
                     <View style={styles.switchRow}>
                         <Text style={styles.switchLabel}>{t("commerce.edit_associate.can_see_and_erase_logs")}</Text>
                         <Switch
@@ -70,7 +119,9 @@ export default function CommerceAssociateEdit() {
                             value={canEraseLogs}
                         />
                     </View>
+                    {/* end of associate can see and erase logs switch field */}
 
+                    {/* Delete associate button */}
                     <View style={styles.deleteAccountRow}>
                         <TouchableOpacity
                             onPress={() => setModalVisible(!modalVisible)}
@@ -80,11 +131,13 @@ export default function CommerceAssociateEdit() {
                             <Feather name="trash" size={24} color="#DC3545" style={styles.deleteIcon} />
                         </TouchableOpacity>
                     </View>
+                    {/* end of delete associate button */}
                 </View>
 
+                {/* Submit button */}
                 <View style={styles.footerContainer}>
                     <TouchableOpacity
-                        onPress={() => router.back()}
+                        onPress={onSubmit}
                         style={styles.submitButton}
                         activeOpacity={0.7}
                     >
@@ -93,47 +146,52 @@ export default function CommerceAssociateEdit() {
                         </View>
                     </TouchableOpacity>
                 </View>
+                {/* end of submit button */}
             </ScrollView>
 
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(!modalVisible);
-                }}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalView}>
-                        <View style={[styles.iconContainer, styles.deleteIconContainer]}>
-                            <Feather name="trash" size={24} color="#DC3545" />
-                        </View>
-                        <Text style={styles.modalText}>{t("commerce.edit_associate.modal.remove_user")}</Text>
-                        <View style={styles.buttonContainer}>
+            {/* Modal to confirm associate deletion */}
+            <View>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                    }}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalView}>
+                            <View style={[styles.iconContainer, styles.deleteIconContainer]}>
+                                <Feather name="trash" size={24} color="#DC3545" />
+                            </View>
+                            <Text style={styles.modalText}>{t("commerce.edit_associate.modal.remove_user")}</Text>
+                            <View style={styles.buttonContainer}>
 
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                onPress={() => router.back()}
-                                style={styles.modalSaveButton}
-                            >
-                                <View style={styles.modalButtonSaveContent}>
-                                    <Feather name="check" size={24} color="white" />
-                                </View>
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    onPress={() => router.back()}
+                                    style={styles.modalSaveButton}
+                                >
+                                    <View style={styles.modalButtonSaveContent}>
+                                        <Feather name="check" size={24} color="white" />
+                                    </View>
+                                </TouchableOpacity>
 
-                            <TouchableOpacity
-                                onPress={() => setModalVisible(false)}
-                                style={styles.modalSaveButton}
-                                activeOpacity={0.7}
-                            >
-                                <View style={styles.modalButtonCancelContent}>
-                                    <AntDesign name="close" size={24} color="black" />
-                                </View>
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() => setModalVisible(false)}
+                                    style={styles.modalSaveButton}
+                                    activeOpacity={0.7}
+                                >
+                                    <View style={styles.modalButtonCancelContent}>
+                                        <AntDesign name="close" size={24} color="black" />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
-                </View>
-            </Modal>
+                </Modal>
+            </View>
+            {/* end of modal to confirm associate deletion */}
         </SafeAreaView>
     );
 }
@@ -169,7 +227,7 @@ const styles = StyleSheet.create({
     personContainer: {
         paddingHorizontal: 20,
     },
-    personButton: {
+    person: {
         width: '100%',
     },
     personInfo: {
@@ -179,6 +237,10 @@ const styles = StyleSheet.create({
         borderBottomColor: '#DFDFDF',
         paddingBottom: 16,
     },
+    personAvatarText: {
+        fontSize: fontSize.labels.medium,
+        fontWeight: 'bold',
+    },
     personAvatar: {
         height: 64,
         width: 64,
@@ -186,11 +248,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#CADCFF',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    personAvatarText: {
-        color: '#0093FD',
-        fontSize: fontSize.labels.medium,
-        fontWeight: 'bold',
     },
     personName: {
         fontSize: fontSize.labels.large,
@@ -268,9 +325,6 @@ const styles = StyleSheet.create({
     deleteIconContainer: {
         backgroundColor: '#FFE0E0',
     },
-    deleteItemText: {
-        color: '#DC3545',
-    },
     modalContainer: {
         height: '100%',
         justifyContent: 'flex-end',
@@ -320,5 +374,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 4,
         borderRadius: 10,
+    },
+    copyIconContainer: {
+        position: 'absolute',
+        top: 8,
+        height: 56,
+        right: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        backgroundColor: '#F3F4F6',
+        borderTopRightRadius: 6,
+        borderBottomRightRadius: 6,
+        borderColor: '#E9ECEF',
+        borderWidth: 1,
+        zIndex: 10,
     },
 });

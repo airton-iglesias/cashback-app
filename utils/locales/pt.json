@@ -71,11 +71,11 @@
     },
     "walletRecovery": {
         "title": "Frase",
-        "label": "Insira sua frase de 17 palavras",
-        "warning": "A frase de 17 palavras é o fator de segurança mais alto, foi enviada para o seu e-mail quando criou conta. Ela permite acesso à sua carteira em qualquer lugar.",
+        "label": "Insira sua frase de 24 palavras",
+        "warning": "A frase de 24 palavras é o fator de segurança mais alto, foi enviada para o seu e-mail quando criou conta. Ela permite acesso à sua carteira em qualquer lugar.",
         "paste": "Colar",
         "errorMessage": "Algo deu errado. Por favor, verifique sua frase e tente novamente.",
-        "phraseError": "A frase deve conter exatamente 17 palavras e sem caracteres especiais."
+        "phraseError": "A frase deve conter exatamente 24 palavras e sem caracteres especiais."
     },
     "pin": {
         "recoverPin": "Recuperar Pin",
@@ -208,6 +208,10 @@
         "emailResend": "Um novo código de confirmação foi enviado para o seu email."
     },
     "commerce": {
+        "validation": {
+            "requiredField": "Campo obrigatório",
+            "optionalField": "Campo opcional"
+        },
         "home": {
             "label": "Crie um novo estabelecimento, evento ou promoção",
             "establishment_label": "Estabelecimentos",
@@ -266,10 +270,11 @@
                 "bannerLabel": "Cartaz",
                 "descriptionMediasLabel": "Mídias de descrição",
                 "modalTitle": "Informações sobre as mídias",
-                "modalBanner": "Cartaz",
-                "modalBannerDescription": "Texto explicando sobre as mídias",
-                "modalCarroselMedias": "Carrossel",
-                "modalCarroselDescription": "Texto explicando sobre as mídias"
+                "modalBanner": "Fotos e vídeos - Cartaz",
+                "modalBannerDescription": "Você pode escolher arquivos multimídia na proporção 9:16. Mídias fora dessa proporção serão adaptadas automaticamente para se adequar ao melhor formato do feed de comércios. O tamanho limite de todos os arquivos é de 100 MB.",
+                "modalCarroselMedias": "Fotos - Logo/Marca e imagens de descrição",
+                "modalCarroselDescription": "A imagem de logo/marca, é a foto na proporção 1:1 usada pra identificar o seu comércio. Imagens de descrição são as fotos na proporção 16:9 na aba de ''informação completa'' do seu comércio. Você pode escolher até 10 imagens de descrição. O tamanho limite de todos os arquivos é de 100 MB.",
+                "errorMessage": "Por favor, insira pelo menos 1 imagem."
             },
             "step5": {
                 "headerLabel": "Cashback",
@@ -285,8 +290,7 @@
             "step6": {
                 "headerLabel": "Mais informações",
                 "emailContactLabel": "Email para a nossa equipe o contatar",
-                "warning1": "Vamos contata-lo por email, para encontrar a melhor forma de os nossos clientes se tornarem vossos clientes.",
-                "warning2": "Indique um email seguro, com retorno rápido."
+                "warning": "Vamos contata-lo por email, para encontrar a melhor forma de os nossos clientes se tornarem vossos clientes. Indique um email seguro, com retorno rápido."
             },
             "gobackModal": {
                 "description1": "Ao voltar, os dados serão perdidos.",
@@ -340,7 +344,7 @@
             "description2": "do cliente"
         }
     },
-    "modalCommerce": {
+    "commerceInformations": {
         "headerLabel": "Informação completa",
         "oficial_website": "Site oficial",
         "eventCreatedBy": "Evento criado por",
@@ -349,10 +353,12 @@
         "discountCode": "Código de desconto",
         "access": "Acessar",
         "getDiscountLocally": "Obtenha o seu desconto no local",
+        "getDiscountInLink": "Para obter descontos, acesse o site",
         "discountBase": "Desconto base",
         "discountAbove": "Desconto acima de",
         "burn": "Queima",
         "about": "Sobre"
+        
     },
     "profile": {
         "headerBackLabel": "Voltar",

@@ -145,7 +145,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        paddingHorizontal: 15,
         paddingTop: 70,
     },
     keyboardAvoidingView: {
@@ -161,11 +160,13 @@ const styles = StyleSheet.create({
     form: {
         gap: 10,
         flex: 1,
-        marginBottom: 30
+        marginBottom: 30,
+        paddingHorizontal: 15
     },
     header: {
         width: '100%',
         marginBottom: 15,
+        paddingHorizontal: 15
     },
     headerText: {
         fontSize: fontSize.titles.large,
@@ -181,6 +182,7 @@ const styles = StyleSheet.create({
         gap: 20,
         justifyContent: 'flex-end',
         paddingBottom: 35,
+        paddingHorizontal: 15
     },
     buttonWrapper: {
         borderRadius: 8,

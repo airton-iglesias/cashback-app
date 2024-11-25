@@ -101,7 +101,6 @@ export default function CreditsExtractModal({ modalVisible, handleCloseModal }: 
                         )}
                         keyExtractor={item => item.id}
                     />
-
                 }
             </Modal>
         </SafeAreaView>
@@ -111,7 +110,8 @@ export default function CreditsExtractModal({ modalVisible, handleCloseModal }: 
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
-        paddingTop: 30
+        paddingTop: 30,
+        position: 'absolute'
     },
     backButton: {
         position: 'absolute',

@@ -15,7 +15,7 @@ const screenHeight = Dimensions.get("window").height;
 const generateUniqueId = () =>
     `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-const FeedScreen = () => {
+export default function FeedScreen() {
     const [posts, setPosts] = useState<postTypes[]>([]);
     const [activePostId, setActivePostId] = useState<string>("");
     const [isMuted, setIsMuted] = useState(true);
@@ -78,15 +78,14 @@ const FeedScreen = () => {
         fetchPosts();
     }, []);
 
-    const viewabilityConfigCallbackPairs = useRef([
-        {
-            viewabilityConfig: { itemVisiblePercentThreshold: 80 },
-            onViewableItemsChanged: ({ changed, viewableItems }: any) => {
-                if (viewableItems.length > 0 && viewableItems[0].isViewable) {
-                    setActivePostId(viewableItems[0].item.id);
-                }
-            },
+    const viewabilityConfigCallbackPairs = useRef([{
+        viewabilityConfig: { itemVisiblePercentThreshold: 80 },
+        onViewableItemsChanged: ({ changed, viewableItems }: any) => {
+            if (viewableItems.length > 0 && viewableItems[0].isViewable) {
+                setActivePostId(viewableItems[0].item.id);
+            }
         },
+    },
     ]);
 
     const onEndReached = () => {
@@ -136,5 +135,3 @@ const styles = StyleSheet.create({
         backgroundColor: "black",
     },
 });
-
-export default FeedScreen;

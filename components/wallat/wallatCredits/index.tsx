@@ -146,50 +146,55 @@ export default function WallatCredits({ currencyType, openExtract }: any) {
                 </View>
             </View>
 
+
             {
                 renderComponent()
             }
 
-            <Modal
-                animationType="slide"
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalWrapper}>
-                    <TouchableOpacity style={{ position: 'absolute', left: 20, zIndex: 10, flexDirection: 'row' }} onPress={() => setModalVisible(false)}>
-                        <Feather name="arrow-left" size={30} style={{ color: 'black', marginTop: 2 }} />
-                        <Text style={styles.modalText}>{t("dashboardWallat.creditsScreen.modalback")}</Text>
-                    </TouchableOpacity>
-                </View>
-                <FlatList
-                    data={options}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            onPress={() => handleCurrencySelect(item.currency)}
-                            style={{
-                                borderBottomWidth: 1,
-                                backgroundColor: selectedCurrency === item.currency ? '#EDEDED' : '#fff',
-                                borderColor: '#d1d5db'
-                            }}
-                        >
-                            <View style={styles.optionWrapper}>
-                                <View style={styles.optionContent}>
-                                    <Text style={{ fontSize: fontSize.labels.medium }}>{item.currency}</Text>
-                                </View>
-                                {selectedCurrency === item.currency && <Feather name="check" size={24} color="black" />}
-                            </View>
+
+            <View>
+
+                <Modal
+                    animationType="slide"
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalWrapper}>
+                        <TouchableOpacity style={{ position: 'absolute', left: 20, zIndex: 10, flexDirection: 'row' }} onPress={() => setModalVisible(false)}>
+                            <Feather name="arrow-left" size={30} style={{ color: 'black', marginTop: 2 }} />
+                            <Text style={styles.modalText}>{t("dashboardWallat.creditsScreen.modalback")}</Text>
                         </TouchableOpacity>
-                    )}
-                />
-            </Modal>
+                    </View>
+                    <FlatList
+                        data={options}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                onPress={() => handleCurrencySelect(item.currency)}
+                                style={{
+                                    borderBottomWidth: 1,
+                                    backgroundColor: selectedCurrency === item.currency ? '#EDEDED' : '#fff',
+                                    borderColor: '#d1d5db'
+                                }}
+                            >
+                                <View style={styles.optionWrapper}>
+                                    <View style={styles.optionContent}>
+                                        <Text style={{ fontSize: fontSize.labels.medium }}>{item.currency}</Text>
+                                    </View>
+                                    {selectedCurrency === item.currency && <Feather name="check" size={24} color="black" />}
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                    />
+                </Modal>
+            </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
     },
     headerContainer: {
         paddingTop: 16,
@@ -206,9 +211,9 @@ const styles = StyleSheet.create({
         padding: 16
     },
     currencyWrapper: {
-        alignItems: 'flex-start', 
-        flex: 1, 
-        justifyContent: 'center', 
+        alignItems: 'flex-start',
+        flex: 1,
+        justifyContent: 'center',
     },
     amountText: {
         fontSize: fontSize.titles.large,

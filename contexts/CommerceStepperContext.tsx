@@ -8,7 +8,7 @@ interface ImageFile {
 interface Section {
     minValue: string;
     discount: string;
-    type: string;
+    cashbackType: string;
 }
 
 interface StepperData {
@@ -36,6 +36,9 @@ interface StepperData {
     sections: Section[];
     proprietary: string;
     currencyType: string;
+    modality: string;
+    coupon?: string;
+    link?: string;
 }
 
 interface StepperContextProps extends StepperData {
@@ -69,7 +72,10 @@ export const StepperProvider = ({ children }: { children: ReactNode }) => {
         cashbackForm: '',
         sections: [],
         proprietary: '',
-        currencyType: ''
+        currencyType: '',
+        modality: '',
+        coupon: '',
+        link: '',
     });
 
     const updateStepperData = (data: Partial<StepperData>) => {

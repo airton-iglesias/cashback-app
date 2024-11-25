@@ -53,7 +53,7 @@ export default function New_Commerce() {
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <CommerceHeader
                     Title={editor === "true" ? t("commerce.new_commerce.step0.edit") : t("commerce.new_commerce.step0.new")}
-                    ScreenClose={() => router.replace("/commerce")}
+                    ScreenClose={() => setModalVisible(true)}
                 />
 
                 <View style={styles.section}>

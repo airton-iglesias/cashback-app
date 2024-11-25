@@ -1,351 +1,296 @@
-
-
-const data = [
-    {
-        id: '1',
-        title: 'Fitness Center 1',
-        location: 'Beja, Portugal',
-        discount: '20%',
-        type: 'video',
-        source: 'https://i.imgur.com/6Y8qkha.mp4',
-        modal: {
-            cupomCode: 'ID s039da',
-            locationMap: null,
-            website: "sitebacalhao.com",
-            createdBy: "Casa Verde dos Relógios",
-            eventDate: "0 out - 20:00 a 20 out - 21:00",
-            cashbackType: "Evento",
-            baseDiscount: "10%",
-            flexDiscount: [
-                {
-                    currency: 'EUR',
-                    value: 100,
-                    discount: '10%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 200,
-                    discount: '20%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 300,
-                    discount: '30%'
-                },
-            ],
-            about: "Lorem ipsum...",
-            carouselImages: [
-                {
-                    id: '01',
-                    image: 'https://i.imgur.com/7NvPLld.jpeg',
-                    type: 'image'
-                },
-                {
-                    id: '02',
-                    image: 'https://i.imgur.com/5Qx1oqV.jpeg',
-                    type: 'image'
-                },
-                {
-                    id: '03',
-                    image: 'https://i.imgur.com/2cFsaV2.png',
-                    videoUrl: 'https://i.imgur.com/6Y8qkha.mp4',
-                    type: 'video'
-                }
-            ]
-        }
-    },
-    {
-        id: '2',
-        title: 'Cafe Center 1',
-        location: 'Beja, Portugal',
-        discount: '20%',
-        type: 'image',
-        source: 'https://i.imgur.com/vuz4ufK.png',
-        modal: {
-            cupomCode: 'ID s039da',
-            locationMap: "Beja, portugal",
-            website: "sitebacalhao.com",
-            createdBy: "Casa Verde dos Relógios",
-            eventDate: "0 out - 20:00 a 20 out - 21:00",
-            cashbackType: "Evento",
-            baseDiscount: "10%",
-            flexDiscount: [
-                {
-                    currency: 'EUR',
-                    value: 100,
-                    discount: '10%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 200,
-                    discount: '20%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 300,
-                    discount: '30%'
-                },
-            ],
-            carouselImages: [
-                {
-                    id: '01',
-                    image: 'https://i.imgur.com/7NvPLld.jpeg',
-                },
-                {
-                    id: '02',
-                    image: 'https://i.imgur.com/5Qx1oqV.jpeg',
-                },
-                {
-                    id: '03',
-                    image: 'https://i.imgur.com/2cFsaV2.png',
-                }
-            ],
-            about: `<div><b>Exemplo </b><i>de <u>texto</u></i></div><div><i><u><br></u></i></div><div><font color="#ff0000">Cor Vermelha, </font><font color="#00ff00">Cor Verde, </font><font color="#0000ff">Cor Azul, </font><font color="#ffff00">Cor Amarela, </font><font color="#ff00ff">Cor Lilas, </font><font color="#00ffff">Cor Ciano.</font></div><div><font color="#00ffff"><br></font></div><div><ul><li><font color="#00ffff">&nbsp;</font><font color="#000000">Item 1</font></li><li><font color="#000000">&nbsp;Item 2</font></li><li><font color="#000000">&nbsp;Item 3</font></li></ul><div><font color="#000000"><a href="https://www.google.com">Link para o website</a></font></div></div>`,
-        }
-    },
-    {
-        id: '3',
-        title: 'Fitness Center 3',
-        location: 'Beja, Portugal',
-        discount: '20%',
-        type: 'video',
-        source: 'https://i.imgur.com/6Y8qkha.mp4',
-        modal: {
-            cupomCode: 'ID s039da',
-            locationMap: null,
-            website: "sitebacalhao.com",
-            createdBy: "Casa Verde dos Relógios",
-            eventDate: "0 out - 20:00 a 20 out - 21:00",
-            cashbackType: "Evento",
-            baseDiscount: "10%",
-            flexDiscount: [
-                {
-                    currency: 'EUR',
-                    value: 100,
-                    discount: '10%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 200,
-                    discount: '20%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 300,
-                    discount: '30%'
-                },
-            ],
-            about: "Lorem ipsum...",
-            carouselImages: [
-                {
-                    id: '01',
-                    image: 'https://i.imgur.com/7NvPLld.jpeg',
-                },
-                {
-                    id: '02',
-                    image: 'https://i.imgur.com/5Qx1oqV.jpeg',
-                },
-                {
-                    id: '03',
-                    image: 'https://i.imgur.com/2cFsaV2.png',
-                }
-            ]
-        }
-    },
-];
 import { ScrollView, TouchableOpacity, View, Text, Image, TextInput, StyleSheet } from "react-native";
 import * as Clipboard from 'expo-clipboard';
 import { MaterialCommunityIcons, Octicons, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
-import { WebView } from 'react-native-webview';
 import { Linking } from 'react-native';
 import { router, useLocalSearchParams } from "expo-router";
 import { fontSize } from "@/constants/fonts";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CalendarIcon from "@/assets/icons/calendarIcon";
 import Carousel from "@/components/carousel";
 import { SafeAreaView } from "react-native-safe-area-context";
+import CommerceInformationSkeleton from "@/components/commerceInformationSkeleton";
 
 interface flexDiscountProps {
-    currency: string;
-    value: number;
+    type: 'base' | 'flex' | 'burn';
+    currency?: string;
+    value?: number;
     discount: string;
+}
+interface carouselItem {
+    id: string;
+    source: string;
+    type: 'image' | 'video';
+}
+interface DatasProps {
+    title: string;
+    discountType: 'local' | 'online' | 'link';
+    location: string;
+    distance: string;
+    type: string;
+    source: string;
+    cupomCode?: string;
+    locationMap?: string;
+    website: string;
+    createdBy: string;
+    eventDate: string;
+    cashbackType: string;
+    baseDiscount: string;
+    flexDiscount: flexDiscountProps[];
+    carouselImages: carouselItem[];
+    about: string;
 }
 
 export default function Commerce_Informations() {
-    const params: any = useLocalSearchParams();
-    const selectedItem: any = params.selectedItem ? JSON.parse(params.selectedItem) : data[0];
+    const { id }: any = useLocalSearchParams();
+    const [datas, setDatas] = useState<DatasProps>({} as DatasProps);
 
     const { t } = useLocale();
+    const [isLoading, setIsLoading] = useState(true);
     const copyToClipboard = () => {
-        Clipboard.setStringAsync(selectedItem.modal.cupomCode);
+        Clipboard.setStringAsync(datas.cupomCode || '');
     };
 
+    useEffect(() => {
+        /* Make the request to the api here, you can use the id to identify the commerce/promo/event and get the data
+            {...}
+        */
+
+        // The Timeout is to simulate an API call delay, you can remove it when making the API call
+        setTimeout(() => {
+            setDatas({
+                title: 'Cafe Center 1',
+                discountType: 'online',
+                location: 'Beja, Portugal',
+                distance: '1.5 km',
+                type: 'image',
+                source: 'https://i.imgur.com/vuz4ufK.png',
+                cupomCode: 'ID s039da',
+                locationMap: 'aaaa',
+                website: "sitebacalhao.com",
+                createdBy: "Casa Verde dos Relógios",
+                eventDate: "0 out - 20:00 a 20 out - 21:00",
+                cashbackType: "Evento",
+                baseDiscount: "10%",
+                flexDiscount: [
+                    {
+                        type: 'base',
+                        discount: '10%',
+                    },
+                    {
+                        type: 'flex',
+                        currency: 'EUR',
+                        value: 100,
+                        discount: '10%'
+                    },
+                    {
+                        type: 'flex',
+                        currency: 'EUR',
+                        value: 200,
+                        discount: '20%'
+                    },
+                    {
+                        type: 'flex',
+                        currency: 'EUR',
+                        value: 300,
+                        discount: '30%'
+                    },
+                    {
+                        type: 'burn',
+                        discount: '10%'
+                    },
+                ],
+                carouselImages: [
+                    {
+                        id: '01',
+                        source: 'https://i.imgur.com/7NvPLld.jpeg',
+                        type: 'image',
+                    },
+                    {
+                        id: '02',
+                        source: 'https://i.imgur.com/5Qx1oqV.jpeg',
+                        type: 'image',
+                    },
+                    {
+                        id: '03',
+                        source: 'https://i.imgur.com/2cFsaV2.png',
+                        type: 'image',
+                    }
+                ],
+                about: 'Descrição do comercio ou da promoção/evento'
+            })
+
+            setIsLoading(false);
+        }, 2000)
+    }, [])
+
     return (
-        <SafeAreaView style={{ backgroundColor: 'white' }}>
-            <View style={styles.headerContainer}>
-                <TouchableOpacity onPress={() => router.back()} style={styles.closeButton} activeOpacity={0.7}>
-                    <Octicons name="chevron-left" size={32} color="black" />
-                </TouchableOpacity>
-                <Text style={styles.headerText}>{t("modalCommerce.headerLabel")}</Text>
-            </View>
+        <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
+            {isLoading ?
+                <CommerceInformationSkeleton />
+                :
+                <View>
+                    <View style={styles.headerContainer}>
+                        <TouchableOpacity onPress={() => router.back()} style={styles.closeButton} activeOpacity={0.7}>
+                            <Octicons name="chevron-left" size={32} color="black" />
+                        </TouchableOpacity>
+                        <Text style={styles.headerText}>{t("commerceInformations.headerLabel")}</Text>
+                    </View>
 
-            <ScrollView>
-                <Carousel carouselData={selectedItem.modal.carouselImages} />
+                    <ScrollView>
+                        <Carousel carouselData={datas.carouselImages} />
 
-                {selectedItem && (
-                    <View style={styles.contentContainer}>
-                        <View style={styles.section}>
-                            <View style={styles.sectionHeader}>
-                                <View style={{ flex: 1 }}>
-                                    <Text numberOfLines={2} style={styles.title}>{selectedItem.title}</Text>
-                                </View>
-                                <View style={styles.cashbackType}>
-                                    <Text style={styles.cashbackTypeLabel}>{selectedItem.modal.cashbackType}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.sectionItem}>
-                                {!selectedItem.modal.locationMap ? (
-                                    <>
-                                        <View style={styles.iconContainer}>
-                                            <Feather name="external-link" size={24} color="#0A58CA" />
+                        {datas && (
+                            <View style={styles.contentContainer}>
+                                <View style={styles.section}>
+                                    <View style={styles.sectionHeader}>
+                                        <View style={{ flex: 1 }}>
+                                            <Text numberOfLines={2} style={styles.title}>{datas.title}</Text>
                                         </View>
-                                        <View>
-                                            <Text style={styles.label}>{t("modalCommerce.oficial_website")}</Text>
-                                            <Text style={styles.link}>{selectedItem.modal.website}</Text>
+                                        <View style={styles.cashbackType}>
+                                            <Text style={styles.cashbackTypeLabel}>{datas.cashbackType}</Text>
                                         </View>
-                                    </>
-                                ) : (
-                                    <>
-                                        <TouchableOpacity
-                                            activeOpacity={0.7}
-                                            onPress={() => router.push("/map_location")}
-                                        >
-                                            <Image style={styles.image} source={require("@/assets/images/mapPreview.png")} />
-                                        </TouchableOpacity>
-                                        <View>
-                                            <Text style={styles.location}>{selectedItem.location} | {selectedItem.modal.distance}</Text>
-                                            <Text style={styles.link}>{selectedItem.modal.website}</Text>
-                                        </View>
-                                    </>
-                                )}
-                            </View>
-                            <View style={styles.sectionItem}>
-                                <Image style={styles.image} source={require("@/assets/images/reidobacalhau.png")} />
-                                <View style={styles.infoContainer}>
-                                    <Text style={styles.label}>{t("modalCommerce.eventCreatedBy")}</Text>
-                                    <Text style={styles.link}>{selectedItem.modal.createdBy}</Text>
-                                </View>
-                            </View>
-                            <View style={styles.sectionItem}>
-                                <View style={styles.calendarIconContainer}>
-                                    <CalendarIcon />
-                                </View>
-                                <View style={styles.infoContainer}>
-                                    <Text style={styles.label}>{t("modalCommerce.when")}</Text>
-                                    <Text style={styles.date}>{selectedItem.modal.eventDate}</Text>
-                                </View>
-                            </View>
-                        </View>
-
-                        {selectedItem.modal.cupomCode ? (
-                            <View style={styles.couponContainer}>
-                                <View style={styles.couponIconContainer}>
-                                    <MaterialIcons name="local-fire-department" size={40} color="#146C43" />
-                                </View>
-                                <View style={styles.couponContent}>
-                                    <Text style={styles.couponText}>{t("modalCommerce.getDiscount")}</Text>
-                                    <Text style={styles.couponCodeText}>{t("modalCommerce.discountCode")}</Text>
-                                    <View style={styles.couponInputContainer}>
-                                        <TextInput
-                                            cursorColor={'#ADB5BD'}
-                                            style={styles.couponInput}
-                                            value={selectedItem.modal.cupomCode}
-                                            placeholderTextColor={'#ADB5BD'}
-                                            editable={false}
-                                        />
-                                        <TouchableOpacity style={styles.copyIconContainer} onPress={copyToClipboard} activeOpacity={0.7}>
-                                            <Ionicons name="copy-outline" size={18} color="#495057" />
-                                        </TouchableOpacity>
                                     </View>
-                                    <TouchableOpacity style={styles.accessButtonContainer} activeOpacity={0.7}>
-                                        <View style={styles.accessButton}>
-                                            <Text style={styles.accessButtonText}>{t("modalCommerce.access")}</Text>
+                                    <View style={styles.sectionItem}>
+                                        {!datas.locationMap ? (
+                                            <>
+                                                <TouchableOpacity style={styles.iconContainer} activeOpacity={0.7} onPress={() => router.push('/commerce_informations/map')}>
+                                                    <Feather name="external-link" size={24} color="#0A58CA" />
+                                                </TouchableOpacity>
+                                                <View>
+                                                    <Text style={styles.label}>{t("commerceInformations.oficial_website")}</Text>
+                                                    <Text style={styles.link}>{datas.website}</Text>
+                                                </View>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <TouchableOpacity
+                                                    activeOpacity={0.7}
+                                                    onPress={() => router.navigate("/commerce_informations/map")}
+                                                >
+                                                    <Image style={styles.image} source={require("@/assets/images/mapPreview.png")} />
+                                                </TouchableOpacity>
+                                                <View>
+                                                    <Text style={styles.location}>{datas.location} | {datas.distance}</Text>
+                                                    <TouchableOpacity onPress={() => Linking.openURL("https://www.google.com")} activeOpacity={0.7}>
+                                                        <Text style={styles.link}>{datas.website}</Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            </>
+                                        )}
+                                    </View>
+                                    <View style={styles.sectionItem}>
+                                        <Image style={styles.image} source={require("@/assets/images/reidobacalhau.png")} />
+                                        <View style={styles.infoContainer}>
+                                            <Text style={styles.label}>{t("commerceInformations.eventCreatedBy")}</Text>
+                                            <Text style={styles.link}>{datas.createdBy}</Text>
                                         </View>
-                                    </TouchableOpacity>
+                                    </View>
+                                    <View style={styles.sectionItem}>
+                                        <View style={styles.calendarIconContainer}>
+                                            <CalendarIcon />
+                                        </View>
+                                        <View style={styles.infoContainer}>
+                                            <Text style={styles.label}>{t("commerceInformations.when")}</Text>
+                                            <Text style={styles.date}>{datas.eventDate}</Text>
+                                        </View>
+                                    </View>
                                 </View>
-                            </View>
-                        ) : (
-                            <View style={styles.noCouponContainer}>
-                                <View style={styles.noCouponIconContainer}>
-                                    <MaterialIcons name="local-fire-department" size={40} color="#146C43" />
+
+                                {datas.discountType === 'online' || datas.discountType === 'link' ? (
+                                    <View style={styles.couponContainer}>
+                                        <View style={styles.couponIconContainer}>
+                                            <MaterialIcons name="local-fire-department" size={40} color="#146C43" />
+                                        </View>
+                                        <View style={styles.couponContent}>
+                                            <Text style={styles.couponText}>{t(datas.discountType === 'online' ? "commerceInformations.getDiscount" : "commerceInformations.getDiscountInLink")}</Text>
+                                            {datas.discountType === 'online' && (
+                                                <>
+                                                    <Text style={styles.couponCodeText}>{t("commerceInformations.discountCode")}</Text>
+                                                    <View style={styles.couponInputContainer}>
+                                                        <TextInput
+                                                            cursorColor={'#ADB5BD'}
+                                                            style={styles.couponInput}
+                                                            value={datas.cupomCode}
+                                                            placeholderTextColor={'#ADB5BD'}
+                                                            editable={false}
+                                                        />
+                                                        <TouchableOpacity style={styles.copyIconContainer} onPress={copyToClipboard} activeOpacity={0.7}>
+                                                            <Ionicons name="copy-outline" size={18} color="#495057" />
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                </>
+                                            )}
+                                            <TouchableOpacity style={styles.accessButtonContainer} activeOpacity={0.7}>
+                                                <View style={styles.accessButton}>
+                                                    <Text style={styles.accessButtonText}>{t("commerceInformations.access")}</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                ) : (
+                                    <View style={styles.noCouponContainer}>
+                                        <View style={styles.noCouponIconContainer}>
+                                            <MaterialIcons name="local-fire-department" size={40} color="#146C43" />
+                                        </View>
+                                        <Text style={[styles.noCouponText, { marginTop: 5 }]}>{t("commerceInformations.getDiscountLocally")}</Text>
+                                    </View>
+                                )}
+
+                                <View style={styles.section}>
+                                    {datas.flexDiscount && datas.flexDiscount.length > 0 &&
+                                        datas.flexDiscount.map((item: flexDiscountProps, index: number) => {
+                                            if (item.type === 'base') {
+                                                return (
+                                                    <View key={index} style={styles.discountContainer}>
+                                                        <Text style={styles.discountTitle}>{t("commerceInformations.discountBase")}</Text>
+                                                        <View style={styles.discountValueContainer}>
+                                                            <Text style={styles.discountValue}>{item.discount}</Text>
+                                                            <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#D9A100" style={styles.ticketIcon} />
+                                                        </View>
+                                                    </View>
+                                                )
+                                            } else if (item.type === 'flex') {
+                                                return (
+                                                    <View key={index} style={styles.discountContainer}>
+                                                        <Text style={styles.discountTitle}>
+                                                            {t("commerceInformations.discountAbove")} {item.value} {item.currency}
+                                                        </Text>
+                                                        <View style={styles.discountValueContainer}>
+                                                            <Text style={styles.discountValue}>{item.discount}</Text>
+                                                            <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#D9A100" style={styles.ticketIcon} />
+                                                        </View>
+                                                    </View>
+                                                )
+                                            } else if (item.type === 'burn') {
+                                                return (
+                                                    <View key={index} style={styles.discountContainer}>
+                                                        <Text style={styles.discountTitle}>{t("commerceInformations.burn")}</Text>
+                                                        <View style={styles.burnValueContainer}>
+                                                            <Text style={styles.burnValue}>{item.discount}</Text>
+                                                            <MaterialIcons name="local-fire-department" size={16} color="#520DC2" style={styles.ticketIcon} />
+                                                        </View>
+                                                    </View>
+                                                )
+                                            }
+                                        })
+                                    }
+
                                 </View>
-                                <Text style={[styles.noCouponText, { marginTop: 5 }]}>{t("modalCommerce.getDiscountLocaly")}</Text>
-                                <TouchableOpacity style={{ flexDirection: 'row', marginTop: 4 }} onPress={copyToClipboard} activeOpacity={0.7}>
-                                    <Text style={[styles.noCouponText, { fontWeight: '700' }]}>{selectedItem.modal.cupomCode}</Text>
-                                    <Ionicons style={styles.copyIcon} name="copy-outline" size={20} color="black" />
-                                </TouchableOpacity>
+
+                                <View style={styles.aboutContainer}>
+                                    <Text style={styles.aboutTitle}>{t("commerceInformations.about")}</Text>
+
+                                    <Text style={styles.aboutText}>
+                                        {datas.about}
+                                    </Text>
+
+                                </View>
                             </View>
                         )}
-
-                        <View style={styles.section}>
-                            <View style={styles.discountContainer}>
-                                <Text style={styles.discountTitle}>{t("modalCommerce.discountBase")}</Text>
-                                <View style={styles.discountValueContainer}>
-                                    <Text style={styles.discountValue}>{selectedItem.modal.baseDiscount}</Text>
-                                    <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#D9A100" style={styles.ticketIcon} />
-                                </View>
-                            </View>
-
-                            {selectedItem.modal.flexDiscount && selectedItem.modal.flexDiscount.length > 0 &&
-                                selectedItem.modal.flexDiscount.map((item: flexDiscountProps, index: number) => (
-                                    <View key={index} style={styles.discountContainer}>
-                                        <Text style={styles.discountTitle}>
-                                            {t("modalCommerce.discountAbove")} {item.value} {item.currency}
-                                        </Text>
-                                        <View style={styles.discountValueContainer}>
-                                            <Text style={styles.discountValue}>{item.discount}</Text>
-                                            <MaterialCommunityIcons name="ticket-confirmation-outline" size={16} color="#D9A100" style={styles.ticketIcon} />
-                                        </View>
-                                    </View>
-                                ))
-                            }
-
-                            <View style={styles.discountContainer}>
-                                <Text style={styles.discountTitle}>{t("modalCommerce.burn")}</Text>
-                                <View style={styles.burnValueContainer}>
-                                    <Text style={styles.burnValue}>{selectedItem.modal.baseDiscount}</Text>
-                                    <MaterialIcons name="local-fire-department" size={16} color="#520DC2" style={styles.ticketIcon} />
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.aboutContainer}>
-                            <Text style={styles.aboutTitle}>{t("modalCommerce.about")}</Text>
-                            <ScrollView
-                                contentContainerStyle={{ flexGrow: 1 }}
-                            >
-                                <WebView
-                                    style={[styles.aboutText, { height: 200 }]}
-                                    originWhitelist={['*']}
-                                    nestedScrollEnabled
-                                    source={{
-                                        html:
-                                            `<div style='font-size: 40px; color: #4A4949'>${selectedItem.modal.about || ''}</div>`
-                                    }}
-                                    onShouldStartLoadWithRequest={(request) => {
-                                        if (request.url.startsWith('http')) {
-                                            Linking.openURL(request.url);
-                                            return false;
-                                        }
-                                        return false;
-                                    }}
-                                />
-                            </ScrollView>
-                        </View>
-                    </View>
-                )}
-            </ScrollView>
+                    </ScrollView>
+                </View>
+            }
         </SafeAreaView>
     );
 }
@@ -615,7 +560,7 @@ const styles = StyleSheet.create({
     },
     aboutText: {
         color: '#374151',
-        fontSize: fontSize.titles.mini,
+        fontSize: fontSize.labels.medium,
     },
     copyIcon: {
         marginLeft: 10,

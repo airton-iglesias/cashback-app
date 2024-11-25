@@ -94,7 +94,7 @@ export default function Points() {
     };
 
     return (
-        <View style={[styles.container, { paddingTop: insets.top}, modalVisible ? {backgroundColor: 'white'}:{backgroundColor: '#212121'} ]}>
+        <View style={[styles.container, { paddingTop: insets.top }, modalVisible ? { backgroundColor: 'white' } : { backgroundColor: '#212121' }]}>
             <View style={{ backgroundColor: 'white', flex: 1 }}>
                 {showTopbar && <Topbar openSidebar={openSidebar} openNotifications={openNotifications} />}
                 {showSidebar && <Sidebar closeSidebar={closeSidebar} isSidebarOpen={isSidebarOpen} />}
@@ -142,43 +142,46 @@ export default function Points() {
 
                 </View>
 
-                <Modal
-                    animationType="slide"
-                    visible={modalVisible}
-                    onRequestClose={() => setModalVisible(false)}
-                >
-                    <View style={styles.modalHeaderContainer}>
-                        <TouchableOpacity
-                            style={styles.modalBackButton}
-                            onPress={() => setModalVisible(false)}
-                        >
-                            <Octicons name="chevron-left" size={32} color="black" />
-                            <Text style={styles.modalHeaderText}>{t("points.modal.headerLabel")}</Text>
-                        </TouchableOpacity>
-                    </View>
+                <View>
+                    <Modal
+                        animationType="slide"
+                        visible={modalVisible}
+                        onRequestClose={() => setModalVisible(false)}
+                    >
+                        <View style={styles.modalHeaderContainer}>
+                            <TouchableOpacity
+                                style={styles.modalBackButton}
+                                onPress={() => setModalVisible(false)}
+                            >
+                                <Octicons name="chevron-left" size={32} color="black" />
+                                <Text style={styles.modalHeaderText}>{t("points.modal.headerLabel")}</Text>
+                            </TouchableOpacity>
+                        </View>
 
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalIconContainer}>
-                            <View style={styles.modalIconBackground}>
-                                <InfoCloudIcon width={36} height={36} color={'#3b82f6'} />
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalIconContainer}>
+                                <View style={styles.modalIconBackground}>
+                                    <InfoCloudIcon width={36} height={36} color={'#3b82f6'} />
+                                </View>
+                                <View style={styles.modalTitleContainer}>
+                                    <Text style={styles.modalTitle}>{t("points.modal.title1")}</Text>
+                                    <Text style={styles.modalTitle}>{t("points.modal.title2")}</Text>
+                                </View>
                             </View>
-                            <View style={styles.modalTitleContainer}>
-                                <Text style={styles.modalTitle}>{t("points.modal.title1")}</Text>
-                                <Text style={styles.modalTitle}>{t("points.modal.title2")}</Text>
+                            <View style={styles.modalContent}>
+                                <View style={styles.modalSection}>
+                                    <Text style={styles.modalSectionTitle}>{t("points.modal.deductionPoints")}</Text>
+                                    <Text style={styles.modalSectionText}>{t("points.modal.deductionDescription")}</Text>
+                                </View>
+                                <View style={styles.modalSection}>
+                                    <Text style={styles.modalSectionTitleAdd}>{t("points.modal.additionPoints")}</Text>
+                                    <Text style={styles.modalSectionText}>{t("points.modal.additionDescription")}</Text>
+                                </View>
                             </View>
                         </View>
-                        <View style={styles.modalContent}>
-                            <View style={styles.modalSection}>
-                                <Text style={styles.modalSectionTitle}>{t("points.modal.deductionPoints")}</Text>
-                                <Text style={styles.modalSectionText}>{t("points.modal.deductionDescription")}</Text>
-                            </View>
-                            <View style={styles.modalSection}>
-                                <Text style={styles.modalSectionTitleAdd}>{t("points.modal.additionPoints")}</Text>
-                                <Text style={styles.modalSectionText}>{t("points.modal.additionDescription")}</Text>
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
+                    </Modal>
+                </View>
+                
             </View>
         </View>
     );

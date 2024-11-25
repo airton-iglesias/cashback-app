@@ -47,7 +47,7 @@ export default function Map({ items, isKeyboardVisible }: any) {
 
             <View style={styles.map}></View>
 
-            <View style={[styles.mapButtonWrapper, isKeyboardVisible ? null : { paddingBottom: 80 }]}>
+            <View style={[styles.mapButtonWrapper]}>
                 <TouchableOpacity onPress={() => setIsMapButtonOpen(!isMapButtonOpen)} activeOpacity={0.7}>
                     <View style={styles.mapButtonContent}>
                         <Text style={styles.mapButtonText}>{t("dashboardSearchResults.filter.map.commerce")}</Text>

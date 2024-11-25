@@ -53,7 +53,7 @@ export default function LoyaltyComponent({ loyaltyDatas, setSearch, loading }: a
                                 </View>
                             )}
                             showsVerticalScrollIndicator={false}
-                            contentContainerStyle={{ paddingBottom: 440 }}
+                            contentContainerStyle={{ paddingBottom: 380 }}
                         />
 
                 ) : (

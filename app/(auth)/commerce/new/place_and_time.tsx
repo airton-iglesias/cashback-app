@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import {
+    SafeAreaView,
+    View,
+    KeyboardAvoidingView,
+    ScrollView,
+    StyleSheet,
+} from 'react-native';
 import Input from '@/components/input';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import CommerceHeader from '@/components/commerce/commerceHeader';
@@ -11,7 +16,13 @@ import { router } from 'expo-router';
 import FooterNewCommerce from '@/components/commerce/footerNewCommerce';
 import { Skeleton } from 'moti/skeleton';
 
+// Import react-hook-form and zod
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { getNewCommerceStep3Schema, NewCommerceStep3Data } from '@/schemas/commerceSchemas';
+
 export default function New_Commerce_Step_3() {
+    // Get data from context
     const {
         PlaceType,
         CashbackType,
@@ -21,12 +32,17 @@ export default function New_Commerce_Step_3() {
         startHour,
         endHour,
         mapAdress,
-        setStepperData
+        setStepperData,
     } = useStepperContext();
 
+    // Localization function
     const { t } = useLocale();
+
+    // Local state for modal visibility and map loading
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [mapLoading, setMapLoading] = useState<boolean>(true);
+
+    // Define initial map region
     const INITIAL_REGION = {
         latitude: 38.7266085,
         longitude: -9.1503216,
@@ -34,88 +50,226 @@ export default function New_Commerce_Step_3() {
         longitudeDelta: 2,
     };
 
+    // Handle go back confirmation
     const handleGoBackConfirmed = () => {
         setModalVisible(false);
-        router.replace("/commerce")
-        return;
+        router.replace("/commerce");
     };
 
+    // React Hook Form setup
+    const newCommerceStep3Schema = React.useMemo(
+        () => getNewCommerceStep3Schema(t, CashbackType, PlaceType),
+        [t, CashbackType, PlaceType]
+    );
+
+    const { control, handleSubmit, formState: { errors } } = useForm<NewCommerceStep3Data>({
+        resolver: zodResolver(newCommerceStep3Schema),
+        mode: 'onChange',
+        defaultValues: {
+            webSite,
+            startDate,
+            endDate,
+            startHour,
+            endHour,
+            mapAdress,
+        },
+    });
+
+    // Handle form submission
+    const onSubmit = (data: NewCommerceStep3Data) => {
+        // Update the context with the form data
+        setStepperData({
+            webSite: data.webSite,
+            startDate: data.startDate,
+            endDate: data.endDate,
+            startHour: data.startHour,
+            endHour: data.endHour,
+            mapAdress: data.mapAdress
+        });
+        // Navigate to the next step
+        router.push("/commerce/new/description");
+    };
+
+    // Function to format date to DD/MM/YYYY
+    const formatDate = (value: string) => {
+        const digits = value.replace(/\D/g, '');
+        let formattedValue = '';
+
+        if (digits.length > 0) {
+            formattedValue += digits.substring(0, 2);
+        }
+        if (digits.length >= 3) {
+            formattedValue += '/' + digits.substring(2, 4);
+        }
+        if (digits.length >= 5) {
+            formattedValue += '/' + digits.substring(4, 8);
+        }
+
+        return formattedValue;
+    };
+
+    // Function to format time to HH:MM
+    const formatTime = (value: string) => {
+        const digits = value.replace(/\D/g, '');
+        let formattedValue = '';
+
+        if (digits.length > 0) {
+            formattedValue += digits.substring(0, 2);
+        }
+        if (digits.length >= 3) {
+            formattedValue += ':' + digits.substring(2, 4);
+        }
+
+        return formattedValue;
+    };
 
     return (
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                    {/* Header with close modal */}
                     <CommerceHeader
                         Title={t("commerce.new_commerce.step2.headerLabel")}
                         ScreenClose={() => setModalVisible(true)}
                     />
 
+                    {/* WebSite Input */}
                     <View style={styles.longInputWrapper}>
-                        <Input
-                            label={t("commerce.new_commerce.step2.webSite")}
-                            value={webSite}
-                            placeholder={t("commerce.new_commerce.step2.webSitePlaceholder")}
-                            type={'url'}
-                            onChange={(text: string) => setStepperData({ webSite: text })}
+                        <Controller
+                            control={control}
+                            name="webSite"
+                            render={({ field: { onChange, value } }) => (
+                                <Input
+                                    label={t("commerce.new_commerce.step2.webSite")}
+                                    value={value}
+                                    placeholder={t("commerce.new_commerce.step2.webSitePlaceholder")}
+                                    type={'url'}
+                                    onChange={onChange}
+                                    error={errors.webSite?.message}
+                                />
+                            )}
                         />
                     </View>
 
+                    {/* Conditional rendering for date and time inputs if CashbackType is not "Permanente" */}
                     {CashbackType !== "Permanente" && (
                         <View>
+                            {/* Date Inputs */}
                             <View style={styles.dateTimeSection}>
                                 <View style={styles.dateTimeBlock}>
-                                    <Input
-                                        label={t("commerce.new_commerce.step2.startDate")}
-                                        value={startDate}
-                                        maxLength={10}
-                                        type={'date'}
-                                        onChange={(text: string) => setStepperData({ startDate: text })}
+                                    <Controller
+                                        control={control}
+                                        name="startDate"
+                                        render={({ field: { onChange, value } }) => (
+                                            <Input
+                                                label={t("commerce.new_commerce.step2.startDate")}
+                                                value={value}
+                                                maxLength={10}
+                                                type={'date'}
+                                                keyboardType={'numeric'}
+                                                onChange={(text) => {
+                                                    const formattedText = formatDate(text);
+                                                    onChange(formattedText);
+                                                    setStepperData({ startDate: formattedText });
+                                                }}
+                                                error={errors.startDate?.message}
+                                            />
+                                        )}
                                     />
                                 </View>
                                 <View style={styles.dateTimeBlock}>
-                                    <Input
-                                        label={t("commerce.new_commerce.step2.endDate")}
-                                        value={endDate}
-                                        maxLength={10}
-                                        type={'date'}
-                                        onChange={(text: string) => setStepperData({ endDate: text })}
+                                    <Controller
+                                        control={control}
+                                        name="endDate"
+                                        render={({ field: { onChange, value } }) => (
+                                            <Input
+                                                label={t("commerce.new_commerce.step2.endDate")}
+                                                value={value}
+                                                maxLength={10}
+                                                type={'date'}
+                                                keyboardType={'numeric'}
+                                                onChange={(text) => {
+                                                    const formattedText = formatDate(text);
+                                                    onChange(formattedText);
+                                                    setStepperData({ endDate: formattedText });
+
+                                                }}
+                                                error={errors.endDate?.message}
+                                            />
+                                        )}
                                     />
                                 </View>
                             </View>
 
+                            {/* Time Inputs */}
                             <View style={styles.dateTimeSection}>
                                 <View style={styles.dateTimeBlock}>
-                                    <Input
-                                        label={t("commerce.new_commerce.step2.startHour")}
-                                        value={startHour}
-                                        type={'time'}
-                                        maxLength={8}
-                                        onChange={(text: string) => setStepperData({ startHour: text })}
+                                    <Controller
+                                        control={control}
+                                        name="startHour"
+                                        render={({ field: { onChange, value } }) => (
+                                            <Input
+                                                label={t("commerce.new_commerce.step2.startHour")}
+                                                value={value}
+                                                type={'time'}
+                                                maxLength={5}
+                                                keyboardType={'numeric'}
+                                                onChange={(text) => {
+                                                    const formattedText = formatTime(text);
+                                                    onChange(formattedText);
+                                                    setStepperData({ startHour: formattedText });
+                                                }}
+                                                error={errors.startHour?.message}
+                                            />
+                                        )}
                                     />
                                 </View>
                                 <View style={styles.dateTimeBlock}>
-                                    <Input
-                                        label={t("commerce.new_commerce.step2.endHour")}
-                                        value={endHour}
-                                        type={'time'}
-                                        maxLength={8}
-                                        onChange={(text: string) => setStepperData({ endHour: text })}
+                                    <Controller
+                                        control={control}
+                                        name="endHour"
+                                        render={({ field: { onChange, value } }) => (
+                                            <Input
+                                                label={t("commerce.new_commerce.step2.endHour")}
+                                                value={value}
+                                                type={'time'}
+                                                maxLength={5}
+                                                keyboardType={'numeric'}
+                                                onChange={(text) => {
+                                                    const formattedText = formatTime(text);
+                                                    onChange(formattedText);
+                                                    setStepperData({ endHour: formattedText });
+                                                }}
+                                                error={errors.endHour?.message}
+                                            />
+                                        )}
                                     />
                                 </View>
                             </View>
                         </View>
                     )}
 
+                    {/* Conditional rendering for map address input if PlaceType is "Físico" */}
                     {PlaceType === "Físico" && (
                         <View>
+                            {/* Map Address Input */}
                             <View style={styles.longInputWrapper}>
-                                <Input
-                                    label={t("commerce.new_commerce.step2.locationLabel")}
-                                    value={mapAdress}
-                                    placeholder={t("commerce.new_commerce.step2.adressPlaceholder")}
-                                    onChange={(text: string) => setStepperData({ mapAdress: text })}
+                                <Controller
+                                    control={control}
+                                    name="mapAdress"
+                                    render={({ field: { onChange, value } }) => (
+                                        <Input
+                                            label={t("commerce.new_commerce.step2.locationLabel")}
+                                            value={value}
+                                            placeholder={t("commerce.new_commerce.step2.adressPlaceholder")}
+                                            onChange={onChange}
+                                            error={errors.mapAdress?.message}
+                                        />
+                                    )}
                                 />
                             </View>
+                            
+                            {/* Map View Placeholder */}
                             <View style={styles.mapContainer}>
                                 <View style={styles.mapPlaceholder}>
                                     <Skeleton
@@ -124,16 +278,17 @@ export default function New_Commerce_Step_3() {
                                         colorMode='light'
                                         show={mapLoading}
                                     >
-                                        {/*
-                                        <MapView
-                                            style={styles.map}
-                                            provider={PROVIDER_GOOGLE}
-                                            zoomEnabled={true}
-                                            scrollEnabled={true}
-                                            showsUserLocation={true}
-                                            initialRegion={INITIAL_REGION}
-                                        />
-                                    */}
+                                        {/* Uncomment and configure MapView when ready */}
+                                        {/* 
+                                            <MapView
+                                                style={styles.map}
+                                                provider={PROVIDER_GOOGLE}
+                                                zoomEnabled={true}
+                                                scrollEnabled={true}
+                                                showsUserLocation={true}
+                                                initialRegion={INITIAL_REGION}
+                                            />
+                                        */}
                                     </Skeleton>
                                 </View>
                             </View>
@@ -141,22 +296,27 @@ export default function New_Commerce_Step_3() {
                     )}
                 </ScrollView>
 
+                {/* Footer with navigation buttons */}
                 <FooterNewCommerce
                     backStep={() => router.back()}
-                    nextStep={() => router.push("/commerce/new/description")}
+                    nextStep={handleSubmit(onSubmit)}
                     currentStep={3}
                 />
 
-                <CommerceGoBackModal
-                    modalVisible={modalVisible}
-                    setModalVisible={() => setModalVisible(false)}
-                    ScreenGoback={handleGoBackConfirmed}
-                />
+                {/* Go Back Confirmation Modal */}
+                <View>
+                    <CommerceGoBackModal
+                        modalVisible={modalVisible}
+                        setModalVisible={() => setModalVisible(false)}
+                        ScreenGoback={handleGoBackConfirmed}
+                    />
+                </View>
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
 
+// Stylesheet with unused styles removed
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -168,54 +328,6 @@ const styles = StyleSheet.create({
     scrollViewContent: {
         flexGrow: 1,
     },
-    inputSection: {
-        width: '100%',
-        paddingHorizontal: 16,
-        marginTop: 24,
-    },
-    inputLabel: {
-        fontSize: 18,
-        fontWeight: 'normal',
-        marginBottom: 4
-    },
-    textInput: {
-        borderWidth: 1,
-        borderRadius: 6,
-        width: '100%',
-        height: 48,
-        fontSize: 18,
-        color: '#ADB5BD',
-        borderColor: '#ADB5BD',
-        paddingHorizontal: 10
-    },
-    inputWrapper: {
-        position: 'relative',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    inputHighlight: {
-        position: 'absolute',
-        borderWidth: 4,
-        width: '101.5%',
-        height: 53,
-        borderRadius: 10,
-        opacity: 0,
-    },
-    inputHighlightVisible: {
-        opacity: 0.15,
-        borderColor: '#6610F2',
-    },
-    inputFocused: {
-        borderColor: '#000000',
-    },
-    inputError: {
-        borderColor: '#DC3545',
-    },
-    inputErrorHighlight: {
-        opacity: 0.20,
-        borderColor: '#DC3545',
-    },
-
     longInputWrapper: {
         paddingHorizontal: 15,
         marginTop: 20,
@@ -224,7 +336,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         paddingHorizontal: 15,
-        gap: 15
+        gap: 15,
     },
     dateTimeBlock: {
         flex: 1,
@@ -244,11 +356,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
-        overflow: 'hidden'
-    },
-    mapText: {
-        fontSize: 24,
-        color: '#6C757D',
+        overflow: 'hidden',
     },
     map: {
         width: '100%',

@@ -61,7 +61,7 @@ export default function Topbar({ openSidebar, openNotifications }: any) {
                         <TouchableOpacity
                             activeOpacity={0.7}
                             style={styles.plusWrapper}
-                            onPress={() => router.navigate("/dashboard/(tabs)/wallet")}
+                            onPress={() => router.navigate("/dashboard/wallet")}
                         >
                             <Feather name="plus" size={20} color="#6FC768" />
                         </TouchableOpacity>

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Camera, CameraView } from 'expo-camera';
 import QRCodeHole from '@/components/qrcodeHole';
 import { useLocale } from '@/contexts/TranslationContext';
 import { fontSize } from '@/constants/fonts';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Qrcode() {
     const [hasPermission, setHasPermission] = useState<null | boolean>(false);
@@ -28,7 +29,7 @@ export default function Qrcode() {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
             {hasPermission ? (
                 <View style={styles.container}>
                     <View style={styles.header}>
@@ -64,7 +65,7 @@ export default function Qrcode() {
                     </View>
                 </View>
             )}
-        </SafeAreaView>
+        </View>
     );
 }
 
@@ -78,8 +79,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'black',
         width: '100%',
-        height: 106,
-        paddingTop: 8,
+        height: 85,
         zIndex: 20,
     },
     headerText: {

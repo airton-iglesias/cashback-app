@@ -5,8 +5,9 @@ import CommerceHeader from '@/components/commerce/commerceHeader';
 import { useLocale } from "@/contexts/TranslationContext";
 import * as Clipboard from 'expo-clipboard';
 import QRCode from 'react-native-qrcode-svg';
-import { printAsync } from 'expo-print';
-import { router } from 'expo-router';
+import * as Print from 'expo-print';
+import { shareAsync } from 'expo-sharing';
+import { router, useLocalSearchParams } from 'expo-router';
 import { qrCodeTemplate } from '@/components/qrCodeTemplate';
 import { fontSize } from '@/constants/fonts';
 
@@ -15,24 +16,13 @@ export default function Commerce_Qrcode() {
     const [loading, setLoading] = useState(true);
     const { t } = useLocale();
     const qrCodeRef = useRef<any>(null);
+    const { id, name } = useLocalSearchParams();
 
     useEffect(() => {
         const fetchSelectDatas = async () => {
             /* make the request to the API here
-            //Example: 
-            const selectDataReponse = await
-                fetch('domain of application here', {
-                    method: 'GET',
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Something went wrong');
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
+                you can use id to identify the commerce/promo/event
+                {...}
             */
 
             //temporary variable
@@ -51,20 +41,19 @@ export default function Commerce_Qrcode() {
         Clipboard.setStringAsync(commerceID);
     };
 
-    const handlePrint = async () => {
-        if (qrCodeRef.current) {
-            qrCodeRef.current.toDataURL(async (data: string) => {
-                try {
-                    const htmlContent = qrCodeTemplate.replace('{{qrcodeData}}', data);
-                    await printAsync({
-                        html: htmlContent,
-                    });
-                } catch (error) {
-                    console.error("Erro ao gerar o HTML para impressão", error);
-                }
-            });
-        }
-    };
+    // const handlePrint = async () => {
+    //     if (qrCodeRef.current) {
+    //         qrCodeRef.current.toDataURL(async (data: string) => {
+    //             try {
+    //                 const htmlContent = qrCodeTemplate.replace('{{qrcodeData}}', data);
+    //                 const { uri } = await Print.printToFileAsync({ html: htmlContent });
+    //                 await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+    //             } catch (error) {
+    //                 console.error("Erro ao gerar o HTML para impressão", error);
+    //             }
+    //         });
+    //     }
+    // };
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -120,7 +109,7 @@ export default function Commerce_Qrcode() {
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.printerLabel}
-                    onPress={handlePrint}
+                    //onPress={handlePrint}
                     disabled={loading}
                 >
                     <Feather name="printer" size={20} color='#0D6EFD' />

@@ -12,17 +12,39 @@ import { fontSize } from '@/constants/fonts';
 
 export default function CommerceAddAccess() {
     const [userID, setUserID] = useState('');
+    const [datas, setDatas] = useState<any[]>([]);
     const [administrador, setAdministrador] = useState(false);
     const [canSeeLogs, setCanSeeLogs] = useState(false);
     const [canEraseLogs, setCanEraseLogs] = useState(false);
     const { t } = useLocale();
 
-    const datas: string | any[] = [
-        /*{
-            userName: 'Pedro',
-            image: require('../../assets/images/bar2.png')
-        }*/
-    ]
+    const handleIDChange = async (id: string) => {
+        setUserID(id);
+        if (id) {
+            try {
+                // Simulação de busca de dados do usuário
+                // Substitua este bloco pelo seu método de busca de dados real
+                const userData = {
+                    userName: 'Pedro',
+                    image: 'https://th.bing.com/th/id/OIP.hCfHyL8u8XAbreXuaiTMQgHaHZ?rs=1&pid=ImgDetMain'
+                };
+                setDatas([userData]);
+            } catch (error) {
+                console.error(error);
+                setDatas([]);
+            }
+        } else {
+            setDatas([]);
+        }
+    };
+
+    const onSubmit = () => {
+        /* make the request to the API here
+            {...}
+        */
+
+        router.push("/commerce/access_manager")
+    };
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -33,25 +55,30 @@ export default function CommerceAddAccess() {
                     ScreenClose={() => router.replace("/commerce")}
                 />
 
+                {/* user ID input field */}
+
                 <View style={styles.idContainer}>
                     <Text style={styles.idLabel}>{t("commerce.add_access.id")}</Text>
                     <TextInput
                         cursorColor={'#ADB5BD'}
                         value={userID}
                         style={styles.idInput}
+                        onChangeText={handleIDChange}
                     />
                 </View>
+                {/* end of user ID input field */}
 
-                {datas.length > 0 ?
+                {/* user search to add */}
+                {datas.length > 0 && (
                     <View style={styles.personContainer}>
                         <View style={styles.personButton}>
                             <View style={styles.personInfo}>
                                 <View style={styles.personAvatar}>
-                                    {datas[0].image ?
-                                        <Image source={datas[0].image} style={styles.userImage} resizeMode={'cover'} />
-                                        :
+                                    {datas[0].image ? (
+                                        <Image source={{ uri: datas[0].image }} style={styles.userImage} resizeMode={'cover'} />
+                                    ) : (
                                         <Text style={styles.accessItemAvatarText}>{datas[0].userName.slice(0, 2)}</Text>
-                                    }
+                                    )}
                                 </View>
                                 <View>
                                     <Text style={styles.personName}>{datas[0].userName}</Text>
@@ -59,11 +86,11 @@ export default function CommerceAddAccess() {
                             </View>
                         </View>
                     </View>
-                    :
-                    null
-                }
+                )}
+                {/* end of user search to add */}
 
                 <View style={styles.switchContainer}>
+                    {/* user administrator switch field */}
                     <View style={styles.switchRow}>
                         <Text style={styles.switchLabel}>{t("commerce.add_access.admin")}</Text>
                         <Switch
@@ -71,6 +98,9 @@ export default function CommerceAddAccess() {
                             value={administrador}
                         />
                     </View>
+                    {/* end of user administrator switch field */}
+
+                    {/* user can see logs switch field */}
                     <View style={styles.switchRow}>
                         <Text style={styles.switchLabel}>{t("commerce.add_access.can_see_logs")}</Text>
                         <Switch
@@ -78,6 +108,9 @@ export default function CommerceAddAccess() {
                             value={canSeeLogs}
                         />
                     </View>
+                    {/* end of user can see logs switch field */}
+
+                    {/* user can see and erase logs switch field */}
                     <View style={styles.switchRow}>
                         <Text style={styles.switchLabel}>{t("commerce.add_access.can_see_and_erase_logs")}</Text>
                         <Switch
@@ -85,11 +118,13 @@ export default function CommerceAddAccess() {
                             value={canEraseLogs}
                         />
                     </View>
+                    {/* end of user can see and erase logs switch field */}
                 </View>
 
+                {/* submit button */}
                 <View style={styles.footerContainer}>
                     <TouchableOpacity
-                        onPress={() => router.push("/commerce/access_manager")}
+                        onPress={onSubmit}
                         style={styles.submitButton}
                         activeOpacity={0.7}
                     >
@@ -98,6 +133,7 @@ export default function CommerceAddAccess() {
                         </View>
                     </TouchableOpacity>
                 </View>
+                {/* end of submit button */}
             </ScrollView>
         </SafeAreaView>
     );

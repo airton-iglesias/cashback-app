@@ -49,8 +49,6 @@ export default function WalletRecovery() {
         setText(sanitizedContent);
     };
 
-
-
     // Function to validate and save the 17-word phrase
     const onSubmit = async () => {
         if (requestError) { setRequestError(!requestError) }
@@ -95,7 +93,6 @@ export default function WalletRecovery() {
                             </View>
                         </View>
                     )}
-
 
                     {/* Error message section */}
                     {requestError && (

@@ -118,7 +118,7 @@ export const getWalletRecoverySchema = (t: (key: string) => string) => {
     phrase: z.string()
       .transform((value) => value.replace(/[^a-zA-ZÀ-ÿ0-9\s]/g, '').trim())
       .transform((value) => value.split(/\s+/))
-      .refine((words) => words.length === 17, {
+      .refine((words) => words.length === 24, {
         message: t("walletRecovery.phraseError"),
       })
   });

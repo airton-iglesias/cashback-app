@@ -114,6 +114,11 @@ export default function Results({ showResults, showResultsValue, datas }: any) {
         return matchesFilter && matchesSearchInput;
     });
 
+    const handleShowMap = () => {
+        if (showSortList) { setShowSortList(!showSortList) }
+        setShowMap(!showMap);
+    };
+
     return (
         <View style={styles.container}>
             <SearchTopbar
@@ -121,19 +126,19 @@ export default function Results({ showResults, showResultsValue, datas }: any) {
                 activeFilter={activeFilter}
                 searchInput={searchInput}
                 setSearchInput={(Text: string) => setSearchInput(Text)}
-                showResults={(value: boolean) => showResults(value)}
+                showResults={() => showResults()}
             />
 
             <View style={styles.searchResultInfos}>
                 <Text style={styles.searchResultInfosText}>{filteredData.length} {t("dashboardSearchResults.content.results")}</Text>
                 <View style={styles.iconsWrapper}>
                     {showMap ?
-                        <TouchableOpacity onPress={() => setShowMap(!showMap)} activeOpacity={0.7}>
+                        <TouchableOpacity onPress={handleShowMap} activeOpacity={0.7}>
                             <FontAwesome5 name="list-ul" size={24} color="#0D6EFD" />
                         </TouchableOpacity>
                         :
-                        <View style={{flexDirection: 'row', gap: 15}}>
-                            <TouchableOpacity onPress={() => setShowMap(!showMap)} activeOpacity={0.7}>
+                        <View style={{ flexDirection: 'row', gap: 15 }}>
+                            <TouchableOpacity onPress={handleShowMap} activeOpacity={0.7}>
                                 <MapPinnedIcon />
                             </TouchableOpacity>
 
@@ -145,14 +150,14 @@ export default function Results({ showResults, showResultsValue, datas }: any) {
                 </View>
             </View>
 
-            { showSortList && (
+            {showSortList && (
                 <SortMenu
                     sortCriteria={sortCriteria}
                     handleSortChange={(value: string) => handleSortChange(value)}
                 />
             )}
 
-            { showMap ?
+            {showMap ?
                 <Map
                     isKeyboardVisible={isKeyboardVisible}
                 />
@@ -160,7 +165,7 @@ export default function Results({ showResults, showResultsValue, datas }: any) {
                 <FlatList
                     data={filteredData}
                     keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <CommerceItem item={item} /> }
+                    renderItem={({ item }) => <CommerceItem item={item} />}
                     contentContainerStyle={{ paddingBottom: 110 }}
                 />
             }

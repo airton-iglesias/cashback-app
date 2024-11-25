@@ -102,11 +102,11 @@ export default function WallatTokens({ openExtract }: any) {
 
             {currentComponent === "graphic" && (
 
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, gap: 20 }}>
 
                     <LinearGraph loading={loading} />
 
-                    <View style={[styles.warningContainer, { marginHorizontal: 15, top: 15, paddingRight: 16 }]}>
+                    <View style={[styles.warningContainer, { marginHorizontal: 15, top: 70, paddingHorizontal: 16 }]}>
                         <Ionicons name="alert-circle-outline" size={30} color="#a16207" />
                         <Text style={styles.warningText}>
                             {t("dashboardWallat.tokensScreen.warning")}
@@ -152,7 +152,8 @@ export default function WallatTokens({ openExtract }: any) {
                                             width={160}
                                         >
                                             {
-                                            loading ? null : <Text numberOfLines={1} style={styles.walletLabel}>{t("dashboardWallat.tokensScreen.next_distribution")}: 03/04/2024</Text>}
+                                                loading ? null : <Text numberOfLines={1} style={styles.walletLabel}>{t("dashboardWallat.tokensScreen.next_distribution")}: 03/04/2024</Text>
+                                            }
                                         </Skeleton>
                                     </View>
                                 </View>
@@ -196,61 +197,65 @@ export default function WallatTokens({ openExtract }: any) {
                 </View>
             )}
 
-            <Modal
-                animationType="slide"
-                visible={modalZoiVisible}
-                onRequestClose={() => setModalZoiVisible(false)}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalIconContainer}>
-                        <View style={styles.modalIconBackground}>
-                            <InfoCloudIcon width={36} height={36} color={'#3b82f6'} />
+            <View>
+                <Modal
+                    animationType="slide"
+                    visible={modalZoiVisible}
+                    onRequestClose={() => setModalZoiVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalIconContainer}>
+                            <View style={styles.modalIconBackground}>
+                                <InfoCloudIcon width={36} height={36} color={'#3b82f6'} />
+                            </View>
+                            <View style={styles.modalTitleContainer}>
+                                <Text style={styles.modalTitle}>{t("dashboardWallat.tokensScreen.modal.zoi.title1")}</Text>
+                                <Text style={styles.modalTitle}>{t("dashboardWallat.tokensScreen.modal.zoi.title2")}</Text>
+                            </View>
                         </View>
-                        <View style={styles.modalTitleContainer}>
-                            <Text style={styles.modalTitle}>{t("dashboardWallat.tokensScreen.modal.zoi.title1")}</Text>
-                            <Text style={styles.modalTitle}>{t("dashboardWallat.tokensScreen.modal.zoi.title2")}</Text>
+                        <View style={styles.modalContent}>
+                            <View style={styles.modalSection}>
+                                <Text style={styles.modalSectionTitle}>{t("dashboardWallat.tokensScreen.modal.zoi.criterionTitle")}</Text>
+                                <Text style={styles.modalSectionText}>{t("dashboardWallat.tokensScreen.modal.zoi.criterionDescription")}</Text>
+                            </View>
+                            <View style={styles.modalSection}>
+                                <Text style={styles.modalSectionTitleAdd}>{t("dashboardWallat.tokensScreen.modal.zoi.importantTitle")}</Text>
+                                <Text style={styles.modalSectionText}>{t("dashboardWallat.tokensScreen.modal.zoi.importantDescription")}</Text>
+                            </View>
                         </View>
                     </View>
-                    <View style={styles.modalContent}>
-                        <View style={styles.modalSection}>
-                            <Text style={styles.modalSectionTitle}>{t("dashboardWallat.tokensScreen.modal.zoi.criterionTitle")}</Text>
-                            <Text style={styles.modalSectionText}>{t("dashboardWallat.tokensScreen.modal.zoi.criterionDescription")}</Text>
-                        </View>
-                        <View style={styles.modalSection}>
-                            <Text style={styles.modalSectionTitleAdd}>{t("dashboardWallat.tokensScreen.modal.zoi.importantTitle")}</Text>
-                            <Text style={styles.modalSectionText}>{t("dashboardWallat.tokensScreen.modal.zoi.importantDescription")}</Text>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+                </Modal>
+            </View>
 
-            <Modal
-                animationType="slide"
-                visible={modalPoolVisible}
-                onRequestClose={() => setModalPoolVisible(false)}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalIconContainer}>
-                        <View style={styles.modalIconBackground}>
-                            <InfoCloudIcon width={36} height={36} color={'#3b82f6'} />
+            <View>
+                <Modal
+                    animationType="slide"
+                    visible={modalPoolVisible}
+                    onRequestClose={() => setModalPoolVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalIconContainer}>
+                            <View style={styles.modalIconBackground}>
+                                <InfoCloudIcon width={36} height={36} color={'#3b82f6'} />
+                            </View>
+                            <View style={styles.modalTitleContainer}>
+                                <Text style={styles.modalTitle}>{t("dashboardWallat.tokensScreen.modal.pool.title1")}</Text>
+                                <Text style={styles.modalTitle}>{t("dashboardWallat.tokensScreen.modal.pool.title2")}</Text>
+                            </View>
                         </View>
-                        <View style={styles.modalTitleContainer}>
-                            <Text style={styles.modalTitle}>{t("dashboardWallat.tokensScreen.modal.pool.title1")}</Text>
-                            <Text style={styles.modalTitle}>{t("dashboardWallat.tokensScreen.modal.pool.title2")}</Text>
+                        <View style={styles.modalContent}>
+                            <View style={styles.modalSection}>
+                                <Text style={styles.modalSectionTitle}>{t("dashboardWallat.tokensScreen.modal.pool.taxTitle")}</Text>
+                                <Text style={styles.modalSectionText}>{t("dashboardWallat.tokensScreen.modal.pool.taxDescription")}</Text>
+                            </View>
+                            <View style={styles.modalSection}>
+                                <Text style={styles.modalSectionTitleAdd}>{t("dashboardWallat.tokensScreen.modal.pool.poolTitle")}</Text>
+                                <Text style={styles.modalSectionText}>{t("dashboardWallat.tokensScreen.modal.pool.poolDescription")}</Text>
+                            </View>
                         </View>
                     </View>
-                    <View style={styles.modalContent}>
-                        <View style={styles.modalSection}>
-                            <Text style={styles.modalSectionTitle}>{t("dashboardWallat.tokensScreen.modal.pool.taxTitle")}</Text>
-                            <Text style={styles.modalSectionText}>{t("dashboardWallat.tokensScreen.modal.pool.taxDescription")}</Text>
-                        </View>
-                        <View style={styles.modalSection}>
-                            <Text style={styles.modalSectionTitleAdd}>{t("dashboardWallat.tokensScreen.modal.pool.poolTitle")}</Text>
-                            <Text style={styles.modalSectionText}>{t("dashboardWallat.tokensScreen.modal.pool.poolDescription")}</Text>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+                </Modal>
+            </View>
         </View>
     );
 };
@@ -490,6 +495,6 @@ const styles = StyleSheet.create({
     halfActiveSegment: {
         backgroundColor: '#198754',
         height: '100%',
-        width: '50%', 
+        width: '50%',
     },
 });

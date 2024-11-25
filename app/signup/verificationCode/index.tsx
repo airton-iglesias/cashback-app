@@ -36,7 +36,7 @@ export default function VerificationCode() {
             // {...}
 
             // Temporary sentence to simulate the API response
-            const sentence = "natureza brilho sonho pássaro estrela oceano força energia mundo futuro coragem vitória equilíbrio paz luz céu vida";
+            const sentence = "hill aware false ranch eager enlist shift two divide kitchen invest system suggest require orient mammal bubble abstract habit traffic equal embody win accident";
             await StorageService.setItem('walletPhrase', sentence);
 
             // if all is alright, navigate to the next screen passing the sentence as a param
@@ -171,7 +171,6 @@ export default function VerificationCode() {
         </SafeAreaView>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {

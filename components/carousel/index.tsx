@@ -12,10 +12,10 @@ import {
 
 interface CarouselItem {
     id: string;
-    image?: string;
-    videoUrl?: string;
+    source: string;
     type: 'image' | 'video';
 }
+
 
 export default function Carousel({ carouselData }: { carouselData: CarouselItem[] }) {
     const flatlistRef = useRef<FlatList<CarouselItem>>(null);
@@ -53,7 +53,7 @@ export default function Carousel({ carouselData }: { carouselData: CarouselItem[
             >
                 <View>
                     <Image
-                        source={{ uri: item.image }}
+                        source={{ uri: item.source }}
                         style={styles.image}
                     />
                 </View>

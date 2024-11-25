@@ -90,10 +90,18 @@ function Content() {
       <Tabs
         screenOptions={{
           headerShown: false,
-          tabBarBackground: () => ( <BlurView intensity={80} tint="dark" style={styles.BlurView} /> ),
+          tabBarBackground: () => (<BlurView intensity={80} tint="dark" style={styles.BlurView} />),
           tabBarStyle: { height: 80, backgroundColor: 'rgba(0, 0, 0, 0.8)' },
-          tabBarIconStyle: { flex: 1 }
-        }}>
+          tabBarIconStyle: { flex: 1 },
+          tabBarHideOnKeyboard: true
+        }}
+        screenListeners={{
+          tabPress: (e) => {
+            const currentTab = e.target?.split('-')[0];
+            handleTabChange(currentTab);
+          },
+        }}
+      >
         <Tabs.Screen name="index" options={{ headerShown: false, tabBarShowLabel: false, tabBarIcon: ({ focused }) => <HomeIcon size={30} focused={focused} /> }} />
         <Tabs.Screen name="search" options={{ headerShown: false, tabBarShowLabel: false, tabBarIcon: ({ focused }) => <SearchIcon size={28} focused={focused} /> }} />
         <Tabs.Screen name="wallet" options={{ headerShown: false, tabBarShowLabel: false, tabBarIcon: ({ focused }) => <WallatIcon size={28} focused={focused} /> }} />

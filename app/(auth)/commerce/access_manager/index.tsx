@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, TouchableOpacity, Image, ScrollView, StyleShe
 import { FontAwesome6 } from '@expo/vector-icons';
 import CommerceHeader from '@/components/commerce/commerceHeader';
 import { useLocale } from "@/contexts/TranslationContext";
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
 import UserSkeleton from '@/components/userSkeleton';
 
@@ -11,24 +11,13 @@ export default function CommerceAccessManager() {
     const { t } = useLocale();
     const [loading, setLoading] = useState(true);
     const [userDatas, setUserDatas] = useState<any>([]);
+    const { id, name } = useLocalSearchParams();
 
     useEffect(() => {
         const fetchSelectDatas = async () => {
             /* make the request to the API here
-            //Example: 
-            const selectDataReponse = await
-                fetch('domain of application here', {
-                    method: 'GET',
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Something went wrong');
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
+                you can use id and name to identify the commerce/promo/event
+                {...}
             */
 
             //temporary variable
@@ -36,15 +25,16 @@ export default function CommerceAccessManager() {
                 {
                     id: '#32594',
                     name: 'Pedro',
-                    image: null
+                    image: null // Sem imagem para este exemplo
                 },
                 {
                     id: '#32595',
-                    name: 'Fernanda',
-                    image: require('@/assets/images/bar2.png')
+                    name: 'Fernando',
+                    image: 'https://th.bing.com/th/id/OIP.hCfHyL8u8XAbreXuaiTMQgHaHZ?rs=1&pid=ImgDetMain'
                 }
             ];
 
+            /* The Timeout is to simulate an API call delay, you can remove it when making the API call */
             setTimeout(() => {
                 setUserDatas(dataReponse);
                 setLoading(false);
@@ -66,9 +56,11 @@ export default function CommerceAccessManager() {
                     ScreenClose={() => router.replace("/commerce")}
                 />
 
+                {/* Manage Access Label */}
                 <View style={styles.manageAccessContainer}>
                     <Text style={styles.manageAccessTitle}>{t("commerce.access_manager.label")}</Text>
                 </View>
+                {/* end of manage Access Label */}
 
 
                 {loading ?
@@ -82,21 +74,37 @@ export default function CommerceAccessManager() {
                                 <View style={styles.acessItemOutter}>
                                     <TouchableOpacity
                                         activeOpacity={0.7}
-                                        onPress={() => router.push("/commerce/associate_edit")}
+                                        onPress={() => router.push({
+                                            pathname: "/commerce/associate_edit",
+                                            params: {
+                                                id: user.id,
+                                                name: user.name,
+                                                image: user.image,
+                                            },
+                                        })}
                                         style={styles.accessItemButton}
                                     >
                                         <View style={styles.accessItemInner}>
+                                            {/* Avatar */}
                                             <View style={styles.accessItemAvatar}>
                                                 {user.image ? (
-                                                    <Image source={user.image} style={styles.userImage} resizeMode={'cover'} />
+                                                    <Image
+                                                        source={{ uri: user.image }}
+                                                        style={styles.userImage}
+                                                        resizeMode="cover"
+                                                    />
                                                 ) : (
                                                     <Text style={styles.accessItemAvatarText}>{user.name.slice(0, 2)}</Text>
                                                 )}
                                             </View>
+                                            {/* end of Avatar */}
+
+                                            {/* Name and ID */}
                                             <View style={{ marginLeft: 15 }}>
                                                 <Text style={styles.accessItemName}>{user.name}</Text>
                                                 <Text style={styles.accessItemId}>{user.id}</Text>
                                             </View>
+                                            {/* end of Name and ID */}
                                         </View>
                                     </TouchableOpacity>
                                 </View>
@@ -105,7 +113,7 @@ export default function CommerceAccessManager() {
                     />
                 }
 
-
+                {/* Add fab Button */}
                 <TouchableOpacity
                     onPress={() => router.push("/commerce/add_access")}
                     style={styles.addButton}
@@ -113,6 +121,7 @@ export default function CommerceAccessManager() {
                 >
                     <FontAwesome6 name="plus" size={24} color="white" />
                 </TouchableOpacity>
+                {/* end of add fab Button */}
             </View>
 
         </SafeAreaView >
@@ -135,22 +144,6 @@ const styles = StyleSheet.create({
     manageAccessTitle: {
         fontSize: fontSize.titles.mini,
         fontWeight: 'bold',
-    },
-    commerceInfoContainer: {
-        paddingHorizontal: 20,
-        marginTop: 16,
-    },
-    commerceInfoInner: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#DFDFDF',
-        paddingBottom: 16,
-    },
-    commerceImage: {
-        height: 64,
-        width: 64,
-        borderRadius: 32,
     },
     accessItemContainer: {
         paddingHorizontal: 20,
@@ -189,19 +182,6 @@ const styles = StyleSheet.create({
         fontSize: fontSize.labels.medium,
         marginTop: 4,
         color: '#635C5C'
-    },
-    accessItemAvatarRed: {
-        height: 64,
-        width: 64,
-        borderRadius: 32,
-        backgroundColor: '#FFDADA',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    accessItemAvatarTextRed: {
-        color: '#B72E2E',
-        fontSize: fontSize.labels.medium,
-        fontWeight: 'bold',
     },
     userImage: {
         flex: 1,

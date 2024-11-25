@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, StyleSheet, Image, Modal } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -19,6 +19,7 @@ export default function New_Commerce_Step_5() {
     const scrollViewRef = useRef<ScrollView>(null);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [modalMediasInfoVisible, setModalMediasInfoVisible] = useState(false);
+    const [error, setError] = useState(false);
     const { t } = useLocale();
 
     const uriToFile = async (uri: string, name: string, type: string): Promise<File> => {
@@ -39,7 +40,7 @@ export default function New_Commerce_Step_5() {
 
     const pickLogoImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: ['images'],
             allowsEditing: true,
             quality: 1,
             aspect: [1, 1],
@@ -51,9 +52,9 @@ export default function New_Commerce_Step_5() {
         }
     };
 
-    const pickBannerImage = async () => {
+    const pickBannerMedia = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ['images', 'videos'],
             allowsEditing: true,
             quality: 1,
             aspect: [9, 16],
@@ -74,7 +75,7 @@ export default function New_Commerce_Step_5() {
         if (descriptionMedia.length >= 10) return;
 
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ['images'],
             allowsEditing: true,
             quality: 1,
             aspect: [16, 9],
@@ -102,6 +103,9 @@ export default function New_Commerce_Step_5() {
     };
 
     const handleNextStep = () => {
+        if (error) { setError(!error) }
+        if (!logoImage && !posterImage && descriptionMedia.length === 0) { setError(!error); return; }
+
         if (PlaceType === "Físico") {
             router.push("/commerce/new/cashback_items");
             return;
@@ -114,8 +118,10 @@ export default function New_Commerce_Step_5() {
         router.replace("/commerce")
     };
 
-    const player = useVideoPlayer(posterImage.uri, player => {
-        player.loop = true;
+    // Video player function, to handle the thumb of the video files
+    const player = useVideoPlayer(posterImage?.uri || '', player => {
+        player.loop = false;
+        player.pause();
     });
 
 
@@ -127,14 +133,16 @@ export default function New_Commerce_Step_5() {
                         Title={t("commerce.new_commerce.step4.headerLabel")}
                         ScreenClose={() => { setModalVisible(true); }}
                     />
-                    {/* Logomarca */}
+                    {/* Logomarca section */}
                     <View style={styles.section}>
-
+                        {/* Label */}
                         <View style={styles.imagesHeader}>
                             <Text style={styles.sectionTitle}>{t("commerce.new_commerce.step4.logoLabel")}</Text>
                         </View>
+                        {/* End of label */}
 
                         <View>
+                            {/* Upload logomarca button */}
                             <TouchableOpacity activeOpacity={0.7} onPress={pickLogoImage}>
                                 <View style={styles.uploadContainer}>
                                     {logoImage ? (
@@ -144,6 +152,9 @@ export default function New_Commerce_Step_5() {
                                     )}
                                 </View>
                             </TouchableOpacity>
+                            {/* End of upload button */}
+
+                            {/* if the image is selected, then show the remove button */}
                             {logoImage && (
                                 <TouchableOpacity
                                     activeOpacity={0.7}
@@ -153,29 +164,40 @@ export default function New_Commerce_Step_5() {
                                     <Feather name="trash" size={16} color="black" />
                                 </TouchableOpacity>
                             )}
+                            {/* End of remove button */}
+
+                            {error && <Text style={styles.errorText}>{t("commerce.new_commerce.step4.errorMessage")}</Text>}
                         </View>
                     </View>
-                    {/* Cartaz */}
+                    {/* End of Logomarca section */}
+
+
+                    {/* Banner section */}
                     <View style={styles.section}>
+                        {/* Label */}
                         <View style={styles.imagesHeader}>
                             <View style={{ flexDirection: 'row', gap: 5 }}>
-                                <Text style={styles.sectionTitleScrollable}>{t("commerce.new_commerce.step4.descriptionMediasLabel")}</Text>
+                                <Text style={styles.sectionTitleScrollable}>{t("commerce.new_commerce.step4.bannerLabel")}</Text>
                                 <TouchableOpacity style={{ marginTop: 3 }} onPress={() => setModalMediasInfoVisible(true)}>
                                     <Feather name="info" size={12} color="#0052FF" />
                                 </TouchableOpacity>
                             </View>
                         </View>
+                        {/* End of label */}
+
                         <View>
-                            <TouchableOpacity activeOpacity={0.7} onPress={pickBannerImage}>
+                            {/* Upload banner button */}
+                            <TouchableOpacity activeOpacity={0.7} onPress={pickBannerMedia}>
                                 <View style={styles.uploadContainer}>
                                     {posterImage ? (
                                         posterImage.type === 'image' ? (
-                                            <Image source={{ uri: posterImage.uri }} style={styles.imageThumbnail} resizeMode={'cover'} />
+                                            <Image source={{ uri: posterImage.uri }} style={styles.imageThumbnail} resizeMode={'contain'} />
                                         ) : (
                                             <VideoView
                                                 player={player}
                                                 style={[StyleSheet.absoluteFill, { flex: 1 }]}
                                                 contentFit={'contain'}
+                                                nativeControls={false}
                                             />
                                         )
                                     ) : (
@@ -183,6 +205,10 @@ export default function New_Commerce_Step_5() {
                                     )}
                                 </View>
                             </TouchableOpacity>
+                            {/* End of upload button */}
+
+                            {/* if the image is selected, then show the remove button */}
+
                             {posterImage && (
                                 <TouchableOpacity
                                     activeOpacity={0.7}
@@ -192,11 +218,17 @@ export default function New_Commerce_Step_5() {
                                     <Feather name="trash" size={16} color="black" />
                                 </TouchableOpacity>
                             )}
+
+                            {/* End of remove button */}
+
+                            {error && <Text style={styles.errorText}>{t("commerce.new_commerce.step4.errorMessage")}</Text>}
                         </View>
                     </View>
-                    {/* Imagens e Vídeos de Descrição */}
+
+                    {/* Images of description section */}
                     <View style={styles.section}>
-                        <View style={styles.imagesHeader}>
+                        {/* Label */}
+                        <View style={[styles.imagesHeader, {}]}>
                             <View style={{ flexDirection: 'row', gap: 5 }}>
                                 <Text style={styles.sectionTitleScrollable}>{t("commerce.new_commerce.step4.descriptionMediasLabel")}</Text>
                                 <TouchableOpacity style={{ marginTop: 3 }} onPress={() => setModalMediasInfoVisible(true)}>
@@ -205,14 +237,18 @@ export default function New_Commerce_Step_5() {
                             </View>
                             <Text style={styles.imageCount}>{descriptionMedia.length}/10</Text>
                         </View>
+                        {/* End of label */}
+
+                        
                         <ScrollView
                             ref={scrollViewRef}
                             horizontal
                             showsHorizontalScrollIndicator={false}
                             contentContainerStyle={styles.horizontalScrollView}
                         >
+                            {/* Upload images button */}
                             {descriptionMedia.map((media: any, index: any) => (
-                                <View key={index} style={{ backgroundColor: '#ebebea', borderRadius: 8 }}>
+                                <View key={index} style={[styles.uploadContainer, { marginTop: 13 }]}>
                                     <TouchableOpacity
                                         activeOpacity={0.7}
                                         onPress={() => removeMedia(index)}
@@ -220,25 +256,22 @@ export default function New_Commerce_Step_5() {
                                     >
                                         <Feather name="trash" size={16} color="black" />
                                     </TouchableOpacity>
-                                    {media.type === 'image' ? (
-                                        <Image source={{ uri: media.uri }} style={styles.imageThumbnail} />
-                                    ) : (
-                                        <VideoView
-                                            player={player}
-                                            style={[StyleSheet.absoluteFill, { flex: 1 }]}
-                                            contentFit={'contain'}
-                                        />
-                                    )}
+                                    <Image source={{ uri: media.uri }} style={styles.imageThumbnail} resizeMode={'contain'} />
                                 </View>
                             ))}
+                            {/* End of upload button */}
+
+                            {/* if the image is selected, then show the remove button */}
                             {descriptionMedia.length < 10 && (
                                 <TouchableOpacity activeOpacity={0.7} onPress={pickMultipleMedia}>
-                                    <View style={styles.uploadContainer}>
+                                    <View style={[styles.uploadContainer, { marginTop: 13 }]}>
                                         <Feather name="upload" size={24} color="black" />
                                     </View>
                                 </TouchableOpacity>
                             )}
+                            {/* End of remove button */}
                         </ScrollView>
+                        {error && <Text style={styles.errorText}>{t("commerce.new_commerce.step4.errorMessage")}</Text>}
                     </View>
                 </ScrollView>
 
@@ -254,6 +287,7 @@ export default function New_Commerce_Step_5() {
                     ScreenGoback={handleGoBackConfirmed}
                 />
 
+                {/* Modal for medias info */}
                 <Modal
                     animationType="slide"
                     visible={modalMediasInfoVisible}
@@ -280,6 +314,7 @@ export default function New_Commerce_Step_5() {
                         </View>
                     </View>
                 </Modal>
+                {/* End of modal for medias info */}
             </KeyboardAvoidingView>
         </SafeAreaView>
     );
@@ -329,8 +364,6 @@ const styles = StyleSheet.create({
     horizontalScrollView: {
         flexDirection: 'row',
         gap: 15,
-        height: 130,
-
     },
     imageThumbnail: {
         width: 100,
@@ -346,7 +379,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: -13,
         left: 80,
-        zIndex: 10,
+        zIndex: 1,
         borderRadius: 999,
         borderWidth: 1,
         padding: 6,
@@ -429,5 +462,10 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         left: 15,
         marginBottom: 3
+    },
+    errorText: {
+        color: '#DC3545',
+        fontSize: fontSize.labels.medium,
+        marginTop: 5,
     },
 });

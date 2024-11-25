@@ -1,83 +1,38 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal } from 'react-native';
+import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal, ActivityIndicator } from 'react-native';
 import { Feather, Octicons, AntDesign, SimpleLineIcons } from '@expo/vector-icons';
 import QRCodeIcon from '@/assets/icons/qrcodeIcon';
 import { useLocale } from "@/contexts/TranslationContext";
 import CommerceHeader from '@/components/commerce/commerceHeader';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
-
-const data = [
-    {
-        id: '1',
-        title: 'Fitness Center 1',
-        location: 'Beja, Portugal',
-        discount: '20%',
-        type: 'video',
-        source: 'https://i.imgur.com/6Y8qkha.mp4',
-        modal: {
-            cupomCode: 'ID s039da',
-            locationMap: null,
-            website: "sitebacalhao.com",
-            createdBy: "Casa Verde dos Relógios",
-            eventDate: "0 out - 20:00 a 20 out - 21:00",
-            cashbackType: "Evento",
-            baseDiscount: "10%",
-            flexDiscount: [
-                {
-                    currency: 'EUR',
-                    value: 100,
-                    discount: '10%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 200,
-                    discount: '20%'
-                },
-                {
-                    currency: 'EUR',
-                    value: 300,
-                    discount: '30%'
-                },
-            ],
-            about: "Lorem ipsum...",
-            carouselImages: [
-                {
-                    id: '01',
-                    image: 'https://i.imgur.com/7NvPLld.jpeg',
-                },
-                {
-                    id: '02',
-                    image: 'https://i.imgur.com/5Qx1oqV.jpeg',
-                },
-                {
-                    id: '03',
-                    image: 'https://i.imgur.com/2cFsaV2.png',
-                }
-            ]
-        }
-    },
-];
 
 export default function CommerceMenu() {
     const [modalVisible, setModalVisible] = useState(false);
-    const [commerceModalVisible, setCommerceModalVisible] = useState(false);
+    const { id, name } = useLocalSearchParams();
     const { t } = useLocale();
+    const [deleteLoading, setDeleteLoading] = useState(false)
 
+    const handleDelete = () => {
+        // Implement delete logic here
+        setModalVisible(false);
+        router.replace("/commerce")
+    };
     return (
         <SafeAreaView style={styles.safeArea}>
 
             <CommerceHeader
-                Title={'Soverteria - Loja 1'}
-                SubTitle={'32594'}
+                Title={`${name}`}
+                SubTitle={`${id}`}
                 ScreenGoback={() => router.back()}
                 ScreenClose={() => router.replace("/commerce")}
             />
 
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                {/* Extract button */}
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={() => router.push('/commerce/credit_extract')}
+                    onPress={() => router.push({ pathname: '/commerce/credit_extract', params: { id: id, name: name } })}
                 >
                     <View style={[styles.menuItem, { borderTopWidth: 0 }]}>
                         <View style={styles.iconContainer}>
@@ -86,13 +41,14 @@ export default function CommerceMenu() {
                         <Text style={styles.menuItemText}>{t("commerce.menu.credit_extract")}</Text>
                     </View>
                 </TouchableOpacity>
+                {/* End of Extract button */}
 
-
+                {/* Commerce information button */}
                 <View style={styles.menuItem}>
                     <TouchableOpacity
                         activeOpacity={0.7}
                         style={styles.menuItemButton}
-                        onPress={() => router.push({ pathname: "/commerce_informations", params: { selectedItem: JSON.stringify(data[0]) } })}
+                        onPress={() => router.push({ pathname: "/commerce_informations", params: { id: id, name: name } })}
                     >
                         <View style={styles.iconContainer}>
                             <Feather name="eye" size={24} color="#0A3A74" />
@@ -100,7 +56,9 @@ export default function CommerceMenu() {
                         <Text style={styles.menuItemText}>{t("commerce.menu.published_version")}</Text>
                     </TouchableOpacity>
                 </View>
+                {/* End of Commerce information button */}
 
+                {/* Edit button */}
                 <View style={styles.menuItem}>
                     <TouchableOpacity
                         activeOpacity={0.7}
@@ -116,11 +74,13 @@ export default function CommerceMenu() {
                         <Text style={styles.menuItemText}>{t("commerce.menu.edit")}</Text>
                     </TouchableOpacity>
                 </View>
+                {/* End of Edit button */}
 
+                {/* Access manager button */}
                 <View style={styles.menuItem}>
                     <TouchableOpacity
                         activeOpacity={0.7}
-                        onPress={() => router.push('/commerce/access_manager')}
+                        onPress={() => router.push({ pathname: '/commerce/access_manager', params: { id: id, name: name } })}
                         style={styles.menuItemButton}
                     >
                         <View style={styles.iconContainer}>
@@ -129,10 +89,12 @@ export default function CommerceMenu() {
                         <Text style={styles.menuItemText}>{t("commerce.menu.access_manager")}</Text>
                     </TouchableOpacity>
                 </View>
+                {/* End of Access manager button */}
 
+                {/* QRcode button */}
                 <View style={styles.menuItem}>
                     <TouchableOpacity
-                        onPress={() => router.push('/commerce/qrcode')}
+                        onPress={() => router.push({ pathname: '/commerce/qrcode', params: { id: id, name: name } })}
                         activeOpacity={0.7}
                         style={styles.menuItemButton}
                     >
@@ -142,7 +104,9 @@ export default function CommerceMenu() {
                         <Text style={styles.menuItemText}>{t("commerce.menu.qrcode")}</Text>
                     </TouchableOpacity>
                 </View>
+                {/* End of QRcode button */}
 
+                {/* Delete button */}
                 <View style={[styles.menuItem]}>
                     <TouchableOpacity
                         activeOpacity={0.7}
@@ -157,8 +121,10 @@ export default function CommerceMenu() {
                         </Text>
                     </TouchableOpacity>
                 </View>
+                {/* End of Delete button */}
             </ScrollView>
 
+            {/* modal to warning about delete */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -177,11 +143,17 @@ export default function CommerceMenu() {
 
                             <TouchableOpacity
                                 activeOpacity={0.7}
-                                onPress={() => router.replace("/commerce")}
+                                onPress={handleDelete}
                                 style={styles.modalSaveButton}
+                                disabled={deleteLoading}
                             >
                                 <View style={styles.modalButtonSaveContent}>
-                                    <Feather name="check" size={24} color="white" />
+
+                                    {deleteLoading ? (
+                                        <ActivityIndicator size={24} color="#000" />
+                                    ) : (
+                                        <Feather name="check" size={24} color="white" />
+                                    )}
                                 </View>
                             </TouchableOpacity>
 
@@ -189,6 +161,7 @@ export default function CommerceMenu() {
                                 activeOpacity={0.7}
                                 onPress={() => setModalVisible(false)}
                                 style={styles.modalSaveButton}
+                                disabled={deleteLoading}
                             >
                                 <View style={styles.modalButtonCancelContent}>
                                     <AntDesign name="close" size={24} color="black" />
@@ -198,6 +171,7 @@ export default function CommerceMenu() {
                     </View>
                 </View>
             </Modal>
+            {/* End of modal to warning about delete */}
         </SafeAreaView >
     );
 }

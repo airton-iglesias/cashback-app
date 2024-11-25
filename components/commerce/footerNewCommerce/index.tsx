@@ -1,9 +1,9 @@
-import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { useLocale } from "@/contexts/TranslationContext";
 import { fontSize } from "@/constants/fonts";
 
-export default function FooterNewCommerce({backStep, nextStep, currentStep}: any) {
+export default function FooterNewCommerce({backStep, nextStep, currentStep, disabled}: any) {
     const { t } = useLocale();
 
     return (
@@ -13,6 +13,7 @@ export default function FooterNewCommerce({backStep, nextStep, currentStep}: any
                 <TouchableOpacity style={styles.backButtonContent}
                     onPress={backStep}
                     activeOpacity={0.7}
+                    disabled={disabled ? disabled : false}
                 >
                     <Feather name="arrow-left" size={24} color="white" />
                 </TouchableOpacity>
@@ -32,8 +33,9 @@ export default function FooterNewCommerce({backStep, nextStep, currentStep}: any
                 <TouchableOpacity style={styles.nextButtonContent}
                     onPress={nextStep}
                     activeOpacity={0.7}
+                    disabled={disabled ? disabled : false}
                 >
-                    <Feather name="arrow-right" size={24} color="white" />
+                    { disabled ? <ActivityIndicator size={24} color="#fff" /> : <Feather name="arrow-right" size={24} color="white" />}
                 </TouchableOpacity>
             </View>
 
