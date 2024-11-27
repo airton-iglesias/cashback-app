@@ -83,9 +83,9 @@ export default function New_Commerce_Step_6() {
 
             // Variable Temporary
             const selectDataReponse: any = [
-                { id: 1, text: 'Fidelização' },
-                { id: 2, text: 'Livre' },
-                { id: 3, text: 'Queima' },
+                { id: 1, text: `${t('commerce.new_commerce.step5.fidelity')}` },
+                { id: 2, text:  `${t('commerce.new_commerce.step5.free')}`},
+                { id: 3, text: `${t('commerce.new_commerce.step5.burn')}` },
             ];
             //Variable Temporary
             const currencyOptionsResponse: any = [
@@ -95,9 +95,9 @@ export default function New_Commerce_Step_6() {
             ];
             //Variable Temporary
             const tempModalityOptions = [
-                { id: 1, text: 'local' },
-                { id: 2, text: 'coupon' },
-                { id: 3, text: 'link' },
+                { id: 1, text: `${t('commerce.new_commerce.step5.local')}` },
+                { id: 2, text: `${t('commerce.new_commerce.step5.coupon')}` },
+                { id: 3, text: `${t('commerce.new_commerce.step5.link')}` },
             ];
 
             // The Timeout is to simulate an API call delay, you can remove it when making the API call

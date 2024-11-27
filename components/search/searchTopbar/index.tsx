@@ -1,9 +1,10 @@
 import { fontSize } from '@/constants/fonts';
 import { useLocale } from '@/contexts/TranslationContext';
 import { Feather, Entypo } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 
-export default function searchTopbar({handleFilterChange, activeFilter, setSearchInput, searchInput, showResults}: any) {
+export default function searchTopbar({handleFilterChange, activeFilter, handleSearchInputChange, searchInput }: any) {
     const { t } = useLocale();
     
     return (
@@ -13,7 +14,7 @@ export default function searchTopbar({handleFilterChange, activeFilter, setSearc
                 <TouchableOpacity
                     style={styles.headerBackIcon}
                     activeOpacity={0.7}
-                    onPress={() => showResults()}
+                    onPress={() => router.back()}
                 >
                     <Entypo name="chevron-left" size={24} color="white" />
                 </TouchableOpacity>
@@ -21,7 +22,7 @@ export default function searchTopbar({handleFilterChange, activeFilter, setSearc
                 <View style={styles.inputWrapper}>
                     <TextInput
                         cursorColor={'#ADB5BD'}
-                        onChangeText={(text) => setSearchInput(text)}
+                        onChangeText={(text) => handleSearchInputChange(text)}
                         value={searchInput}
                         placeholder={t("dashboardSearchResults.topbar.search")}
                         placeholderTextColor={'gray'}
@@ -38,28 +39,28 @@ export default function searchTopbar({handleFilterChange, activeFilter, setSearc
                     activeOpacity={0.7}
                     style={[
                         styles.cashbackTypeButton,
-                        activeFilter === 'Comercios' && styles.cashbackTypeButtonAtive
+                        activeFilter === 'Commerces' && styles.cashbackTypeButtonAtive
                     ]}
-                    onPress={() => handleFilterChange('Comercios')}
+                    onPress={() => handleFilterChange('Commerces')}
                 >
-                    <Text style={activeFilter === 'Comercios' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>{t("dashboardSearchResults.topbar.commerce")}</Text>
+                    <Text style={activeFilter === 'Commerces' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>{t("dashboardSearchResults.topbar.commerce")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    style={[styles.cashbackTypeButton, styles.cashbackTypeButtonMiddle, activeFilter === 'Eventos' && styles.cashbackTypeButtonAtive,]}
-                    onPress={() => handleFilterChange('Eventos')}
+                    style={[styles.cashbackTypeButton, styles.cashbackTypeButtonMiddle, activeFilter === 'Events' && styles.cashbackTypeButtonAtive,]}
+                    onPress={() => handleFilterChange('Events')}
                 >
-                    <Text style={activeFilter === 'Eventos' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>{t("dashboardSearchResults.topbar.events")}</Text>
+                    <Text style={activeFilter === 'Events' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>{t("dashboardSearchResults.topbar.events")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={[
                         styles.cashbackTypeButton,
-                        activeFilter === 'Promoções' && styles.cashbackTypeButtonAtive
+                        activeFilter === 'Promotions' && styles.cashbackTypeButtonAtive
                     ]}
-                    onPress={() => handleFilterChange('Promoções')}
+                    onPress={() => handleFilterChange('Promotions')}
                 >
-                    <Text style={activeFilter === 'Promoções' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>{t("dashboardSearchResults.topbar.promotions")}</Text>
+                    <Text style={activeFilter === 'Promotions' ? styles.cashbackTypeTextActive : styles.cashbackTypeText}>{t("dashboardSearchResults.topbar.promotions")}</Text>
                 </TouchableOpacity>
             </View>
         </View>

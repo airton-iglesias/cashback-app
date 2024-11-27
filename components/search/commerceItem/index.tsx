@@ -2,10 +2,12 @@ import { TouchableOpacity, View, Image, Text, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSize } from "@/constants/fonts";
 import { router } from "expo-router";
+import { useLocale } from "@/contexts/TranslationContext";
 
 export default function CommerceItem({item}: any) {
+    const { t } = useLocale();
     return (
-        <TouchableOpacity style={styles.item} onPress={() => router.navigate("/commerce_informations")} activeOpacity={0.7}>
+        <TouchableOpacity style={styles.item} onPress={() => router.push({ pathname: "/commerce_informations", params: { id: item.id } })} activeOpacity={0.7}>
             <Image style={styles.image} source={require('@/assets/images/reidobacalhau.png')} />
             <View style={styles.textContainer}>
                 <Text numberOfLines={2} style={styles.title}>{item.title}</Text>
@@ -17,13 +19,13 @@ export default function CommerceItem({item}: any) {
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={[
                             styles.eventTag,
-                            item.cashbackType === 'Evento' && styles.eventTagEvento,
-                            item.cashbackType === 'Promoção' && styles.eventTagPromocao,
-                            item.cashbackType === 'Permanente' && styles.eventTagPermanente
+                            item.cashbackType === "events" && styles.eventTagEvento,
+                            item.cashbackType === "promotions" && styles.eventTagPromocao,
+                            item.cashbackType === "permanent" && styles.eventTagPermanente
                         ]}
 
-                        >{item.cashbackType}</Text>
-                        <Text style={styles.localTag}>{item.cashbackLocationType}</Text>
+                        >{t(`dashboardSearch.home.${item.cashbackType}`)}</Text>
+                        <Text style={styles.localTag}>{t(`dashboardSearch.home.${item.cashbackLocationType}`)}</Text>
                     </View>
                     <View style={[styles.discount]}>
                         <Text style={styles.discountText}>{item.discount}</Text>

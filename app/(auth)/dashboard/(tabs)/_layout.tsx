@@ -56,10 +56,6 @@ function Content() {
       if (pathname === '/dashboard/qrcode' && currentScreen === 'send_cashback') {
         hideTopbar(false);
       }
-
-      if (pathname === '/dashboard/search' && currentScreen === 'search') {
-        hideTopbar(false);
-      }
     }, [pathname])
   );
 

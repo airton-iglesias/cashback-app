@@ -87,7 +87,7 @@
     "dashboardSearch": {
         "home": {
             "search": "Buscar",
-            "commerce": "Comércios",
+            "commerces": "Comércios",
             "events": "Eventos",
             "promotions": "Promoções",
             "whereLabel": "Onde?",
@@ -95,7 +95,9 @@
             "online": "Online",
             "closeToMe": "Perto de mim",
             "choosePlace": "Escolha um local",
-            "maxDistance": "Distância máxima"
+            "maxDistance": "Distância máxima",
+            "permanent": "Permanente",
+            "web": "Web"
         }
     },
     "dashboardSearchResults": {
@@ -285,7 +287,13 @@
                 "minimalCurrencyPlaceholder": "50c",
                 "discountSectionPorcentage": "Desconto da etapa",
                 "discountSectionPorcentagePlaceholder": "20 %",
-                "currencyType": "Moeda"
+                "currencyType": "Moeda",
+                "local": "Local",
+                "coupon": "Cupom",
+                "link": "Link",
+                "fidelity": "Fidelização",
+                "free": "Livre",
+                "burn": "Queima"
             },
             "step6": {
                 "headerLabel": "Mais informações",

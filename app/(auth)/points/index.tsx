@@ -28,20 +28,7 @@ export default function Points() {
     useEffect(() => {
         const fetchSelectDatas = async () => {
             /* make the request to the API here
-            //Example: 
-            const selectDataReponse = await
-                fetch('domain of application here', {
-                    method: 'GET',
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Something went wrong');
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
+                {...}
             */
 
             //temporary variable
