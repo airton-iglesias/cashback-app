@@ -44,6 +44,20 @@ export default function WallatCredits({ currencyType, openExtract }: any) {
                     { id: "12", name: "Pizzaria", value: "100,00" },
                     { id: "13", name: "Pizzaria", value: "100,00" },
                     { id: "14", name: "Pizzaria", value: "100,00" },
+                    { id: "15", name: "Pizzaria", value: "100,00" },
+                    { id: "16", name: "Pizzaria", value: "100,00" },
+                    { id: "17", name: "Pizzaria", value: "100,00" },
+                    { id: "18", name: "Pizzaria", value: "100,00" },
+                    { id: "19", name: "Pizzaria", value: "100,00" },
+                    { id: "20", name: "Pizzaria", value: "100,00" },
+                    { id: "21", name: "Pizzaria", value: "100,00" },
+                    { id: "22", name: "Pizzaria", value: "100,00" },
+                    { id: "23", name: "Pizzaria", value: "100,00" },
+                    { id: "24", name: "Pizzaria", value: "100,00" },
+                    { id: "25", name: "Pizzaria", value: "100,00" },
+                    { id: "26", name: "Pizzaria", value: "100,00" },
+                    { id: "27", name: "Pizzaria", value: "100,00" },
+                    { id: "28", name: "Rei do churrasco", value: "100,00" },
                 ],
             });
             setLoading(false);
@@ -71,29 +85,6 @@ export default function WallatCredits({ currencyType, openExtract }: any) {
     const handleCurrencySelect = (currency: string) => {
         setSelectedCurrency(currency);
         setModalVisible(false);
-    };
-
-    const renderComponent = () => {
-        if (currentComponent === "deposit") {
-            return (
-                <WallatDeposit
-                    token={datas?.token}
-                    blockChain={datas?.blockChain}
-                    wallatLink={datas?.wallatLink}
-                    loading={loading}
-                />
-            )
-        }
-
-        if (currentComponent === "fidelity") {
-            return (
-                <LoyaltyComponent
-                    setSearch={(text: string) => setSearch(text)}
-                    loyaltyDatas={datas?.loyaltyDatas}
-                    loading={loading}
-                />
-            )
-        }
     };
 
     return (
@@ -146,14 +137,28 @@ export default function WallatCredits({ currencyType, openExtract }: any) {
                 </View>
             </View>
 
+            <View style={{flex: 1}}>
+                {currentComponent === "fidelity" && (
+                    <LoyaltyComponent
+                        setSearch={(text: string) => setSearch(text)}
+                        loyaltyDatas={datas?.loyaltyDatas}
+                        loading={loading}
+                    />
+                )}
+            </View>
 
-            {
-                renderComponent()
-            }
 
+
+            {currentComponent === "deposit" && (
+                <WallatDeposit
+                    token={datas?.token}
+                    blockChain={datas?.blockChain}
+                    wallatLink={datas?.wallatLink}
+                    loading={loading}
+                />
+            )}
 
             <View>
-
                 <Modal
                     animationType="slide"
                     visible={modalVisible}
@@ -165,6 +170,8 @@ export default function WallatCredits({ currencyType, openExtract }: any) {
                             <Text style={styles.modalText}>{t("dashboardWallat.creditsScreen.modalback")}</Text>
                         </TouchableOpacity>
                     </View>
+
+
                     <FlatList
                         data={options}
                         keyExtractor={item => item.id}

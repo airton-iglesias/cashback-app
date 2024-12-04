@@ -102,11 +102,13 @@ export default function WallatTokens({ openExtract }: any) {
 
             {currentComponent === "graphic" && (
 
-                <View style={{ flex: 1, gap: 20 }}>
+                <View style={{ flex: 1, gap: 5 }}>
 
-                    <LinearGraph loading={loading} />
+                    <View style={{width: '100%', height: 210}}>
+                        <LinearGraph loading={loading} />
+                    </View>
 
-                    <View style={[styles.warningContainer, { marginHorizontal: 15, top: 70, paddingHorizontal: 16 }]}>
+                    <View style={[styles.warningContainer, { marginHorizontal: 15, paddingHorizontal: 16 }]}>
                         <Ionicons name="alert-circle-outline" size={30} color="#a16207" />
                         <Text style={styles.warningText}>
                             {t("dashboardWallat.tokensScreen.warning")}

@@ -1,21 +1,28 @@
 import { fontSize } from "@/constants/fonts";
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import Input from "@/components/input";
 import { useLocale } from "@/contexts/TranslationContext";
 
 export default function LoyaltyComponent({ loyaltyDatas, setSearch, loading }: any) {
+    const [searchText, setSearchText] = useState('');
+
+
     const { t } = useLocale();
 
+    const filteredLoyaltyDatas = loyaltyDatas.filter((item: any) =>
+        item.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+
     return (
-        <View>
+        <View style={{flex: 1}}>
             <View style={styles.searchContainer}>
                 <View style={styles.searchInnerContainer}>
                     <FontAwesome name="search" size={18} style={styles.searchIcon} />
                     <Input
                         placeholder={t("dashboardWallat.creditsScreen.search")}
-                        onChange={(text: string) => setSearch(text)}
+                        onChange={(text: string) => setSearchText(text)}
                         customPaddingLeft={40}
                     />
                 </View>
@@ -29,41 +36,28 @@ export default function LoyaltyComponent({ loyaltyDatas, setSearch, loading }: a
             </View>
 
             <View style={styles.listContainer}>
-                {loyaltyDatas !== null ? (
-
-                    loading ?
-                        <ActivityIndicator size={34} color={'#000'} />
-                        :
-
-                        <FlatList
-                            data={loyaltyDatas}
-                            keyExtractor={(item) => item.id}
-                            renderItem={({ item, index }) => (
-                                <View style={styles.componentContainer}>
-                                    <View style={styles.componentSubContainer}>
-                                        <Text numberOfLines={1} style={styles.componentName}>{item.name}</Text>
-                                    </View>
-                                    <View style={styles.componentValueLimitContainer}>
-                                        <View style={styles.componentValueContainer}>
-                                            <Text numberOfLines={1} style={styles.componentValue}>
-                                                {item.value}
-                                            </Text>
-                                        </View>
-                                    </View>
+                <FlatList
+                    data={filteredLoyaltyDatas}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item, index }) => (
+                        <View style={styles.componentContainer}>
+                            <View style={styles.componentSubContainer}>
+                                <Text numberOfLines={1} style={styles.componentName}>{item.name}</Text>
+                            </View>
+                            <View style={styles.componentValueLimitContainer}>
+                                <View style={styles.componentValueContainer}>
+                                    <Text numberOfLines={1} style={styles.componentValue}>
+                                        {item.value}
+                                    </Text>
                                 </View>
-                            )}
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={{ paddingBottom: 380 }}
-                        />
-
-                ) : (
-                    loading ?
-                        <ActivityIndicator size={34} color={'#000'} />
-                        :
-                        <View style={styles.emptyContainer}>
-                            <Text style={styles.emptyText}>{t("dashboardWallat.creditsScreen.noData")}</Text>
+                            </View>
                         </View>
-                )}
+                    )}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: 120 }}
+                />
+
+     
             </View>
         </View >
     );
@@ -104,6 +98,8 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         paddingHorizontal: 20,
+        height: '100%',
+        zIndex: 50
     },
     labelContainer: {
         paddingHorizontal: 20,

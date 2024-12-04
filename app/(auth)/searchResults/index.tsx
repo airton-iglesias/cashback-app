@@ -10,6 +10,7 @@ import Map from '@/components/search/map';
 import CommerceItem from '@/components/search/commerceItem';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
+import CommerceItemLoading from '@/components/search/commerceItemLoading';
 
 type DataItem = {
     id: string;
@@ -34,6 +35,7 @@ export default function SearchResults() {
     const [activeFilter, setActiveFilter] = useState(filterType || 'Commerces');
     const [sortCriteria, setSortCriteria] = useState('date');
     const [keyboardIsVisible, setKeyboardIsVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const { t } = useLocale();
 
     useEffect(() => {
@@ -42,80 +44,83 @@ export default function SearchResults() {
         //Make the request to the API here, using the useLocalSearchParams as params
         //{...}
 
-        setData([
-            {
-                id: '1',
-                title: 'Fitness Center 1',
-                location: 'Beja, Portugal',
-                discount: '10%',
-                distance: '1km',
-                type: 'video',
-                source: 'https://i.imgur.com/6Y8qkha.mp4',
-                cashbackLocationType: 'locally',
-                cashbackType: 'events',
-                eventDate: "0 out - 20:00 a 20 out - 21:00",
-            },
-            {
-                id: '2',
-                title: 'Fitness Center 1',
-                location: 'Beja, Portugal',
-                discount: '20%',
-                distance: '2km',
-                type: 'video',
-                source: 'https://i.imgur.com/6Y8qkha.mp4',
-                cashbackLocationType: 'locally',
-                cashbackType: 'promotions',
-                eventDate: "0 out - 20:00 a 20 out - 21:00",
-            },
-            {
-                id: '3',
-                title: 'Fitness Center 1',
-                location: 'Beja, Portugal',
-                discount: '30%',
-                distance: '1km',
-                type: 'video',
-                source: 'https://i.imgur.com/6Y8qkha.mp4',
-                cashbackLocationType: 'web',
-                cashbackType: 'permanent',
-                eventDate: "0 out - 20:00 a 20 out - 21:00",
-            },
-            {
-                id: '4',
-                title: 'Cafe Center 1',
-                location: 'Beja, Portugal',
-                discount: '40%',
-                distance: '3km',
-                type: 'video',
-                source: 'https://i.imgur.com/6Y8qkha.mp4',
-                cashbackLocationType: 'web',
-                cashbackType: 'permanent',
-                eventDate: "0 out - 20:00 a 20 out - 21:00",
-            },
-            {
-                id: '5',
-                title: 'Fitness Center 1',
-                location: 'Beja, Portugal',
-                discount: '40%',
-                distance: '3km',
-                type: 'video',
-                source: 'https://i.imgur.com/6Y8qkha.mp4',
-                cashbackLocationType: 'web',
-                cashbackType: 'promotions',
-                eventDate: "0 out - 20:00 a 20 out - 21:00",
-            },
-            {
-                id: '6',
-                title: 'Fitness Center 1',
-                location: 'Beja, Portugal',
-                discount: '40%',
-                distance: '3km',
-                type: 'video',
-                source: 'https://i.imgur.com/6Y8qkha.mp4',
-                cashbackLocationType: 'web',
-                cashbackType: 'events',
-                eventDate: "0 out - 20:00 a 20 out - 21:00",
-            },
-        ]);
+        setTimeout(() => {
+            setData([
+                {
+                    id: '1',
+                    title: 'Fitness Center 1',
+                    location: 'Beja, Portugal',
+                    discount: '10%',
+                    distance: '1km',
+                    type: 'video',
+                    source: 'https://i.imgur.com/6Y8qkha.mp4',
+                    cashbackLocationType: 'locally',
+                    cashbackType: 'events',
+                    eventDate: "0 out - 20:00 a 20 out - 21:00",
+                },
+                {
+                    id: '2',
+                    title: 'Fitness Center 1',
+                    location: 'Beja, Portugal',
+                    discount: '20%',
+                    distance: '2km',
+                    type: 'video',
+                    source: 'https://i.imgur.com/6Y8qkha.mp4',
+                    cashbackLocationType: 'locally',
+                    cashbackType: 'promotions',
+                    eventDate: "0 out - 20:00 a 20 out - 21:00",
+                },
+                {
+                    id: '3',
+                    title: 'Fitness Center 1',
+                    location: 'Beja, Portugal',
+                    discount: '30%',
+                    distance: '1km',
+                    type: 'video',
+                    source: 'https://i.imgur.com/6Y8qkha.mp4',
+                    cashbackLocationType: 'web',
+                    cashbackType: 'permanent',
+                    eventDate: "0 out - 20:00 a 20 out - 21:00",
+                },
+                {
+                    id: '4',
+                    title: 'Cafe Center 1',
+                    location: 'Beja, Portugal',
+                    discount: '40%',
+                    distance: '3km',
+                    type: 'video',
+                    source: 'https://i.imgur.com/6Y8qkha.mp4',
+                    cashbackLocationType: 'web',
+                    cashbackType: 'permanent',
+                    eventDate: "0 out - 20:00 a 20 out - 21:00",
+                },
+                {
+                    id: '5',
+                    title: 'Fitness Center 1',
+                    location: 'Beja, Portugal',
+                    discount: '40%',
+                    distance: '3km',
+                    type: 'video',
+                    source: 'https://i.imgur.com/6Y8qkha.mp4',
+                    cashbackLocationType: 'web',
+                    cashbackType: 'promotions',
+                    eventDate: "0 out - 20:00 a 20 out - 21:00",
+                },
+                {
+                    id: '6',
+                    title: 'Fitness Center 1',
+                    location: 'Beja, Portugal',
+                    discount: '40%',
+                    distance: '3km',
+                    type: 'video',
+                    source: 'https://i.imgur.com/6Y8qkha.mp4',
+                    cashbackLocationType: 'web',
+                    cashbackType: 'events',
+                    eventDate: "0 out - 20:00 a 20 out - 21:00",
+                },
+            ]);
+            setIsLoading(false);
+        }, 2000);
     }, [searchValue]);
 
     //UseEffect to handle keyboard visibility
@@ -210,12 +215,15 @@ export default function SearchResults() {
                 {showMap ?
                     <Map isKeyboardVisible={keyboardIsVisible} />
                     :
-                    <FlatList
-                        data={sortedAndFilteredData}
-                        keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => <CommerceItem item={item} />}
-                        contentContainerStyle={{ paddingBottom: 110 }}
-                    />
+                    isLoading ?
+                        <CommerceItemLoading />
+                        :
+                        <FlatList
+                            data={sortedAndFilteredData}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => <CommerceItem item={item} />}
+                            contentContainerStyle={{ paddingBottom: 110 }}
+                        />
                 }
             </View>
         </SafeAreaView>
