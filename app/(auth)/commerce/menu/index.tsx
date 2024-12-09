@@ -6,17 +6,18 @@ import { useLocale } from "@/contexts/TranslationContext";
 import CommerceHeader from '@/components/commerce/commerceHeader';
 import { router, useLocalSearchParams } from 'expo-router';
 import { fontSize } from '@/constants/fonts';
+import DeleteWarningModal from '@/components/deleteWarningModal';
 
 export default function CommerceMenu() {
     const [modalVisible, setModalVisible] = useState(false);
     const { id, name } = useLocalSearchParams();
     const { t } = useLocale();
-    const [deleteLoading, setDeleteLoading] = useState(false)
+    const [deleteLoading, setDeleteLoading] = useState(false);
 
     const handleDelete = () => {
         // Implement delete logic here
         setModalVisible(false);
-        router.replace("/commerce")
+
     };
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -124,54 +125,13 @@ export default function CommerceMenu() {
                 {/* End of Delete button */}
             </ScrollView>
 
-            {/* modal to warning about delete */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(!modalVisible);
-                }}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalView}>
-                        <View style={[styles.iconContainer, styles.deleteIconContainer]}>
-                            <Feather name="trash" size={24} color="#DC3545" />
-                        </View>
-                        <Text style={styles.modalText}>{t("commerce.menu.modal.title")}</Text>
-                        <View style={styles.buttonContainer}>
-
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                onPress={handleDelete}
-                                style={styles.modalSaveButton}
-                                disabled={deleteLoading}
-                            >
-                                <View style={styles.modalButtonSaveContent}>
-
-                                    {deleteLoading ? (
-                                        <ActivityIndicator size={24} color="#000" />
-                                    ) : (
-                                        <Feather name="check" size={24} color="white" />
-                                    )}
-                                </View>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                onPress={() => setModalVisible(false)}
-                                style={styles.modalSaveButton}
-                                disabled={deleteLoading}
-                            >
-                                <View style={styles.modalButtonCancelContent}>
-                                    <AntDesign name="close" size={24} color="black" />
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-            {/* End of modal to warning about delete */}
+            <DeleteWarningModal
+                text={t("commerce.menu.modal.title")}
+                deleteLoading={deleteLoading}
+                handleDelete={handleDelete}
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+            />
         </SafeAreaView >
     );
 }

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TextInput } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+
 import CommerceHeader from '@/components/commerce/commerceHeader';
 import CommerceGoBackModal from '@/components/commerce/commerceGoBackModal';
 import { useStepperContext } from '@/contexts/CommerceStepperContext';
@@ -7,27 +8,28 @@ import { useLocale } from '@/contexts/TranslationContext';
 import { router } from 'expo-router';
 import FooterNewCommerce from '@/components/commerce/footerNewCommerce';
 import { fontSize } from '@/constants/fonts';
-import { getNewCommerceStep4Schema, NewCommerceStep4Data } from "@/schemas/commerceSchemas";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Input from '@/components/input';
+import TextEditorLinkModal from '@/components/textEditorLinkModal';
+import TextEditorToolBar from '@/components/textEditorToolBar';
+import TextEditorColorPicker from '@/components/textEditorColorPicker';
+import { RichEditor } from '@/components/react-native-pell-rich-editor';
 
 export default function New_Commerce_Step_4() {
-
+    const richText = useRef<RichEditor | null>(null);
     const { description, setStepperData } = useStepperContext();
+
+    const [modalVisible, setModalVisible] = useState(false);
     const [modalBackVisible, setModalBackVisible] = useState(false);
+    const [textColorSelected, setTextColorSelected] = useState<string>('#000000');
+    const [isColorPickerVisible, setIsColorPickerVisible] = useState<boolean>(false);
     const { t } = useLocale();
+    const scrollRef = useRef<ScrollView>(null);
 
-    // React Hook Form setup
-    const newCommerceStep4Schema = React.useMemo(() => getNewCommerceStep4Schema(t), [t]);
-    const { control, handleSubmit, formState: { errors }, } = useForm<NewCommerceStep4Data>({
-        resolver: zodResolver(newCommerceStep4Schema),
-        mode: "onChange",
-        defaultValues: {
-            description
-        },
-    });
-
+    const handleSaveLink = (linkTitle: string, linkURL: string) => {
+        if (richText.current) {
+            richText.current.insertLink(linkTitle, linkURL);
+            setModalVisible(false);
+        }
+    };
 
     const handleGoBackConfirmed = () => {
         setModalBackVisible(false);
@@ -35,9 +37,19 @@ export default function New_Commerce_Step_4() {
         return;
     };
 
-    const onSubmit = (data: any) => {
-        setStepperData({ description: data.description });
-        router.push("/commerce/new/images_and_videos");
+    const applyTextColor = (color: string) => {
+        setTextColorSelected(color);
+        if (richText.current) {
+            richText.current?.setForeColor(color);
+        }
+        setIsColorPickerVisible(false);
+    };
+
+    const handleTextChange = (descriptionText: any) => {
+        setStepperData({ description: descriptionText });
+        setTimeout(() => {
+            scrollRef.current?.scrollToEnd({ animated: false });
+        }, 100);
     };
 
     return (
@@ -53,25 +65,53 @@ export default function New_Commerce_Step_4() {
             </View>
 
             <View style={styles.textInputContainer}>
-                <View style={{ flex: 1, height: '100%' }}>
-                    <Controller
-                        control={control}
-                        name="description"
-                        render={({ field: { onChange, value } }) => (
-                            <Input
-                                onChange={onChange}
-                                value={description || value}
-                                error={errors.description?.message}
-                            />
-                        )}
+
+                <View style={{ position: 'relative' }}>
+
+                    <TextEditorToolBar
+                        handleInsertLink={() => setModalVisible(true)}
+                        richText={richText}
+                        textColorSelected={textColorSelected}
+                        isColorPickerVisible={isColorPickerVisible}
+                        setIsColorPickerVisible={(value: boolean) => setIsColorPickerVisible(value)}
                     />
+
+
+                    <TextEditorColorPicker
+                        colors={['#000000', '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF']}
+                        applyTextColor={(color: string) => applyTextColor(color)}
+                        isVisible={isColorPickerVisible}
+                        onClose={() => setIsColorPickerVisible(false)}
+                    />
+
+                </View>
+
+                <View style={styles.textInput}>
+                    <ScrollView ref={scrollRef} contentContainerStyle={{ flexGrow: 1 }}>
+                        <RichEditor
+                            ref={richText}
+                            style={{ flex: 1 }}
+                            editorStyle={{
+                                backgroundColor: 'white',
+                                contentCSSText: 'font-size: 16px;',
+                            }}
+                            onChange={handleTextChange}
+                            initialContentHTML={description}
+                        />
+                    </ScrollView>
                 </View>
             </View>
 
             <FooterNewCommerce
                 backStep={() => router.back()}
-                nextStep={handleSubmit(onSubmit)}
+                nextStep={() => /*router.push("/commerce/new/images_and_videos")*/ console.log(description)}
                 currentStep={4}
+            />
+
+            <TextEditorLinkModal
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                handleSaveLink={handleSaveLink}
             />
 
             <CommerceGoBackModal
@@ -88,26 +128,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
-    colorPickerContainer: {
-        justifyContent: 'space-between',
-        paddingHorizontal: 5,
-        paddingVertical: 10,
-        backgroundColor: '#fff',
-        borderWidth: 1,
-        borderColor: '#ddd',
-        position: 'absolute',
-        top: 53,
-        zIndex: 1000,
-        borderRadius: 8,
-        left: 205,
-    },
-    colorOption: {
-        width: 30,
-        height: 30,
-        borderRadius: 15,
-        marginVertical: 5,
-        borderWidth: 1,
-    },
     descriptionSection: {
         marginTop: 18,
         paddingHorizontal: 15,
@@ -115,113 +135,18 @@ const styles = StyleSheet.create({
     descriptionLabel: {
         fontSize: fontSize.labels.medium,
     },
-    formattingBar: {
-        flexDirection: 'row',
-        backgroundColor: '#F1F1F1',
-        height: 54,
-        borderRadius: 8,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 15,
-        marginBottom: 20,
-        position: 'relative'
-    },
-    flatStyle: {
-        margin: 'auto',
-        gap: 25,
-    },
-    icon: {
-        textAlign: 'center',
-    },
-    unselectedButton: {
-        opacity: 0.6,
-    },
     textInputContainer: {
         flex: 1,
         marginTop: 20,
         paddingHorizontal: 15,
     },
     textInput: {
-        flex: 0.5,
+        flex: 1,
         borderWidth: 1,
         borderColor: '#E3E3E3',
         borderRadius: 8,
-        padding: 10,
+        padding: 5,
         fontSize: fontSize.labels.medium,
         color: '#6C757D',
-    },
-    pencilButton: {
-        height: 30,
-        width: 30,
-        borderRadius: 999,
-    },
-    dropdownContainer: {
-        position: 'absolute',
-        justifyContent: 'space-between',
-        top: 53,
-        left: 275,
-        backgroundColor: '#FFFFFF',
-        borderColor: '#E3E3E3',
-        borderWidth: 1,
-        borderRadius: 8,
-        paddingHorizontal: 5,
-        paddingVertical: 10,
-        zIndex: 1000,
-        width: 50,
-        gap: 15,
-    },
-    modalContainer: {
-        height: '100%',
-        justifyContent: 'flex-end',
-    },
-    modalView: {
-        backgroundColor: 'white',
-        paddingHorizontal: 20,
-        paddingVertical: 30,
-        alignItems: 'center',
-        shadowRadius: 4,
-        borderColor: '#D7D7D7',
-        borderWidth: 1,
-        borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
-        gap: 20
-    },
-    modalText: {
-        textAlign: 'center',
-        fontSize: fontSize.labels.medium,
-    },
-    modalInputWrapper: {
-        width: '100%',
-        gap: 10,
-        marginBottom: 10
-    },
-    buttonContainer: {
-        gap: 10,
-        justifyContent: 'space-between',
-        width: '100%',
-    },
-    modalSaveButton: {
-        width: '100%',
-        borderRadius: 8,
-    },
-    modalButtonSaveContent: {
-        flexDirection: 'row',
-        backgroundColor: '#000000',
-        width: '100%',
-        height: 52,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 4,
-        borderRadius: 10,
-    },
-    modalButtonCancelContent: {
-        flexDirection: 'row',
-        backgroundColor: '#E9ECEF',
-        width: '100%',
-        height: 52,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 4,
-        borderRadius: 10,
     },
 });

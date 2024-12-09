@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import {
-    ActivityIndicator, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView,
-    StyleSheet, Text, TouchableOpacity, View
-} from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
@@ -12,6 +9,7 @@ import Input from '@/components/input';
 import { useLocale } from '@/contexts/TranslationContext';
 import { fontSize } from '@/constants/fonts';
 import { getEmailSchema, EmailData } from '@/schemas/authSchemas';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function ResetPassword() {
@@ -49,78 +47,68 @@ export default function ResetPassword() {
     };
 
     return (
-
-
-        <SafeAreaView style={styles.container}>
-            <KeyboardAvoidingView
-                style={styles.keyboardAvoidingView}
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
-            >
-                <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                    <View style={styles.wrapper}>
-                        <View>
-                            {/* Header section */}
-                            <View style={styles.header}>
-                                <Text style={styles.headerText}>{t('recoveryDatas.title')}</Text>
-                            </View>
-                            {/* End of Header section */}
-
-                            {/* Error Message */}
-                            {codeError && (
-                                <View style={styles.errorMessageContainer}>
-                                    <View style={styles.errorMessageWrapper}>
-                                        <Text style={styles.errorMessage}>{t('recoveryDatas.emailError')}</Text>
-                                    </View>
-                                </View>
-                            )}
-                            {/* End of Error Message */}
-
-                            {/* Form */}
-                            <View style={styles.form}>
-                                {/* Email input field */}
-                                <View style={styles.inputGroup}>
-                                    <Controller
-                                        control={control}
-                                        name="email"
-                                        render={({ field: { onChange, onBlur, value } }) => (
-                                            <Input
-                                                label={t('recoveryDatas.inputLabel')}
-                                                onChange={(text: string) => onChange(text.toLowerCase())}
-                                                onBlur={onBlur}
-                                                value={value || ''}
-                                                type="email"
-                                                error={errors.email?.message}
-                                            />
-                                        )}
-                                    />
-                                </View>
-                                {/* Enf of email input field */}
-                            </View>
-                        </View>
-
-                        {/* Button container */}
-                        <View style={styles.buttonContainer}>
-                            {/* Submit button */}
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                style={styles.buttonWrapper}
-                                onPress={handleSubmit(onSubmit)}
-                                disabled={loading}
-                            >
-                                <View style={styles.submitButton}>
-                                    {loading ?
-                                        <ActivityIndicator size={24} color="#fff" />
-                                        :
-                                        <Feather name="arrow-right" size={24} color={'white'} />
-                                    }
-                                </View>
-                            </TouchableOpacity>
-                            {/* Enf of Submit button */}
-                        </View>
+        <SafeAreaView style={{ backgroundColor: '#fff', flex: 1 }}>
+            <View style={styles.container}>
+                <View style={{ flex: 1 }}>
+                    {/* Header section */}
+                    <View style={styles.header}>
+                        <Text style={styles.headerText}>{t('recoveryDatas.title')}</Text>
                     </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
+                    {/* End of Header section */}
+
+                    {/* Error Message */}
+                    {codeError && (
+                        <View style={styles.errorMessageContainer}>
+                            <View style={styles.errorMessageWrapper}>
+                                <Text style={styles.errorMessage}>{t('recoveryDatas.emailError')}</Text>
+                            </View>
+                        </View>
+                    )}
+                    {/* End of Error Message */}
+
+                    {/* Form */}
+                    <View style={styles.form}>
+                        {/* Email input field */}
+                        <View style={styles.inputGroup}>
+                            <Controller
+                                control={control}
+                                name="email"
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <Input
+                                        label={t('recoveryDatas.inputLabel')}
+                                        onChange={(text: string) => onChange(text.toLowerCase())}
+                                        onBlur={onBlur}
+                                        value={value || ''}
+                                        type="email"
+                                        error={errors.email?.message}
+                                    />
+                                )}
+                            />
+                        </View>
+                        {/* Enf of email input field */}
+                    </View>
+                </View>
+
+                {/* Button container */}
+                <View style={styles.buttonContainer}>
+                    {/* Submit button */}
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={styles.buttonWrapper}
+                        onPress={handleSubmit(onSubmit)}
+                        disabled={loading}
+                    >
+                        <View style={styles.submitButton}>
+                            {loading ?
+                                <ActivityIndicator size={24} color="#fff" />
+                                :
+                                <Feather name="arrow-right" size={24} color={'white'} />
+                            }
+                        </View>
+                    </TouchableOpacity>
+                    {/* Enf of Submit button */}
+                </View>
+            </View>
         </SafeAreaView>
     );
 }
@@ -128,18 +116,8 @@ export default function ResetPassword() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
-        paddingTop: 70,
-    },
-    keyboardAvoidingView: {
-        flex: 1,
-    },
-    scrollViewContent: {
-        flexGrow: 1,
-    },
-    wrapper: {
-        flex: 1,
         justifyContent: 'space-between',
+        paddingTop: 40
     },
     form: {
         gap: 10,

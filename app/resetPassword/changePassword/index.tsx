@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import {
-    ActivityIndicator, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView,
-    StyleSheet, Text, TouchableOpacity, View
-} from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
@@ -12,6 +9,7 @@ import Input from '@/components/input';
 import { useLocale } from '@/contexts/TranslationContext';
 import { fontSize } from '@/constants/fonts';
 import { getPasswordSchema, PasswordData } from '@/schemas/authSchemas';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function SignUp() {
@@ -48,112 +46,91 @@ export default function SignUp() {
                 });
             }, 1000);
 
-        } 
+        }
         catch (error) {
             setLoading(false);
         }
     };
 
     return (
-
-
-        <SafeAreaView style={styles.container}>
-            <KeyboardAvoidingView
-                style={styles.keyboardAvoidingView}
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
-            >
-                <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                    <View style={styles.wrapper}>
-                        <View>
-                            {/* Header section */}
-                            <View style={styles.header}>
-                                <Text style={styles.headerText}>{t('recoveryDatas.newPasswordLabel')}</Text>
-                            </View>
-                            {/* End of header*/}   
-
-                            {/* Form section */}
-                            <View style={styles.form}>
-
-                                {/* Password input field */}
-                                <View style={styles.inputGroup}>
-                                    <Controller
-                                        control={control}
-                                        name="password"
-                                        render={({ field: { onChange, onBlur, value } }) => (
-                                            <Input
-                                                label={t('recoveryDatas.password')}
-                                                onChange={onChange}
-                                                onBlur={onBlur}
-                                                value={value || ''}
-                                                type="password"
-                                                error={errors.password?.message}
-                                            />
-                                        )}
-                                    />
-                                </View>
-                                {/* Enf of password input field */}
-
-                                {/* Confirm password input field */}
-                                <View style={styles.inputGroup}>
-                                    <Controller
-                                        control={control}
-                                        name="confirmPassword"
-                                        render={({ field: { onChange, onBlur, value } }) => (
-                                            <Input
-                                                label={t('recoveryDatas.confirmPassword')}
-                                                onChange={onChange}
-                                                onBlur={onBlur}
-                                                value={value || ''}
-                                                type="password"
-                                                error={errors.confirmPassword?.message}
-                                            />
-                                        )}
-                                    />
-                                </View>
-                                {/* Enf of confirm password input field */}
-                            </View>
-                        </View>
-
-                        {/* Button container */}
-                        <View style={styles.buttonContainer}>
-                            {/* Submit button */}
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                style={styles.buttonWrapper}
-                                onPress={handleSubmit(onSubmit)}
-                                disabled={loading}
-                            >
-                                <View style={styles.submitButton}>
-                                    {loading ?
-                                        <ActivityIndicator size={24} color="#fff" />
-                                        :
-                                        <Feather name="arrow-right" size={24} color={'white'} />
-                                    }
-                                </View>
-                            </TouchableOpacity>
-                            {/* Enf of submit button */}
-                        </View>
+        <SafeAreaView style={{ backgroundColor: '#fff', flex: 1 }}>
+            <View style={styles.container}>
+                <View style={{ flex: 1, paddingTop: 40 }}>
+                    {/* Header section */}
+                    <View style={styles.header}>
+                        <Text style={styles.headerText}>{t('recoveryDatas.newPasswordLabel')}</Text>
                     </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
+                    {/* End of header*/}
+
+                    {/* Form section */}
+                    <View style={styles.form}>
+
+                        {/* Password input field */}
+                        <View style={styles.inputGroup}>
+                            <Controller
+                                control={control}
+                                name="password"
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <Input
+                                        label={t('recoveryDatas.password')}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                        value={value || ''}
+                                        type="password"
+                                        error={errors.password?.message}
+                                    />
+                                )}
+                            />
+                        </View>
+                        {/* Enf of password input field */}
+
+                        {/* Confirm password input field */}
+                        <View style={styles.inputGroup}>
+                            <Controller
+                                control={control}
+                                name="confirmPassword"
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <Input
+                                        label={t('recoveryDatas.confirmPassword')}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                        value={value || ''}
+                                        type="password"
+                                        error={errors.confirmPassword?.message}
+                                    />
+                                )}
+                            />
+                        </View>
+                        {/* Enf of confirm password input field */}
+                    </View>
+                </View>
+
+                {/* Button container */}
+                <View style={styles.buttonContainer}>
+                    {/* Submit button */}
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={styles.buttonWrapper}
+                        onPress={handleSubmit(onSubmit)}
+                        disabled={loading}
+                    >
+                        <View style={styles.submitButton}>
+                            {loading ?
+                                <ActivityIndicator size={24} color="#fff" />
+                                :
+                                <Feather name="arrow-right" size={24} color={'white'} />
+                            }
+                        </View>
+                    </TouchableOpacity>
+                    {/* Enf of submit button */}
+                </View>
+            </View>
+        </SafeAreaView >
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: 'white',
-        paddingTop: 70,
-    },
-    keyboardAvoidingView: {
-        flex: 1,
-    },
-    scrollViewContent: {
-        flexGrow: 1,
-    },
-    wrapper: {
         flex: 1,
         justifyContent: 'space-between',
     },

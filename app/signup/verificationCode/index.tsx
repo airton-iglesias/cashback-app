@@ -18,6 +18,8 @@ export default function VerificationCode() {
     const [loading, setLoading] = useState<boolean>(false);
     const [codeError, setCodeError] = useState<boolean>(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(120);
+    const [showTimer, setShowTimer] = useState(false);
     const { t } = useLocale();
 
     // React Hook Form setup
@@ -61,10 +63,30 @@ export default function VerificationCode() {
         // make the request to the API here
 
         //{...}
+        setShowTimer(true);
+        const timer = setInterval(() => {
+            setTimeLeft((prevTime) => {
+                if (prevTime <= 1) {
+                    clearInterval(timer);
+                    setTimeLeft(10);
+                    setShowTimer(false);
+                    return 0;
+                }
+                return prevTime - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    };
+
+    const formatTime = (seconds: number) => {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     };
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ backgroundColor: "#fff" }}>
             <View style={styles.container}>
                 <View>
                     {/* Header */}
@@ -83,7 +105,7 @@ export default function VerificationCode() {
                     )}
                     {/* End of Error Message */}
 
-                    {/* Verification code inputs */}
+                    {/* Code verification inputs */}
                     <View style={styles.inputWrapper}>
                         <Controller
                             control={control}
@@ -104,19 +126,20 @@ export default function VerificationCode() {
                             )}
                         />
                     </View>
-                    {/* end of Verification code inputs */}
+                    {/* End of Code verification inputs */}
                 </View>
 
-                {/* dont received email Button */}
+                {/* Dont receive code button*/}
                 <View style={styles.resendCodeContainer}>
+                    {showTimer && (<Text>{formatTime(timeLeft)}</Text>)}
                     <Text style={{ fontSize: fontSize.labels.medium }}>{t("signup.verificationCode.dontReceiveCode")}</Text>
-                    <TouchableOpacity activeOpacity={0.7} onPress={resendEmailCode}>
+                    <TouchableOpacity activeOpacity={0.7} onPress={resendEmailCode} disabled={timeLeft === 120 ? false : true}>
                         <Text style={{ color: '#1E40AF', fontSize: fontSize.labels.medium }}>{t("signup.verificationCode.resendCode")}</Text>
                     </TouchableOpacity>
                 </View>
-                {/* End of dont received email Button */}
+                {/* End of Dont receive code button*/}
 
-                {/* Submit Button */}
+                {/* Submit button */}
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         activeOpacity={0.6}
@@ -133,7 +156,7 @@ export default function VerificationCode() {
                         </View>
                     </TouchableOpacity>
                 </View>
-                {/* End of Submit Button */}
+                {/* End of Submit button */}
             </View>
 
             {/* Resended email warning modal */}

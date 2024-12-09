@@ -46,13 +46,13 @@
         "verificationCodeSent": {
             "title": "Um código de verificação foi enviado para a sua caixa de email!"
         },
-        "verificationCode":{
+        "verificationCode": {
             "title": "Verificação de email",
             "subtitle": "Insira o código de verificação enviado para o seu email",
             "dontReceiveCode": "Não recebeu o código?",
             "resendCode": "Reenviar código",
             "wrongCode": "O código inserido é inválido!",
-            "RequiredField":"Campo obrigatório",
+            "RequiredField": "Campo obrigatório",
             "lengthInvalid": "O código precisa ter 6 dígitos."
         },
         "sentenceWallet": {
@@ -75,7 +75,15 @@
         "warning": "A frase de 24 palavras é o fator de segurança mais alto, foi enviada para o seu e-mail quando criou conta. Ela permite acesso à sua carteira em qualquer lugar.",
         "paste": "Colar",
         "errorMessage": "Algo deu errado. Por favor, verifique sua frase e tente novamente.",
-        "phraseError": "A frase deve conter exatamente 24 palavras e sem caracteres especiais."
+        "phraseError": "A frase deve conter exatamente 24 palavras e sem caracteres especiais.",
+        "lostPhraseButton": "Perdi a frase de 24 palavras",
+        "lostPhrase": {
+            "title": "Perdi a frase",
+            "warningTitle": "IMPORTANTE",
+            "warningText": "Associar uma nova carteira á sua conta, elimina a carteira anterior e perde o acesso aos ativos na carteira eliminada.",
+            "warningCheckboxText": "Concordo em proseguir e eliminar a minha carteira atual, para associar uma carteira nova.",
+            "modalText": "Confirmar eliminação"
+        }
     },
     "pin": {
         "recoverPin": "Recuperar Pin",
@@ -366,7 +374,6 @@
         "discountAbove": "Desconto acima de",
         "burn": "Queima",
         "about": "Sobre"
-        
     },
     "profile": {
         "headerBackLabel": "Voltar",

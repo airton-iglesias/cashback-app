@@ -148,20 +148,20 @@ export default function WalletRecovery() {
                         </View>
                     </View>
                     {/* End of Sentence text */}
-                </View>
 
-                {/* Warning */}
-                <View style={styles.warningContainer}>
-                    <View style={styles.warningItemsWrapper}>
-                        <View style={styles.warningIconWrapper}>
-                            <Ionicons name="alert-circle-outline" size={30} color="#a16207" />
-                        </View>
-                        <View style={styles.warningTextWrapper}>
-                            <Text style={styles.warningText}>{t("walletRecovery.warning")}</Text>
+                    {/* Warning */}
+                    <View style={styles.warningContainer}>
+                        <View style={styles.warningItemsWrapper}>
+                            <View style={styles.warningIconWrapper}>
+                                <Ionicons name="alert-circle-outline" size={30} color="#a16207" />
+                            </View>
+                            <View style={styles.warningTextWrapper}>
+                                <Text style={styles.warningText}>{t("walletRecovery.warning")}</Text>
+                            </View>
                         </View>
                     </View>
+                    {/* End of Warning */}
                 </View>
-                {/* End of Warning */}
 
                 {/* Submit button */}
                 <View style={styles.buttonContainer}>
@@ -177,6 +177,17 @@ export default function WalletRecovery() {
                                 :
                                 <Feather name="arrow-right" size={24} color={'white'} />
                             }
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        activeOpacity={0.6}
+                        style={styles.buttonWrapper}
+                        onPress={() => router.navigate("/walletLost")}
+                        disabled={loading}
+                    >
+                        <View style={styles.lostWalletButton}>
+                            <Text style={styles.lostWalletText}>{t("walletRecovery.lostPhraseButton")}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -231,14 +242,26 @@ const styles = StyleSheet.create({
         padding: 4,
         borderRadius: 10,
     },
+    lostWalletButton: {
+        flexDirection: 'row',
+        width: '100%',
+        height: 52,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 4,
+        borderRadius: 10,
+    },
+    lostWalletText: {
+        color: '#0D6EFD',
+        fontSize: fontSize.labels.medium
+    },
     warningContainer: {
         width: '100%',
         alignItems: 'center',
         gap: 15,
-        flex: 1,
         justifyContent: 'center',
         paddingHorizontal: 15,
-        marginBottom: 15
+        marginTop: 20
     },
     warningItemsWrapper: {
         backgroundColor: '#FFE69C',

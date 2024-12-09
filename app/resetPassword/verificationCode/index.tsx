@@ -17,6 +17,8 @@ export default function VerificationCode() {
     const [loading, setLoading] = useState<boolean>(false);
     const [codeError, setCodeError] = useState<boolean>(true);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(120);
+    const [showTimer, setShowTimer] = useState(false);
 
     // Translation function
     const { t } = useLocale();
@@ -50,10 +52,30 @@ export default function VerificationCode() {
         // make the request to the API here
 
         //{...}
+        setShowTimer(true);
+        const timer = setInterval(() => {
+            setTimeLeft((prevTime) => {
+                if (prevTime <= 1) {
+                    clearInterval(timer);
+                    setTimeLeft(10);
+                    setShowTimer(false);
+                    return 0;
+                }
+                return prevTime - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    };
+
+    const formatTime = (seconds: number) => {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     };
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ backgroundColor: "#fff" }}>
             <View style={styles.container}>
                 <View>
                     {/* Header */}
@@ -98,8 +120,9 @@ export default function VerificationCode() {
 
                 {/* Dont receive code button*/}
                 <View style={styles.resendCodeContainer}>
+                    {showTimer && (<Text>{formatTime(timeLeft)}</Text>)}
                     <Text style={{ fontSize: fontSize.labels.medium }}>{t("signup.verificationCode.dontReceiveCode")}</Text>
-                    <TouchableOpacity activeOpacity={0.7} onPress={resendEmailCode}>
+                    <TouchableOpacity activeOpacity={0.7} onPress={resendEmailCode} disabled={timeLeft === 120 ? false : true}>
                         <Text style={{ color: '#1E40AF', fontSize: fontSize.labels.medium }}>{t("signup.verificationCode.resendCode")}</Text>
                     </TouchableOpacity>
                 </View>

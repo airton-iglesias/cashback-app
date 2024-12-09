@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import {
-    Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView,
-    StyleSheet, Text, TouchableOpacity, View
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
@@ -12,6 +9,7 @@ import Input from '@/components/input';
 import { useLocale } from '@/contexts/TranslationContext';
 import { fontSize } from '@/constants/fonts';
 import { getSignUpSchema, SignUpData } from '@/schemas/authSchemas';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SignUp() {
     // State variables for loading state
@@ -39,117 +37,111 @@ export default function SignUp() {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <KeyboardAvoidingView
-                style={styles.keyboardAvoidingView}
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
-            >
-                <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                    <View style={styles.wrapper}>
-                        <View>
-                            {/* Header section */}
-                            <View style={styles.header}>
-                                <Text style={styles.headerText}>{t('signup.begin.header')}</Text>
-                            </View>
-                            {/* End of header section */}
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
 
-                            {/* Form section */}
-                            <View style={styles.form}>
-                                {/* Email input field */}
-                                <View style={styles.inputGroup}>
-                                    <Controller
-                                        control={control}
-                                        name="email"
-                                        render={({ field: { onChange, onBlur, value } }) => (
-                                            <Input
-                                                label={t('signup.begin.email')}
-                                                onChange={(text: string) => onChange(text.toLowerCase())}
-                                                onBlur={onBlur}
-                                                value={value || ''}
-                                                type="email"
-                                                error={errors.email?.message}
-                                            />
-                                        )}
-                                    />
-                                </View>
-                                {/* Enf of email input field */}
-
-                                {/* Password input field */}
-                                <View style={styles.inputGroup}>
-                                    <Controller
-                                        control={control}
-                                        name="password"
-                                        render={({ field: { onChange, onBlur, value } }) => (
-                                            <Input
-                                                label={t('signup.begin.password')}
-                                                onChange={onChange}
-                                                onBlur={onBlur}
-                                                value={value || ''}
-                                                type="password"
-                                                error={errors.password?.message}
-                                            />
-                                        )}
-                                    />
-                                </View>
-                                {/* Enf of password input field */}
-
-                                {/* Confirm password input field */}
-                                <View style={styles.inputGroup}>
-                                    <Controller
-                                        control={control}
-                                        name="confirmPassword"
-                                        render={({ field: { onChange, onBlur, value } }) => (
-                                            <Input
-                                                label={t('signup.begin.confirmPassword')}
-                                                onChange={onChange}
-                                                onBlur={onBlur}
-                                                value={value || ''}
-                                                type="password"
-                                                error={errors.confirmPassword?.message}
-                                            />
-                                        )}
-                                    />
-                                </View>
-                                {/* Enf of confirm password input field */}
-                            </View>
-                            {/* End of form section */}
-                        </View>
-
-                        {/* Button container */}
-                        <View style={styles.buttonContainer}>
-                            {/* Submit button */}
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                style={styles.buttonWrapper}
-                                onPress={handleSubmit(onSubmit)}
-                                disabled={loading}
-                            >
-                                <View style={styles.submitButton}>
-                                    <Feather name="arrow-right" size={24} color="white" />
-                                </View>
-                            </TouchableOpacity>
-                            {/* End of submit button */}
-
-                            {/* Google Sign-In button */}
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                style={styles.buttonWrapper}
-                                disabled={loading}
-                            >
-                                <View style={styles.googleButton}>
-                                    <Image
-                                        source={require('@/assets/icons/google-icon.png')}
-                                        style={styles.googleIcon}
-                                    />
-                                </View>
-                            </TouchableOpacity>
-                            {/* Enf of Google Sign-In button */}
-                        </View>
-                        {/* End of button container */}
+            <View style={styles.container}>
+                <View style={{ flex: 1 }}>
+                    {/* Header section */}
+                    <View style={styles.header}>
+                        <Text style={styles.headerText}>{t('signup.begin.header')}</Text>
                     </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
+                    {/* End of header section */}
+
+                    {/* Form section */}
+                    <View style={styles.form}>
+                        {/* Email input field */}
+                        <View style={styles.inputGroup}>
+                            <Controller
+                                control={control}
+                                name="email"
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <Input
+                                        label={t('signup.begin.email')}
+                                        onChange={(text: string) => onChange(text.toLowerCase())}
+                                        onBlur={onBlur}
+                                        value={value || ''}
+                                        type="email"
+                                        error={errors.email?.message}
+                                    />
+                                )}
+                            />
+                        </View>
+                        {/* Enf of email input field */}
+
+                        {/* Password input field */}
+                        <View style={styles.inputGroup}>
+                            <Controller
+                                control={control}
+                                name="password"
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <Input
+                                        label={t('signup.begin.password')}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                        value={value || ''}
+                                        type="password"
+                                        error={errors.password?.message}
+                                    />
+                                )}
+                            />
+                        </View>
+                        {/* Enf of password input field */}
+
+                        {/* Confirm password input field */}
+                        <View style={styles.inputGroup}>
+                            <Controller
+                                control={control}
+                                name="confirmPassword"
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <Input
+                                        label={t('signup.begin.confirmPassword')}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                        value={value || ''}
+                                        type="password"
+                                        error={errors.confirmPassword?.message}
+                                    />
+                                )}
+                            />
+                        </View>
+                        {/* Enf of confirm password input field */}
+                    </View>
+                    {/* End of form section */}
+                </View>
+
+                {/* Button container */}
+                <View style={styles.buttonContainer}>
+                    {/* Submit button */}
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={styles.buttonWrapper}
+                        onPress={handleSubmit(onSubmit)}
+                        disabled={loading}
+                    >
+                        <View style={styles.submitButton}>
+                            <Feather name="arrow-right" size={24} color="white" />
+                        </View>
+                    </TouchableOpacity>
+                    {/* End of submit button */}
+
+                    {/* Google Sign-In button */}
+                    <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={styles.buttonWrapper}
+                        disabled={loading}
+                    >
+                        <View style={styles.googleButton}>
+                            <Image
+                                source={require('@/assets/icons/google-icon.png')}
+                                style={styles.googleIcon}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                    {/* Enf of Google Sign-In button */}
+                </View>
+                {/* End of button container */}
+            </View>
+
         </SafeAreaView>
     );
 }
@@ -157,18 +149,8 @@ export default function SignUp() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
-        paddingTop: 70,
-    },
-    keyboardAvoidingView: {
-        flex: 1,
-    },
-    scrollViewContent: {
-        flexGrow: 1,
-    },
-    wrapper: {
-        flex: 1,
         justifyContent: 'space-between',
+        height: '100%'
     },
     form: {
         gap: 10,
@@ -195,7 +177,8 @@ const styles = StyleSheet.create({
         gap: 20,
         justifyContent: 'flex-end',
         paddingBottom: 35,
-        paddingHorizontal: 15
+        paddingHorizontal: 15,
+        zIndex: 10
     },
     buttonWrapper: {
         borderRadius: 8,

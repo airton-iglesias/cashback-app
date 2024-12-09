@@ -27,7 +27,7 @@ interface StepperData {
     startHour: string;
     endHour: string;
     mapAdress: string;
-    description: string;
+    description: any;
     logoImage: ImageFile | null;
     posterImage: any;
     descriptionMedia: any;
