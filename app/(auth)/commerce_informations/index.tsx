@@ -10,6 +10,7 @@ import CalendarIcon from "@/assets/icons/calendarIcon";
 import Carousel from "@/components/carousel";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CommerceInformationSkeleton from "@/components/commerceInformationSkeleton";
+import WebView from "react-native-webview";
 
 interface flexDiscountProps {
     type: 'base' | 'flex' | 'burn';
@@ -117,7 +118,7 @@ export default function Commerce_Informations() {
                         type: 'image',
                     }
                 ],
-                about: 'Descrição do comercio ou da promoção/evento'
+                about: '<div>Essa é uma exemplificação do editor de texto atual, vamos lá:</div><div><br></div><div>texto bold: <b>exemplo de texto bold</b></div><div>texto itálico: <i>exemplo de texto itálico</i></div><div>texto sublinhado: <u>exemplo de texto sublinhado</u></div><div><u><br></u></div><div>Exemplo de lista:</div><div><br></div><div><ul><li>item 1</li><li>item 2</li><li>item 3</li><li>item 4</li><li>item 5</li><li>item 6</li><li>item 7</li></ul><div><br></div></div><div><a href="https://www.google.com">Exemplo de um Link</a></div>'
             })
 
             setIsLoading(false);
@@ -129,7 +130,7 @@ export default function Commerce_Informations() {
             {isLoading ?
                 <CommerceInformationSkeleton />
                 :
-                <View>
+                <View style={{ flex: 1 }}>
                     <View style={styles.headerContainer}>
                         <TouchableOpacity onPress={() => router.back()} style={styles.closeButton} activeOpacity={0.7}>
                             <Octicons name="chevron-left" size={32} color="black" />
@@ -284,6 +285,11 @@ export default function Commerce_Informations() {
                                     <Text style={styles.aboutText}>
                                         {datas.about}
                                     </Text>
+
+                                    <WebView
+                                        originWhitelist={['*']}
+                                        source={{ html: datas.about }}
+                                    />
 
                                 </View>
                             </View>

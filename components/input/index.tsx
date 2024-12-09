@@ -17,6 +17,7 @@ interface InputProps {
     customColor?: string;
     customBackground?: string;
     customLabelColor?: string;
+    customHighlightWidth?: any;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -33,6 +34,7 @@ const Input: React.FC<InputProps> = ({
     customColor,
     customBackground,
     customLabelColor,
+    customHighlightWidth,
     ...rest
 }) => {
     const [isInputFocus, setIsInputFocus] = React.useState(false);
@@ -61,6 +63,7 @@ const Input: React.FC<InputProps> = ({
                             styles.inputHighlight,
                             isInputFocus && styles.inputHighlightVisible,
                             !!error && styles.inputErrorHighlight,
+                            customHighlightWidth ? { width: customHighlightWidth } : { width: '102.5%' },
                         ]}
                     ></View>
                 ) : null}

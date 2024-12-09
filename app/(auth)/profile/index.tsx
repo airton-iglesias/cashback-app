@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Image, KeyboardAvoidingView, ScrollView,
+import {
+    Image, KeyboardAvoidingView, ScrollView,
     Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, StyleSheet,
-    Modal } from "react-native";
+    Modal,
+    ActivityIndicator
+} from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { Feather, Ionicons, Entypo } from '@expo/vector-icons';
 import Select from '@/components/select';
@@ -15,13 +18,13 @@ import { fontSize } from '@/constants/fonts';
 import SelectLanguage from '@/components/selectLanguage';
 import { Skeleton } from 'moti/skeleton';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ProfileValidationData, ProfileValidationSchema } from '@/schemas/profileSchemas';
 
 export default function Profile() {
 
     const [image, setImage] = useState<any>(null);
-    const [name, setName] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-    const [telemovel, setTelemovel] = useState<string>('');
     const [country, setCountry] = useState<string>('Selecione o país');
     const [currency, setCurrency] = useState<string>('Selecione a moeda');
     const [location, setLocation] = useState(false);
@@ -30,6 +33,8 @@ export default function Profile() {
     const { t } = useLocale();
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [isPermissionModalVisible, setIsPermissionModalVisible] = useState(false);
+    const [savedSuccess, setSavedSuccess] = useState(false);
+    const [requestLoading, setRequestLoading] = useState(false);
 
     const countryOptions = [
         { id: 1, text: 'Portugal' },
@@ -42,6 +47,17 @@ export default function Profile() {
         { id: 2, text: 'BRL' },
         { id: 3, text: 'USD' },
     ];
+
+    // React Hook Form setup
+    const profileSchema = React.useMemo(() => ProfileValidationSchema(t), [t]);
+    const { control, handleSubmit, formState: { errors }, reset, } = useForm<ProfileValidationData>({
+        resolver: zodResolver(profileSchema), mode: "onChange",
+        defaultValues: {
+            name: '',
+            email: '',
+            telemovel: '',
+        },
+    });
 
     useEffect(() => {
         const loadProfileData = async () => {
@@ -57,10 +73,13 @@ export default function Profile() {
                     location: false
                 };
 
+                reset({
+                    name: fetchedProfileData.name,
+                    email: fetchedProfileData.email,
+                    telemovel: fetchedProfileData.telemovel,
+                });
+
                 setAccountID(fetchedProfileData.accountID);
-                setName(fetchedProfileData.name);
-                setEmail(fetchedProfileData.email);
-                setTelemovel(fetchedProfileData.telemovel);
                 setCountry(fetchedProfileData.country);
                 setCurrency(fetchedProfileData.currency);
                 setLocation(fetchedProfileData.location);
@@ -97,6 +116,16 @@ export default function Profile() {
         Clipboard.setStringAsync(item);
     };
 
+    const onSubmit = (data: any) => {
+        setRequestLoading(true);
+        console.log(data.name, data.email, data.telemovel);
+
+        setTimeout(() => {
+            setRequestLoading(false);
+            setSavedSuccess(true);
+        }, 2000);
+    }
+
     return (
         <SafeAreaView style={{ backgroundColor: 'white' }}>
             <KeyboardAvoidingView>
@@ -108,16 +137,23 @@ export default function Profile() {
                         <Ionicons name="chevron-back" size={20} color="black" />
                         <Text style={styles.backButtonText}>{t("profile.headerBackLabel")}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.saveButton}
-                    >
-                        <Text style={styles.saveButtonText}>{t("profile.headerSaveLabel")}</Text>
-                        <Feather name="check" size={24} color="#0D6EFD" />
-                    </TouchableOpacity>
+
+                    {requestLoading ? (
+                        <ActivityIndicator size={40} color="#0D6EFD" />
+                    ) : (
+                        <TouchableOpacity
+                            style={styles.saveButton}
+                            onPress={handleSubmit(onSubmit)}
+                        >
+                            <Text style={styles.saveButtonText}>{t("profile.headerSaveLabel")}</Text>
+                            <Feather name="check" size={24} color="#0D6EFD" />
+                        </TouchableOpacity>
+                    )}
                 </View>
 
                 <ScrollView contentContainerStyle={styles.scrollView}>
                     <View style={styles.container}>
+
                         <View style={styles.imageContainer}>
                             <TouchableWithoutFeedback onPress={handleImagePick} style={{ borderRadius: 8 }}>
                                 {loadingProfile ?
@@ -178,10 +214,21 @@ export default function Profile() {
                                     colorMode='light'
                                 />
                                 :
-                                <Input
-                                    label={t("profile.nameLabel")}
-                                    onChange={(text: string) => setName(text)}
-                                    value={name}
+                                <Controller
+                                    control={control}
+                                    name="name"
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <Input
+                                            label={t("profile.nameLabel")}
+                                            onChange={(text) => {
+                                                // Permitir letras, espaços e acentos
+                                                const sanitizedValue = text.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
+                                                onChange(sanitizedValue);
+                                            }}
+                                            value={value}
+                                            error={errors.name?.message}
+                                        />
+                                    )}
                                 />
                             }
                         </View>
@@ -194,11 +241,18 @@ export default function Profile() {
                                     colorMode='light'
                                 />
                                 :
-                                <Input
-                                    label={t("profile.emailLabel")}
-                                    type={'email'}
-                                    value={email}
-                                    onChange={(text: string) => setEmail(text)}
+                                <Controller
+                                    control={control}
+                                    name="email"
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <Input
+                                            label={t("profile.emailLabel")}
+                                            type={'email'}
+                                            value={value}
+                                            onChange={onChange}
+                                            error={errors.email?.message}
+                                        />
+                                    )}
                                 />
                             }
                         </View>
@@ -211,10 +265,18 @@ export default function Profile() {
                                     colorMode='light'
                                 />
                                 :
-                                <Input
-                                    label={t("profile.phoneLabel")}
-                                    value={telemovel}
-                                    onChange={(text: string) => setTelemovel(text)}
+                                <Controller
+                                    control={control}
+                                    name="telemovel"
+                                    render={({ field: { onChange, onBlur, value } }) => (
+                                        <Input
+                                            label={t("profile.phoneLabel")}
+                                            value={value}
+                                            onChange={onChange}
+                                            keyboardType={'numeric'}
+                                            error={errors.telemovel?.message}
+                                        />
+                                    )}
                                 />
                             }
                         </View>
@@ -360,7 +422,40 @@ export default function Profile() {
                     </Modal>
                 </ScrollView>
             </KeyboardAvoidingView>
-        </SafeAreaView>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={savedSuccess}
+                onRequestClose={() => {
+                    setSavedSuccess(false);
+                }}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalView}>
+                        <View style={[styles.iconContainer, { backgroundColor: '#000', width: 60, height: 60 }]}>
+                            <Feather name="check-circle" size={60} color="#4ade80" />
+                        </View>
+                        <View>
+                            <Text style={styles.modalText}>{t("profile.savedSuccess")}</Text>
+                        </View>
+                        <View style={styles.buttonContainer}>
+
+                            <TouchableOpacity
+                                activeOpacity={0.7}
+                                onPress={() => setSavedSuccess(false)}
+                                style={styles.modalSaveButton}
+                            >
+                                <View style={styles.modalButtonSaveContent}>
+                                    <Feather name="check" size={24} color="black" />
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
+        </SafeAreaView >
     );
 }
 
@@ -562,5 +657,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 4,
         borderRadius: 10,
-    }
+    },
+    buttonContainer: {
+        gap: 10,
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+
 });
+

@@ -387,7 +387,10 @@
         "changePin": "Alterar Pin",
         "changePassword": "Alterar Password",
         "languageLabel": "Idioma",
-        "noPermissionGallery": "É necessário conceder a permissão para o uso da galeria."
+        "noPermissionGallery": "É necessário conceder a permissão para o uso da galeria.",
+        "savedSuccess": "As informações foram salvas com sucesso!",
+        "nameValidation": "O nome deve ter pelo menos 3 caracteres.",
+        "phoneValidation": "Por favor, insira um número de telefone válido."
     },
     "points": {
         "info": "Info",

@@ -165,6 +165,7 @@ export default function New_Commerce_Step_3() {
                                                 label={t("commerce.new_commerce.step2.startDate")}
                                                 value={value}
                                                 maxLength={10}
+                                                customHighlightWidth={'105.5%'}
                                                 type={'date'}
                                                 keyboardType={'numeric'}
                                                 onChange={(text) => {
@@ -186,6 +187,7 @@ export default function New_Commerce_Step_3() {
                                                 label={t("commerce.new_commerce.step2.endDate")}
                                                 value={value}
                                                 maxLength={10}
+                                                customHighlightWidth={'105.5%'}
                                                 type={'date'}
                                                 keyboardType={'numeric'}
                                                 onChange={(text) => {
@@ -214,6 +216,7 @@ export default function New_Commerce_Step_3() {
                                                 type={'time'}
                                                 maxLength={5}
                                                 keyboardType={'numeric'}
+                                                customHighlightWidth={'105.5%'}
                                                 onChange={(text) => {
                                                     const formattedText = formatTime(text);
                                                     onChange(formattedText);
@@ -234,6 +237,7 @@ export default function New_Commerce_Step_3() {
                                                 value={value}
                                                 type={'time'}
                                                 maxLength={5}
+                                                customHighlightWidth={'105.5%'}
                                                 keyboardType={'numeric'}
                                                 onChange={(text) => {
                                                     const formattedText = formatTime(text);
@@ -268,7 +272,7 @@ export default function New_Commerce_Step_3() {
                                     )}
                                 />
                             </View>
-                            
+
                             {/* Map View Placeholder */}
                             <View style={styles.mapContainer}>
                                 <View style={styles.mapPlaceholder}>
