@@ -19,14 +19,13 @@ import { getNewCommerceStep6Schema, NewCommerceStep6Data } from '@/schemas/comme
 export default function New_Commerce_Step_6() {
     const { CashbackType, PlaceType, referenceUser, association, title, email,
         userPoints, webSite, startDate, endDate, startHour, endHour, mapAdress, description, logoImage, posterImage,
-        descriptionMedia, baseDiscount, cashbackForm, sections, proprietary, currencyType, modality, coupon, link, setStepperData } = useStepperContext();
+        descriptionMedia, baseDiscount, cashbackForm, sections, proprietary, currencyType, setStepperData } = useStepperContext();
 
 
     // select variables
 
     const [typesOptions, setTypesOptions] = useState<any>([]);
     const [currencyOptions, setCurrencyOptions] = useState<any>([]);
-    const [modalityOptions, setModalityOptions] = useState<any>([]);
 
     // State variables for UI 
     const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -44,9 +43,6 @@ export default function New_Commerce_Step_6() {
             baseDiscount,
             cashbackForm,
             sections: sections || [],
-            modality: '',
-            coupon: '',
-            link: '',
         },
     });
 
@@ -56,9 +52,6 @@ export default function New_Commerce_Step_6() {
     const watchedCurrencyType = useWatch({ control, name: 'currencyType' });
     const watchedBaseDiscount = useWatch({ control, name: 'baseDiscount' });
     const watchedCashbackForm = useWatch({ control, name: 'cashbackForm' });
-    const watchedModality = useWatch({ control, name: 'modality' });
-    const watchedcoupon = useWatch({ control, name: 'coupon' });
-    const watchedLink = useWatch({ control, name: 'link' });
 
     // UseEffect to set the stepperData context refreshed
     useEffect(() => {
@@ -67,11 +60,8 @@ export default function New_Commerce_Step_6() {
             currencyType: watchedCurrencyType,
             baseDiscount: watchedBaseDiscount,
             cashbackForm: watchedCashbackForm,
-            modality: watchedModality,
-            coupon: watchedcoupon,
-            link: watchedLink
         });
-    }, [watchedSections, watchedCurrencyType, watchedBaseDiscount, watchedCashbackForm, watchedModality, watchedcoupon, watchedLink]);
+    }, [watchedSections, watchedCurrencyType, watchedBaseDiscount, watchedCashbackForm]);
 
 
     //UseEffect to request the selects data
@@ -84,7 +74,7 @@ export default function New_Commerce_Step_6() {
             // Variable Temporary
             const selectDataReponse: any = [
                 { id: 1, text: `${t('commerce.new_commerce.step5.fidelity')}` },
-                { id: 2, text:  `${t('commerce.new_commerce.step5.free')}`},
+                { id: 2, text: `${t('commerce.new_commerce.step5.free')}` },
                 { id: 3, text: `${t('commerce.new_commerce.step5.burn')}` },
             ];
             //Variable Temporary
@@ -93,18 +83,11 @@ export default function New_Commerce_Step_6() {
                 { id: 2, text: 'BRL' },
                 { id: 3, text: 'USD' },
             ];
-            //Variable Temporary
-            const tempModalityOptions = [
-                { id: 1, text: `${t('commerce.new_commerce.step5.local')}` },
-                { id: 2, text: `${t('commerce.new_commerce.step5.coupon')}` },
-                { id: 3, text: `${t('commerce.new_commerce.step5.link')}` },
-            ];
 
             // The Timeout is to simulate an API call delay, you can remove it when making the API call
             setTimeout(() => {
                 setTypesOptions(selectDataReponse);
                 setCurrencyOptions(currencyOptionsResponse);
-                setModalityOptions(tempModalityOptions);
                 setSelectLoading(false);
             }, 1000);
         };
@@ -134,7 +117,7 @@ export default function New_Commerce_Step_6() {
             webSite, startDate, endDate, startHour, endHour, mapAdress, //place_and_time datas
             description, //description data
             logoImage, posterImage, descriptionMedia, //images_and_videos datas
-            currencyType, baseDiscount, cashbackForm, sections, modality, coupon, link, //cashback_items datas
+            currencyType, baseDiscount, cashbackForm, sections, //cashback_items datas
             email, //contact_datas
         )
 
@@ -162,62 +145,6 @@ export default function New_Commerce_Step_6() {
                     contentContainerStyle={styles.scrollViewContent}
                 >
                     <View style={styles.sectionContainer}>
-
-                        {/* Seletor de Modalidade */}
-                        <View style={styles.section}>
-                            <Text style={styles.sectionTitle}>Modalidade</Text>
-                            <Controller
-                                control={control}
-                                name="modality"
-                                render={({ field: { onChange, value } }) => (
-                                    <Select
-                                        options={modalityOptions}
-                                        onChangeSelect={(item: any) => onChange(item.text)}
-                                        text={value || t("commerce.new_commerce.step5.selectLabel")}
-                                        SelectOption={SelectOption}
-                                        error={errors.modality?.message}
-                                    />
-                                )}
-                            />
-                        </View>
-
-                        {/* coupon input field */}
-                        {watchedModality === 'coupon' && (
-                            <View style={styles.section}>
-                                <Text style={styles.sectionTitle}>coupon</Text>
-                                <Controller
-                                    control={control}
-                                    name="coupon"
-                                    render={({ field: { onChange, value } }) => (
-                                        <Input
-                                            onChange={onChange}
-                                            value={value}
-                                            error={errors.coupon?.message}
-                                        />
-                                    )}
-                                />
-                            </View>
-                        )}
-                        {/* End of coupon input field */}
-
-                        {/* Link input field */}
-                        {watchedModality === 'link' && (
-                            <View style={styles.section}>
-                                <Text style={styles.sectionTitle}>Link</Text>
-                                <Controller
-                                    control={control}
-                                    name="link"
-                                    render={({ field: { onChange, value } }) => (
-                                        <Input
-                                            onChange={onChange}
-                                            value={value}
-                                            error={errors.link?.message}
-                                        />
-                                    )}
-                                />
-                            </View>
-                        )}
-                        {/* End of link input field */}
 
                         {/* Select currency type */}
                         <View style={styles.section}>

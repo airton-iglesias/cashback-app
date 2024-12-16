@@ -37,14 +37,13 @@ export default function NewCommerceStep2() {
         resolver: zodResolver(newCommerceStep2Schema),
         mode: "onChange",
         defaultValues: {
-          title,
-          proprietary,
-          association,
-          userPoints,
-          referenceUser,
+            title,
+            proprietary,
+            association,
+            userPoints,
+            referenceUser,
         },
-      });
-      
+    });
 
     // Fetch dropdown options
     useEffect(() => {
@@ -52,14 +51,9 @@ export default function NewCommerceStep2() {
             // Simulated API response
             const selectDataReponse: any = {
                 associationOptions: [
-                    { id: 1, text: "Promoção" },
-                    { id: 2, text: "Evento" },
-                ],
-                userPointsOptions: [
-                    { id: 1, text: "Airton" },
-                    { id: 2, text: "Luis" },
-                    { id: 3, text: "Bruno" },
-                ],
+                    { id: 1, text: "Comércio do bruno" },
+                    { id: 2, text: "Mercadinho do bruno" },
+                ]
             };
 
             // The Timeout is to simulate an API call delay, you can remove it when making the API call
@@ -161,25 +155,21 @@ export default function NewCommerceStep2() {
                 {/* End of Select for Association */}
 
                 {/* Select for User Points */}
-                <View style={styles.selectSection}>
-                    <Text style={styles.inputLabel}>{t("commerce.new_commerce.step1.userPoints")}</Text>
-                    <Skeleton show={selectLoading} colorMode="light" width="100%" height={48}>
-                        {selectLoading ? null : (
-                            <Controller
-                                control={control}
-                                name="userPoints"
-                                render={({ field: { onChange, value } }) => (
-                                    <Select
-                                        options={selectDatas.userPointsOptions}
-                                        text={value || t("commerce.new_commerce.step1.selectLabel")}
-                                        onChangeSelect={(item: any) => onChange(item.text)}
-                                        SelectOption={SelectOption}
-                                        error={errors.userPoints?.message}
-                                    />
-                                )}
+                <View style={styles.longInputWrapper}>
+                    <Controller
+                        control={control}
+                        name="userPoints"
+                        render={({ field: { onChange, value } }) => (
+                            <Input
+                                label={t("commerce.new_commerce.step1.userPoints")}
+                                placeholder={t("commerce.new_commerce.step1.ID")}
+                                value={value}
+                                onChange={onChange}
+                                type="text"
+                                error={errors.userPoints?.message}
                             />
                         )}
-                    </Skeleton>
+                    />
                 </View>
                 {/* End of select for user points */}
 
@@ -188,7 +178,7 @@ export default function NewCommerceStep2() {
                     <Controller
                         control={control}
                         name="referenceUser"
-                        render={({ field: { onChange, onBlur, value } }) => (
+                        render={({ field: { onChange, value } }) => (
                             <Input
                                 label={t("commerce.new_commerce.step1.referedBy")}
                                 placeholder={t("commerce.new_commerce.step1.ID")}

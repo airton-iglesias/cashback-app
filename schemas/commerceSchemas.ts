@@ -3,18 +3,18 @@ import { z } from 'zod';
 export const getNewCommerceStep2Schema = (t: (key: string) => string) => {
     return z.object({
         title: z.string({ required_error: t("commerce.validation.requiredField") }).min(1, { message: t("commerce.validation.requiredField") }),
-        proprietary: z.string({ required_error: t("commerce.validation.requiredField") }).min(1, { message: t("commerce.validation.requiredField") }),
-        association: z.string({ required_error: t("commerce.validation.requiredField") }).min(1, { message: t("commerce.validation.requiredField") }),
-        userPoints: z.string({ required_error: t("commerce.validation.requiredField") }).min(1, { message: t("commerce.validation.requiredField") }).optional(),
+        userPoints: z.string({ required_error: t("commerce.validation.requiredField") }).min(1, { message: t("commerce.validation.requiredField") }),
+        proprietary: z.string({ required_error: t("commerce.validation.requiredField") }).optional(),
+        association: z.string({ required_error: t("commerce.validation.requiredField") }).optional(),
         referenceUser: z.string().optional(),
     });
 };
 
 export type NewCommerceStep2Data = {
     title: string;
-    proprietary: string;
-    association: string;
-    userPoints?: string;
+    proprietary?: string;
+    association?: string;
+    userPoints: string;
     referenceUser?: string;
 };
 
@@ -63,32 +63,32 @@ export const getNewCommerceStep3Schema = (
                     });
                 }
             }
-            if (placeType === "Físico") {
-                if (!data.mapAdress || data.mapAdress.length < 2) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: t("commerce.validation.requiredField"),
-                        path: ["mapAdress"],
-                    });
-                }
-            } else if (placeType === "Web") {
-                if (!data.webSite || data.webSite.trim().length === 0) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: t("commerce.validation.requiredField"),
-                        path: ["webSite"],
-                    });
-                }
-                // Opcional: você pode adicionar validação adicional para verificar se o webSite é uma URL válida
-                // Exemplo:
-                // else if (!isValidUrl(data.webSite)) {
-                //   ctx.addIssue({
-                //     code: z.ZodIssueCode.custom,
-                //     message: t("commerce.validation.invalidURL"),
-                //     path: ["webSite"],
-                //   });
-                // }
-            }
+            // if (placeType === "Físico") {
+            //     if (!data.mapAdress || data.mapAdress.length < 2) {
+            //         ctx.addIssue({
+            //             code: z.ZodIssueCode.custom,
+            //             message: t("commerce.validation.requiredField"),
+            //             path: ["mapAdress"],
+            //         });
+            //     }
+            // } else if (placeType === "Web") {
+            //     if (!data.webSite || data.webSite.trim().length === 0) {
+            //         ctx.addIssue({
+            //             code: z.ZodIssueCode.custom,
+            //             message: t("commerce.validation.requiredField"),
+            //             path: ["webSite"],
+            //         });
+            //     }
+            // Opcional: você pode adicionar validação adicional para verificar se o webSite é uma URL válida
+            // Exemplo:
+            // else if (!isValidUrl(data.webSite)) {
+            //   ctx.addIssue({
+            //     code: z.ZodIssueCode.custom,
+            //     message: t("commerce.validation.invalidURL"),
+            //     path: ["webSite"],
+            //   });
+            // }
+            // }
         });
 };
 
@@ -149,40 +149,13 @@ export const getNewCommerceStep6Schema = (t: (key: string) => string) => {
                 })
             )
             .optional(),
-
-        modality: z
-            .string({ required_error: t("commerce.validation.requiredField") })
-            .nonempty({ message: t("commerce.validation.requiredField") }),
-
-        coupon: z.string().optional(),
-        link: z.string().optional(),
-
-        // ... restante do schema
-    }).superRefine((data, ctx) => {
-        if (data.modality === 'cupom' && (!data.coupon || data.coupon.trim() === '')) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: t("commerce.validation.requiredField"),
-                path: ['cupom'],
-            });
-        }
-        if (data.modality === 'link' && (!data.link || data.link.trim() === '')) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: t("commerce.validation.requiredField"),
-                path: ['link'],
-            });
-        }
-    });
+    })
 };
 
 export type NewCommerceStep6Data = {
     currencyType: string;
     baseDiscount: string;
     cashbackForm: string;
-    modality: string;
-    coupon?: string;
-    link?: string;
     sections?: {
         minValue: string;
         discount: string;

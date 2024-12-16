@@ -104,7 +104,7 @@ export default function New_Commerce_Step_5() {
 
     const handleNextStep = () => {
         if (error) { setError(!error) }
-        if (!logoImage && !posterImage && descriptionMedia.length === 0) { setError(!error); return; }
+        if (!logoImage || /*!posterImage ||*/ descriptionMedia.length === 0) { setError(!error); return; }
 
         if (PlaceType === "Físico") {
             router.push("/commerce/new/cashback_items");
@@ -221,7 +221,7 @@ export default function New_Commerce_Step_5() {
 
                             {/* End of remove button */}
 
-                            {error && <Text style={styles.errorText}>{t("commerce.new_commerce.step4.errorMessage")}</Text>}
+                            {/* {error && <Text style={styles.errorText}>{t("commerce.new_commerce.step4.errorMessage")}</Text>} */}
                         </View>
                     </View>
 
@@ -239,7 +239,7 @@ export default function New_Commerce_Step_5() {
                         </View>
                         {/* End of label */}
 
-                        
+
                         <ScrollView
                             ref={scrollViewRef}
                             horizontal
