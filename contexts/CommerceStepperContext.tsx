@@ -12,8 +12,8 @@ interface Section {
 }
 
 interface StepperData {
-    CashbackType: string;
-    PlaceType: string;
+    CashbackType: number;
+    PlaceType: number;
     selectedType: number;
     selectedPlace: number;
     referenceUser: string;
@@ -49,8 +49,8 @@ const StepperContext = createContext<StepperContextProps | undefined>(undefined)
 
 export const StepperProvider = ({ children }: { children: ReactNode }) => {
     const [stepperData, setStepperData] = useState<StepperData>({
-        CashbackType: 'Permanente',
-        PlaceType: 'Físico',
+        CashbackType: 0,
+        PlaceType: 0,
         selectedType: 0,
         selectedPlace: 0,
         referenceUser: '',

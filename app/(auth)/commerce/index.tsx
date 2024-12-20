@@ -17,34 +17,85 @@ export default function CommerceHome() {
 
     // State variables for UI
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [showSidebar, setShowSidebar] = useState(false); 
-    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false); 
-    const [showNotifications, setShowNotifications] = useState(false); 
-    const [loading, setLoading] = useState(true); 
+    const [showSidebar, setShowSidebar] = useState(false);
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [loading, setLoading] = useState(true);
     const { t } = useLocale();
-  
+
 
     // Simulates fetching data
     useEffect(() => {
         const fetchSelectDatas = async () => {
             try {
-                const dataResponse = [
+                const dataResponse: any[] = [
                     {
-                        id: '151',
+                        id: '#151',
+                        type: 0,
                         name: 'Commerce Name',
                         image: 'https://neufert-cdn.archdaily.net/uploads/photo/image/71324/cropped_large_Danpal_Facade_System_8.jpg?v=1533219819',
-                        promotion: {
-                            id: '#350',
-                            name: 'Promotion Name',
-                            role: t("commerce.home.admin"),
-                            image: 'https://th.bing.com/th/id/OIP.9nyTpzPgpvxBs2vYCYxytgHaG0?rs=1&pid=ImgDetMain',
-                        },
-                        event: {
-                            id: '#989',
-                            name: 'Event Name',
-                            role: t("commerce.home.admin"),
-                            image: 'https://img.freepik.com/premium-photo/table-bar-with-bar-background_895403-7.jpg?w=2000'
-                        },
+                        promotions: [
+                            {
+                                id: '#350',
+                                name: 'Promotion Name',
+                                role: t("commerce.home.admin"),
+                                image: 'https://th.bing.com/th/id/OIP.9nyTpzPgpvxBs2vYCYxytgHaG0?rs=1&pid=ImgDetMain',
+                            }
+                        ],
+                        events: [
+                            {
+                                id: '#989',
+                                name: 'Event Name',
+                                role: t("commerce.home.admin"),
+                                image: 'https://img.freepik.com/premium-photo/table-bar-with-bar-background_895403-7.jpg?w=2000'
+                            },
+                            {
+                                id: '#99',
+                                name: 'Event Name',
+                                role: t("commerce.home.admin"),
+                                image: 'https://img.freepik.com/premium-photo/table-bar-with-bar-background_895403-7.jpg?w=2000'
+                            },
+                        ]
+                    },
+                    {
+                        id: '#1521',
+                        type: 0,
+                        name: 'Commerce Name',
+                        image: 'https://neufert-cdn.archdaily.net/uploads/photo/image/71324/cropped_large_Danpal_Facade_System_8.jpg?v=1533219819',
+                        promotions: [
+                            {
+                                id: '#350',
+                                name: 'Promotion Name',
+                                role: t("commerce.home.admin"),
+                                image: 'https://th.bing.com/th/id/OIP.9nyTpzPgpvxBs2vYCYxytgHaG0?rs=1&pid=ImgDetMain',
+                            },
+                            {
+                                id: '#33530',
+                                name: 'Promotion Name',
+                                role: t("commerce.home.admin"),
+                                image: 'https://th.bing.com/th/id/OIP.9nyTpzPgpvxBs2vYCYxytgHaG0?rs=1&pid=ImgDetMain',
+                            },
+                        ],
+                        events: [
+                            {
+                                id: '#989',
+                                name: 'Event Name',
+                                role: t("commerce.home.admin"),
+                                image: 'https://img.freepik.com/premium-photo/table-bar-with-bar-background_895403-7.jpg?w=2000'
+                            },
+                        ]
+                    },
+                    {
+                        id: '#15821',
+                        type: 2,
+                        name: 'Commerce Name',
+                        image: 'https://neufert-cdn.archdaily.net/uploads/photo/image/71324/cropped_large_Danpal_Facade_System_8.jpg?v=1533219819',
+                    },
+                    {
+                        id: '#1582541',
+                        type: 1,
+                        name: 'Commerce Name',
+                        image: 'https://neufert-cdn.archdaily.net/uploads/photo/image/71324/cropped_large_Danpal_Facade_System_8.jpg?v=1533219819',
                     },
                 ];
 
@@ -95,8 +146,8 @@ export default function CommerceHome() {
 
     return (
         <View style={styles.container}>
-           
-             <Topbar openSidebar={openSidebar} openNotifications={openNotifications} />
+
+            <Topbar openSidebar={openSidebar} openNotifications={openNotifications} />
             {showSidebar && <Sidebar closeSidebar={closeSidebar} isSidebarOpen={isSidebarOpen} />}
             {showNotifications && <NotificationSidebar closeSidebar={closeNotifications} isSidebarOpen={isNotificationsOpen} />}
 
@@ -105,27 +156,27 @@ export default function CommerceHome() {
                 <View style={styles.skeletonContainer}>
                     <EstablishmentSkeleton />
                 </View>
-            ) : 
-            
-            commerceDatas === null ? (
-                /* Displays empty state if no data is available */
-                <View style={styles.emptyStateContainer}>
-                    <MoonStarIcon />
-                    <Text style={styles.emptyStateText}>{t("commerce.home.label")}</Text>
-                </View>
-            ) : (
-                /* Displays commerce data */
-                <View style={styles.listContainer}>
-                    <View style={styles.headerContainer}>
-                        <Text style={styles.headerText}>{t("commerce.home.establishment_label")}</Text>
+            ) :
+
+                commerceDatas === null ? (
+                    /* Displays empty state if no data is available */
+                    <View style={styles.emptyStateContainer}>
+                        <MoonStarIcon />
+                        <Text style={styles.emptyStateText}>{t("commerce.home.label")}</Text>
                     </View>
-                    <FlatList
-                        data={commerceDatas}
-                        renderItem={({ item }) => <ListCommerces data={item} />}
-                        contentContainerStyle={styles.flatListContent}
-                    />
-                </View>
-            )}
+                ) : (
+                    /* Displays commerce data */
+                    <View style={styles.listContainer}>
+                        <View style={styles.headerContainer}>
+                            <Text style={styles.headerText}>{t("commerce.home.establishment_label")}</Text>
+                        </View>
+                        <FlatList
+                            data={commerceDatas}
+                            renderItem={({ item }) => <ListCommerces data={item} />}
+                            contentContainerStyle={styles.flatListContent}
+                        />
+                    </View>
+                )}
 
             {/* Floating Action Button */}
             <TouchableOpacity

@@ -61,7 +61,7 @@ export default function New_Commerce() {
                     <RadioCommerceType
                         selected={selectedType}
                         options={[t("commerce.new_commerce.step0.permanent"), t("commerce.new_commerce.step0.event"), t("commerce.new_commerce.step0.promotion")]}
-                        onChangeSelect={(opt, i) => setStepperData({ CashbackType: opt, selectedType: i })}
+                        onChangeSelect={(opt, i) => setStepperData({ CashbackType: i, selectedType: i })}
                     />
                 </View>
 
@@ -70,7 +70,7 @@ export default function New_Commerce() {
                     <RadioCommerce
                         selected={selectedPlace}
                         options={[t("commerce.new_commerce.step0.fisic"), t("commerce.new_commerce.step0.web")]}
-                        onChangeSelect={(opt, i) => setStepperData({ PlaceType: opt, selectedPlace: i })}
+                        onChangeSelect={(opt, i) => setStepperData({ PlaceType: i, selectedPlace: i })}
                     />
                 </View>
             </ScrollView>
