@@ -118,7 +118,7 @@ export default function Commerce_Informations() {
                         type: 'image',
                     }
                 ],
-                about: '<div>Essa é uma exemplificação do editor de texto atual, vamos lá:</div><div><br></div><div>texto bold: <b>exemplo de texto bold</b></div><div>texto itálico: <i>exemplo de texto itálico</i></div><div>texto sublinhado: <u>exemplo de texto sublinhado</u></div><div><u><br></u></div><div>Exemplo de lista:</div><div><br></div><div><ul><li>item 1</li><li>item 2</li><li>item 3</li><li>item 4</li><li>item 5</li><li>item 6</li><li>item 7</li></ul><div><br></div></div><div><a href="https://www.google.com">Exemplo de um Link</a></div>'
+                about: '<div>Essa é uma exemplificação do editor de textoatual, vamos lá:</div><div><br></div><div>texto bold: <b>exemplo de texto bold</b></div><div>texto itálico: <i>exemplo de texto itálico</i></div><div>texto sublinhado: <u>exemplo de texto sublinhado</u></div><div><u><br></u></div><div>Exemplo de lista:</div><div><br></div><div><ul><li>item 1</li><li>item 2</li><li>item 3</li><li>item 4</li><li>item 5</li><li>item 6</li><li>item 7</li></ul><div><br></div></div><div><a href="https://www.google.com">Exemplo de um Link</a></div>'
             })
 
             setIsLoading(false);
@@ -286,11 +286,6 @@ export default function Commerce_Informations() {
                                         {datas.about}
                                     </Text>
 
-                                    <WebView
-                                        originWhitelist={['*']}
-                                        source={{ html: datas.about }}
-                                    />
-
                                 </View>
                             </View>
                         )}
@@ -309,6 +304,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         width: '100%',
         height: 80,
+        borderBottomWidth: 1,
+        borderBottomColor: '#D2D2D2',
     },
     closeButton: {
         position: 'absolute',
